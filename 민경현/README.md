@@ -8,7 +8,7 @@
 #### 3. 2차 피드백 적용
 ![alt text](image-4.png)
 ### JIRA 수행
----
+추가 예정
 #### 1. JIRA 하위항목 - 명세서 작성
 ![alt text](image.png)
 #### 2. JIRA 하위항목 - 목업 작성성
