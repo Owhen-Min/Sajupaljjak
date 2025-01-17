@@ -1,5 +1,5 @@
 
-### Notion 회의
+### Notion 회의 
 ---
 #### 1. 아이디어 회의
 ![alt text](image-2.png)
@@ -16,3 +16,4 @@
 ---
 ### 요구사항 명세서 작성
 https://road-marscapone-17b.notion.site/a408-functions?pvs=74
+---
