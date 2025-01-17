@@ -16,3 +16,4 @@
 ---
 ### 요구사항 명세서 작성
 https://road-marscapone-17b.notion.site/a408-functions?pvs=74
+  
