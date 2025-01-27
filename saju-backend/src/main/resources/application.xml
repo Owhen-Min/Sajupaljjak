@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: saju-backend
+  datasource:
+    url: jdbc:mysql://mysql:3306/saju
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
