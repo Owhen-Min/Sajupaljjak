@@ -3,6 +3,7 @@ package com.saju.sajubackend.domain.chat;
 import com.saju.sajubackend.domain.member.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,15 +12,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.awt.TrayIcon.MessageType;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "MESSAGE")
 public class Message {
@@ -46,5 +49,16 @@ public class Message {
     @OneToOne
     @JoinColumn(name = "message_type_id", nullable = false)
     private MessageType messageType;
+
+    @Builder
+    private Message(Long messageId, Member sender, Chatroom chatroom, String content, LocalDateTime sendTime,
+                   MessageType messageType) {
+        this.messageId = messageId;
+        this.sender = sender;
+        this.chatroom = chatroom;
+        this.content = content;
+        this.sendTime = sendTime;
+        this.messageType = messageType;
+    }
 }
 

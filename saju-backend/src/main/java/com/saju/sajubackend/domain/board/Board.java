@@ -1,5 +1,6 @@
 package com.saju.sajubackend.domain.board;
 
+import com.saju.sajubackend.domain.common.BaseTimeEntity;
 import com.saju.sajubackend.domain.member.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,18 +11,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "BOARD")
-public class Board {
+public class Board extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -43,19 +42,13 @@ public class Board {
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     @Builder
-    private Board(Long boardId, Member member, String mainType, String subType, String title, String content,
-                 LocalDateTime createdAt) {
+    private Board(Long boardId, Member member, String mainType, String subType, String title, String content) {
         this.boardId = boardId;
         this.member = member;
         this.mainType = mainType;
         this.subType = subType;
         this.title = title;
         this.content = content;
-        this.createdAt = createdAt;
     }
 }
