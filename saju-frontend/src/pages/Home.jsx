@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.webp';
+import SelectionGrid from '../components/SelectionGrid';
+
 
 function OnboardingPage() {
   const navigate = useNavigate();
@@ -41,9 +43,10 @@ function OnboardingPage() {
         <button onClick={handleCoupleStatus}>
           isLogin이 True이고 isCouple이 true일 때
         </button>
-        
       </div>
     </div>
+
+    
   );
 }
 
