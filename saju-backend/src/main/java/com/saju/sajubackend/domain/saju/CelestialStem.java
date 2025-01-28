@@ -14,20 +14,21 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "ELEMENTS")
-public class Elements {
+@Table(name = "CelestialStem")
+public class CelestialStem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "elements_id")
-    private Integer elementsId;
+    @Column(name = "celestial_stem_id")
+    private Long celestialStemId;
 
-    @Column(nullable = false, length = 10)
-    private String element;
+    @Column(name = "celestial_stem_name", nullable = false, length = 20)
+    private String celestialStemName;
 
     @Builder
-    private Elements(Integer elementsId, String element) {
-        this.elementsId = elementsId;
-        this.element = element;
+    private CelestialStem(Long celestialStemId, String celestialStemName) {
+        this.celestialStemId = celestialStemId;
+        this.celestialStemName = celestialStemName;
     }
 }
+

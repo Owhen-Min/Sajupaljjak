@@ -1,6 +1,6 @@
 package com.saju.sajubackend.domain.place;
 
-import com.saju.sajubackend.domain.saju.Elements;
+import com.saju.sajubackend.domain.saju.Element;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,16 +38,16 @@ public class Place {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "elements_id", nullable = false)
-    private Elements elements;
+    @JoinColumn(name = "element_id", nullable = false)
+    private Element element;
 
     @Builder
-    private Place(Long placeId, String name, String address, Integer cityCode, String description, Elements elements) {
+    private Place(Long placeId, String name, String address, Integer cityCode, String description, Element element) {
         this.placeId = placeId;
         this.name = name;
         this.address = address;
         this.cityCode = cityCode;
         this.description = description;
-        this.elements = elements;
+        this.element = element;
     }
 }

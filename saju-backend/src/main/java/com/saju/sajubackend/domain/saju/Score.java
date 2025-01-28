@@ -16,27 +16,27 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "Scores")
-public class Scores {
+@Table(name = "Score")
+public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "scores_id")
-    private Long scoresId;
+    @Column(name = "score_id")
+    private Long scoreId;
 
     @OneToOne
     @JoinColumn(name = "source_id")
-    private CelestialStems source;
+    private CelestialStem source;
 
     @OneToOne
     @JoinColumn(name = "target_id")
-    private CelestialStems target;
+    private CelestialStem target;
 
     @Column(nullable = false)
     private Long score;
 
     @Builder
-    private Scores(Long scoresId, CelestialStems source, CelestialStems target, Long score) {
-        this.scoresId = scoresId;
+    private Score(Long scoreId, CelestialStem source, CelestialStem target, Long score) {
+        this.scoreId = scoreId;
         this.source = source;
         this.target = target;
         this.score = score;
