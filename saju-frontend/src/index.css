@@ -1,0 +1,12 @@
+#root {
+  max-width: 400px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+} 
+
+body {
+  background-color: #ffefef;
+}
