@@ -8,19 +8,23 @@ import org.springframework.core.env.Environment;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @SpringBootApplication
 public class SajuBackendApplication {
+    private static final Logger logger = LoggerFactory.getLogger(SajuBackendApplication.class);
 
     public static void main(String[] args) {
-        System.out.println("---------------------start-----------------");
+        logger.info("---------------------start-----------------");
         SpringApplication.run(SajuBackendApplication.class, args);
     }
 
     @Bean
     public CommandLineRunner printActiveProfiles(Environment environment) {
         return args -> {
-            System.out.println("✅ Active Profiles: " + Arrays.toString(environment.getActiveProfiles()));
-            System.out.println("🛠️ Current Property: " + environment.getProperty("spring.datasource.url")); // 예제용
+            logger.info("✅ Active Profiles: {}", Arrays.toString(environment.getActiveProfiles()));
+            logger.info("🛠️ Current Property: {}", environment.getProperty("spring.datasource.url"));
         };
     }
 }
