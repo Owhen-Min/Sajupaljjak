@@ -1,0 +1,78 @@
+.signup {
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.signup-prompt {
+    margin-bottom: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+.signup-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.input-group {
+    margin-bottom: 24px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f8f9fa;
+}
+
+.birthday-gender-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.birthday-input {
+    width: 150px;
+}
+
+.gender-input {
+    width: 40px;
+    text-align: center;
+}
+
+.separator {
+    font-size: 20px;
+    color: #666;
+}
+
+.dots {
+    color: #666;
+    letter-spacing: 2px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: white;
+}
+
+.confirm-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #ff4b4b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 32px;
+}
+
+input::placeholder {
+    color: #aaa;
+} 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -15,21 +15,51 @@ const Button = styled.button`
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: ${props => props.isSelected ? '#4CAF50' : 'white'};
-  color: ${props => props.isSelected ? 'white' : 'black'};
+  background-color: ${props => props.$isSelected ? '#ff5226' : 'white'};
+  color: ${props => props.$isSelected ? 'white' : 'black'};
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: ${props => props.isSelected ? '#45a049' : '#f5f5f5'};
+    background-color: ${props => props.$isSelected ? '#ff5226' : '#f5f5f5'};
   }
 `;
 
-// ... existing code ...
+const GridItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: ${props => props.selected ? '#FF0000' : 'white'};
+  color: ${props => props.selected ? 'white' : 'black'};
 
-const SelectionGrid = ({ rows, cols, multiSelect, options, onSelect, showSelectAll }) => {
-    const [selectedItems, setSelectedItems] = useState([]);
+  &:hover {
+    background-color: ${props => props.selected ? '#FF0000' : '#f5f5f5'};
+  }
+`;
+
+const SelectionGrid = ({ 
+  rows, 
+  cols, 
+  multiSelect = false,
+  options = [],
+  onSelect = () => {},
+  showSelectAll = false,
+  selected = []
+}) => {
+    const [selectedItems, setSelectedItems] = useState(
+      Array.isArray(selected) ? selected : [options.indexOf(selected)]
+    );
     
+    useEffect(() => {
+      setSelectedItems(
+        Array.isArray(selected) ? selected : [options.indexOf(selected)]
+      );
+    }, [selected, options]);
+
     const handleClick = (index) => {
       if (multiSelect) {
         setSelectedItems(prev => {
@@ -40,9 +70,8 @@ const SelectionGrid = ({ rows, cols, multiSelect, options, onSelect, showSelectA
         });
       } else {
         setSelectedItems([index]);
+        onSelect(options[index]);
       }
-      
-      onSelect(index);
     };
   
     const handleSelectAll = () => {
@@ -62,7 +91,7 @@ const SelectionGrid = ({ rows, cols, multiSelect, options, onSelect, showSelectA
       <div>
         {showSelectAll && multiSelect && (
           <Button
-            isSelected={selectedItems.length === options.length}
+            $isSelected={selectedItems.length === options.length}
             onClick={handleSelectAll}
             style={{ marginBottom: '10px', width: '100%' }}
           >
@@ -70,16 +99,14 @@ const SelectionGrid = ({ rows, cols, multiSelect, options, onSelect, showSelectA
           </Button>
         )}
         <Grid cols={cols}>
-          {Array(rows * cols).fill(null).map((_, index) => (
-            options[index] && (
-              <Button
-                key={index}
-                isSelected={selectedItems.includes(index)}
-                onClick={() => handleClick(index)}
-              >
-                {options[index]}
-              </Button>
-            )
+          {options.map((option, index) => (
+            <GridItem
+              key={index}
+              selected={selectedItems.includes(index)}
+              onClick={() => handleClick(index)}
+            >
+              {option}
+            </GridItem>
           ))}
         </Grid>
       </div>
@@ -92,14 +119,8 @@ const SelectionGrid = ({ rows, cols, multiSelect, options, onSelect, showSelectA
     multiSelect: PropTypes.bool,
     options: PropTypes.array,
     onSelect: PropTypes.func,
-    showSelectAll: PropTypes.bool
-  };
-  
-  SelectionGrid.defaultProps = {
-    multiSelect: false,
-    options: [],
-    onSelect: () => {},
-    showSelectAll: false
+    showSelectAll: PropTypes.bool,
+    selected: PropTypes.array
   };
   
 
