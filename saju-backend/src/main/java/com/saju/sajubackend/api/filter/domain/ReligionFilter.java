@@ -9,25 +9,25 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "REGION_FILTER")
-public class RegionFilter {
+@Table(name = "RELIGION_FILTER")
+public class ReligionFilter {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "region_filter_id")
-    private Long regionFilterId;
+    @Column(name = "religion_filter_id")
+    private Long religionFilterId;
 
-    @Column(name = "city_code", nullable = false)
-    private Integer cityCode;
+    @Column(nullable = false)
+    private int religionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "filter_id", nullable = false)
     private Filter filter;
 
     @Builder
-    private RegionFilter(Long regionFilterId, Integer cityCode, Filter filter) {
-        this.regionFilterId = regionFilterId;
-        this.cityCode = cityCode;
+    private ReligionFilter(Long religionFilterId, int religionId, Filter filter) {
+        this.religionFilterId = religionFilterId;
+        this.religionId = religionId;
         this.filter = filter;
     }
 }
