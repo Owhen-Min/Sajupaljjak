@@ -274,8 +274,8 @@ function SignUpPage() {
             <h2>종교를 선택해주세요</h2>
             <div className="input-group">
               <SelectionGrid
-                rows={3}
-                cols={2}
+                rows={2}
+                cols={3}
                 options={['무교', '개신교', '불교', '천주교', '기타']}
                 onSelect={(selected) => handleSelectionChange('religion', selected)}
                 selected={formData.religion ? [['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)] : []}
@@ -304,11 +304,12 @@ function SignUpPage() {
             <h2>음주 여부를 선택해주세요</h2>
             <div className="input-group">
               <SelectionGrid
-                rows={1}
-                cols={4}
+                rows={2}
+                cols={2}
                 options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
                 onSelect={(selected) => handleSelectionChange('drinking', selected)}
                 selected={formData.drinking ? [['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)] : []}
+                multiSelect={false}
               />
             </div>
           </>

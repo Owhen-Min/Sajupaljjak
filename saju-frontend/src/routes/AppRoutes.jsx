@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from '../pages/Home';
+import Onboarding from '../pages/Onboarding';
 import LogInPage from '../pages/login';
 import SignUpPage from '../pages/Signup';
 
@@ -13,7 +13,7 @@ function AppRoutes() {
   return (
     <Routes>
       {/* 메인 페이지 (온보딩) */}
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Onboarding />} />
       
       {/* 로그인 상태에 따른 라우트들 */}
       <Route path="/login" element={<LogInPage />} />
