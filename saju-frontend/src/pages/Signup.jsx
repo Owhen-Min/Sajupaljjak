@@ -1,84 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SelectionGrid from '../components/SelectionGrid';
-import styled from 'styled-components';
-import { StyledInput, StyledButton } from '../components/StyledElements';
+import { TailwindInput, TailwindButton } from '../components/TailwindElements';
 import { provinces } from '../data/provinceCode';
+import '../styles/Signup.css';
 
-const InputGroup = styled.div`
-  display: flex;
-  gap: 10px;
-  width: 100%;
-`;
+function Header({ step, children }) {
+  const getProgressWidth = () => {
+    if (step < 4) return 'w-1/3';
+    if (step < 9) return 'w-2/3';
+    return 'w-full';
+  };
 
-const StyledHeader = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  border-bottom: 1px solid #eee;
-  
-  .header-content {
-    display: flex;
-    align-items: center;
-    position: relative;
-    margin-bottom: 10px;
-  }
+  return (
+    <div className="flex flex-col p-5 border-b border-gray-200">
+      <div className="flex items-center relative mb-2.5">
+        {children}
+      </div>
+      <div className="w-full h-0.5 bg-gray-200 relative">
+        <div className={`absolute h-full bg-red-500 transition-all duration-300 ${getProgressWidth()}`} />
+      </div>
+    </div>
+  );
+}
 
-  h1 {
-    flex: 1;
-    text-align: center;
-    font-size: 18px;
-    margin: 0;
-  }
-  
-  .back-button {
-    position: absolute;
-    left: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #FF0000;
-  }
-
-  .progress-bar {
-    width: 100%;
-    height: 2px;
-    background-color: #eee;
-    position: relative;
-  }
-
-  .progress-fill {
-    position: absolute;
-    height: 100%;
-    background-color: #FF0000;
-    width: ${props => {
-      if (props.step < 4) return '33.33%';
-      if (props.step < 9) return '66.66%';
-      return '100%';
-    }};
-    transition: width 0.3s ease;
-  }
-`;
-
-const ErrorBubble = styled.div`
-  color: #FF0000;
-  background-color: #FFE6E6;
-  padding: 8px 12px;
-  border-radius: 4px;
-  margin-top: 8px;
-  font-size: 14px;
-  position: relative;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: -6px;
-    left: 20px;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: 6px solid #FFE6E6;
-  }
-`;
+function ErrorBubble({ children }) {
+  return (
+    <div className="text-red-500 bg-red-50 px-3 py-2 rounded relative mt-2 text-sm before:content-[''] before:absolute before:-top-1.5 before:left-5 before:border-l-[6px] before:border-r-[6px] before:border-b-[6px] before:border-l-transparent before:border-r-transparent before:border-b-red-50">
+      {children}
+    </div>
+  );
+}
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -91,16 +43,28 @@ function SignUpPage() {
     gender: '',
     birthday: '',
     birthtime: '',
+    birthtimeUnknown: false,
     religion: '',
     smoking: '',
     drinking: '',
     height: '170',
     si: '',
     gun: '',
+    nickname: '',
+    introduction: '',
+    profileImage: '',
   });
-  const [isComplete, setIsComplete] = useState(false);
-  const [options, setOptions] = useState(['무교', '개신교', '불교', '천주교', '기타']);
-  const [locationError, setLocationError] = useState(false);
+  const [errors, setErrors] = useState({
+    name: false,
+    gender: false,
+    birthday: false,
+    birthtime: false,
+    religion: false,
+    smoking: false,
+    drinking: false,
+    height: false,
+    location: false
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -115,18 +79,22 @@ function SignUpPage() {
   }, [navigate, location]);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+    const inputValue = type === 'checkbox' ? checked : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: inputValue
     }));
         
-    // 자동으로 다음 단계로 이동하는 로직 추가
     if (step < 4) {
-      const updatedFormData = { ...formData, [name]: value };
+      const updatedFormData = { ...formData, [name]: inputValue };
       if (step === 1 && updatedFormData.name) {
         setStep(2);
-      } else if (step === 3 && updatedFormData.birthday && updatedFormData.birthtime) {
+      } else if (step === 3 && (
+        (updatedFormData.birthday && updatedFormData.birthtime) || 
+        (updatedFormData.birthday && updatedFormData.birthtimeUnknown)
+      )) {
         setStep(4);
       }
     }
@@ -137,36 +105,29 @@ function SignUpPage() {
     
     setFormData(prev => {
       const newFormData = { ...prev, [field]: selected };
-      console.log('새로운 formData:', newFormData);
       
       if (step < 8) {
-        console.log('현재 step:', step);
         if (step === 2 && field === 'gender') {
-          console.log('성별 선택 후 step 3으로 이동 시도');
           setTimeout(() => {
             setStep(3);
             setMaxStep(Math.max(maxStep, 4));
           }, 100);
         } else if (step === 4 && field === 'religion') {
-          console.log('종교 선택 후 step 5로 이동 시도');
           setTimeout(() => {
             setStep(5);
             setMaxStep(Math.max(maxStep, 5));
           }, 100);
         } else if (step === 5 && field === 'smoking') {
-          console.log('흡연 선택 후 step 6으로 이동 시도');
           setTimeout(() => {
             setStep(6);
             setMaxStep(Math.max(maxStep, 6));
           }, 100);
         } else if (step === 6 && field === 'drinking') {
-          console.log('음주 선택 후 step 7로 이동 시도');
           setTimeout(() => {
             setStep(7);
             setMaxStep(Math.max(maxStep, 7));
           }, 100);
         } else if (step === 7 && field === 'height') {
-          console.log('키 선택 후 step 8로 이동 시도');
           setTimeout(() => {
             setStep(8);
             setMaxStep(Math.max(maxStep, 9));
@@ -178,27 +139,90 @@ function SignUpPage() {
     });
   };
 
+  const validateStep = (currentStep) => {
+    let isValid = true;
+    const newErrors = { ...errors };
+
+    if (currentStep === 3) {
+      if (!formData.name) {
+        newErrors.name = true;
+        isValid = false;
+      }
+      if (!formData.gender) {
+        newErrors.gender = true;
+        isValid = false;
+      }
+      if (!formData.birthday || (!formData.birthtimeUnknown && !formData.birthtime)) {
+        newErrors.birthday = true;
+        isValid = false;
+      }
+    } else if (currentStep === 8) {
+      // 내 정보 입력 단계 검증
+      if (!formData.religion) {
+        newErrors.religion = true;
+        isValid = false;
+      }
+      if (!formData.smoking) {
+        newErrors.smoking = true;
+        isValid = false;
+      }
+      if (!formData.drinking) {
+        newErrors.drinking = true;
+        isValid = false;
+      }
+      if (!formData.height) {
+        newErrors.height = true;
+        isValid = false;
+      }
+      if (!formData.si || !formData.gun) {
+        newErrors.location = true;
+        isValid = false;
+      }
+    } else if (currentStep === 11) {
+      if (!formData.nickname) {
+        newErrors.nickname = true;
+        isValid = false;
+      }
+      if (!formData.introduction) {
+        newErrors.introduction = true;
+        isValid = false;
+      }
+      if (!formData.profileImage) {
+        newErrors.profileImage = true;
+        isValid = false;
+      }
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const renderStep = () => {
     return (
       <div className="signup-step">
         {4 > step && step >= 1 && (
           <>
-            <h2>이름을 입력해 주세요</h2>
+            <h3 className="input-prompt">이름을 입력해 주세요</h3>
             <div className="input-group">
-              <StyledInput
+              <TailwindInput
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="이름"
               />
+              {errors.name && (
+                <ErrorBubble>
+                  이름을 입력해주세요
+                </ErrorBubble>
+              )}
             </div>
           </>
         )}
                 
         {4 > step && step >= 2 && (
           <>
-            <h2>성별을 입력해주세요</h2>
+            <h3 className="input-prompt">성별을 입력해주세요</h3>
             <div className="input-group">
               <SelectionGrid
                 rows={1}
@@ -207,15 +231,20 @@ function SignUpPage() {
                 onSelect={(selected) => handleSelectionChange('gender', selected)}
                 selected={formData.gender ? [['남자', '여자'].indexOf(formData.gender)] : []}
               />
+              {errors.gender && (
+                <ErrorBubble>
+                  성별을 선택해주세요
+                </ErrorBubble>
+              )}
             </div>
           </>
         )}
             
         {4 > step && step >= 3 && (
           <>
-            <h2>태어난 시간을 입력해주세요.<br/>양력으로 입력해주세요.</h2>
-              <InputGroup>
-                <StyledInput
+            <h3 className="input-prompt">태어난 시간을 입력해주세요.<br/>양력으로 입력해주세요.</h3>
+              <div className="flex items-center gap-2 mt-2">
+                <TailwindInput
                   type="text"
                   name="birthday"
                   value={formData.birthday}
@@ -241,7 +270,7 @@ function SignUpPage() {
                     maxLength="10"
                     style={{ flex: 2 }}
                   />
-                <StyledInput
+                <TailwindInput
                   type="text"
                   name="birthtime"
                   value={formData.birthtime}
@@ -264,14 +293,35 @@ function SignUpPage() {
                   placeholder="18:00"
                   maxLength="5"
                   style={{ flex: 1 }}
+                  disabled={formData.birthtimeUnknown}
                 />
-              </InputGroup>
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <input
+                  type="checkbox"
+                  id="birthtimeUnknown"
+                  checked={formData.birthtimeUnknown}
+                  onChange={handleBirthTimeUnknown}
+                  style={{ cursor: 'pointer' }}
+                />
+                <label 
+                  htmlFor="birthtimeUnknown"
+                  style={{ cursor: 'pointer', fontSize: '14px' }}
+                >
+                  태어난 시간을 모릅니다
+                </label>
+              </div>
+              {errors.birthday && !formData.birthtimeUnknown && (
+                <ErrorBubble>
+                  태어난 시간을 입력해주세요
+                </ErrorBubble>
+              )}
             </>
           )}
             
         {9 > step && step >= 4 && (
           <>
-            <h2>종교를 선택해주세요</h2>
+            <h3 className="input-prompt">종교를 선택해주세요</h3>
             <div className="input-group">
               <SelectionGrid
                 rows={2}
@@ -280,13 +330,18 @@ function SignUpPage() {
                 onSelect={(selected) => handleSelectionChange('religion', selected)}
                 selected={formData.religion ? [['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)] : []}
               />
+              {errors.religion && (
+                <ErrorBubble>
+                  종교를 선택해주세요
+                </ErrorBubble>
+              )}
             </div>
           </>
         )}
 
         {9 > step && step >= 5 && (
           <>
-            <h2>흡연 여부를 선택해주세요</h2>
+            <h3 className="input-prompt">흡연 여부를 선택해주세요</h3>
             <div className="input-group">
               <SelectionGrid
                 rows={1}
@@ -295,13 +350,18 @@ function SignUpPage() {
                 onSelect={(selected) => handleSelectionChange('smoking', selected)}
                 selected={formData.smoking ? [['흡연', '비흡연', '금연중'].indexOf(formData.smoking)] : []}
               />
+              {errors.smoking && (
+                <ErrorBubble>
+                  흡연 여부를 선택해주세요
+                </ErrorBubble>
+              )}
             </div>
           </>
         )}
 
         {9 > step && step >= 6 && (
           <>
-            <h2>음주 여부를 선택해주세요</h2>
+            <h3 className="input-prompt">음주 여부를 선택해주세요</h3>
             <div className="input-group">
               <SelectionGrid
                 rows={2}
@@ -311,13 +371,18 @@ function SignUpPage() {
                 selected={formData.drinking ? [['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)] : []}
                 multiSelect={false}
               />
+              {errors.drinking && (
+                <ErrorBubble>
+                  음주 여부를 선택해주세요
+                </ErrorBubble>
+              )}
             </div>
           </>
         )}
 
         {9 > step && step >= 7 && (
           <>
-            <h2>키를 입력해주세요</h2>
+            <h3 className="input-prompt">키를 입력해주세요</h3>
             <div className="input-group" style={{ position: 'relative' }}>
               <div style={{ 
                 display: 'flex', 
@@ -331,34 +396,14 @@ function SignUpPage() {
                   onChange={(e) => {
                     const selected = e.target.value;
                     setFormData(prev => ({ ...prev, height: selected }));
-                    // 키 선택 후 자동으로 다음 단계로 이동
-                    setTimeout(() => {
-                      setStep(8);
-                      setMaxStep(Math.max(maxStep, 9));
-                    }, 100);
                   }}
-                  style={{
-                    width: '120px',
-                    height: '40px',
-                    textAlign: 'center',
-                    fontSize: '16px',
-                    border: '1px solid #ddd',
-                    borderRadius: '4px',
-                    appearance: 'none',
-                    WebkitAppearance: 'none',
-                    MozAppearance: 'none',
-                    background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E") no-repeat right 10px center`,
-                    backgroundColor: 'white',
-                    paddingRight: '30px',
-                    cursor: 'pointer'
-                  }}
+                  className="w-30 h-10 text-center text-base border border-gray-300 rounded-md appearance-none cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pr-8"
                   onClick={(e) => {
-                    // 모바일 환경에서는 네이티브 피커 사용
                     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                       e.preventDefault();
                       const input = document.createElement('input');
                       input.type = 'number';
-                      input.min = '130';
+                      input.min = '140';
                       input.max = '220';
                       input.value = formData.height || '170';
                       input.style.position = 'absolute';
@@ -366,7 +411,7 @@ function SignUpPage() {
                       
                       input.addEventListener('change', (event) => {
                         const value = event.target.value;
-                        if (130 <= value && value <= 220) {
+                        if (140 <= value && value <= 220) {
                           setFormData(prev => ({ ...prev, height: value }));
                         }
                         document.body.removeChild(input);
@@ -376,34 +421,32 @@ function SignUpPage() {
                       input.focus();
                       input.click();
                     }
+                    setStep(8);
+                    setMaxStep(Math.max(maxStep, 9));
                   }}
                 >
-                  {Array.from({ length: 91 }, (_, i) => i + 130).map(height => (
+                  {Array.from({ length: 81 }, (_, i) => i + 140).map(height => (
                     <option key={height} value={height}>
                       {height}cm
                     </option>
                   ))}
                 </select>
               </div>
+              {errors.height && (
+                <ErrorBubble>
+                  키를 입력해주세요
+                </ErrorBubble>
+              )}
             </div>
           </>
         )}
 
         {9 > step && step >= 8 && (
           <>
-            <h2>거주지를 선택해주세요</h2>
+            <h3 className="input-prompt">거주지를 선택해주세요</h3>
             <div className="input-group">
-              <div style={{ 
-                display: 'flex', 
-                flexDirection: 'column',
-                width: '100%' 
-              }}>
-                <div style={{ 
-                  display: 'flex', 
-                  flexDirection: 'row',
-                  gap: '10px',
-                  width: '100%' 
-                }}>
+              <div className="flex flex-col w-full">
+                <div className="flex flex-row gap-2.5 w-full">
                   <select
                     name="si"
                     value={Object.keys(provinces).find(key => provinces[key].code === formData.si) || ""}
@@ -414,14 +457,7 @@ function SignUpPage() {
                         gun: '' 
                       }));
                     }}
-                    style={{
-                      flex: 1,
-                      height: '40px',
-                      padding: '8px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      fontSize: '16px'
-                    }}
+                    className="flex-1 h-10 px-2 border border-gray-300 rounded-md text-base"
                   >
                     <option value="">시/도 선택</option>
                     {Object.keys(provinces).map(province => (
@@ -452,14 +488,7 @@ function SignUpPage() {
                           gun: selectedGunCode
                         }));
                       }}
-                      style={{
-                        flex: 1,
-                        height: '40px',
-                        padding: '8px',
-                        border: '1px solid #ddd',
-                        borderRadius: '4px',
-                        fontSize: '16px'
-                      }}
+                      className="flex-1 h-10 px-2 border border-gray-300 rounded-md text-base"
                     >
                       <option value="">구/군 선택</option>
                       {Object.keys(provinces[Object.keys(provinces).find(
@@ -478,9 +507,30 @@ function SignUpPage() {
                     </select>
                   )}
                 </div>
-                {locationError && (
+                {errors.location && (
                   <ErrorBubble>
                     거주지를 모두 선택해주세요
+                  </ErrorBubble>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+        {11 > step && step >= 9 && (
+          <>
+            <h3 className="input-prompt">닉네임을 입력해주세요</h3>
+            <div className="input-group">
+              <div className="flex flex-col w-full">
+                <TailwindInput
+                  type="text"
+                  name="nickname"
+                  value={formData.nickname}
+                  onChange={handleInputChange}
+                  placeholder="닉네임"
+                />
+                {errors.nickname && (
+                  <ErrorBubble>
+                    닉네임을 입력해주세요
                   </ErrorBubble>
                 )}
               </div>
@@ -492,32 +542,43 @@ function SignUpPage() {
   };
 
     const handleSubmit = () => {
-        // 여기에 제출 로직 구현
         console.log('제출된 데이터:', formData);
     };
 
-    // 다음 단계로 이동하는 함수 추가
     const handleNextStep = () => {
       if (step < 9) {
-        if (step === 8 && (!formData.si || !formData.gun)) {
-          setLocationError(true);
+        if (!validateStep(step)) {
           return;
         }
         
-        setLocationError(false);
-        const nextStep = step + 1;
+        let nextStep;
+        if (step === 3) {
+          nextStep = Math.min(8, maxStep);
+        } else if (step === 8) {
+          nextStep = 9;
+        }
+        
         setStep(nextStep);
         setMaxStep(Math.max(maxStep, nextStep));
       }
     };
 
+    const handleBirthTimeUnknown = (e) => {
+      const isChecked = e.target.checked;
+      setFormData(prev => ({
+        ...prev,
+        birthtimeUnknown: isChecked,
+        birthtime: isChecked ? '' : prev.birthtime
+      }));
+    };
+
     return (
       <div className="signup">
-        <StyledHeader step={step}>
-          <div className="header-content">
+        <Header step={step}>
+          <div className="flex items-center relative w-full">
             {step > 3 && (
               <button 
-                className="back-button" 
+                className="back-button absolute left-0" 
                 onClick={() => {
                   if (step >= 9) {
                     setStep(8);
@@ -529,26 +590,25 @@ function SignUpPage() {
                 이전
               </button>
             )}
-            <h1>{step >= 4 ? '내 정보 입력' : '사주 정보 입력'}</h1>
+            <h1 className="w-full text-center text-base font-semibold">
+              {step >= 9 ? '내 프로필 입력' : step >= 4 ? '내 정보 입력' : '사주 정보 입력'}
+            </h1>
           </div>
-          <div className="progress-bar">
-            <div className="progress-fill" />
-          </div>
-        </StyledHeader>
+        </Header>
         {renderStep()}
         <div className="button-group">
-          {step < 9 && (
-            <StyledButton 
+          {(step === 3 || step === 8) && (
+            <TailwindButton 
               onClick={handleNextStep}
               disabled={step >= maxStep}
             >
               다음
-            </StyledButton>
+            </TailwindButton>
           )}
-          {step === 9 && (
-            <StyledButton onClick={handleSubmit}>
+          {step === 11 && (
+            <TailwindButton onClick={handleSubmit}>
               확인
-            </StyledButton>
+            </TailwindButton>
           )}
         </div>
       </div>

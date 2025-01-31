@@ -1,48 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(${props => props.cols}, 1fr);
-  gap: 10px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-`;
-
-const Button = styled.button`
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: ${props => props.$isSelected ? '#ff5226' : 'white'};
-  color: ${props => props.$isSelected ? 'white' : 'black'};
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: ${props => props.$isSelected ? '#ff5226' : '#f5f5f5'};
-  }
-`;
-
-const GridItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  background-color: ${props => props.selected ? '#FF0000' : 'white'};
-  color: ${props => props.selected ? 'white' : 'black'};
-
-  &:hover {
-    background-color: ${props => props.selected ? '#FF0000' : '#f5f5f5'};
-  }
-`;
 
 const SelectionGrid = ({ 
-  rows, 
   cols, 
   multiSelect = false,
   options = [],
@@ -90,34 +49,41 @@ const SelectionGrid = ({
     return (
       <div>
         {showSelectAll && multiSelect && (
-          <Button
-            $isSelected={selectedItems.length === options.length}
+          <button
+            className={`w-full mb-2.5 py-3 px-4 border-2 rounded-lg cursor-pointer font-semibold shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
+              ${selectedItems.length === options.length 
+                ? 'bg-[#ff5226] text-white border-[#ff5226] hover:bg-[#ff4012] hover:border-[#ff4012]' 
+                : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
             onClick={handleSelectAll}
-            style={{ marginBottom: '10px', width: '100%' }}
           >
             전체 선택
-          </Button>
+          </button>
         )}
-        <Grid cols={cols}>
+        <div 
+          className={`grid gap-2.5 w-full max-w-[600px] mx-auto`}
+          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+        >
           {options.map((option, index) => (
-            <GridItem
+            <button
               key={index}
-              selected={selectedItems.includes(index)}
+              className={`flex items-center justify-center py-3 px-4 border-2 rounded-lg cursor-pointer font-medium shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
+                ${selectedItems.includes(index)
+                  ? 'bg-[#FF0000] text-white border-[#FF0000] hover:bg-[#e60000] hover:border-[#e60000]'
+                  : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
               onClick={() => handleClick(index)}
             >
               {option}
-            </GridItem>
+            </button>
           ))}
-        </Grid>
+        </div>
       </div>
     );
   };
   
   SelectionGrid.propTypes = {
-    rows: PropTypes.number.isRequired,
     cols: PropTypes.number.isRequired,
     multiSelect: PropTypes.bool,
-    options: PropTypes.array,
+    options: PropTypes.array.isRequired,
     onSelect: PropTypes.func,
     showSelectAll: PropTypes.bool,
     selected: PropTypes.array

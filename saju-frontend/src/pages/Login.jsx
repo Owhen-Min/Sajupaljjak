@@ -1,4 +1,3 @@
-import React from 'react';
 import logo from '../assets/logo.webp';
 import KakaoLoginREST from '../components/KakaoLoginREST';
 import { useNavigate } from 'react-router-dom';
