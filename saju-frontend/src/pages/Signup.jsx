@@ -48,8 +48,8 @@ function SignUpPage() {
     smoking: '',
     drinking: '',
     height: '170',
-    si: '',
-    gun: '',
+    cityCode: '',
+    dongCode: '',
     nickname: '',
     introduction: '',
     profileImage: '',
@@ -63,7 +63,10 @@ function SignUpPage() {
     smoking: false,
     drinking: false,
     height: false,
-    location: false
+    location: false,
+    nickname: false,
+    introduction: false,
+    profileImage: false
   });
 
   useEffect(() => {
@@ -101,7 +104,6 @@ function SignUpPage() {
   };
 
   const handleSelectionChange = (field, selected) => {
-    console.log('handleSelectionChange 호출됨:', { field, selected, currentStep: step });
     
     setFormData(prev => {
       const newFormData = { ...prev, [field]: selected };
@@ -141,7 +143,20 @@ function SignUpPage() {
 
   const validateStep = (currentStep) => {
     let isValid = true;
-    const newErrors = { ...errors };
+    const newErrors = {
+      name: false,
+      gender: false,
+      birthday: false,
+      birthtime: false,
+      religion: false,
+      smoking: false,
+      drinking: false,
+      height: false,
+      location: false,
+      nickname: false,
+      introduction: false,
+      profileImage: false
+    };
 
     if (currentStep === 3) {
       if (!formData.name) {
@@ -152,7 +167,8 @@ function SignUpPage() {
         newErrors.gender = true;
         isValid = false;
       }
-      if (!formData.birthday || (!formData.birthtimeUnknown && !formData.birthtime)) {
+      if (!formData.birthday || formData.birthday.length !== 10 || 
+          (!formData.birthtimeUnknown && (!formData.birthtime || formData.birthtime.length !== 5))) {
         newErrors.birthday = true;
         isValid = false;
       }
@@ -174,7 +190,7 @@ function SignUpPage() {
         newErrors.height = true;
         isValid = false;
       }
-      if (!formData.si || !formData.gun) {
+      if (!formData.cityCode || !formData.dongCode) {
         newErrors.location = true;
         isValid = false;
       }
@@ -189,6 +205,19 @@ function SignUpPage() {
       }
       if (!formData.profileImage) {
         newErrors.profileImage = true;
+        isValid = false;
+      }
+    } else if (currentStep === 12) {
+      if (!formData.profileImage) {
+        newErrors.profileImage = true;
+        isValid = false;
+      }
+      if (!formData.nickname) {
+        newErrors.nickname = true;
+        isValid = false;
+      }
+      if (!formData.introduction) {
+        newErrors.introduction = true;
         isValid = false;
       }
     }
@@ -311,7 +340,7 @@ function SignUpPage() {
                   태어난 시간을 모릅니다
                 </label>
               </div>
-              {errors.birthday && !formData.birthtimeUnknown && (
+              {errors.birthday && (
                 <ErrorBubble>
                   태어난 시간을 입력해주세요
                 </ErrorBubble>
@@ -388,7 +417,8 @@ function SignUpPage() {
                 display: 'flex', 
                 alignItems: 'center',
                 justifyContent: 'start',
-                width: '100%'
+                textAlign: 'center',
+                width: '100%',
               }}>
                 <select
                   name="height"
@@ -397,7 +427,7 @@ function SignUpPage() {
                     const selected = e.target.value;
                     setFormData(prev => ({ ...prev, height: selected }));
                   }}
-                  className="w-30 h-10 text-center text-base border border-gray-300 rounded-md appearance-none cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pr-8"
+                  className="w-30 h-10 text-center text-base border border-gray-300 rounded-md appearance-none cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
                   onClick={(e) => {
                     if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                       e.preventDefault();
@@ -426,7 +456,7 @@ function SignUpPage() {
                   }}
                 >
                   {Array.from({ length: 81 }, (_, i) => i + 140).map(height => (
-                    <option key={height} value={height}>
+                    <option key={height} value={height} className="pl-2">
                       {height}cm
                     </option>
                   ))}
@@ -448,13 +478,13 @@ function SignUpPage() {
               <div className="flex flex-col w-full">
                 <div className="flex flex-row gap-2.5 w-full">
                   <select
-                    name="si"
-                    value={Object.keys(provinces).find(key => provinces[key].code === formData.si) || ""}
+                    name="cityCode"
+                    value={Object.keys(provinces).find(key => provinces[key].code === formData.cityCode) || ""}
                     onChange={(e) => {
                       setFormData(prev => ({ 
                         ...prev, 
-                        si: provinces[e.target.value]?.code || '',
-                        gun: '' 
+                        cityCode: provinces[e.target.value]?.code || '',
+                        dongCode: '' 
                       }));
                     }}
                     className="flex-1 h-10 px-2 border border-gray-300 rounded-md text-base"
@@ -467,35 +497,35 @@ function SignUpPage() {
                     ))}
                   </select>
 
-                  {formData.si && (
+                  {formData.cityCode && (
                     <select
-                      name="gun"
+                      name="dongCode"
                       value={(() => {
                         const selectedSi = Object.keys(provinces).find(
-                          key => provinces[key].code === formData.si
+                          key => provinces[key].code === formData.cityCode
                         );
                         return Object.keys(provinces[selectedSi]?.sigungu || {}).find(
-                          key => provinces[selectedSi]?.sigungu[key] === formData.gun
+                          key => provinces[selectedSi]?.sigungu[key] === formData.dongCode
                         ) || "";
                       })()}
                       onChange={(e) => {
                         const selectedSi = Object.keys(provinces).find(
-                          key => provinces[key].code === formData.si
+                          key => provinces[key].code === formData.cityCode
                         );
-                        const selectedGunCode = provinces[selectedSi]?.sigungu[e.target.value];
+                        const selectedDongCode = provinces[selectedSi]?.sigungu[e.target.value];
                         setFormData(prev => ({ 
                           ...prev, 
-                          gun: selectedGunCode
+                          dongCode: selectedDongCode
                         }));
                       }}
                       className="flex-1 h-10 px-2 border border-gray-300 rounded-md text-base"
                     >
                       <option value="">구/군 선택</option>
                       {Object.keys(provinces[Object.keys(provinces).find(
-                        key => provinces[key].code === formData.si
+                        key => provinces[key].code === formData.cityCode
                       )].sigungu).map(district => {
                         const selectedSi = Object.keys(provinces).find(
-                          key => provinces[key].code === formData.si
+                          key => provinces[key].code === formData.cityCode
                         );
                         const districtName = district.replace(selectedSi, '').replace(/^\s+/, '');
                         return (
@@ -516,7 +546,7 @@ function SignUpPage() {
             </div>
           </>
         )}
-        {11 > step && step >= 9 && (
+        {step >= 9 && (
           <>
             <h3 className="input-prompt">닉네임을 입력해주세요</h3>
             <div className="input-group">
@@ -525,7 +555,11 @@ function SignUpPage() {
                   type="text"
                   name="nickname"
                   value={formData.nickname}
-                  onChange={handleInputChange}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                    setMaxStep(Math.max(maxStep, 12));
+                    setStep(Math.min(12, maxStep));
+                  }}
                   placeholder="닉네임"
                 />
                 {errors.nickname && (
@@ -537,12 +571,93 @@ function SignUpPage() {
             </div>
           </>
         )}
+        {step >= 10 && (
+          <>
+            <h3 className="input-prompt">자기소개를 입력해주세요</h3>
+            <div className="input-group">
+              <div className="flex flex-col w-full">
+                <textarea
+                  name="introduction"
+                  value={formData.introduction}
+                  onChange={(e) => {
+                    handleInputChange(e);
+                    setMaxStep(Math.max(maxStep, 12));
+                    setStep(Math.min(12, maxStep));
+                  }}
+                  placeholder="자기소개를 입력해주세요"
+                  className="w-full h-32 p-3 border border-gray-300 rounded-md resize-none text-base"
+                  maxLength={500}
+                />
+                {errors.introduction && (
+                  <ErrorBubble>
+                    자기소개를 입력해주세요
+                  </ErrorBubble>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+        {step >= 11 && (
+          <>
+            <h3 className="input-prompt">프로필 사진을 등록해주세요</h3>
+            <div className="input-group">
+              <div className="flex flex-col w-full items-center">
+                <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-full mb-4 flex items-center justify-center overflow-hidden">
+                  {formData.profileImage ? (
+                    <img 
+                      src={formData.profileImage} 
+                      alt="프로필 미리보기" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-gray-400">사진 추가</span>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  name="profileImage"
+                  accept="image/*"
+                  onChange={(e) => {
+                    setMaxStep(Math.max(maxStep, 12));
+                    setStep(Math.min(12, maxStep));
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setFormData(prev => ({
+                          ...prev,
+                          profileImage: reader.result
+                        }));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="hidden"
+                  id="profileImageInput"
+                />
+                <label 
+                  htmlFor="profileImageInput"
+                  className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-red-600"
+                >
+                  사진 선택하기
+                </label>
+                {errors.profileImage && (
+                  <ErrorBubble>
+                    프로필 사진을 등록해주세요
+                  </ErrorBubble>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     );
   };
 
     const handleSubmit = () => {
-        console.log('제출된 데이터:', formData);
+        if (validateStep(step)) {
+          console.log('제출된 데이터:', formData);
+        }
     };
 
     const handleNextStep = () => {
@@ -555,11 +670,10 @@ function SignUpPage() {
         if (step === 3) {
           nextStep = Math.min(8, maxStep);
         } else if (step === 8) {
-          nextStep = 9;
+          nextStep = Math.min(12, maxStep);
         }
         
         setStep(nextStep);
-        setMaxStep(Math.max(maxStep, nextStep));
       }
     };
 
@@ -605,7 +719,7 @@ function SignUpPage() {
               다음
             </TailwindButton>
           )}
-          {step === 11 && (
+          {step === 12 && (
             <TailwindButton onClick={handleSubmit}>
               확인
             </TailwindButton>
