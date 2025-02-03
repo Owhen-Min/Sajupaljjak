@@ -1,4 +1,4 @@
-package com.saju.sajubackend.api.saju.domain;
+package com.saju.sajubackend.common.enums;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
