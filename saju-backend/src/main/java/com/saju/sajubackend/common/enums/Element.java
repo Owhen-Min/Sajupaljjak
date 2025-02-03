@@ -1,33 +1,39 @@
 package com.saju.sajubackend.common.enums;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
+import com.saju.sajubackend.common.exception.BaseException;
+import com.saju.sajubackend.common.exception.ErrorMessage;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "ELEMENT")
-public class Element {
+@RequiredArgsConstructor
+public enum Element {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "element_id")
-    private Integer elementId;
+    FIRE(0, "화"),
+    WATER(1, "수"),
+    WOOD(2, "목"),
+    METAL(3, "금"),
+    EARTH(4, "토");
 
-    @Column(nullable = false, length = 10)
-    private String element;
+    private final int code;
+    private final String label;
 
-    @Builder
-    private Element(Integer elementId, String element) {
-        this.elementId = elementId;
-        this.element = element;
+    public static Element fromCode(int code) {
+        for (Element element : Element.values()) {
+            if (element.code == code) {
+                return element;
+            }
+        }
+        throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_ELEMENT_CODE);
+    }
+
+    public static Element fromLabel(String label) {
+        for (Element element : Element.values()) {
+            if (element.label.equals(label)) {
+                return element;
+            }
+        }
+        throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_ELEMENT_LABEL);
     }
 }
