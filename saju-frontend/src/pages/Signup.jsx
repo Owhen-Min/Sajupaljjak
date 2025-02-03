@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SelectionGrid from '../components/SelectionGrid';
-import { TailwindInput, TailwindButton } from '../components/TailwindElements';
+import Dropdown from '../components/Dropdown';
+import Button from '../components/Button';
+import Input from '../components/Input';
 import { provinces } from '../data/provinceCode';
 import '../styles/Signup.css';
 
@@ -233,7 +235,7 @@ function SignUpPage() {
           <>
             <h3 className="input-prompt">이름을 입력해 주세요</h3>
             <div className="input-group">
-              <TailwindInput
+              <Input
                 type="text"
                 name="name"
                 value={formData.name}
@@ -273,7 +275,7 @@ function SignUpPage() {
           <>
             <h3 className="input-prompt">태어난 시간을 입력해주세요.<br/>양력으로 입력해주세요.</h3>
               <div className="flex items-center gap-2 mt-2">
-                <TailwindInput
+                <Input
                   type="text"
                   name="birthday"
                   value={formData.birthday}
@@ -299,7 +301,7 @@ function SignUpPage() {
                     maxLength="10"
                     style={{ flex: 2 }}
                   />
-                <TailwindInput
+                <Input
                   type="text"
                   name="birthtime"
                   value={formData.birthtime}
@@ -475,74 +477,68 @@ function SignUpPage() {
           <>
             <h3 className="input-prompt">거주지를 선택해주세요</h3>
             <div className="input-group">
-              <div className="flex flex-col w-full">
-                <div className="flex flex-row gap-2.5 w-full">
-                  <select
-                    name="cityCode"
-                    value={Object.keys(provinces).find(key => provinces[key].code === formData.cityCode) || ""}
+              <div className="flex flex-row gap-2.5 w-full">
+                <Dropdown
+                  name="cityCode"
+                  value={Object.keys(provinces).find(key => provinces[key].code === formData.cityCode) || ""}
+                  onChange={(e) => {
+                    setFormData(prev => ({ 
+                      ...prev, 
+                      cityCode: provinces[e.target.value]?.code || '',
+                      dongCode: '' 
+                    }));
+                  }}
+                  placeholder="시/도 선택"
+                  options={Object.keys(provinces).map(province => ({
+                    value: province,
+                    label: province
+                  }))}
+                  className="flex-1"
+                />
+
+                {formData.cityCode && (
+                  <Dropdown
+                    name="dongCode"
+                    value={(() => {
+                      const selectedSi = Object.keys(provinces).find(
+                        key => provinces[key].code === formData.cityCode
+                      );
+                      return Object.keys(provinces[selectedSi]?.sigungu || {}).find(
+                        key => provinces[selectedSi]?.sigungu[key] === formData.dongCode
+                      ) || "";
+                    })()}
                     onChange={(e) => {
+                      const selectedSi = Object.keys(provinces).find(
+                        key => provinces[key].code === formData.cityCode
+                      );
+                      const selectedDongCode = provinces[selectedSi]?.sigungu[e.target.value];
                       setFormData(prev => ({ 
                         ...prev, 
-                        cityCode: provinces[e.target.value]?.code || '',
-                        dongCode: '' 
+                        dongCode: selectedDongCode
                       }));
                     }}
-                    className="flex-1 h-10 px-2 border border-gray-300 rounded-md text-base"
-                  >
-                    <option value="">시/도 선택</option>
-                    {Object.keys(provinces).map(province => (
-                      <option key={province} value={province}>
-                        {province}
-                      </option>
-                    ))}
-                  </select>
-
-                  {formData.cityCode && (
-                    <select
-                      name="dongCode"
-                      value={(() => {
-                        const selectedSi = Object.keys(provinces).find(
-                          key => provinces[key].code === formData.cityCode
-                        );
-                        return Object.keys(provinces[selectedSi]?.sigungu || {}).find(
-                          key => provinces[selectedSi]?.sigungu[key] === formData.dongCode
-                        ) || "";
-                      })()}
-                      onChange={(e) => {
-                        const selectedSi = Object.keys(provinces).find(
-                          key => provinces[key].code === formData.cityCode
-                        );
-                        const selectedDongCode = provinces[selectedSi]?.sigungu[e.target.value];
-                        setFormData(prev => ({ 
-                          ...prev, 
-                          dongCode: selectedDongCode
-                        }));
-                      }}
-                      className="flex-1 h-10 px-2 border border-gray-300 rounded-md text-base"
-                    >
-                      <option value="">구/군 선택</option>
-                      {Object.keys(provinces[Object.keys(provinces).find(
+                    placeholder="구/군 선택"
+                    options={Object.keys(provinces[Object.keys(provinces).find(
+                      key => provinces[key].code === formData.cityCode
+                    )].sigungu).map(district => {
+                      const selectedSi = Object.keys(provinces).find(
                         key => provinces[key].code === formData.cityCode
-                      )].sigungu).map(district => {
-                        const selectedSi = Object.keys(provinces).find(
-                          key => provinces[key].code === formData.cityCode
-                        );
-                        const districtName = district.replace(selectedSi, '').replace(/^\s+/, '');
-                        return (
-                          <option key={district} value={district}>
-                            {districtName}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  )}
-                </div>
-                {errors.location && (
-                  <ErrorBubble>
-                    거주지를 모두 선택해주세요
-                  </ErrorBubble>
+                      );
+                      const districtName = district.replace(selectedSi, '').replace(/^\s+/, '');
+                      return {
+                        value: district,
+                        label: districtName
+                      };
+                    })}
+                    className="flex-1"
+                  />
                 )}
               </div>
+              {errors.location && (
+                <ErrorBubble>
+                  거주지를 모두 선택해주세요
+                </ErrorBubble>
+              )}
             </div>
           </>
         )}
@@ -551,7 +547,7 @@ function SignUpPage() {
             <h3 className="input-prompt">닉네임을 입력해주세요</h3>
             <div className="input-group">
               <div className="flex flex-col w-full">
-                <TailwindInput
+                <Input
                   type="text"
                   name="nickname"
                   value={formData.nickname}
@@ -655,9 +651,11 @@ function SignUpPage() {
   };
 
     const handleSubmit = () => {
+      // 나중에 백이랑 소통할 때 추가
         if (validateStep(step)) {
           console.log('제출된 데이터:', formData);
         }
+        navigate('/Welcome');
     };
 
     const handleNextStep = () => {
@@ -712,17 +710,17 @@ function SignUpPage() {
         {renderStep()}
         <div className="button-group">
           {(step === 3 || step === 8) && (
-            <TailwindButton 
+            <Button 
               onClick={handleNextStep}
               disabled={step >= maxStep}
             >
               다음
-            </TailwindButton>
+            </Button>
           )}
           {step === 12 && (
-            <TailwindButton onClick={handleSubmit}>
-              확인
-            </TailwindButton>
+            <Button onClick={handleSubmit}>
+              가입하기
+            </Button>
           )}
         </div>
       </div>

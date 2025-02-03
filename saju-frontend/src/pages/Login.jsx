@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function LogInPage() {
   const navigate = useNavigate();
+  console.log(import.meta.env.VITE_KAKAO_REST_API_KEY);
   return (
     <div className="login">
       <img src={logo} alt="logo" />
