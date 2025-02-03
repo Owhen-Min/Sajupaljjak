@@ -1,5 +1,8 @@
 package com.saju.sajubackend.common.advice;
 
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,4 +19,12 @@ public class ControllerExceptionAdvice {
 			.status(e.getHttpStatus())
 			.body(FailResponse.fail(e.getHttpStatus().value(), e.getErrorMessage().getMessage()));
 	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<FailResponse> handleValidationException(Exception e) {
+		return ResponseEntity
+				.status(HttpStatus.BAD_REQUEST)
+				.body(FailResponse.fail(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+	}
+
 }
