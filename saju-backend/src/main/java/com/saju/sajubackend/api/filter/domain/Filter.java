@@ -24,8 +24,9 @@ public class Filter {
     @Column(nullable = false)
     private int smokingId;
 
+    @Convert(converter = DrinkingFrequencyConverter.class)
     @Column(nullable = false)
-    private int drinkingId;
+    private DrinkingFrequency drinking;
 
     @Column(name = "min_height")
     private Integer minHeight;
@@ -40,11 +41,11 @@ public class Filter {
     private Integer maxAge;
 
     @Builder
-    public Filter(Long filterId, Member member, int smokingId, int drinkingId, Integer minHeight, Integer maxHeight, Integer minAge, Integer maxAge) {
+    private Filter(Long filterId, Member member, int smokingId, DrinkingFrequency drinking, Integer minHeight, Integer maxHeight, Integer minAge, Integer maxAge) {
         this.filterId = filterId;
         this.member = member;
         this.smokingId = smokingId;
-        this.drinkingId = drinkingId;
+        this.drinking = drinking;
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
         this.minAge = minAge;
