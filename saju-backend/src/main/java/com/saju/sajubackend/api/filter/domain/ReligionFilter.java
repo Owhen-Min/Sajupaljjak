@@ -1,5 +1,7 @@
 package com.saju.sajubackend.api.filter.domain;
 
+import com.saju.sajubackend.common.converter.ReligionConverter;
+import com.saju.sajubackend.common.enums.Religion;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
