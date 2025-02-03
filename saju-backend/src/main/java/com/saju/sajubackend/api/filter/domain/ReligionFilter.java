@@ -1,5 +1,7 @@
 package com.saju.sajubackend.api.filter.domain;
 
+import com.saju.sajubackend.common.converter.ReligionConverter;
+import com.saju.sajubackend.common.enums.Religion;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,17 +19,18 @@ public class ReligionFilter {
     @Column(name = "religion_filter_id")
     private Long religionFilterId;
 
+    @Convert(converter = ReligionConverter.class)
     @Column(nullable = false)
-    private int religionId;
+    private Religion religion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "filter_id", nullable = false)
     private Filter filter;
 
     @Builder
-    private ReligionFilter(Long religionFilterId, int religionId, Filter filter) {
+    private ReligionFilter(Long religionFilterId, Religion religion, Filter filter) {
         this.religionFilterId = religionFilterId;
-        this.religionId = religionId;
+        this.religion = religion;
         this.filter = filter;
     }
 }

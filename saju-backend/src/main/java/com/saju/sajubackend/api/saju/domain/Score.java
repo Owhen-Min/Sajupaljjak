@@ -1,13 +1,8 @@
 package com.saju.sajubackend.api.saju.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.saju.sajubackend.common.converter.CelestialStemConverter;
+import com.saju.sajubackend.common.enums.CelestialStem;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,12 +18,12 @@ public class Score {
     @Column(name = "score_id")
     private Long scoreId;
 
-    @OneToOne
-    @JoinColumn(name = "source_id")
+    @Convert(converter = CelestialStemConverter.class)
+    @Column
     private CelestialStem source;
 
-    @OneToOne
-    @JoinColumn(name = "target_id")
+    @Convert(converter = CelestialStemConverter.class)
+    @Column
     private CelestialStem target;
 
     @Column(nullable = false)

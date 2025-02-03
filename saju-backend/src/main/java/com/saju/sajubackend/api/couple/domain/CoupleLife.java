@@ -16,25 +16,41 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "SAJU_COUPLE")
-public class SajuCouple {
+@Table(name = "COUPLE_LIFE")
+public class CoupleLife {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "saju_couple_id")
-    private Long sajuCoupleId;
+    @Column(name = "couple_life_id")
+    private Long coupleLifeId;
 
     @OneToOne
     @JoinColumn(name = "couple_id", nullable = false)
     private Couple couple;
 
-    @Column(name = "saju_couple_content", nullable = false, columnDefinition = "TEXT")
-    private String sajuCoupleContent;
+    @Column(nullable = false)
+    private String harmony;
+
+    @Column(nullable = false)
+    private String chemi;
+
+    @Column(nullable = false)
+    private String good;
+
+    @Column(nullable = false)
+    private String bad;
+
+    @Column(nullable = false)
+    private String advice;
 
     @Builder
-    private SajuCouple(Long sajuCoupleId, Couple couple, String sajuCoupleContent) {
-        this.sajuCoupleId = sajuCoupleId;
+    private CoupleLife(Long coupleLifeId, Couple couple, String harmony, String chemi, String good, String bad, String advice) {
+        this.coupleLifeId = coupleLifeId;
         this.couple = couple;
-        this.sajuCoupleContent = sajuCoupleContent;
+        this.harmony = harmony;
+        this.chemi = chemi;
+        this.good = good;
+        this.bad = bad;
+        this.advice = advice;
     }
 }
