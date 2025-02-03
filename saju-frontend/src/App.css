@@ -1,17 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.onboarding {
+  padding-top: 10vh;
+  padding-bottom: 20vh;
+}
+
 .onboarding img {
   width: 100%;
   height: auto;
-  margin-top : 20vh;
-  margin-bottom: 20vh;
 } 
+
+.login {
+  padding-top: 10vh;
+  padding-bottom: 20vh;
+}
 
 .login img {
   width: 100%;
   height: auto;
-  margin-top : 20vh;
   margin-bottom: 20vh;
 } 
 
 .onboarding {
   text-align: center;
+}
+
+h2 {
+  margin-bottom: 10px;
 }

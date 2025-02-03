@@ -1,7 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.webp';
-import SelectionGrid from '../components/SelectionGrid';
+import logo from '../../assets/logo.webp';
 
 
 function OnboardingPage() {

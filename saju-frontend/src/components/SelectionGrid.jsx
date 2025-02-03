@@ -1,48 +1,30 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(${props => props.cols}, 1fr);
-  gap: 10px;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-`;
+const SelectionGrid = ({ 
+  cols, 
+  multiSelect = false,
+  options = [],
+  onSelect = () => {},
+  showSelectAll = false,
+  selected = []
+}) => {
+    const [selectedItems, setSelectedItems] = useState(
+      Array.isArray(selected) ? selected : selected ? [options.indexOf(selected)] : []
+    );
 
-const Button = styled.button`
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: ${props => props.isSelected ? '#4CAF50' : 'white'};
-  color: ${props => props.isSelected ? 'white' : 'black'};
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: ${props => props.isSelected ? '#45a049' : '#f5f5f5'};
-  }
-`;
-
-// ... existing code ...
-
-const SelectionGrid = ({ rows, cols, multiSelect, options, onSelect, showSelectAll }) => {
-    const [selectedItems, setSelectedItems] = useState([]);
-    
     const handleClick = (index) => {
       if (multiSelect) {
-        setSelectedItems(prev => {
-          if (prev.includes(index)) {
-            return prev.filter(item => item !== index);
-          }
-          return [...prev, index];
-        });
+        const newSelected = selectedItems.includes(index)
+          ? selectedItems.filter(item => item !== index)
+          : [...selectedItems, index];
+        
+        setSelectedItems(newSelected);
+        onSelect(newSelected.map(idx => options[idx]));
       } else {
         setSelectedItems([index]);
+        onSelect(options[index]);
       }
-      
-      onSelect(index);
     };
   
     const handleSelectAll = () => {
@@ -61,45 +43,44 @@ const SelectionGrid = ({ rows, cols, multiSelect, options, onSelect, showSelectA
     return (
       <div>
         {showSelectAll && multiSelect && (
-          <Button
-            isSelected={selectedItems.length === options.length}
+          <button
+            className={`w-full mb-2.5 py-3 px-4 border-2 rounded-lg cursor-pointer font-semibold shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
+              ${selectedItems.length === options.length 
+                ? 'bg-[#ff5226] text-white border-[#ff5226] hover:bg-[#ff4012] hover:border-[#ff4012]' 
+                : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
             onClick={handleSelectAll}
-            style={{ marginBottom: '10px', width: '100%' }}
           >
             전체 선택
-          </Button>
+          </button>
         )}
-        <Grid cols={cols}>
-          {Array(rows * cols).fill(null).map((_, index) => (
-            options[index] && (
-              <Button
-                key={index}
-                isSelected={selectedItems.includes(index)}
-                onClick={() => handleClick(index)}
-              >
-                {options[index]}
-              </Button>
-            )
+        <div 
+          className={`grid gap-2.5 w-full max-w-[600px] mx-auto`}
+          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+        >
+          {options.map((option, index) => (
+            <button
+              key={index}
+              className={`flex items-center justify-center py-3 px-4 border-2 rounded-lg cursor-pointer font-medium shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
+                ${selectedItems.includes(index)
+                  ? 'bg-[#FF0000] text-white border-[#FF0000] hover:bg-[#e60000] hover:border-[#e60000]'
+                  : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
+              onClick={() => handleClick(index)}
+            >
+              {option}
+            </button>
           ))}
-        </Grid>
+        </div>
       </div>
     );
   };
   
   SelectionGrid.propTypes = {
-    rows: PropTypes.number.isRequired,
     cols: PropTypes.number.isRequired,
     multiSelect: PropTypes.bool,
-    options: PropTypes.array,
+    options: PropTypes.array.isRequired,
     onSelect: PropTypes.func,
-    showSelectAll: PropTypes.bool
-  };
-  
-  SelectionGrid.defaultProps = {
-    multiSelect: false,
-    options: [],
-    onSelect: () => {},
-    showSelectAll: false
+    showSelectAll: PropTypes.bool,
+    selected: PropTypes.array
   };
   
 
