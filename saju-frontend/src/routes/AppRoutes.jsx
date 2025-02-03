@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Onboarding from '../pages/SignUp/Onboarding';
 import LogInPage from '../pages/login';
@@ -7,6 +6,7 @@ import Welcome from '../pages/SignUp/Welcome';
 import SignUpPreference from '../pages/SignUp/SignUpPreference';
 import SignUpAdditional from '../pages/SignUp/SignUpAdditional';
 import SignUpCouple from '../pages/SignUp/SignUpCouple';
+
 // 나중에 추가될 다른 페이지들을 위한 임시 컴포넌트들
 const Solo = () => <div>싱글 상태 페이지</div>;
 const Couple = () => <div>커플 상태 페이지</div>;
