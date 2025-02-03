@@ -2,14 +2,13 @@ package com.saju.sajubackend.api.member.domain;
 
 import com.saju.sajubackend.api.filter.domain.*;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -44,9 +43,9 @@ public class Member {
     @Column(name = "city_code")
     private Integer cityCode;
 
-    @OneToOne
-    @JoinColumn(name = "smoking_id")
-    private Smoking smoking;
+    @Convert(converter = SmokingStatusConverter.class)
+    @Column(nullable = false)
+    private SmokingStatus smoking;
 
     @Convert(converter = DrinkingFrequencyConverter.class)
     @Column(nullable = false)
@@ -57,7 +56,7 @@ public class Member {
     private Religion religion;
 
     @Builder
-    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, Smoking smoking, DrinkingFrequency drinking, Religion religion) {
+    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, SmokingStatus smoking, DrinkingFrequency drinking, Religion religion) {
         this.memberId = memberId;
         this.bday = bday;
         this.btime = btime;

@@ -21,8 +21,9 @@ public class Filter {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Convert(converter = SmokingStatusConverter.class)
     @Column(nullable = false)
-    private int smokingId;
+    private SmokingStatus smoking;
 
     @Convert(converter = DrinkingFrequencyConverter.class)
     @Column(nullable = false)
@@ -41,10 +42,10 @@ public class Filter {
     private Integer maxAge;
 
     @Builder
-    private Filter(Long filterId, Member member, int smokingId, DrinkingFrequency drinking, Integer minHeight, Integer maxHeight, Integer minAge, Integer maxAge) {
+    private Filter(Long filterId, Member member, SmokingStatus smoking, DrinkingFrequency drinking, Integer minHeight, Integer maxHeight, Integer minAge, Integer maxAge) {
         this.filterId = filterId;
         this.member = member;
-        this.smokingId = smokingId;
+        this.smoking = smoking;
         this.drinking = drinking;
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
