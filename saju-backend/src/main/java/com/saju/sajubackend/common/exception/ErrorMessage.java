@@ -27,7 +27,10 @@ public enum ErrorMessage {
 	INVALID_MESSAGE_LABEL("유효하지 않은 메시지 값입니다."),
 
 	INVALID_ELEMENT_CODE("유효하지 않은 오행 코드입니다."),
-	INVALID_ELEMENT_LABEL("유효하지 않은 오행 값입니다.");
+	INVALID_ELEMENT_LABEL("유효하지 않은 오행 값입니다."),
+
+	INVALID_CELESTIAL_STEM_CODE("유효하지 않은 천간 코드입니다."),
+	INVALID_CELESTIAL_STEM_LABEL("유효하지 않은 천간 값입니다.");
 
 	private final String message;
 }
