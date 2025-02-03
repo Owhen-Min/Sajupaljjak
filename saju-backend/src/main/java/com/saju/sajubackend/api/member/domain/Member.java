@@ -51,8 +51,8 @@ public class Member {
     @Column(nullable = false)
     private DrinkingFrequency drinking;
 
-    @OneToOne
-    @JoinColumn(name = "religion_id")
+    @Convert(converter = ReligionConverter.class)
+    @Column(nullable = false)
     private Religion religion;
 
     @Builder
