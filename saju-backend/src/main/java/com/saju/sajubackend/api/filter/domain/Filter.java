@@ -1,6 +1,5 @@
 package com.saju.sajubackend.api.filter.domain;
 
-import com.saju.sajubackend.api.filter.dto.UserPreferenceRequest;
 import com.saju.sajubackend.api.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -50,18 +49,6 @@ public class Filter {
         this.maxHeight = maxHeight;
         this.minAge = minAge;
         this.maxAge = maxAge;
-    }
-
-    public static Filter from(UserPreferenceRequest request, Member member) {
-        return Filter.builder()
-                .member(member)
-                .smokingId((request.getSmokingFilter()))
-                .drinkingId(request.getDrinkingFilter())
-                .minHeight((request.getMinHeight()))
-                .maxHeight(request.getMaxHeight())
-                .minAge(request.getMinAge())
-                .maxAge(request.getMaxAge())
-                .build();
     }
 }
 

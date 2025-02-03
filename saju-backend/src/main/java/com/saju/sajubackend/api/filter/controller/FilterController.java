@@ -1,6 +1,6 @@
 package com.saju.sajubackend.api.filter.controller;
 
-import com.saju.sajubackend.api.filter.dto.UserPreferenceRequest;
+import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
 import com.saju.sajubackend.api.filter.service.FilterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ public class FilterController {
     private final FilterService filterService;
 
     @PostMapping
-    public ResponseEntity<Void> createFilter(@Valid @RequestBody UserPreferenceRequest request,
-                                            Long memberId) {
+    public ResponseEntity<Void> createFilter(@Valid @RequestBody FilterSaveRequestDto request,
+                                            Long memberId) { // todo : 토큰에서 memberId 꺼내기
         filterService.createFilter(request, memberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

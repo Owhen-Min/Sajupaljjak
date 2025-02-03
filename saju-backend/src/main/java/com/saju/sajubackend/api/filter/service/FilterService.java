@@ -3,7 +3,7 @@ package com.saju.sajubackend.api.filter.service;
 import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.filter.domain.RegionFilter;
 import com.saju.sajubackend.api.filter.domain.ReligionFilter;
-import com.saju.sajubackend.api.filter.dto.UserPreferenceRequest;
+import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
 import com.saju.sajubackend.api.filter.repository.FilterRepository;
 import com.saju.sajubackend.api.filter.repository.RegionFilterRepository;
 import com.saju.sajubackend.api.filter.repository.ReligionFilterRepository;
@@ -28,14 +28,14 @@ public class FilterService {
     private final RegionFilterRepository regionFilterRepository;
     private final MemberRepository memberRepository;
 
-    public void createFilter(UserPreferenceRequest request, Long memberId) {
+    public void createFilter(FilterSaveRequestDto request, Long memberId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
 
-        Filter filter = filterRepository.save(Filter.from(request, member));
+        Filter filter = filterRepository.save(request.toEntity(member));
 
-        saveRegionFilters(request.getRegionFilter(), filter);
-        saveReligionFilters(request.getReligionFilter(), filter);
+        saveRegionFilters(request.regionFilter(), filter);
+        saveReligionFilters(request.religionFilter(), filter);
     }
 
     private void saveRegionFilters(List<Integer> cityCodes, Filter filter) {
