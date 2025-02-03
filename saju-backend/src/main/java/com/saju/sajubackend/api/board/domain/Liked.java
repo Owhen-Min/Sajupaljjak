@@ -20,12 +20,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "LIKE")
-public class Like extends BaseTimeEntity {
+public class Liked extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
-    private Long likeId;
+    @Column(name = "liked_id")
+    private Long likedId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
@@ -36,8 +36,8 @@ public class Like extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    private Like(Long likeId, Board board, Member member) {
-        this.likeId = likeId;
+    private Liked(Long likedId, Board board, Member member) {
+        this.likedId = likedId;
         this.board = board;
         this.member = member;
     }
