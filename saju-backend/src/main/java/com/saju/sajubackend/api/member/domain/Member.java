@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +33,7 @@ public class Member {
     private LocalDate bday;
 
     @Column(nullable = false, length = 10)
-    private String btime;
+    private LocalDateTime btime;
 
     @Column(name = "is_couple", nullable = false, length = 15)
     private String isCouple;
@@ -63,9 +65,7 @@ public class Member {
     private Religion religion;
 
     @Builder
-    private Member(Long memberId, LocalDate bday, String btime, String isCouple, String nickname, String intro,
-                  String profileImg, Integer height, Integer cityCode, Smoking smoking, Drinking drinking,
-                  Religion religion) {
+    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, Smoking smoking, Drinking drinking, Religion religion) {
         this.memberId = memberId;
         this.bday = bday;
         this.btime = btime;
