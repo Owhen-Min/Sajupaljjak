@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import SelectionGrid from '../components/SelectionGrid';
-import Dropdown from '../components/Dropdown';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import { provinces } from '../data/provinceCode';
-import '../styles/Signup.css';
+import SelectionGrid from '../../components/SelectionGrid';
+import Dropdown from '../../components/Dropdown';
+import MainButton from '../../components/MainButton';
+import Input from '../../components/Input';
+import { provinces } from '../../data/provinceCode';
+import '../../styles/Signup.css';
 
 function Header({ step, children }) {
   const getProgressWidth = () => {
@@ -256,7 +256,6 @@ function SignUpPage() {
             <h3 className="input-prompt">성별을 입력해주세요</h3>
             <div className="input-group">
               <SelectionGrid
-                rows={1}
                 cols={2}
                 options={['남자', '여자']}
                 onSelect={(selected) => handleSelectionChange('gender', selected)}
@@ -355,7 +354,6 @@ function SignUpPage() {
             <h3 className="input-prompt">종교를 선택해주세요</h3>
             <div className="input-group">
               <SelectionGrid
-                rows={2}
                 cols={3}
                 options={['무교', '개신교', '불교', '천주교', '기타']}
                 onSelect={(selected) => handleSelectionChange('religion', selected)}
@@ -375,7 +373,6 @@ function SignUpPage() {
             <h3 className="input-prompt">흡연 여부를 선택해주세요</h3>
             <div className="input-group">
               <SelectionGrid
-                rows={1}
                 cols={3}
                 options={['흡연', '비흡연', '금연중']}
                 onSelect={(selected) => handleSelectionChange('smoking', selected)}
@@ -395,7 +392,6 @@ function SignUpPage() {
             <h3 className="input-prompt">음주 여부를 선택해주세요</h3>
             <div className="input-group">
               <SelectionGrid
-                rows={2}
                 cols={2}
                 options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
                 onSelect={(selected) => handleSelectionChange('drinking', selected)}
@@ -710,17 +706,17 @@ function SignUpPage() {
         {renderStep()}
         <div className="button-group">
           {(step === 3 || step === 8) && (
-            <Button 
+            <MainButton 
               onClick={handleNextStep}
               disabled={step >= maxStep}
             >
               다음
-            </Button>
+            </MainButton>
           )}
           {step === 12 && (
-            <Button onClick={handleSubmit}>
+            <MainButton onClick={handleSubmit}>
               가입하기
-            </Button>
+            </MainButton>
           )}
         </div>
       </div>

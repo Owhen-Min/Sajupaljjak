@@ -1,7 +1,7 @@
-export const Button = ({ className, children, ...props }) => (
+export const MainButton = ({ className, children, half, ...props }) => (
     <button
       className={`
-        w-full px-4 py-3
+        ${half ? 'w-1/2' : 'w-full'} px-4 py-3
         mt-5
         text-base font-medium text-white
         bg-[#ff6842]
@@ -21,4 +21,4 @@ export const Button = ({ className, children, ...props }) => (
     </button>
   );
   
-  export default Button;
+  export default MainButton;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const SelectionGrid = ({ 
@@ -10,23 +10,17 @@ const SelectionGrid = ({
   selected = []
 }) => {
     const [selectedItems, setSelectedItems] = useState(
-      Array.isArray(selected) ? selected : [options.indexOf(selected)]
+      Array.isArray(selected) ? selected : selected ? [options.indexOf(selected)] : []
     );
-    
-    useEffect(() => {
-      setSelectedItems(
-        Array.isArray(selected) ? selected : [options.indexOf(selected)]
-      );
-    }, [selected, options]);
 
     const handleClick = (index) => {
       if (multiSelect) {
-        setSelectedItems(prev => {
-          if (prev.includes(index)) {
-            return prev.filter(item => item !== index);
-          }
-          return [...prev, index];
-        });
+        const newSelected = selectedItems.includes(index)
+          ? selectedItems.filter(item => item !== index)
+          : [...selectedItems, index];
+        
+        setSelectedItems(newSelected);
+        onSelect(newSelected.map(idx => options[idx]));
       } else {
         setSelectedItems([index]);
         onSelect(options[index]);
