@@ -557,8 +557,8 @@ function SignUpPage() {
                   value={formData.nickname}
                   onChange={(e) => {
                     handleInputChange(e);
-                    setMaxStep(Math.max(maxStep, 12));
-                    setStep(Math.min(12, maxStep));
+                    setMaxStep(Math.max(maxStep, 10));
+                    setStep(Math.max(10, maxStep));
                   }}
                   placeholder="닉네임"
                 />
@@ -581,8 +581,8 @@ function SignUpPage() {
                   value={formData.introduction}
                   onChange={(e) => {
                     handleInputChange(e);
-                    setMaxStep(Math.max(maxStep, 12));
-                    setStep(Math.min(12, maxStep));
+                    setMaxStep(Math.max(maxStep, 11));
+                    setStep(Math.max(maxStep, 11));
                   }}
                   placeholder="자기소개를 입력해주세요"
                   className="w-full h-32 p-3 border border-gray-300 rounded-md resize-none text-base"
@@ -618,8 +618,6 @@ function SignUpPage() {
                   name="profileImage"
                   accept="image/*"
                   onChange={(e) => {
-                    setMaxStep(Math.max(maxStep, 12));
-                    setStep(Math.min(12, maxStep));
                     const file = e.target.files[0];
                     if (file) {
                       const reader = new FileReader();
@@ -630,6 +628,8 @@ function SignUpPage() {
                         }));
                       };
                       reader.readAsDataURL(file);
+                      setMaxStep(Math.max(maxStep, 12));
+                      setStep(Math.max(maxStep, 12));
                     }
                   }}
                   className="hidden"
