@@ -1,16 +1,8 @@
 package com.saju.sajubackend.api.member.domain;
 
-import com.saju.sajubackend.api.filter.domain.Drinking;
-import com.saju.sajubackend.api.filter.domain.Religion;
-import com.saju.sajubackend.api.filter.domain.Smoking;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.saju.sajubackend.api.filter.domain.*;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -56,16 +48,16 @@ public class Member {
     @JoinColumn(name = "smoking_id")
     private Smoking smoking;
 
-    @OneToOne
-    @JoinColumn(name = "drinking_id")
-    private Drinking drinking;
+    @Convert(converter = DrinkingFrequencyConverter.class)
+    @Column(nullable = false)
+    private DrinkingFrequency drinking;
 
     @OneToOne
     @JoinColumn(name = "religion_id")
     private Religion religion;
 
     @Builder
-    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, Smoking smoking, Drinking drinking, Religion religion) {
+    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, Smoking smoking, DrinkingFrequency drinking, Religion religion) {
         this.memberId = memberId;
         this.bday = bday;
         this.btime = btime;
