@@ -668,6 +668,12 @@ function SignUpPage() {
         }
         
         setStep(nextStep);
+        
+        // 페이지 최상단으로 스크롤
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'  // 부드러운 스크롤 효과
+        });
       }
     };
 
@@ -682,22 +688,46 @@ function SignUpPage() {
 
     return (
       <div className="signup">
+        <button
+          onClick={() => {
+            if (step >= 9) {
+              setStep(8);
+            } else if (step >= 4) {
+              setStep(3);
+            }
+          }}
+          className={`
+            w-6 aspect-square 
+            flex items-center justify-center
+            text-gray-600
+            border border-gray-300 
+            rounded-lg
+            bg-white
+            box-border
+            transition-all duration-300 ease-in-out
+            hover:bg-gray-100
+            focus:outline-none focus:border-[#ff6842] focus:ring-2 focus:ring-[#4CAF50]/20
+            absolute
+          `}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            className="w-6 h-6"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M15 19l-7-7 7-7" 
+            />
+          </svg>
+        </button>
         <Header step={step}>
+        
           <div className="flex items-center relative w-full">
-            {step > 3 && (
-              <button 
-                className="back-button absolute left-0" 
-                onClick={() => {
-                  if (step >= 9) {
-                    setStep(8);
-                  } else if (step >= 4) {
-                    setStep(3);
-                  }
-                }}
-              >
-                이전
-              </button>
-            )}
             <h1 className="w-full text-center text-base font-semibold">
               {step >= 9 ? '내 프로필 입력' : step >= 4 ? '내 정보 입력' : '사주 정보 입력'}
             </h1>
