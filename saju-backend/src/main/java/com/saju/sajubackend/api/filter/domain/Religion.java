@@ -1,33 +1,40 @@
 package com.saju.sajubackend.api.filter.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Builder;
+import com.saju.sajubackend.common.exception.BaseException;
+import com.saju.sajubackend.common.exception.ErrorMessage;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Table(name = "RELIGION")
-public class Religion {
+@RequiredArgsConstructor
+public enum Religion {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "religion_id")
-    private Integer religionId;
+    NONE(0, "무교"),
+    CHRISTIANITY(1, "기독교"),
+    BUDDHISM(2, "불교"),
+    CATHOLICISM(3, "천주교"),
+    OTHER(4, "기타");
 
-    @Column(nullable = false, length = 30)
-    private String name;
+    private final int code;
+    private final String label;
 
-    @Builder
-    private Religion(Integer religionId, String name) {
-        this.religionId = religionId;
-        this.name = name;
+    public static Religion fromCode(int code) {
+        for (Religion religion : Religion.values()) {
+            if (religion.code == code) {
+                return religion;
+            }
+        }
+        throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_RELIGION_CODE);
+    }
+
+    public static Religion fromLabel(String label) {
+        for (Religion religion : Religion.values()) {
+            if (religion.label.equals(label)) {
+                return religion;
+            }
+        }
+        throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_RELIGION_LABEL);
     }
 }
+

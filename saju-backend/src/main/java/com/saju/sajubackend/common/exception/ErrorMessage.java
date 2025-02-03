@@ -18,7 +18,10 @@ public enum ErrorMessage {
 	INVALID_DRINKING_LABEL("유효하지 않은 음주 값입니다."),
 
 	INVALID_SMOKING_CODE("유효하지 않은 흡연 코드입니다."),
-	INVALID_SMOKING_LABEL("유효하지 않은 흡연 값입니다.");
+	INVALID_SMOKING_LABEL("유효하지 않은 흡연 값입니다."),
+
+	INVALID_RELIGION_CODE("유효하지 않은 종교 코드입니다."),
+	INVALID_RELIGION_LABEL("유효하지 않은 종교 값입니다.");
 
 	private final String message;
 }
