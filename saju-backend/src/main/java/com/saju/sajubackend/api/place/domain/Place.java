@@ -1,6 +1,6 @@
 package com.saju.sajubackend.api.place.domain;
 
-import com.saju.sajubackend.api.saju.domain.Element;
+import com.saju.sajubackend.common.enums.Element;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
