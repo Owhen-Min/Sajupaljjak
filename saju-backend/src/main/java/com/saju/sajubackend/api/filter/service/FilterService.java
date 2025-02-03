@@ -32,10 +32,10 @@ public class FilterService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
 
-        Filter filter = filterRepository.save(request.toEntity(member));
+        Filter filter = filterRepository.save(request.toFilter(member));
 
         saveRegionFilters(request.regionFilter(), filter);
-        saveReligionFilters(request.religionFilter(), filter);
+        saveReligionFilters(request.toReligionFilters(filter));
     }
 
     private void saveRegionFilters(List<Integer> cityCodes, Filter filter) {
@@ -51,16 +51,9 @@ public class FilterService {
         regionFilterRepository.saveAll(regionFilters);
     }
 
-    private void saveReligionFilters(List<Integer> religionIds, Filter filter) {
-        if (religionIds.isEmpty()) return;
+    private void saveReligionFilters(List<ReligionFilter> religions) {
+        if (religions.isEmpty()) return;
 
-        List<ReligionFilter> religionFilters = religionIds.stream()
-                .map(religionId -> ReligionFilter.builder()
-                        .religionId(religionId)
-                        .filter(filter)
-                        .build())
-                .collect(Collectors.toList());
-
-        religionFilterRepository.saveAll(religionFilters);
+        religionFilterRepository.saveAll(religions);
     }
 }
