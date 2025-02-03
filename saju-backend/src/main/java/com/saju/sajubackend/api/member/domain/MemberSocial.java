@@ -1,6 +1,8 @@
 package com.saju.sajubackend.api.member.domain;
 
+import com.saju.sajubackend.common.converter.GenderConverter;
 import com.saju.sajubackend.common.entity.TimeStampedEntity;
+import com.saju.sajubackend.common.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

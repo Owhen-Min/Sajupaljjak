@@ -1,4 +1,4 @@
-package com.saju.sajubackend.api.filter.domain;
+package com.saju.sajubackend.common.enums;
 
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;

@@ -1,6 +1,10 @@
 package com.saju.sajubackend.api.filter.domain;
 
 import com.saju.sajubackend.api.member.domain.Member;
+import com.saju.sajubackend.common.converter.DrinkingFrequencyConverter;
+import com.saju.sajubackend.common.converter.SmokingStatusConverter;
+import com.saju.sajubackend.common.enums.DrinkingFrequency;
+import com.saju.sajubackend.common.enums.SmokingStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

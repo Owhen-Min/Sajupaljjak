@@ -1,5 +1,6 @@
-package com.saju.sajubackend.api.member.domain;
+package com.saju.sajubackend.common.converter;
 
+import com.saju.sajubackend.common.enums.Gender;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
