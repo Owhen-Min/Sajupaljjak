@@ -19,7 +19,7 @@ public class MatchingService {
     private final int MAGINOT_SCORE = 80;
 
     public List<Member> getMatchingMembers(Long memberId) {
-        // 1. redis에 이미 존재하는지 확인
+        // todo : redis에 이미 존재하는지 확인
 
         // 2. 랜덤으로 3명 가져오기
         return matchingQueryDslRepository.findMatchingMembers(memberId, MAGINOT_SCORE);
