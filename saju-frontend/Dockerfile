@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # 2️⃣ Nginx로 정적 파일 서빙
-FROM nginx:latest
+FROM nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
