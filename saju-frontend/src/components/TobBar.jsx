@@ -1,0 +1,36 @@
+
+import { Link, useLocation } from "react-router-dom";
+const getTitleFromPath = (pathname) => {
+  if (pathname.startsWith("/solo")) return "솔로";
+  if (pathname.startsWith("/chats")) return "채팅";
+  if (pathname.startsWith("/community")) return "커뮤니티";
+  if (pathname.startsWith("/fortune")) return "운세";
+  if (pathname.startsWith("/match")) return "매칭";
+  return "";
+};
+
+const TopBar = () => {
+  const location = useLocation();
+  const title = getTitleFromPath(location.pathname);
+
+  return (
+    <header className="w-full px-4 py-2 flex justify-between items-center bg-white">
+      <div>
+        <h1 className="text-xl font-semibold">{title}</h1>
+      </div>
+      <div>
+        <Link to="/mypage">
+          <button className="flex items-center focus:outline-none">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFCm6U-R7Dh4WAGASSJFN9RaPTnxmDeV1cVqitzJ1yXslCORiVstDy8rB0YgI5YCRkCJo&usqp=CAU"
+              alt="Profile"
+              className="w-8 h-8 rounded-full"
+            />
+          </button>
+        </Link>
+      </div>
+    </header>
+  );
+};
+
+export default TopBar;
