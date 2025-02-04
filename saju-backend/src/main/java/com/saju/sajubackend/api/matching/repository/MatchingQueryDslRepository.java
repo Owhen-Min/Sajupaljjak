@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.saju.sajubackend.api.filter.domain.QFilter.filter;
@@ -30,14 +32,14 @@ public class MatchingQueryDslRepository {
     private final int LIMIT = 3;
     private final String SINGLE = "Single";
 
-    public List<Member> findMatchingMembers(Long memberId, int maginot) {
+    public Map<Member, Long> findMatchingMembers(Long memberId, long maginot) {
         // 1. 회원 정보 조회
         Member foundMember = queryFactory
                 .selectFrom(member)
                 .where(member.memberId.eq(memberId))
                 .fetchOne();
 
-        if (foundMember == null) return Collections.emptyList();
+        if (foundMember == null) return Collections.emptyMap();
 
         // 2. 필터 정보 조회
         Filter foundFilter = queryFactory
@@ -45,10 +47,8 @@ public class MatchingQueryDslRepository {
                 .where(filter.member.eq(foundMember))
                 .fetchOne();
 
-        if (foundFilter == null) return Collections.emptyList();
-
-        // 3. 천간 점수가 80점 이상인 천간 조회
-        List<CelestialStem> compatibleStems = getCompatibleCelestialStems(foundMember.getCelestialStem(), maginot);
+        // 3. 80점 이상인 천간과 점수 조회
+        Map<CelestialStem, Long> compatibleStemsMap = getCompatibleCelestialStems(foundMember.getCelestialStem(), maginot);
 
         // 4. 상대 필터링
         List<Member> candidates = queryFactory
@@ -57,25 +57,37 @@ public class MatchingQueryDslRepository {
                         isOppositeGender(foundMember.getGender()) // 성별 반대
                                 .and(isSingle())                  // 싱글 여부
                                 .and(matchReligion(foundFilter))  // 종교
-                                .and(matchCelestialStem(compatibleStems)) // 천간
+                                .and(matchCelestialStem(compatibleStemsMap.keySet())) // 천간
                                 .and(matchRegion(foundFilter))    // 지역
                                 .and(matchFilter(foundFilter))    // 그 외(키, 나이, 흡연, 음주)
                 )
                 .fetch();
 
         // 5. 랜덤으로 3명 선발
-        return random(candidates, LIMIT);
+        List<Member> selectedCandidates = random(candidates, LIMIT);
+
+        // 6. Map<Member, Integer> 형태로 변환
+        return selectedCandidates.stream()
+                .collect(Collectors.toMap(
+                        member -> member,
+                        member -> compatibleStemsMap.getOrDefault(member.getCelestialStem(), 0L)
+                ));
     }
 
-    private List<CelestialStem> getCompatibleCelestialStems(CelestialStem celestialStem, int maginot) {
+    private Map<CelestialStem, Long> getCompatibleCelestialStems(CelestialStem celestialStem, long maginot) {
         return queryFactory
-                .select(score1.target)
+                .select(score1.target, score1.score)
                 .from(score1)
                 .where(
                         score1.source.eq(celestialStem)
                                 .and(score1.score.goe(maginot))
                 )
-                .fetch();
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(score1.target),
+                        tuple -> tuple.get(1, Long.class)
+                ));
     }
 
     private BooleanExpression isOppositeGender(Gender gender) {
@@ -86,7 +98,7 @@ public class MatchingQueryDslRepository {
         return member.isCouple.eq(SINGLE);
     }
 
-    private BooleanExpression matchCelestialStem(List<CelestialStem> compatibleStems) {
+    private BooleanExpression matchCelestialStem(Set<CelestialStem> compatibleStems) {
         return member.celestialStem.in(compatibleStems);
     }
 
