@@ -17,7 +17,7 @@ function OnboardingPage() {
   };
 
   const handleNoCoupleStatus = () => {
-    navigate('/single');
+    navigate('/solo');
   };
 
   const handleCoupleStatus = () => {
