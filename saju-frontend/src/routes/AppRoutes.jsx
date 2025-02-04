@@ -19,7 +19,7 @@ function AppRoutes() {
   return (
     <Routes>
       {/* 메인 페이지 (온보딩) */}
-      <Route path="/" element={<Onboarding />} />
+      <Route path="/main" element={<Onboarding />} />
       
       {/* 로그인으로 이동하는 경우 */}
       <Route path="/login" element={<LogInPage />} />
