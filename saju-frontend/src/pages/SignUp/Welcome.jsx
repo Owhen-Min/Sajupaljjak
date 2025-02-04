@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import MainButton from '../../components/MainButton';
 
-function WelcomePage() {
+function Welcome() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,4 +28,4 @@ function WelcomePage() {
   );
 }
 
-export default WelcomePage;
+export default Welcome;
