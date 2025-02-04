@@ -28,6 +28,7 @@ public class FilterService {
     private final RegionFilterRepository regionFilterRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public void createFilter(FilterSaveRequestDto request, Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
