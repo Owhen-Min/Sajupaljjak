@@ -1,5 +1,5 @@
-import BottomNav from "../components/BottomNav";
-import TopBar from "../components/TobBar";
+import BottomNav from "../../components/BottomNav";
+import TopBar from "../../components/TobBar";
 
 function Chats() {
   return (

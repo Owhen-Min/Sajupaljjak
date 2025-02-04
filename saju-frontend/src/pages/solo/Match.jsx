@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import BottomNav from "../components/BottomNav";
-import TopBar from "../components/TobBar";
-import UserList from "../components/UserList";
-import { testUsers } from "../data/user";
+import BottomNav from "../../components/BottomNav";
+import TopBar from "../../components/TobBar";
+import UserList from "../../components/UserList";
+import { testUsers } from "../../data/user";
 
 function Match() {
   const [users, setUsers] = useState(testUsers);
