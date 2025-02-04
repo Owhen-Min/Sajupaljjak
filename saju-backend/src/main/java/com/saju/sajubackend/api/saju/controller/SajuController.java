@@ -17,17 +17,19 @@ public class SajuController {
     @Autowired
     private SajuService sajuService;
 
+    // todo : memberId 토큰에서 꺼내기
+
     // 간단한 사주(운세) 조회 API (/api/saju)
     @GetMapping
-    public ResponseEntity<SajuResponse> getDailySaju() {
-        SajuResponse response = sajuService.getDailySaju();
+    public ResponseEntity<SajuResponse> getDailySaju(Long memberId) {
+        SajuResponse response = sajuService.getDailySajuForMember(memberId);
         return ResponseEntity.ok(response);
     }
 
     // 오늘의 상세 사주(운세) 조회 API (/api/saju/today)
     @GetMapping("/today")
-    public ResponseEntity<SajuDetailResponse> getTodaySajuDetail() {
-        SajuDetailResponse response = sajuService.getTodaySajuDetail();
+    public ResponseEntity<SajuDetailResponse> getTodaySajuDetail(Long memberId) {
+        SajuDetailResponse response = sajuService.getTodaySajuDetailForMember(memberId);
         return ResponseEntity.ok(response);
     }
 }
