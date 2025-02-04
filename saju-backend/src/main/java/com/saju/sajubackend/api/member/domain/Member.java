@@ -1,11 +1,7 @@
 package com.saju.sajubackend.api.member.domain;
 
-import com.saju.sajubackend.common.converter.DrinkingFrequencyConverter;
-import com.saju.sajubackend.common.converter.ReligionConverter;
-import com.saju.sajubackend.common.converter.SmokingStatusConverter;
-import com.saju.sajubackend.common.enums.DrinkingFrequency;
-import com.saju.sajubackend.common.enums.Religion;
-import com.saju.sajubackend.common.enums.SmokingStatus;
+import com.saju.sajubackend.common.converter.*;
+import com.saju.sajubackend.common.enums.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -60,8 +56,16 @@ public class Member {
     @Column(nullable = false)
     private Religion religion;
 
+    @Convert(converter = GenderConverter.class)
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Convert(converter = CelestialStemConverter.class)
+    @Column
+    private CelestialStem celestialStem;
+
     @Builder
-    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, SmokingStatus smoking, DrinkingFrequency drinking, Religion religion) {
+    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, SmokingStatus smoking, DrinkingFrequency drinking, Religion religion, Gender gender, CelestialStem celestialStem) {
         this.memberId = memberId;
         this.bday = bday;
         this.btime = btime;
@@ -74,5 +78,7 @@ public class Member {
         this.smoking = smoking;
         this.drinking = drinking;
         this.religion = religion;
+        this.gender = gender;
+        this.celestialStem = celestialStem;
     }
 }
