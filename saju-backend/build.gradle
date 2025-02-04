@@ -32,6 +32,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+<<<<<<< HEAD
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
@@ -40,6 +41,14 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
 
+=======
+
+    // validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+>>>>>>> d6f01c6e64bd3b9e7163b4788d63d5a954d2a8fc
 }
 
 tasks.named('test') {

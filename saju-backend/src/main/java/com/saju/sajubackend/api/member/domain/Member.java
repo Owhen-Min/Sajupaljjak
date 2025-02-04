@@ -1,21 +1,19 @@
 package com.saju.sajubackend.api.member.domain;
 
-import com.saju.sajubackend.api.filter.domain.Drinking;
-import com.saju.sajubackend.api.filter.domain.Religion;
-import com.saju.sajubackend.api.filter.domain.Smoking;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDate;
+import com.saju.sajubackend.common.converter.DrinkingFrequencyConverter;
+import com.saju.sajubackend.common.converter.ReligionConverter;
+import com.saju.sajubackend.common.converter.SmokingStatusConverter;
+import com.saju.sajubackend.common.enums.DrinkingFrequency;
+import com.saju.sajubackend.common.enums.Religion;
+import com.saju.sajubackend.common.enums.SmokingStatus;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,7 +29,7 @@ public class Member {
     private LocalDate bday;
 
     @Column(nullable = false, length = 10)
-    private String btime;
+    private LocalDateTime btime;
 
     @Column(name = "is_couple", nullable = false, length = 15)
     private String isCouple;
@@ -50,22 +48,20 @@ public class Member {
     @Column(name = "city_code")
     private Integer cityCode;
 
-    @OneToOne
-    @JoinColumn(name = "smoking_id")
-    private Smoking smoking;
+    @Convert(converter = SmokingStatusConverter.class)
+    @Column(nullable = false)
+    private SmokingStatus smoking;
 
-    @OneToOne
-    @JoinColumn(name = "drinking_id")
-    private Drinking drinking;
+    @Convert(converter = DrinkingFrequencyConverter.class)
+    @Column(nullable = false)
+    private DrinkingFrequency drinking;
 
-    @OneToOne
-    @JoinColumn(name = "religion_id")
+    @Convert(converter = ReligionConverter.class)
+    @Column(nullable = false)
     private Religion religion;
 
     @Builder
-    private Member(Long memberId, LocalDate bday, String btime, String isCouple, String nickname, String intro,
-                  String profileImg, Integer height, Integer cityCode, Smoking smoking, Drinking drinking,
-                  Religion religion) {
+    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, SmokingStatus smoking, DrinkingFrequency drinking, Religion religion) {
         this.memberId = memberId;
         this.bday = bday;
         this.btime = btime;

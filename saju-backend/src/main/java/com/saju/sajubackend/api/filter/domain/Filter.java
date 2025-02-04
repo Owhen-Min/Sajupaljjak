@@ -1,14 +1,11 @@
 package com.saju.sajubackend.api.filter.domain;
 
 import com.saju.sajubackend.api.member.domain.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.saju.sajubackend.common.converter.DrinkingFrequencyConverter;
+import com.saju.sajubackend.common.converter.SmokingStatusConverter;
+import com.saju.sajubackend.common.enums.DrinkingFrequency;
+import com.saju.sajubackend.common.enums.SmokingStatus;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,21 +21,17 @@ public class Filter {
     @Column(name = "filter_id")
     private Long filterId;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToOne
-    @JoinColumn(name = "smoking_id", nullable = false)
-    private Smoking smoking;
+    @Convert(converter = SmokingStatusConverter.class)
+    @Column(nullable = false)
+    private SmokingStatus smoking;
 
-    @OneToOne
-    @JoinColumn(name = "drinking_id", nullable = false)
-    private Drinking drinking;
-
-    @OneToOne
-    @JoinColumn(name = "religion_id", nullable = false)
-    private Religion religion;
+    @Convert(converter = DrinkingFrequencyConverter.class)
+    @Column(nullable = false)
+    private DrinkingFrequency drinking;
 
     @Column(name = "min_height")
     private Integer minHeight;
@@ -53,14 +46,11 @@ public class Filter {
     private Integer maxAge;
 
     @Builder
-    private Filter(Long filterId, Member member, Smoking smoking, Drinking drinking, Religion religion,
-                  Integer minHeight,
-                  Integer maxHeight, Integer minAge, Integer maxAge) {
+    private Filter(Long filterId, Member member, SmokingStatus smoking, DrinkingFrequency drinking, Integer minHeight, Integer maxHeight, Integer minAge, Integer maxAge) {
         this.filterId = filterId;
         this.member = member;
         this.smoking = smoking;
         this.drinking = drinking;
-        this.religion = religion;
         this.minHeight = minHeight;
         this.maxHeight = maxHeight;
         this.minAge = minAge;
