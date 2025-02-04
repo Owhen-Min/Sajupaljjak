@@ -1,38 +1,33 @@
 package com.saju.sajubackend.api.saju.controller;
 
-import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
-import com.saju.sajubackend.api.filter.service.FilterService;
+// 패키지: com.example.saju.controller
+
+
+import com.saju.sajubackend.api.saju.dto.SajuDetailResponse;
+import com.saju.sajubackend.api.saju.dto.SajuResponse;
 import com.saju.sajubackend.api.saju.service.SajuService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
-@RequestMapping("/api/fortune")
+@RequestMapping("/api/saju")
 public class SajuController {
-    private final SajuService sajuService;
 
     @Autowired
-    public SajuController(SajuService sajuService) {
-        this.sajuService = sajuService;
-    }
+    private SajuService sajuService;
 
+    // 간단한 사주(운세) 조회 API (/api/saju)
     @GetMapping
-    public ResponseEntity<Map<String, Object>> getFortune() {
-        String content = sajuService.getFortune();
-        Map<String, Object> response = Map.of("status", 200, "data", Map.of("content", content));
+    public ResponseEntity<SajuResponse> getDailySaju() {
+        SajuResponse response = sajuService.getDailySaju();
         return ResponseEntity.ok(response);
     }
 
+    // 오늘의 상세 사주(운세) 조회 API (/api/saju/today)
     @GetMapping("/today")
-    public ResponseEntity<Map<String, Object>> getDetailedFortune() {
-        Map<String, Object> data = sajuService.getDetailedFortune();
-        Map<String, Object> response = Map.of("status", 200, "data", data);
+    public ResponseEntity<SajuDetailResponse> getTodaySajuDetail() {
+        SajuDetailResponse response = sajuService.getTodaySajuDetail();
         return ResponseEntity.ok(response);
     }
 }
