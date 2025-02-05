@@ -12,6 +12,8 @@ const UserCard = ({ user }) => {
           backgroundPosition: "center",
         }}
       >
+
+        
         <div className="absolute bottom-0 w-full bg-gray-900 bg-opacity-60 p-4 rounded-b-3xl">
           <h2 className="card-title text-white">
             {user.name}{" "}
