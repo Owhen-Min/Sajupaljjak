@@ -1,16 +1,14 @@
-FROM node:22.11.0
+# 1️⃣ Node 환경에서 프로젝트 빌드
+FROM node:22 as builder
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-#현재 컨테이너 디렉토리 루트 경로명이 frontend 이다.
-WORKDIR /frontend
-
-# bookwave-front 전체 복사 -> FE 프로젝트 전체
-COPY . ./
-
-# 이건 docker-compose에서 포트 매핑 해줬으니까 안해도 됨
-EXPOSE 3000
-
-# 컨테이너 안에서 node_module 설치
-RUN npm install --silent
-
-# 컨테이너 내에서 서버 실행
-CMD ["npm", "run", "dev"]
+# 2️⃣ Nginx로 정적 파일 서빙
+FROM nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

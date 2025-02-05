@@ -27,7 +27,7 @@ function OnboardingPage() {
   return (
     <div className="onboarding">
       <img src={logo} alt="logo" />
-      <h4>상태에 따른 분기점</h4>
+      <h4 className="onboarding-title text-blue-500">상태에 따른 분기점</h4>
       <div className="onboarding-buttons">
         <button onClick={handleNotLoggedIn}>
           isLogin이 False일 때

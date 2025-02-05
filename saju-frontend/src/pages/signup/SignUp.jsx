@@ -427,28 +427,6 @@ function SignUpPage() {
                   }}
                   className="w-30 h-10 text-center text-base border border-gray-300 rounded-md appearance-none cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
                   onClick={(e) => {
-                    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                      e.preventDefault();
-                      const input = document.createElement('input');
-                      input.type = 'number';
-                      input.min = '140';
-                      input.max = '220';
-                      input.value = formData.height || '170';
-                      input.style.position = 'absolute';
-                      input.style.opacity = '0';
-                      
-                      input.addEventListener('change', (event) => {
-                        const value = event.target.value;
-                        if (140 <= value && value <= 220) {
-                          setFormData(prev => ({ ...prev, height: value }));
-                        }
-                        document.body.removeChild(input);
-                      });
-
-                      document.body.appendChild(input);
-                      input.focus();
-                      input.click();
-                    }
                     setStep(8);
                     setMaxStep(Math.max(maxStep, 9));
                   }}
