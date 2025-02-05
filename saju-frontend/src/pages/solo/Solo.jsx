@@ -1,7 +1,6 @@
 import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
 import UserList from "../../components/UserList";
-import React, { useEffect } from 'react';
 import useFetchData from '../../hooks/useFetchData';
 
 function Solo() {
