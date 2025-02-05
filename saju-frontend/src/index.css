@@ -2,7 +2,7 @@
   max-width: 400px;
   min-height: 80vh; /* 모바일 기본값 */
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 0px;
   box-sizing: border-box;
   background-color: #ffffff;
 } 

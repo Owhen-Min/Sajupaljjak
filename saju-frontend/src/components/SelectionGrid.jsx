@@ -42,21 +42,21 @@ const SelectionGrid = ({
   
     return (
       <div>
-        {showSelectAll && multiSelect && (
+        <div 
+          className={`grid gap-2.5 w-full max-w-[600px] mx-auto`}
+          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
+        >
+                  {showSelectAll && multiSelect && (
           <button
-            className={`w-full mb-2.5 py-3 px-4 border-2 rounded-lg cursor-pointer font-semibold shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
+            className={`flex items-center justify-center py-3 px-4 border-2 rounded-lg cursor-pointer font-medium shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
               ${selectedItems.length === options.length 
-                ? 'bg-[#ff5226] text-white border-[#ff5226] hover:bg-[#ff4012] hover:border-[#ff4012]' 
+                ? 'bg-[#FF0000] text-white border-[#FF0000] hover:bg-[#e60000] hover:border-[#e60000]'
                 : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
             onClick={handleSelectAll}
           >
             전체 선택
           </button>
         )}
-        <div 
-          className={`grid gap-2.5 w-full max-w-[600px] mx-auto`}
-          style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}
-        >
           {options.map((option, index) => (
             <button
               key={index}
