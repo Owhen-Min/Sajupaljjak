@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import BottomNav from "../../components/BottomNav";
-import TopBar from "../../components/TobBar";
+import TopBar from "../../components/TopBar";
 import UserList from "../../components/UserList";
 import { testUsers } from "../../data/user";
 
