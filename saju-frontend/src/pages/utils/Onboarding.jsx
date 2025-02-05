@@ -13,7 +13,7 @@ function OnboardingPage() {
 
   const handleNoFinishedSignUp = () => {
     // 커플 등록 페이지로 이동
-    navigate('/sign-up');
+    navigate('/signup/additional');
   };
 
   const handleNoCoupleStatus = () => {
