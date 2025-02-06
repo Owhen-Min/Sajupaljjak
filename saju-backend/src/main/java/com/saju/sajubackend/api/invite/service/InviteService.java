@@ -21,6 +21,7 @@ public class InviteService {
     private final MemberRepository memberRepository;
     private final CoupleRepository coupleRepository;
 
+    @Transactional
     public InviteCreateResponseDto createInviteCode(Long memberId) {
         return inviteRepository.findCodeByMemberId(memberId)
                 .map(InviteCreateResponseDto::new)
