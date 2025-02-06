@@ -10,7 +10,6 @@ const Verify = () => {
     const processKakaoLogin = async () => {
       // URL에서 인가 코드 추출
       const code = new URL(window.location.href).searchParams.get("code");
-      
       try {
         // 백엔드 서버로 인가 코드 전송
         const { data } = await post('api/auth/login/kakao', { code });

@@ -629,7 +629,7 @@ function SignUpPage() {
         if (validateStep(step)) {
           console.log('제출된 데이터:', formData);
         }
-        navigate('/Welcome');
+        navigate('/auth/Welcome');
     };
 
     const handleNextStep = () => {

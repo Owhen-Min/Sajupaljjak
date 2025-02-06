@@ -13,7 +13,7 @@ function CoupleInvitation() {
   });
   const [copied, setCopied] = useState(false);
   const [inputCode, setInputCode] = useState('');
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     const loadCoupleCode = async () => {
@@ -144,7 +144,7 @@ function CoupleInvitation() {
 
       // 임시 구현
       console.log('선택된 날짜:', selectedDate);
-      navigate('/matching-standby');
+      navigate('/couple');
     } catch (error) {
       console.error('매칭 시도 실패:', error);
       alert('매칭 시도 중 오류가 발생했습니다.');
@@ -153,7 +153,8 @@ function CoupleInvitation() {
 
   // 상대방이 입력했습니다 버튼 핸들러
   const handleMatchComplete = () => {
-    navigate('/matching-complete');
+    // Todo: 서버에서 로그인 정보 받아오는 과정 추가해야 함.
+    navigate('/couple');
   };
 
   return (
@@ -219,7 +220,7 @@ function CoupleInvitation() {
           <h3 className="text-lg font-bold text-center text-gray-700">만나기 시작한 날</h3>
           <Calendar
             disableFuture={true}
-            onChange={(v) => {console.log(v)}}
+            onChange={(v) => {setSelectedDate(v)}}
             value={selectedDate}
           />
         </div>

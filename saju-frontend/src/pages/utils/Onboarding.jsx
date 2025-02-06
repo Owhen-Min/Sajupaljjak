@@ -8,7 +8,7 @@ function OnboardingPage() {
   // 임시 상태 처리 함수들
   const handleNotLoggedIn = () => {
     // 로그인 페이지로 이동
-    navigate('/auth/login');
+    navigate('/auth/');
   };
 
   const handleNoFinishedSignUp = () => {
