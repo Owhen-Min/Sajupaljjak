@@ -43,32 +43,32 @@ function SignUpPage() {
     email: '',
     name: '',
     gender: '',
-    birthday: '',
-    birthtime: '',
-    birthtimeUnknown: false,
+    birthDay: '',
+    birthTime: '',
+    birthTimeUnknown: false,
     religion: '',
     smoking: '',
     drinking: '',
     height: '170',
     cityCode: '',
     dongCode: '',
+    profileImage: '',
     nickname: '',
     introduction: '',
-    profileImage: '',
   });
   const [errors, setErrors] = useState({
     name: false,
     gender: false,
-    birthday: false,
-    birthtime: false,
+    birthDay: false,
+    birthTime: false,
+    profileImage: false,
+    nickname: false,
     religion: false,
     smoking: false,
     drinking: false,
     height: false,
     location: false,
-    nickname: false,
     introduction: false,
-    profileImage: false
   });
 
   useEffect(() => {
@@ -97,8 +97,8 @@ function SignUpPage() {
       if (step === 1 && updatedFormData.name) {
         setStep(2);
       } else if (step === 3 && (
-        (updatedFormData.birthday && updatedFormData.birthtime) || 
-        (updatedFormData.birthday && updatedFormData.birthtimeUnknown)
+        (updatedFormData.birthDay && updatedFormData.birthTime) || 
+        (updatedFormData.birthDay && updatedFormData.birthTimeUnknown)
       )) {
         setStep(4);
       }
@@ -148,8 +148,8 @@ function SignUpPage() {
     const newErrors = {
       name: false,
       gender: false,
-      birthday: false,
-      birthtime: false,
+      birthDay: false,
+      birthTime: false,
       religion: false,
       smoking: false,
       drinking: false,
@@ -169,9 +169,9 @@ function SignUpPage() {
         newErrors.gender = true;
         isValid = false;
       }
-      if (!formData.birthday || formData.birthday.length !== 10 || 
-          (!formData.birthtimeUnknown && (!formData.birthtime || formData.birthtime.length !== 5))) {
-        newErrors.birthday = true;
+      if (!formData.birthDay || formData.birthDay.length !== 10 || 
+          (!formData.birthTimeUnknown && (!formData.birthTime || formData.birthTime.length !== 5))) {
+        newErrors.birthDay = true;
         isValid = false;
       }
     } else if (currentStep === 8) {
@@ -257,9 +257,9 @@ function SignUpPage() {
             <div className="input-group">
               <SelectionGrid
                 cols={2}
-                options={['남자', '여자']}
+                options={['남성', '여성']}
                 onSelect={(selected) => handleSelectionChange('gender', selected)}
-                selected={formData.gender ? [['남자', '여자'].indexOf(formData.gender)] : []}
+                selected={formData.gender ? [['남성', '여성'].indexOf(formData.gender)] : []}
               />
               {errors.gender && (
                 <ErrorBubble>
@@ -276,8 +276,8 @@ function SignUpPage() {
               <div className="flex items-center gap-2 mt-2">
                 <Input
                   type="text"
-                  name="birthday"
-                  value={formData.birthday}
+                  name="birthDay"
+                  value={formData.birthDay}
                   onChange={(e) => {
                     let value = e.target.value.replace(/[^\d/]/g, '');
                     if (value.length > 10) return;
@@ -293,7 +293,7 @@ function SignUpPage() {
                     }     
                     setFormData(prev => ({
                         ...prev,
-                        birthday: value
+                        birthDay: value
                       }));
                     }}
                     placeholder="2025/01/28"
@@ -302,8 +302,8 @@ function SignUpPage() {
                   />
                 <Input
                   type="text"
-                  name="birthtime"
-                  value={formData.birthtime}
+                  name="birthTime"
+                  value={formData.birthTime}
                   onChange={(e) => {
                     let value = e.target.value.replace(/[^\d:]/g, '');
                     if (value.length > 5) return;      
@@ -317,31 +317,31 @@ function SignUpPage() {
                         
                   setFormData(prev => ({
                     ...prev,
-                    birthtime: value
+                    birthTime: value
                     }));
                   }}
                   placeholder="18:00"
                   maxLength="5"
                   style={{ flex: 1 }}
-                  disabled={formData.birthtimeUnknown}
+                  disabled={formData.birthTimeUnknown}
                 />
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <input
                   type="checkbox"
-                  id="birthtimeUnknown"
-                  checked={formData.birthtimeUnknown}
+                  id="birthTimeUnknown"
+                  checked={formData.birthTimeUnknown}
                   onChange={handleBirthTimeUnknown}
                   style={{ cursor: 'pointer' }}
                 />
                 <label 
-                  htmlFor="birthtimeUnknown"
+                  htmlFor="birthTimeUnknown"
                   style={{ cursor: 'pointer', fontSize: '14px' }}
                 >
                   태어난 시간을 모릅니다
                 </label>
               </div>
-              {errors.birthday && (
+              {errors.birthDay && (
                 <ErrorBubble>
                   태어난 시간을 입력해주세요
                 </ErrorBubble>
@@ -374,9 +374,9 @@ function SignUpPage() {
             <div className="input-group">
               <SelectionGrid
                 cols={3}
-                options={['흡연', '비흡연', '금연중']}
+                options={['흡연', '비흡연', '금연 중']}
                 onSelect={(selected) => handleSelectionChange('smoking', selected)}
-                selected={formData.smoking ? [['흡연', '비흡연', '금연중'].indexOf(formData.smoking)] : []}
+                selected={formData.smoking ? [['흡연', '비흡연', '금연 중'].indexOf(formData.smoking)] : []}
               />
               {errors.smoking && (
                 <ErrorBubble>
@@ -629,7 +629,7 @@ function SignUpPage() {
         if (validateStep(step)) {
           console.log('제출된 데이터:', formData);
         }
-        navigate('/Welcome');
+        navigate('/auth/Welcome');
     };
 
     const handleNextStep = () => {
@@ -659,8 +659,8 @@ function SignUpPage() {
       const isChecked = e.target.checked;
       setFormData(prev => ({
         ...prev,
-        birthtimeUnknown: isChecked,
-        birthtime: isChecked ? '' : prev.birthtime
+        birthTimeUnknown: isChecked,
+        birthTime: isChecked ? '' : prev.birthTime
       }));
     };
 

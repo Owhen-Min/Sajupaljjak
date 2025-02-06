@@ -8,12 +8,12 @@ function OnboardingPage() {
   // 임시 상태 처리 함수들
   const handleNotLoggedIn = () => {
     // 로그인 페이지로 이동
-    navigate('/login');
+    navigate('/auth/');
   };
 
   const handleNoFinishedSignUp = () => {
     // 커플 등록 페이지로 이동
-    navigate('/signup/additional');
+    navigate('/auth/signup/additional');
   };
 
   const handleNoCoupleStatus = () => {
