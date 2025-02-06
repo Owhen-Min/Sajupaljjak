@@ -27,7 +27,7 @@ public class Member {
     @Column(nullable = false, length = 10)
     private LocalDateTime btime;
 
-    @Convert(converter = RelationshipStatus.class)
+    @Convert(converter = RelationshipStatusConverter.class)
     @Column(nullable = false)
     private RelationshipStatus isCouple;
 
