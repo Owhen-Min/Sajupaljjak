@@ -36,13 +36,16 @@ public class MatchingService {
 
         response = matchingMembers.entrySet().stream()
                 .map(entry -> MemberListResponseDto.fromEntity(entry.getKey(), entry.getValue().longValue()))
-                .toList();
+                        .toList();
 
         matchingRedisUtil.createCache(memberId, response);
         return response;
     }
 
     public List<MemberListResponseDto> getMembers(Long memberId, Integer cursor) {
-        return null;
+        Map<Member, Integer> members = matchingPaginationRepository.findMembers(memberId, cursor);
+        return members.entrySet().stream()
+                .map(entry -> MemberListResponseDto.fromEntity(entry.getKey(), entry.getValue()))
+                .toList();
     }
 }
