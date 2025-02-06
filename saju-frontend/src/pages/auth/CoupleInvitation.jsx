@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import TopBar2 from '../components/TopBar2';
-import Calendar from '../components/Calendar'
-import MainButton from '../components/MainButton';
+import TopBar2 from '../../components/TopBar2';
+import Calendar from '../../components/Calendar'
+import MainButton from '../../components/MainButton';
 
 
 function CoupleInvitation() {
@@ -12,6 +12,8 @@ function CoupleInvitation() {
     expiresAt: null,
   });
   const [copied, setCopied] = useState(false);
+  const [inputCode, setInputCode] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     const loadCoupleCode = async () => {
@@ -106,6 +108,54 @@ function CoupleInvitation() {
     }
   };
 
+  // 시작하기 버튼 핸들러
+  const handleStartMatching = async () => {
+    if (!inputCode.trim()) {
+      alert('커플 코드를 입력해주세요.');
+      return;
+    }
+
+    if (!selectedDate) {
+      alert('만나기 시작한 날을 선택해주세요.');
+      return;
+    }
+
+    try {
+      navigate('/couple');
+
+      // API 호출 로직 (실제 구현 시 주석 해제)
+      // const response = await fetch('api/matching', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ 
+      //     code: inputCode,
+      //     startDate: selectedDate.toISOString().split('T')[0] // YYYY-MM-DD 형식
+      //   }),
+      // });
+      // const data = await response.json();
+      
+      // if (data.success) {
+      //   navigate('/matching-standby');
+      // } else {
+      //   alert('유효하지 않은 커플 코드입니다.');
+      // }
+
+      // 임시 구현
+      console.log('선택된 날짜:', selectedDate);
+      navigate('/matching-standby');
+    } catch (error) {
+      console.error('매칭 시도 실패:', error);
+      alert('매칭 시도 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 상대방이 입력했습니다 버튼 핸들러
+  const handleMatchComplete = () => {
+    navigate('/matching-complete');
+  };
+
   return (
     <div className="couple-invitation flex flex-col relative justify-center min-h-screen bg-gray-50">
       <TopBar2 mainText={'커플 초대'} />
@@ -153,12 +203,13 @@ function CoupleInvitation() {
                 "
               placeholder="ABCD 789A"
               maxLength={9}
+              value={inputCode}
               onChange={(e) => {
                 let value = e.target.value.replace(/\s/g, '').toUpperCase();
                 if (value.length > 4) {
                   value = value.slice(0, 4) + ' ' + value.slice(4);
                 }
-                e.target.value = value;
+                setInputCode(value);
               }}
             />
           </div>
@@ -167,13 +218,19 @@ function CoupleInvitation() {
         <div className="w-full max-w-md space-y-2 mt-4">
           <h3 className="text-lg font-bold text-center text-gray-700">만나기 시작한 날</h3>
           <Calendar
-          disableFuture={true}
+            disableFuture={true}
+            onChange={(v) => {console.log(v)}}
+            value={selectedDate}
           />
         </div>
 
         <div className="w-full max-w-md space-y-4 mt-8">
-          <MainButton children={'시작하기'}/>
+          <MainButton 
+            onClick={handleStartMatching}
+            children={'시작하기'}
+          />
           <MainButton
+            onClick={handleMatchComplete}
             className="whitespace-pre-line"
             children={'상대방이\n입력했습니다'}
           />

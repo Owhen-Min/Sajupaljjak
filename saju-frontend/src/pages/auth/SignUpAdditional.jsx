@@ -22,8 +22,8 @@ function SignUpAdditional() {
       </div>
       <MainButton 
         onClick={() => {
-          if (selected === '솔로') {navigate('/preference')}
-          else if (selected === '커플') {navigate('/coupleinvitation')}
+          if (selected === '솔로') {navigate('/auth/preference')}
+          else if (selected === '커플') {navigate('/auth/coupleinvitation')}
         }}
         half={true}>
         다음

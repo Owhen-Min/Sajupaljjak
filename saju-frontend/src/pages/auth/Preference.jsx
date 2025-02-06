@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import TopBar2 from '../components/TopBar2';
-import SelectionGrid from '../components/SelectionGrid';
-import Dropdown from '../components/Dropdown';
-import MainButton from '../components/MainButton';
-import { provinces } from '../data/provinceCode';
-import RangeSlider from '../components/RangeSlider';
+import TopBar2 from '../../components/TopBar2';
+import SelectionGrid from '../../components/SelectionGrid';
+import Dropdown from '../../components/Dropdown';
+import MainButton from '../../components/MainButton';
+import { provinces } from '../../data/provinceCode';
+import RangeSlider from '../../components/RangeSlider';
 
 function ErrorBubble({ children }) {
   return (
