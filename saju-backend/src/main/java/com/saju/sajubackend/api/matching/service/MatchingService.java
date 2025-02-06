@@ -1,32 +1,29 @@
 package com.saju.sajubackend.api.matching.service;
 
 import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
+import com.saju.sajubackend.api.matching.repository.MatchingPaginationRepository;
 import com.saju.sajubackend.api.matching.repository.MatchingQueryDslRepository;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.common.util.MatchingRedisUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class MatchingService {
 
-    private final MatchingQueryDslRepository matchingQueryDslRepository;
     private final MatchingRedisUtil matchingRedisUtil;
+    private final MatchingQueryDslRepository matchingQueryDslRepository;
+    private final MatchingPaginationRepository matchingPaginationRepository;
 
     private final int MAGINOT_SCORE = 80;
-    private final int COUNT = 3;
+    private final int MEMBER_COUNT = 3;
 
     public List<MemberListResponseDto> getMatchingMembers(Long memberId) {
 
@@ -35,7 +32,7 @@ public class MatchingService {
         if (!response.isEmpty()) return response;
 
         // 2. 랜덤으로 3명 가져오기
-        Map<Member, Long> matchingMembers = matchingQueryDslRepository.findMatchingMembers(memberId, MAGINOT_SCORE, COUNT);
+        Map<Member, Integer> matchingMembers = matchingQueryDslRepository.findMatchingMembers(memberId, MAGINOT_SCORE, MEMBER_COUNT);
 
         response = matchingMembers.entrySet().stream()
                 .map(entry -> MemberListResponseDto.fromEntity(entry.getKey(), entry.getValue().longValue()))
@@ -43,5 +40,9 @@ public class MatchingService {
 
         matchingRedisUtil.createCache(memberId, response);
         return response;
+    }
+
+    public List<MemberListResponseDto> getMembers(Long memberId, Integer cursor) {
+        return null;
     }
 }
