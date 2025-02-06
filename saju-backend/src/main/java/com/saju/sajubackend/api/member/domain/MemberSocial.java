@@ -1,8 +1,6 @@
 package com.saju.sajubackend.api.member.domain;
 
-import com.saju.sajubackend.common.converter.GenderConverter;
 import com.saju.sajubackend.common.entity.TimeStampedEntity;
-import com.saju.sajubackend.common.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,19 +24,14 @@ public class MemberSocial extends TimeStampedEntity {
     @Column(nullable = false, length = 20)
     private String name;
 
-    @Convert(converter = GenderConverter.class)
-    @Column(nullable = false)
-    private Gender gender;
-
     @Column(nullable = false, length = 30)
     private String email;
 
     @Builder
-    private MemberSocial(Long socialId, Member member, String name, Gender gender, String email) {
+    private MemberSocial(Long socialId, Member member, String name, String email) {
         this.socialId = socialId;
         this.member = member;
         this.name = name;
-        this.gender = gender;
         this.email = email;
     }
 }
