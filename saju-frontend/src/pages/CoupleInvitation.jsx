@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import SelectionGrid from '../../components/SelectionGrid';
+import SelectionGrid from '../components/SelectionGrid';
 
-function SignUpCouple() {
+function CoupleInvitation() {
   const navigate = useNavigate();
 
   return (
@@ -11,4 +11,4 @@ function SignUpCouple() {
   );
 }
 
-export default SignUpCouple;
+export default CoupleInvitation;

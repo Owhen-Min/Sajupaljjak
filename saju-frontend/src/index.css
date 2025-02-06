@@ -1,11 +1,18 @@
 #root {
   max-width: 400px;
-  min-height: 100vh;
+  min-height: 80vh; /* 모바일 기본값 */
   margin: 0 auto;
   padding: 0 0px;
   box-sizing: border-box;
   background-color: #ffffff;
 } 
+
+/* 데스크탑 환경 (768px 이상) */
+@media screen and (min-width: 768px) {
+  #root {
+    min-height: 100vh;
+  }
+}
 
 body {
   background-color: #ffefef;

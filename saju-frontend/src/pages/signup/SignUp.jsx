@@ -427,28 +427,6 @@ function SignUpPage() {
                   }}
                   className="w-30 h-10 text-center text-base border border-gray-300 rounded-md appearance-none cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
                   onClick={(e) => {
-                    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                      e.preventDefault();
-                      const input = document.createElement('input');
-                      input.type = 'number';
-                      input.min = '140';
-                      input.max = '220';
-                      input.value = formData.height || '170';
-                      input.style.position = 'absolute';
-                      input.style.opacity = '0';
-                      
-                      input.addEventListener('change', (event) => {
-                        const value = event.target.value;
-                        if (140 <= value && value <= 220) {
-                          setFormData(prev => ({ ...prev, height: value }));
-                        }
-                        document.body.removeChild(input);
-                      });
-
-                      document.body.appendChild(input);
-                      input.focus();
-                      input.click();
-                    }
                     setStep(8);
                     setMaxStep(Math.max(maxStep, 9));
                   }}
@@ -668,6 +646,12 @@ function SignUpPage() {
         }
         
         setStep(nextStep);
+        
+        // 페이지 최상단으로 스크롤
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'  // 부드러운 스크롤 효과
+        });
       }
     };
 
@@ -682,22 +666,46 @@ function SignUpPage() {
 
     return (
       <div className="signup">
+        <button
+          onClick={() => {
+            if (step >= 9) {
+              setStep(8);
+            } else if (step >= 4) {
+              setStep(3);
+            }
+          }}
+          className={`
+            w-6 aspect-square 
+            flex items-center justify-center
+            text-gray-600
+            border border-gray-300 
+            rounded-lg
+            bg-white
+            box-border
+            transition-all duration-300 ease-in-out
+            hover:bg-gray-100
+            focus:outline-none focus:border-[#ff6842] focus:ring-2 focus:ring-[#4CAF50]/20
+            absolute
+          `}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            className="w-6 h-6"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M15 19l-7-7 7-7" 
+            />
+          </svg>
+        </button>
         <Header step={step}>
+        
           <div className="flex items-center relative w-full">
-            {step > 3 && (
-              <button 
-                className="back-button absolute left-0" 
-                onClick={() => {
-                  if (step >= 9) {
-                    setStep(8);
-                  } else if (step >= 4) {
-                    setStep(3);
-                  }
-                }}
-              >
-                이전
-              </button>
-            )}
             <h1 className="w-full text-center text-base font-semibold">
               {step >= 9 ? '내 프로필 입력' : step >= 4 ? '내 정보 입력' : '사주 정보 입력'}
             </h1>

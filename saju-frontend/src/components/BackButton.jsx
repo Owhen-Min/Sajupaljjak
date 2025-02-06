@@ -15,7 +15,7 @@ export const BackButton = ({ url }) => {
     <button
       onClick={handleClick}
       className={`
-        w-[12.5%] aspect-square 
+        w-[10%] aspect-square 
         flex items-center justify-center
         text-gray-600
         border border-gray-300 
