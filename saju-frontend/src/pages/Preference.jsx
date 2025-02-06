@@ -3,6 +3,7 @@ import { useState } from 'react';
 import TopBar2 from '../components/TopBar2';
 import SelectionGrid from '../components/SelectionGrid';
 import Dropdown from '../components/Dropdown';
+import MainButton from '../components/MainButton';
 import { provinces } from '../data/provinceCode';
 import RangeSlider from '../components/RangeSlider';
 
@@ -17,11 +18,11 @@ function ErrorBubble({ children }) {
 function Preference() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    religion: '',
     smoking: '',
+    dringking: '',
+    religion: [],
     heightRange: [140, 220],
-    cityCode: '',
-    dongCode: '',
+    cityCode: [],
     ageRange: [20, 40],
   });
   const [errors, setErrors] = useState({
@@ -37,6 +38,29 @@ function Preference() {
       ...prev,
       [field]: selected
     }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      religion: formData.religion.length === 0,
+      smoking: formData.smoking === '',
+      location: formData.cityCode.length === 0,
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error);
+  };
+
+  const handleSubmit = () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    // TODO: API 호출 로직 추가
+    console.log('제출된 데이터:', formData);
+    
+    // 성공 시 다음 페이지로 이동
+    // navigate('/next-page');
   };
 
   return (
@@ -60,7 +84,6 @@ function Preference() {
               }}
             />
           </div>
-          {errors.ageRange && <ErrorBubble>나이 범위를 선택해주세요</ErrorBubble>}
         </div>
         
         <h3 className="input-prompt mb-4">선호하는 종교를 선택해주세요</h3>
@@ -76,7 +99,7 @@ function Preference() {
           {errors.religion && <ErrorBubble>종교를 선택해주세요</ErrorBubble>}
         </div>
 
-        <h3 className="input-prompt mb-4">선호하는 흡연 여부를 선택해주세요</h3>
+        <h3 className="input-prompt mb-8">선호하는 흡연 여부를 선택해주세요</h3>
         <div className="input-group mb-8">
           <SelectionGrid
             cols={3}
@@ -102,65 +125,61 @@ function Preference() {
               <span>{formData.heightRange[1]}cm</span>
             </div>
           </div>
-          {errors.height && <ErrorBubble>키 범위를 선택해주세요</ErrorBubble>}
         </div>
 
-        <h3 className="input-prompt mb-4">선호하는 지역을 선택해주세요</h3>
-        <div className="input-group mb-8">
-          <div className="flex flex-row gap-2.5 w-full">
-            <Dropdown
-              name="cityCode"
-              value={Object.keys(provinces).find(key => provinces[key].code === formData.cityCode) || ""}
-              onChange={(e) => {
-                setFormData(prev => ({ 
-                  ...prev, 
-                  cityCode: provinces[e.target.value]?.code || '',
-                  dongCode: '' 
-                }));
-              }}
-              placeholder="시/도 선택"
-              options={Object.keys(provinces).map(province => ({
-                value: province,
-                label: province
-              }))}
-              className="flex-1"
-            />
-
-            {formData.cityCode && (
-              <Dropdown
-                name="dongCode"
-                value={(() => {
-                  const selectedSi = Object.keys(provinces).find(
-                    key => provinces[key].code === formData.cityCode
-                  );
-                  return Object.keys(provinces[selectedSi]?.sigungu || {}).find(
-                    key => provinces[selectedSi]?.sigungu[key] === formData.dongCode
-                  ) || "";
-                })()}
-                onChange={(e) => {
-                  const selectedSi = Object.keys(provinces).find(
-                    key => provinces[key].code === formData.cityCode
-                  );
-                  const selectedDongCode = provinces[selectedSi]?.sigungu[e.target.value];
-                  setFormData(prev => ({ 
-                    ...prev, 
-                    dongCode: selectedDongCode
-                  }));
-                }}
-                placeholder="구/군 선택"
-                options={Object.keys(provinces[Object.keys(provinces).find(
-                  key => provinces[key].code === formData.cityCode
-                )]?.sigungu || {}).map(district => ({
-                  value: district,
-                  label: district
-                }))}
-                className="flex-1"
-              />
-            )}
+        <h3 className="input-prompt mb-2">선호하는 지역을 선택해주세요</h3>
+        <div className="input-group mb-5 text-sm">
+          <div className="flex flex-wrap gap-2 mt-2">
+            {formData.cityCode.map(code => {
+              const cityName = Object.keys(provinces).find(key => 
+                provinces[key].code === code
+              );
+              return (
+                <button
+                key={code}
+                className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm"
+                >
+                  {cityName}
+                  <span
+                    className="ml-2 text-gray-500 hover:text-gray-700"
+                    onClick={() => {
+                      setFormData(prev => ({
+                        ...prev,
+                        cityCode: prev.cityCode.filter(c => c !== code)
+                      }));
+                    }}
+                  >
+                    ×
+                  </span>
+                </button>
+              );
+              
+            })}
           </div>
-          {errors.location && <ErrorBubble>지역을 모두 선택해주세요</ErrorBubble>}
+            <Dropdown
+              className={"mt-3"}
+              options={Object.keys(provinces).map(cityName => ({
+                value: provinces[cityName].code,
+                label: cityName
+              }))}
+              value=""
+              placeholder="도시를 선택하세요"
+              onChange={(e) => {
+                const selectedCode = e.target.value;
+                if (!formData.cityCode.includes(selectedCode)) {
+                  setFormData(prev => ({
+                    ...prev,
+                    cityCode: [...prev.cityCode, selectedCode]
+                  }));
+                }
+              }}
+            />
+          {errors.location && <ErrorBubble>지역을 선택해주세요</ErrorBubble>}
         </div>
-
+        <MainButton
+        children={'제출'}
+        onClick={handleSubmit}
+        />
       </div>
     </div>
   );

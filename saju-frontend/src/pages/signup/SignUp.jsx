@@ -257,9 +257,9 @@ function SignUpPage() {
             <div className="input-group">
               <SelectionGrid
                 cols={2}
-                options={['남자', '여자']}
+                options={['남성', '여성']}
                 onSelect={(selected) => handleSelectionChange('gender', selected)}
-                selected={formData.gender ? [['남자', '여자'].indexOf(formData.gender)] : []}
+                selected={formData.gender ? [['남성', '여성'].indexOf(formData.gender)] : []}
               />
               {errors.gender && (
                 <ErrorBubble>
@@ -374,9 +374,9 @@ function SignUpPage() {
             <div className="input-group">
               <SelectionGrid
                 cols={3}
-                options={['흡연', '비흡연', '금연중']}
+                options={['흡연', '비흡연', '금연 중']}
                 onSelect={(selected) => handleSelectionChange('smoking', selected)}
-                selected={formData.smoking ? [['흡연', '비흡연', '금연중'].indexOf(formData.smoking)] : []}
+                selected={formData.smoking ? [['흡연', '비흡연', '금연 중'].indexOf(formData.smoking)] : []}
               />
               {errors.smoking && (
                 <ErrorBubble>
