@@ -29,7 +29,6 @@ public class KakaoAuthService {
 
     public LoginResponse socialLogin(String code) {
         // 1. 인가코드로 액세스 토큰 요청
-        System.out.println("들어옴");
         KakaoTokenResponse tokenResponse = getKakaoAccessToken(code);
 
         System.out.println(tokenResponse.getAccess_token());
