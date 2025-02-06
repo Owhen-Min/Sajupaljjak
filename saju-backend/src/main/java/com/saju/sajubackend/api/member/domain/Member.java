@@ -62,7 +62,6 @@ public class Member {
     private Gender gender;
 
     @Convert(converter = CelestialStemConverter.class)
-    @Column
     private CelestialStem celestialStem;
 
     @Builder
