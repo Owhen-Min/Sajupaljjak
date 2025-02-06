@@ -1,7 +1,7 @@
 package com.saju.sajubackend.api.auth.controller;
 
 import com.saju.sajubackend.api.auth.dto.LoginResponse;
-import com.saju.sajubackend.api.auth.service.AuthService;
+import com.saju.sajubackend.api.auth.service.kakao.KakaoAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AuthController {
 
-    private final AuthService authService;
+    private final KakaoAuthService kakaoAuthService;
 
     @GetMapping("/login/kakao")
-    public ResponseEntity<LoginResponse> login(@RequestParam String code) {
-        LoginResponse response = authService.kakaoLogin(code);
-        return ResponseEntity.status(response.getStatus()).body(response);
+    public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam String code) {
+        LoginResponse loginResponse = kakaoAuthService.socialLogin(code);
+        return ResponseEntity.ok(loginResponse);
     }
 
 
