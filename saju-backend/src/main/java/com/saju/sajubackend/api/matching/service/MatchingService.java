@@ -30,12 +30,13 @@ public class MatchingService {
 
     public List<MemberListResponseDto> getMatchingMembers(Long memberId) {
         // 1. redis에 이미 존재하는지 확인
-        if (redisTemplate.hasKey(String.valueOf(memberId))) return getCache(memberId);
+        List<MemberListResponseDto> response = getCache(memberId);
+        if (!response.isEmpty()) return response;
 
         // 2. 랜덤으로 3명 가져오기
         Map<Member, Long> matchingMembers = matchingQueryDslRepository.findMatchingMembers(memberId, MAGINOT_SCORE);
 
-        List<MemberListResponseDto> response = matchingMembers.entrySet().stream()
+        response = matchingMembers.entrySet().stream()
                 .map(entry -> MemberListResponseDto.fromEntity(entry.getKey(), entry.getValue().longValue()))
                 .toList();
 
