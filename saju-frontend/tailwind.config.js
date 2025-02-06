@@ -4,7 +4,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [
-    import("daisyui"), 
-  ],
+  plugins: [import("daisyui"), import("tailwind-scrollbar-hide")],
 };

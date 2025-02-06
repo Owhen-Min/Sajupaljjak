@@ -16,7 +16,8 @@ const TopBar = () => {
   return (
     <header className="w-full px-4 py-2 flex justify-between items-center bg-white">
       <div>
-        <h1 className="text-xl font-semibold">{title}</h1>
+        <div className="text-3xl font-dokrip pl-1">{title}</div>
+        {/* <div className="text-3xl font-gapyeong pl-1">{title}</div> */}
       </div>
       <div>
         <Link to="/mypage">

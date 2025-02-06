@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
-import UserList from "../../components/UserList";
+import UserList2 from "../../components/UserList2";
 import { testUsers } from "../../data/user";
 
 function Match() {
@@ -29,7 +29,7 @@ function Match() {
   return (
     <div>
       <TopBar />
-      <UserList users={users} />
+      <UserList2 users={users} />
       <BottomNav />
     </div>
   );

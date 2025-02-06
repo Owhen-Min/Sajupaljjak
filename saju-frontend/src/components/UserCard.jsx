@@ -12,22 +12,17 @@ const UserCard = ({ user }) => {
           backgroundPosition: "center",
         }}
       >
-
-        
-        <div className="absolute bottom-0 w-full bg-gray-900 bg-opacity-60 p-4 rounded-b-3xl">
-          <h2 className="card-title text-white">
-            {user.name}{" "}
-            <span className="text-sm text-gray-300">({user.nickname})</span>
-          </h2>
-          <div className="badge badge-secondary">{user.memberType}</div>
+        <div className="absolute bottom-0 w-full bg-gray-900 bg-opacity-20 pl-4 pt-1 rounded-b-3xl">
+          <span className="card-title text-white">{user.nickname}</span>
+          {"       "}
+          <span className="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">{user.memberType}</span>
+          {"       "}
+          <span className="badge badge-outline text-white">{user.age}세</span>
+       
           <p className="text-white mt-2">{user.introduction}</p>
           <div className="card-actions justify-end mt-2">
-            <div className="badge badge-outline text-white">
-              Score: {user.score}
-            </div>
-            <div className="badge badge-outline text-white">
-              Age: {user.age}
-            </div>
+          {/*  거주지랑 점수 같은것도 추가 */}
+            
           </div>
         </div>
       </div>

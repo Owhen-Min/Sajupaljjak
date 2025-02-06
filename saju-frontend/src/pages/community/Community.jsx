@@ -5,8 +5,10 @@ function Community() {
   return (
     <div>
       <TopBar />
-      <h1>커뮤니티</h1>
+        <div>
+          
 
+        </div>
       <BottomNav />
     </div>
   );
