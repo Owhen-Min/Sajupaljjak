@@ -1,14 +1,11 @@
-import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
+import BottomNav from "../../components/BottomNav";
 
 function Community() {
   return (
     <div>
       <TopBar />
-        <div>
-          
-
-        </div>
+      <div></div>
       <BottomNav />
     </div>
   );
