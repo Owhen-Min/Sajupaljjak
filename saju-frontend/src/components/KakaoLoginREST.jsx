@@ -1,9 +1,9 @@
 import klogin from '../assets/klogin.webp';
 
-const KakaoLoginREST = () => {
+const KakaoLoginREST = ({ className }) => {
   // 환경 변수에서 값을 가져오도록 수정
   const REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
-  const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI || "http://localhost:5173/auth";
+  const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
   const handleLogin = () => {
     const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
@@ -14,7 +14,8 @@ const KakaoLoginREST = () => {
     <img 
       onClick={handleLogin}
       src={klogin}
-      alt="카카오 로그인" 
+      alt="카카오 로그인"
+      className={className}
       style={{ 
         display: 'block',
         margin: '0 auto',
