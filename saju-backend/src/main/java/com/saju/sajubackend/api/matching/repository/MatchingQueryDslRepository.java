@@ -7,6 +7,7 @@ import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.common.enums.CelestialStem;
 import com.saju.sajubackend.common.enums.Gender;
+import com.saju.sajubackend.common.enums.RelationshipStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -29,10 +30,7 @@ public class MatchingQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    private final int LIMIT = 3;
-    private final String SINGLE = "Single";
-
-    public Map<Member, Long> findMatchingMembers(Long memberId, long maginot) {
+    public Map<Member, Long> findMatchingMembers(Long memberId, long maginot, int count) {
         // 1. 회원 정보 조회
         Member foundMember = queryFactory
                 .selectFrom(member)
@@ -55,7 +53,7 @@ public class MatchingQueryDslRepository {
                 .selectFrom(member)
                 .where(
                         isOppositeGender(foundMember.getGender()) // 성별 반대
-                                .and(isSingle())                  // 싱글 여부
+                                .and(isSolo())                  // 싱글 여부
                                 .and(matchReligion(foundFilter))  // 종교
                                 .and(matchCelestialStem(compatibleStemsMap.keySet())) // 천간
                                 .and(matchRegion(foundFilter))    // 지역
@@ -64,7 +62,7 @@ public class MatchingQueryDslRepository {
                 .fetch();
 
         // 5. 랜덤으로 3명 선발
-        List<Member> selectedCandidates = random(candidates, LIMIT);
+        List<Member> selectedCandidates = random(candidates, count);
 
         // 6. Map<Member, Integer> 형태로 변환
         return selectedCandidates.stream()
@@ -94,8 +92,8 @@ public class MatchingQueryDslRepository {
         return member.gender.ne(gender);
     }
 
-    private BooleanExpression isSingle() {
-        return member.isCouple.eq(SINGLE);
+    private BooleanExpression isSolo() {
+        return member.isCouple.eq(RelationshipStatus.SOLO);
     }
 
     private BooleanExpression matchCelestialStem(Set<CelestialStem> compatibleStems) {

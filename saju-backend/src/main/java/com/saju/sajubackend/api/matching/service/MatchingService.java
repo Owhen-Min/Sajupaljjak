@@ -27,6 +27,7 @@ public class MatchingService {
     private final ScoreRepository scoreRepository;
 
     private final int MAGINOT_SCORE = 80;
+    private final int COUNT = 3;
 
     public List<MemberListResponseDto> getMatchingMembers(Long memberId) {
         // 1. redis에 이미 존재하는지 확인
@@ -34,7 +35,7 @@ public class MatchingService {
         if (!response.isEmpty()) return response;
 
         // 2. 랜덤으로 3명 가져오기
-        Map<Member, Long> matchingMembers = matchingQueryDslRepository.findMatchingMembers(memberId, MAGINOT_SCORE);
+        Map<Member, Long> matchingMembers = matchingQueryDslRepository.findMatchingMembers(memberId, MAGINOT_SCORE, COUNT);
 
         response = matchingMembers.entrySet().stream()
                 .map(entry -> MemberListResponseDto.fromEntity(entry.getKey(), entry.getValue().longValue()))

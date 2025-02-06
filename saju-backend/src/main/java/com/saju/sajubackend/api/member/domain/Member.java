@@ -27,8 +27,9 @@ public class Member {
     @Column(nullable = false, length = 10)
     private LocalDateTime btime;
 
-    @Column(name = "is_couple", nullable = false, length = 15)
-    private String isCouple;
+    @Convert(converter = RelationshipStatus.class)
+    @Column(nullable = false)
+    private RelationshipStatus isCouple;
 
     @Column(nullable = false, length = 30)
     private String nickname;
@@ -65,7 +66,7 @@ public class Member {
     private CelestialStem celestialStem;
 
     @Builder
-    private Member(Long memberId, LocalDate bday, LocalDateTime btime, String isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, SmokingStatus smoking, DrinkingFrequency drinking, Religion religion, Gender gender, CelestialStem celestialStem) {
+    private Member(Long memberId, LocalDate bday, LocalDateTime btime, RelationshipStatus isCouple, String nickname, String intro, String profileImg, Integer height, Integer cityCode, SmokingStatus smoking, DrinkingFrequency drinking, Religion religion, Gender gender, CelestialStem celestialStem) {
         this.memberId = memberId;
         this.bday = bday;
         this.btime = btime;
