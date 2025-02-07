@@ -1,14 +1,19 @@
 package com.saju.sajubackend.api.saju.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "life_fortune")
+@Table(name = "LIFE_FORTUNE")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SoloLife {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long soloLifeId;
 
     private String siju;
     private String ilju;
@@ -17,59 +22,5 @@ public class SoloLife {
     private String danger;
     private String advice;
 
-    // 기본 생성자
-    public SoloLife() {}
 
-    // Getter/Setter
-    public Long getId() {
-        return id;
-    }
-
-    public String getSiju() {
-        return siju;
-    }
-
-    public void setSiju(String siju) {
-        this.siju = siju;
-    }
-
-    public String getIlju() {
-        return ilju;
-    }
-
-    public void setIlju(String ilju) {
-        this.ilju = ilju;
-    }
-
-    public String getCharacteristic() {
-        return characteristic;
-    }
-
-    public void setCharacteristic(String characteristic) {
-        this.characteristic = characteristic;
-    }
-
-    public String getFlow() {
-        return flow;
-    }
-
-    public void setFlow(String flow) {
-        this.flow = flow;
-    }
-
-    public String getDanger() {
-        return danger;
-    }
-
-    public void setDanger(String danger) {
-        this.danger = danger;
-    }
-
-    public String getAdvice() {
-        return advice;
-    }
-
-    public void setAdvice(String advice) {
-        this.advice = advice;
-    }
 }
