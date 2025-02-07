@@ -15,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class KakaoAuthService {
     private final WebClient webClient;
     private final AuthService authService;  // AuthService 주입
