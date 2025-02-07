@@ -22,25 +22,13 @@ function FortuneLife() {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const { data: fetchedData, isLoading, error } = useFetchData('/api/fortune/lifetime', "FortuneLife");
 
-  useEffect(() => {
-    const fetchFortune = async () => {
-      try {
-        setIsLoading(true);
-        const response = await useFetchData('/api/fortune/lifetime', "FortuneLife");
-        setData(response.data);
-      } catch (err) {
-        console.error('평생 운세 데이터를 가져오는데 실패했습니다:', err);
-        setError(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFortune();
-  }, []);
+  // useEffect(() => {
+  //   if (fetchedData) {
+  //     setData(fetchedData);
+  //   }
+  // }, [fetchedData]);
 
   return (
     <div className="container mx-auto max-w-3xl pb-5">
