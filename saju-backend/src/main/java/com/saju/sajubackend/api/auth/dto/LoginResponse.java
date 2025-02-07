@@ -22,6 +22,7 @@ public class LoginResponse {
 
     public static LoginResponse ofFailure(String email) {
         LoginResponse loginResponse = new LoginResponse();
+
         loginResponse.email = email;
         return loginResponse;
     }

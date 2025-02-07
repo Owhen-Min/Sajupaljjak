@@ -5,7 +5,9 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.domain.MemberSocial;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.member.repository.MemberSocialRepository;
-import com.saju.sajubackend.common.enums.Gender;
+import com.saju.sajubackend.common.exception.BaseException;
+import com.saju.sajubackend.common.exception.ErrorMessage;
+import com.saju.sajubackend.common.exception.UnAuthorizedException;
 import com.saju.sajubackend.common.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,7 +59,7 @@ public class AuthService {
     public String refreshAccessToken(String refreshToken) {
         // RefreshToken 검증
         if (!jwtProvider.validateToken(refreshToken)) {
-            throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
+            throw new UnAuthorizedException(ErrorMessage.REFRESH_TOKEN_EXPIRED);
         }
 
         // RefreshToken에서 email 추출
@@ -68,7 +70,7 @@ public class AuthService {
     }
 
     @Transactional
-    public Member registerNewMember(String email, String name, String gender) {
+    public Member registerNewMember(String email, String name) {
         // 새로운 Member 생성 로직
         Member member = Member.builder()
                 .build(); // 필요한 기본값들 설정
@@ -78,7 +80,6 @@ public class AuthService {
                 .member(member)
                 .email(email)
                 .name(name)
-                .gender(Gender.valueOf(gender.toUpperCase()))
                 .build();
 
         memberRepository.save(member);
