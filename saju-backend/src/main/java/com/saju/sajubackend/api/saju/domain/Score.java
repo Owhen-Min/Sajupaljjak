@@ -27,10 +27,10 @@ public class Score {
     private CelestialStem target;
 
     @Column(nullable = false)
-    private Long score;
+    private Integer score;
 
     @Builder
-    private Score(Long scoreId, CelestialStem source, CelestialStem target, Long score) {
+    private Score(Long scoreId, CelestialStem source, CelestialStem target, Integer score) {
         this.scoreId = scoreId;
         this.source = source;
         this.target = target;

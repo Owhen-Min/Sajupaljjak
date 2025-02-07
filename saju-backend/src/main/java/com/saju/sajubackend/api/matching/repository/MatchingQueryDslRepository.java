@@ -30,7 +30,7 @@ public class MatchingQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Map<Member, Long> findMatchingMembers(Long memberId, long maginot, int count) {
+    public Map<Member, Integer> findMatchingMembers(Long memberId, long maginot, int count) {
         // 1. 회원 정보 조회
         Member foundMember = queryFactory
                 .selectFrom(member)
@@ -46,7 +46,7 @@ public class MatchingQueryDslRepository {
                 .fetchOne();
 
         // 3. 80점 이상인 천간과 점수 조회
-        Map<CelestialStem, Long> compatibleStemsMap = getCompatibleCelestialStems(foundMember.getCelestialStem(), maginot);
+        Map<CelestialStem, Integer> compatibleStemsMap = getCompatibleCelestialStems(foundMember.getCelestialStem(), maginot);
 
         // 4. 상대 필터링
         List<Member> candidates = queryFactory
@@ -68,11 +68,11 @@ public class MatchingQueryDslRepository {
         return selectedCandidates.stream()
                 .collect(Collectors.toMap(
                         member -> member,
-                        member -> compatibleStemsMap.getOrDefault(member.getCelestialStem(), 0L)
+                        member -> compatibleStemsMap.getOrDefault(member.getCelestialStem(), 0)
                 ));
     }
 
-    private Map<CelestialStem, Long> getCompatibleCelestialStems(CelestialStem celestialStem, long maginot) {
+    private Map<CelestialStem, Integer> getCompatibleCelestialStems(CelestialStem celestialStem, long maginot) {
         return queryFactory
                 .select(score1.target, score1.score)
                 .from(score1)
@@ -84,7 +84,7 @@ public class MatchingQueryDslRepository {
                 .stream()
                 .collect(Collectors.toMap(
                         tuple -> tuple.get(score1.target),
-                        tuple -> tuple.get(1, Long.class)
+                        tuple -> tuple.get(1, Integer.class)
                 ));
     }
 
