@@ -1,4 +1,4 @@
-package com.saju.sajubackend.api.matching;
+package com.saju.sajubackend.api.matching.dto;
 
 import com.saju.sajubackend.api.member.domain.Member;
 

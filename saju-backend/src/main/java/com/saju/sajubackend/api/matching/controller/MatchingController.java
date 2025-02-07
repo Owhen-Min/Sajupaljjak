@@ -1,6 +1,6 @@
 package com.saju.sajubackend.api.matching.controller;
 
-import com.saju.sajubackend.api.matching.MemberListResponseDto;
+import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.service.MatchingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
 package com.saju.sajubackend.api.matching.service;
 
-import com.saju.sajubackend.api.matching.MemberListResponseDto;
+import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.repository.MatchingQueryDslRepository;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.saju.repository.ScoreRepository;
