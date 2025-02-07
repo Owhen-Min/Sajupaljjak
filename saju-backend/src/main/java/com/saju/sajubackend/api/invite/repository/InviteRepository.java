@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,20 +38,21 @@ public class InviteRepository {
     }
 
     public void deleteBothCode(Long inviterId, Long joinerId) {
-        String luaScript = ""
-                + "local codeInv = redis.call('GET', KEYS[1])\n"
-                + "if codeInv then\n"
-                + "  local codeKeyInv = ARGV[1] .. codeInv\n"
-                + "  redis.call('DEL', codeKeyInv)\n"
-                + "  redis.call('DEL', KEYS[1])\n"
-                + "end\n"
-                + "\n"
-                + "local codeJoin = redis.call('GET', KEYS[2])\n"
-                + "if codeJoin then\n"
-                + "  local codeKeyJoin = ARGV[1] .. codeJoin\n"
-                + "  redis.call('DEL', codeKeyJoin)\n"
-                + "  redis.call('DEL', KEYS[2])\n"
-                + "end\n";
+        String luaScript = """
+                local codeInv = redis.call('GET', KEYS[1])
+                if codeInv then
+                    local codeKeyInv = ARGV[1] .. codeInv
+                    redis.call('DEL', codeKeyInv)
+                    redis.call('DEL', KEYS[1])
+                end
+                
+                local codeJoin = redis.call('GET', KEYS[2])
+                if codeJoin then
+                    local codeKeyJoin = ARGV[1] .. codeJoin
+                    redis.call('DEL', codeKeyJoin)
+                    redis.call('DEL', KEYS[2])
+                end
+                """;
 
         DefaultRedisScript<Void> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptText(luaScript);
@@ -61,5 +63,10 @@ public class InviteRepository {
                 Arrays.asList(ID_PREFIX + inviterId, ID_PREFIX + joinerId),
                 CODE_PREFIX
         );
+    }
+
+    public Long getTTL(Long memberId) {
+        String idKey = ID_PREFIX + memberId;
+        return redisTemplate.getExpire(idKey, TimeUnit.SECONDS);
     }
 }

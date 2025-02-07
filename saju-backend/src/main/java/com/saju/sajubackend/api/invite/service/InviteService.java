@@ -23,13 +23,14 @@ public class InviteService {
 
     @Transactional
     public InviteCreateResponseDto createInviteCode(Long memberId) {
-        return inviteRepository.findCodeByMemberId(memberId)
-                .map(InviteCreateResponseDto::new)
+        String code = inviteRepository.findCodeByMemberId(memberId)
                 .orElseGet(() -> {
                     String newCode = RandomUtil.generateRandomCode(8);
                     inviteRepository.saveInvitationCode(memberId, newCode);
-                    return new InviteCreateResponseDto(newCode);
+                    return newCode;
                 });
+        Long ttl = inviteRepository.getTTL(memberId);
+        return new InviteCreateResponseDto(code, ttl);
     }
 
     @Transactional
