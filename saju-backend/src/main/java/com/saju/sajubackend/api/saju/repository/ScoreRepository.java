@@ -1,4 +1,4 @@
-package com.saju.sajubackend.api.saju.domain.repository;
+package com.saju.sajubackend.api.saju.repository;
 
 import com.saju.sajubackend.api.saju.domain.Score;
 import org.springframework.data.jpa.repository.JpaRepository;
