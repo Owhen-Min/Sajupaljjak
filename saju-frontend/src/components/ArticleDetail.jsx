@@ -1,12 +1,19 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import TopBar2 from '../../components/TopBar2';
+import { useState, useEffect } from 'react';
+import { useQuery } from 'react-query';
+import { get } from '../api/apiService';
 
-function CommunityView() {
-  const { postId } = useParams();
-  const navigate = useNavigate();
+function ArticleDetail({ articleId, onClose }) {
+//   const { data: article, isLoading, isError } = useQuery({
+//     queryKey: ['article', articleId],
+//     queryFn: async () => {
+//       const { data } = await get(`api/articles/${articleId}`);
+//       return data;
+//     },
+//     enabled: !!articleId,
+//   });
 
   const article = {
-    "articleId": postId,
+    "articleId": articleId,
     "createdAt": "2025-02-07 00:00:00",
     "boardType": "갑목",
     "celestialStem": "무토",
@@ -16,10 +23,19 @@ function CommunityView() {
     "commentCount": 4
   };
 
+//   if (isLoading) return <div className="p-4">로딩 중...</div>;
+//   if (isError) return <div className="p-4">에러가 발생했습니다.</div>;
+//   if (!article) return null;
+
   return (
-    <div className="article-detail overflow-y-auto">
-      <TopBar2/>
+    <div className="article-detail fixed inset-0 bg-white z-50 overflow-y-auto">
       <div className="p-4">
+        <button 
+          onClick={onClose}
+          className="mb-4 text-gray-600"
+        >
+          ← 뒤로가기
+        </button>
         
         <div className="flex justify-between items-center mb-4">
           <span className="text-sm text-gray-500">{article.boardType}</span>
@@ -40,4 +56,4 @@ function CommunityView() {
   );
 }
 
-export default CommunityView;
+export default ArticleDetail; 

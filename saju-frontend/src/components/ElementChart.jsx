@@ -43,7 +43,7 @@ function ElementChart({ elementCounts }) {
               <div
                 className="h-full rounded-full transition-all duration-1000"
                 style={{
-                  width: animate ? `${(item.count / total) * 100}%` : '0%',
+                  width: animate ? `${Math.min(100, (item.count / total) * 200)}%` : '0%',
                   backgroundColor: elementColors[item.name]
                 }}
               />
