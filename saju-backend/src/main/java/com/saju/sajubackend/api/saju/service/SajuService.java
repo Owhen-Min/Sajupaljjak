@@ -12,7 +12,7 @@ import com.saju.sajubackend.api.saju.repository.SajuRepository;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class SajuService {
 
-    private final StringRedisTemplate redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
     private final SajuRepository sajuRepository;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -53,8 +53,8 @@ public class SajuService {
     // 회원의 사주 정보를 활용해 오늘의 운세(간단 버전) 조회
     public SajuResponse getDailySajuForMember(Long memberId) {
         String redisKey = getDailyKey(memberId);
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        String cached = ops.get(redisKey);
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        String cached = ops.get(redisKey).toString();
         if (cached != null) {
             try {
                 return objectMapper.readValue(cached, SajuResponse.class);
@@ -97,8 +97,8 @@ public class SajuService {
     // 회원의 사주 정보를 활용해 오늘의 운세(상세 버전) 조회
     public SajuDetailResponse getTodaySajuDetailForMember(Long memberId) {
         String redisKey = getTodayDetailKey(memberId);
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        String cached = ops.get(redisKey);
+        ValueOperations<String, Object> ops = redisTemplate.opsForValue();
+        String cached = ops.get(redisKey).toString();
         if (cached != null) {
             try {
                 return objectMapper.readValue(cached, SajuDetailResponse.class);
