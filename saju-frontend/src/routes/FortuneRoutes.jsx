@@ -3,7 +3,7 @@ import Fortune from '../pages/fortune/Fortune';
 import FortuneToday from '../pages/fortune/FortuneToday';
 import FortuneYear from '../pages/fortune/FortuneYear';
 import FortuneLife from '../pages/fortune/FortuneLife';
-import FortuneGroup from '../pages/fortune/FortuneGroup';
+import FortuneMy from '../pages/fortune/FortuneMy';
 
 function FortuneRoutes() {
   return (
@@ -12,7 +12,7 @@ function FortuneRoutes() {
       <Route path="today" element={<FortuneToday />} />
       <Route path="year" element={<FortuneYear />} />
       <Route path="life" element={<FortuneLife />} />
-      <Route path="group" element={<FortuneGroup />} />
+      <Route path="my" element={<FortuneMy />} />
     </Routes>
   );
 }
