@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.matching.service;
 
 import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
+import com.saju.sajubackend.api.matching.repository.MatchingPaginationRepository;
 import com.saju.sajubackend.api.matching.repository.MatchingQueryDslRepository;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.common.util.MatchingRedisUtil;
@@ -18,6 +19,7 @@ public class MatchingService {
 
     private final MatchingRedisUtil matchingRedisUtil;
     private final MatchingQueryDslRepository matchingQueryDslRepository;
+    private final MatchingPaginationRepository matchingPaginationRepository;
 
     private final int MAGINOT_SCORE = 80;
     private final int MEMBER_COUNT = 3;
@@ -37,5 +39,12 @@ public class MatchingService {
 
         matchingRedisUtil.createCache(memberId, response);
         return response;
+    }
+
+    public List<MemberListResponseDto> getMembers(Long memberId, Integer cursor) {
+        Map<Member, Integer> members = matchingPaginationRepository.findMembers(memberId, cursor);
+        return members.entrySet().stream()
+                .map(entry -> MemberListResponseDto.fromEntity(entry.getKey(), entry.getValue()))
+                .toList();
     }
 }

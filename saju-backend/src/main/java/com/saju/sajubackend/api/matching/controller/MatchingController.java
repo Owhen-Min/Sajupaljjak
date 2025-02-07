@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,5 +23,12 @@ public class MatchingController {
     public ResponseEntity<List<MemberListResponseDto>> getMatchingMembers(Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(matchingService.getMatchingMembers(memberId));
+    }
+
+    @GetMapping
+    public ResponseEntity getMembers(@RequestParam(required = false) Integer cursor,
+                                     Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(matchingService.getMembers(memberId, cursor));
     }
 }
