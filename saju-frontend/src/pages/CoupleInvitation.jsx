@@ -35,27 +35,17 @@ function CoupleInvitation() {
       }
 
       try {
+        const code = 'ABCD 098A';
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+        
+        // 로컬 스토리지에 저장
+        localStorage.setItem('coupleCode', code);
+        localStorage.setItem('codeExpiresAt', expiresAt);
+        
         setCoupleCode({
-          code: 'ABCD 098A',
-          expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-        })
-        // // 새로운 커플 코드 발급 API 호출
-        // const response = await fetch('api/inviting', {
-        //   method: 'GET',
-        // });
-        // const data = await response.json();
-        
-        // // 24시간 후 만료 시간 설정
-        // const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
-        
-        // // 로컬 스토리지에 저장
-        // localStorage.setItem('coupleCode', data.code);
-        // localStorage.setItem('codeExpiresAt', expiresAt);
-        
-        // setCoupleCode({
-        //   code: data.code,
-        //   expiresAt: expiresAt,
-        // });
+          code: code,
+          expiresAt: expiresAt,
+        });
       } catch (error) {
         console.error('커플 코드 발급 실패:', error);
       }
