@@ -52,8 +52,8 @@ function FortuneMy() {
         <SajuGrid 
           saju={data.saju} 
         />
-      </div>
       <ElementChart elementCounts={elementCounts} />
+      </div>
 
     </div>
   );
