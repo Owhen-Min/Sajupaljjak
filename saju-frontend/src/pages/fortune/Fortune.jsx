@@ -60,9 +60,9 @@ function Fortune() {
       <hr/>
         <div className="flex flex-wrap justify-center gap-4 w-full max-w-2xl mx-auto">
           <FortuneButton content="오늘의 운세" url="/fortune/today"/>
+          <FortuneButton content="나의 사주" url="/fortune/my"/>
           <FortuneButton content="신년 운세" url="/fortune/year"/>
           <FortuneButton content="평생 운세" url="/fortune/life"/>
-          <FortuneButton content="모임 운세" url="/fortune/group"/>
         </div>
       <BottomNav />
     </div>

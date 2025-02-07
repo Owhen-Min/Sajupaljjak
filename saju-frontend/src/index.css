@@ -1,6 +1,6 @@
 #root {
   max-width: 400px;
-  min-height: 80vh; /* 모바일 기본값 */
+  min-height: 90vh; /* 모바일 기본값 */
   margin: 0 auto;
   padding: 0 0px;
   box-sizing: border-box;
