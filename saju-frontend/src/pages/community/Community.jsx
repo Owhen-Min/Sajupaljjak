@@ -1,13 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TopBar from "../../components/TopBar";
 import BottomNav from "../../components/BottomNav";
 import CommunityFilterBubble from "../../components/CommunityFilterBubble";
 import ArticleList from "../../components/ArticleList";
-import ArticleDetail from "../../components/ArticleDetail";
 
 function Community() {
   const [selectedElement, setSelectedElement] = useState('all');
-  const [selectedArticleId, setSelectedArticleId] = useState(null);
+  const navigate = useNavigate();
 
   return (
     <div className="community-page flex flex-col h-screen">
@@ -19,14 +19,8 @@ function Community() {
         />
         <ArticleList 
           selectedElement={selectedElement}
-          onArticleClick={(articleId) => setSelectedArticleId(articleId)}
+          onArticleClick={(articleId) => navigate(`/community/${articleId}`)}
         />
-        {selectedArticleId && (
-          <ArticleDetail 
-            articleId={selectedArticleId}
-            onClose={() => setSelectedArticleId(null)}
-          />
-        )}
       </div>
       <BottomNav />
     </div>

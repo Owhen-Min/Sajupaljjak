@@ -10,7 +10,7 @@ function CommunityFilterBubble({ selectedElement, onElementSelect }) {
   ];
 
   return (
-    <div className="flex gap-3 py-5 justify-center">
+    <div className="flex gap-3 pt-5 pb-0 justify-center">
       {elementFilters.map((filter) => (
         <button
           key={filter.id}
