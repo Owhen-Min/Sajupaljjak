@@ -107,7 +107,7 @@ function FortuneToday() {
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
                 💰 재물운
               </h3>
-              <div className="text-gray-600 text-sm leading-relaxed leading-loose">
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
                 <ReactMarkdown>{data.content.wealth}</ReactMarkdown>
               </div>
             </div>
@@ -116,7 +116,7 @@ function FortuneToday() {
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
                 ❤️ 애정운
               </h3>
-              <div className="text-gray-600 text-sm leading-relaxed leading-loose">
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
                 <ReactMarkdown>{data.content.love}</ReactMarkdown>
               </div>
             </div>
@@ -125,7 +125,7 @@ function FortuneToday() {
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
                 🏥 건강운
               </h3>
-              <div className="text-gray-600 text-sm leading-relaxed leading-loose">
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
                 <ReactMarkdown>{data.content.health}</ReactMarkdown>
               </div>
             </div>
@@ -134,7 +134,7 @@ function FortuneToday() {
               <h3 className="text-lg font-semibold text-gray-800 mb-3">
                 📚 학업운
               </h3>
-              <div className="text-gray-600 leading-relaxed leading-loose">
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
                 <ReactMarkdown>{data.content.study}</ReactMarkdown>
               </div>
             </div>
