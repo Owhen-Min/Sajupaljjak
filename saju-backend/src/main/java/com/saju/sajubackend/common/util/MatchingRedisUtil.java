@@ -1,6 +1,6 @@
 package com.saju.sajubackend.common.util;
 
-import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
+import com.saju.sajubackend.api.matching.dto.MatchingMemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -18,15 +18,15 @@ public class MatchingRedisUtil {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public List<MemberListResponseDto> getCache(Long memberId) {
+    public List<MatchingMemberResponseDto> getCache(Long memberId) {
         Object cachedData = redisTemplate.opsForValue().get(getRedisKey(memberId));
         if (cachedData instanceof List<?>) {
-            return (List<MemberListResponseDto>) cachedData;
+            return (List<MatchingMemberResponseDto>) cachedData;
         }
         return Collections.emptyList();
     }
 
-    public void createCache(Long memberId, List<MemberListResponseDto> matchingMembers) {
+    public void createCache(Long memberId, List<MatchingMemberResponseDto> matchingMembers) {
         LocalDateTime midnight = LocalDate.now().plusDays(1).atStartOfDay();
         long secondsUntilMidnight = ChronoUnit.SECONDS.between(LocalDateTime.now(), midnight);
 

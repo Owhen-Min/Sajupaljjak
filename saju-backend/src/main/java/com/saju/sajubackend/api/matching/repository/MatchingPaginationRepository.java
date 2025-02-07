@@ -28,7 +28,7 @@ public class MatchingPaginationRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Map<Member, Integer> findMembers(Long memberId, Integer cursor) {
+    public List<Member> findMembers(Long memberId, Integer cursor, Integer pageSize) {
         // 1. 회원 조회
         Member foundMember = queryFactory
                 .selectFrom(member)
@@ -62,7 +62,10 @@ public class MatchingPaginationRepository {
                                 .and(matchReligion(foundFilter))  // 종교
                                 .and(matchRegion(foundFilter))    // 지역
                                 .and(matchFilter(foundFilter))    // 그 외(키, 나이, 흡연, 음주)
+                                .and(cursor != null ? member.memberId.gt(cursor) : null) // cursor 기반 페이징
                 )
+                .orderBy(member.memberId.desc())
+                .limit(pageSize)
                 .fetch();
 
         // 6. Map<Member, Integer> 형태로 변환

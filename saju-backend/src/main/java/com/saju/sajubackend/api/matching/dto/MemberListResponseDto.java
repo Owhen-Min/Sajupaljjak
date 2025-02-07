@@ -2,39 +2,24 @@ package com.saju.sajubackend.api.matching.dto;
 
 import com.saju.sajubackend.api.member.domain.Member;
 
-import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 public record MemberListResponseDto(
-        Long id,
-        String nickname,
-        long score,
-        String profileImage,
-        Integer region,
-        int age,
-        String celestialStem,
-        String introduction
+
+        List<MatchingMemberResponseDto> members,
+        boolean hasNext,
+        int nextCursor,
+
 ) {
 
-    public static MemberListResponseDto fromEntity(Member member, long score) {
+    public static MemberListResponseDto fromEntity(List<Member> members, Map<Integer, Integer> scores) {
         return new MemberListResponseDto(
-                member.getMemberId(),
-                member.getNickname(),
-                score,
-                member.getProfileImg(),
-                member.getCityCode(),
-                calculateAge(member.getBday()),
-                member.getCelestialStem().getLabel(),
-                member.getIntro()
-        );
-    }
+                members.stream()
+                        .map(member -> MatchingMemberResponseDto.fromEntity(member, scores.get(member.getCelestialStem().getCode())))
+                        .toList(),
+                members.size() > 20
+        )
 
-    private static int calculateAge(LocalDate birthDate) {
-        LocalDate today = LocalDate.now();
-        int age = today.getYear() - birthDate.getYear();
-
-        if (birthDate.plusYears(age).isAfter(today)) { // 생일이 아직 지나지 않았다면 나이에서 1 빼기
-            age--;
-        }
-        return age;
     }
 }

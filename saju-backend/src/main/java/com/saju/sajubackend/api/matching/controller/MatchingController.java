@@ -1,5 +1,6 @@
 package com.saju.sajubackend.api.matching.controller;
 
+import com.saju.sajubackend.api.matching.dto.MatchingMemberResponseDto;
 import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.service.MatchingService;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,14 @@ public class MatchingController {
     private final MatchingService matchingService;
 
     @GetMapping("/top")
-    public ResponseEntity<List<MemberListResponseDto>> getMatchingMembers(Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+    public ResponseEntity<List<MatchingMemberResponseDto>> getMatchingMembers(Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(matchingService.getMatchingMembers(memberId));
     }
 
     @GetMapping
-    public ResponseEntity getMembers(@RequestParam(required = false) Integer cursor,
-                                     Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+    public ResponseEntity<MemberListResponseDto> getMembers(@RequestParam(required = false) Integer cursor,
+                                                            Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(matchingService.getMembers(memberId, cursor));
     }
