@@ -1,8 +1,7 @@
 export const MainButton = ({ className, children, half, ...props }) => (
     <button
       className={`
-        ${half ? 'w-1/2' : 'w-full'} px-4 py-3
-        mt-5
+        px-3
         text-base font-medium text-white
         bg-[#ff6842]
         border-none

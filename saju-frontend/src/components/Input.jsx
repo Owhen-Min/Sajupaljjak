@@ -1,7 +1,7 @@
 export const Input = ({ className, ...props }) => (
     <input
       className={`
-        w-full px-4 py-[15px] 
+        px-4 py-[15px] 
         text-base
         border border-gray-300 
         rounded-lg
