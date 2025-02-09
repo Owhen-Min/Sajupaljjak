@@ -1,11 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 #root {
   max-width: 400px;
   min-height: 90vh; /* 모바일 기본값 */
   margin: 0 auto;
   padding: 0 0px;
   box-sizing: border-box;
+  background-color: white;
   /* background-color: #ffffff; */
-  background-image: url("https://img.freepik.com/free-photo/simple-smooth-fabric-textured-background_53876-128518.jpg?t=st=1738822310~exp=1738825910~hmac=4166c8244d998096c324722e5fa240a5339acdaa52d9344595c145af48e041a7&w=1380");
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 } 
 
 /* 데스크탑 환경 (768px 이상) */
@@ -16,7 +22,7 @@
 }
 
 body {
-  background-color: #ffffff;
+  background-color: #f7f7f7;
 }
 
 
@@ -52,10 +58,6 @@ body {
     font-family: 'GapyeongHanseokbong-Bold', sans-serif;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer utilities {
   /* Chrome, Safari and Opera */
   .scrollbar-hidden::-webkit-scrollbar {
@@ -66,4 +68,15 @@ body {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
   }
+}
+
+@font-face {
+    font-family: 'NotoSansKR';
+    src: url('./assets/fonts/NotoSansKR-Medium.ttf') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.font-noto {
+    font-family: 'NotoSansKR', sans-serif;
 }

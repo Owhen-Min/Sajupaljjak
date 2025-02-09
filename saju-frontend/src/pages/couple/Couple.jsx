@@ -5,7 +5,7 @@ function Couple() {
   return (
     <div>
       <TopBar />
-      <h1>운세</h1>
+      <h1>커플</h1>
 
       <BottomNav />
     </div>

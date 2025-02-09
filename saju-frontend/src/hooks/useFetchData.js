@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { get } from "../api/apiService";
+import { useQuery } from '@tanstack/react-query';
+import { get } from '../api/apiService';
 
 const useFetchData = (uri, queryKey) => {
   const fetchData = async () => {
@@ -7,10 +7,7 @@ const useFetchData = (uri, queryKey) => {
     return data;
   };
 
-  return useQuery({
-    queryKey: [queryKey],
-    queryFn: fetchData,
-  });
+  return useQuery(queryKey, fetchData);
 };
 
 export default useFetchData;

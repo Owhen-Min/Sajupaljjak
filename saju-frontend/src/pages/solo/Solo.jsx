@@ -5,8 +5,6 @@ import UserList from "../../components/UserList";
 // import useFetchData from '../../hooks/useFetchData';
 import { testUsers } from "../../data/user";
 
-
-
 function Solo() {
   // const { data: users, isLoading, isError } = useFetchData('/api/match/top', ['match', 'top']);
   
