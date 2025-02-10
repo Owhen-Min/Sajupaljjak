@@ -6,6 +6,7 @@ import Dropdown from '../../components/Dropdown';
 import MainButton from '../../components/MainButton';
 import { provinces } from '../../data/provinceCode';
 import RangeSlider from '../../components/RangeSlider';
+import '../../styles/SignUp.css';
 
 function ErrorBubble({ children }) {
   return (
@@ -19,7 +20,7 @@ function Preference() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     smoking: '',
-    dringking: '',
+    drinking: '',
     religion: [],
     heightRange: [140, 220],
     cityCode: [],
@@ -28,6 +29,7 @@ function Preference() {
   const [errors, setErrors] = useState({
     religion: false,
     smoking: false,
+    drinking: false,
     height: false,
     location: false,
     ageRange: false,
@@ -44,6 +46,7 @@ function Preference() {
     const newErrors = {
       religion: formData.religion.length === 0,
       smoking: formData.smoking === '',
+      drinking: formData.drinking === '',
       location: formData.cityCode.length === 0,
     };
 
@@ -67,8 +70,8 @@ function Preference() {
     <div className="preference flex flex-col relative justify-center min-h-screen">
       <TopBar2 mainText="내 선호대상 입력" />
       <div className="preference-content p-5">
-        <h3 className="input-prompt mb-4">선호하는 나이 범위를 선택해주세요</h3>
-        <div className="input-group mb-8">
+        <h3 className="input-prompt mb-2">선호하는 나이 범위를 선택해주세요</h3>
+        <div className="input-group mb-6">
           <div className="flex justify-between mt-2 text-md text-gray-600">
             <span>{formData.ageRange[0]}세</span>
             <span>{formData.ageRange[1]}세</span>
@@ -86,8 +89,8 @@ function Preference() {
           </div>
         </div>
         
-        <h3 className="input-prompt mb-4">선호하는 종교를 선택해주세요</h3>
-        <div className="input-group mb-8">
+        <h3 className="input-prompt mb-2">선호하는 종교를 선택해주세요</h3>
+        <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
             options={['무교', '개신교', '불교', '천주교', '기타']}
@@ -99,8 +102,20 @@ function Preference() {
           {errors.religion && <ErrorBubble>종교를 선택해주세요</ErrorBubble>}
         </div>
 
-        <h3 className="input-prompt mb-8">선호하는 흡연 여부를 선택해주세요</h3>
-        <div className="input-group mb-8">
+        <h3 className="input-prompt mb-2">선호하는 음주 여부를 선택해주세요</h3>
+        <div className="input-group mb-6">
+          <SelectionGrid
+            cols={2}
+            options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
+            onSelect={(selected) => handleSelectionChange('drinking', selected)}
+            selected={formData.drinking ? [['주 1~2회', '주 3~4회', '주 5~6회', '주 7회 이상'].indexOf(formData.drinking)] : []}
+          />
+
+          {errors.drinking && <ErrorBubble>음주 여부를 선택해주세요</ErrorBubble>}
+        </div>
+
+        <h3 className="input-prompt mb-2">선호하는 흡연 여부를 선택해주세요</h3>
+        <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
             options={['흡연', '비흡연', '금연중']}
@@ -110,8 +125,8 @@ function Preference() {
           {errors.smoking && <ErrorBubble>흡연 여부를 선택해주세요</ErrorBubble>}
         </div>
 
-        <h3 className="input-prompt mb-4">선호하는 키 범위를 선택해주세요</h3>
-        <div className="input-group mb-8">
+        <h3 className="input-prompt mb-2">선호하는 키 범위를 선택해주세요</h3>
+        <div className="input-group mb-6">
           <div className="relative">
             <RangeSlider 
               min={140} 
@@ -128,7 +143,7 @@ function Preference() {
         </div>
 
         <h3 className="input-prompt mb-2">선호하는 지역을 선택해주세요</h3>
-        <div className="input-group mb-5 text-sm">
+        <div className="input-group mb-6 text-sm">
           <div className="flex flex-wrap gap-2 mt-2">
             {formData.cityCode.map(code => {
               const cityName = Object.keys(provinces).find(key => 
@@ -179,6 +194,7 @@ function Preference() {
         <MainButton
         children={'제출'}
         onClick={handleSubmit}
+        className={"w-full py-3"}
         />
       </div>
     </div>

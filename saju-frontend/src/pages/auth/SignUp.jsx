@@ -233,8 +233,8 @@ function SignUpPage() {
       <div className="signup-step">
         {4 > step && step >= 1 && (
           <>
-            <h3 className="input-prompt">이름을 입력해 주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">이름을 입력해 주세요</h3>
+            <div className="input-group mb-6">
               <Input
                 type="text"
                 name="name"
@@ -253,12 +253,13 @@ function SignUpPage() {
                 
         {4 > step && step >= 2 && (
           <>
-            <h3 className="input-prompt">성별을 입력해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">성별을 입력해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={2}
                 options={['남성', '여성']}
                 onSelect={(selected) => handleSelectionChange('gender', selected)}
+
                 selected={formData.gender ? [['남성', '여성'].indexOf(formData.gender)] : []}
               />
               {errors.gender && (
@@ -272,7 +273,7 @@ function SignUpPage() {
             
         {4 > step && step >= 3 && (
           <>
-            <h3 className="input-prompt">태어난 시간을 입력해주세요.<br/>양력으로 입력해주세요.</h3>
+            <h3 className="input-prompt mb-2">태어난 시간을 입력해주세요.<br/>양력으로 입력해주세요.</h3>
               <div className="flex items-center gap-2 mt-2">
                 <Input
                   type="text"
@@ -299,9 +300,11 @@ function SignUpPage() {
                     placeholder="2025/01/28"
                     maxLength="10"
                     style={{ flex: 2 }}
+                    className="w-2/3"
                   />
                 <Input
                   type="text"
+
                   name="birthTime"
                   value={formData.birthTime}
                   onChange={(e) => {
@@ -324,6 +327,7 @@ function SignUpPage() {
                   maxLength="5"
                   style={{ flex: 1 }}
                   disabled={formData.birthTimeUnknown}
+                  className="w-1/3"
                 />
               </div>
               <div className="flex items-center gap-2 mt-2">
@@ -337,9 +341,11 @@ function SignUpPage() {
                 <label 
                   htmlFor="birthTimeUnknown"
                   style={{ cursor: 'pointer', fontSize: '14px' }}
+                  className="text-gray-500"
                 >
                   태어난 시간을 모릅니다
                 </label>
+
               </div>
               {errors.birthDay && (
                 <ErrorBubble>
@@ -351,8 +357,8 @@ function SignUpPage() {
             
         {9 > step && step >= 4 && (
           <>
-            <h3 className="input-prompt">종교를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">종교를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={3}
                 options={['무교', '개신교', '불교', '천주교', '기타']}
@@ -370,8 +376,8 @@ function SignUpPage() {
 
         {9 > step && step >= 5 && (
           <>
-            <h3 className="input-prompt">흡연 여부를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">흡연 여부를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={3}
                 options={['흡연', '비흡연', '금연 중']}
@@ -389,8 +395,8 @@ function SignUpPage() {
 
         {9 > step && step >= 6 && (
           <>
-            <h3 className="input-prompt">음주 여부를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">음주 여부를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={2}
                 options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
@@ -409,8 +415,8 @@ function SignUpPage() {
 
         {9 > step && step >= 7 && (
           <>
-            <h3 className="input-prompt">키를 입력해주세요</h3>
-            <div className="input-group" style={{ position: 'relative' }}>
+            <h3 className="input-prompt mb-2">키를 입력해주세요</h3>
+            <div className="input-group mb-6" style={{ position: 'relative' }}>
               <div style={{ 
                 display: 'flex', 
                 alignItems: 'center',
@@ -425,7 +431,8 @@ function SignUpPage() {
                     const selected = e.target.value;
                     setFormData(prev => ({ ...prev, height: selected }));
                   }}
-                  className="w-30 h-10 text-center text-base border border-gray-300 rounded-md appearance-none cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
+                  className={
+                    "w-30 h-10 text-center border border-gray-300 rounded-md cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"}
                   onClick={(e) => {
                     setStep(8);
                     setMaxStep(Math.max(maxStep, 9));
@@ -449,8 +456,8 @@ function SignUpPage() {
 
         {9 > step && step >= 8 && (
           <>
-            <h3 className="input-prompt">거주지를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">거주지를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-row gap-2.5 w-full">
                 <Dropdown
                   name="cityCode"
@@ -518,8 +525,8 @@ function SignUpPage() {
         )}
         {step >= 9 && (
           <>
-            <h3 className="input-prompt">닉네임을 입력해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">닉네임을 입력해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-col w-full">
                 <Input
                   type="text"
@@ -543,8 +550,8 @@ function SignUpPage() {
         )}
         {step >= 10 && (
           <>
-            <h3 className="input-prompt">자기소개를 입력해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">자기소개를 입력해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-col w-full">
                 <textarea
                   name="introduction"
@@ -569,8 +576,8 @@ function SignUpPage() {
         )}
         {step >= 11 && (
           <>
-            <h3 className="input-prompt">프로필 사진을 등록해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">프로필 사진을 등록해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-col w-full items-center">
                 <input
                   type="file"
@@ -724,7 +731,7 @@ function SignUpPage() {
             <MainButton 
               onClick={handleNextStep}
               disabled={step >= maxStep}
-              className="w-full py-3"
+              className="w-full py-3 mt-3"
             >
               다음
             </MainButton>
