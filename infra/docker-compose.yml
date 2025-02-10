@@ -1,0 +1,133 @@
+services:
+  jenkins:
+    image: jenkins/jenkins:jdk17
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+    user: root
+    volumes:
+      - /home/ubuntu/jenkins-data:/var/jenkins_home
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      # 글로벌 nginx 설정 파일은 Git에서 관리(예: infra/nginx/global-nginx.conf)
+      - ./infra/nginx.conf:/etc/nginx/nginx.conf:ro
+      # 프론트엔드 빌드 산출물 (saju-frontend에서 빌드 후 결과물을 저장한 폴더)
+      - ./saju-frontend/dist:/usr/share/nginx/html:ro
+#      - /etc/nginx:/etc/nginx
+#      - /home/ubuntu/nginx-proxy.conf:/etc/nginx/conf.d/default.conf
+    restart: always
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: saju
+      MYSQL_USER: saju
+      MYSQL_PASSWORD: saju
+      TZ: Asia/Seoul
+    volumes:
+      - /home/ubuntu/mysql/data:/var/lib/mysql
+      - /home/ubuntu/mysql/config:/etc/mysql/conf.d
+      - /home/ubuntu/mysql/init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      TZ: Asia/Seoul
+    volumes:
+      - /home/ubuntu/redis/data:/data
+      - /home/ubuntu/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: /home/ubuntu/jenkins-data/workspace/infra/saju-backend
+    container_name: saju-backend
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      TZ: Asia/Seoul
+      SPRING_PROFILES_ACTIVE: prod
+    networks:
+      - app-network
+
+
+  frontend:
+    build:
+      context: /home/ubuntu/jenkins-data/workspace/infra/saju-frontend
+      dockerfile: Dockerfile
+    container_name: saju-frontend
+    ports:
+      - "3000:80"
+    restart: always
+    networks:
+      - app-network
+
+  sonarqube:
+    image: sonarqube:lts-community
+    depends_on:
+      - sonar_db
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://sonar_db:5432/sonar
+      SONAR_JDBC_USERNAME: username
+      SONAR_JDBC_PASSWORD: password
+    ports:
+      - "8500:9000"
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_temp:/opt/sonarqube/temp
+    networks:
+      - app-network
+
+  sonar_db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sonar
+    volumes:
+      - sonar_db:/var/lib/postgresql
+      - sonar_db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
+  sonarqube_temp:
+  sonar_db:
+  sonar_db_data:
