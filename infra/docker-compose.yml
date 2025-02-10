@@ -20,7 +20,7 @@ services:
       TZ: Asia/Seoul
     volumes:
       # 글로벌 nginx 설정 파일은 Git에서 관리(예: infra/nginx/global-nginx.conf)
-      - /home/ubuntu/jenkins-data/workspace/infra/infra/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /home/ubuntu/jenkins-data/workspace/final/infra/nginx.conf:/etc/nginx/nginx.conf:ro
       # 프론트엔드 빌드 산출물 (saju-frontend에서 빌드 후 결과물을 저장한 폴더)
       - ./saju-frontend/dist:/usr/share/nginx/html:ro
 #      - /etc/nginx:/etc/nginx
@@ -63,7 +63,7 @@ services:
 
   backend:
     build:
-      context: /home/ubuntu/jenkins-data/workspace/infra/saju-backend
+      context: /home/ubuntu/jenkins-data/workspace/final/saju-backend
     container_name: saju-backend
     ports:
       - "8081:8081"
@@ -79,7 +79,7 @@ services:
 
   frontend:
     build:
-      context: /home/ubuntu/jenkins-data/workspace/infra/saju-frontend
+      context: /home/ubuntu/jenkins-data/workspace/final/saju-frontend
       dockerfile: Dockerfile
     container_name: saju-frontend
     ports:
