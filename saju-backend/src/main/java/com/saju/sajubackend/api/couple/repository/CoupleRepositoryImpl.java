@@ -14,13 +14,11 @@ public class CoupleRepositoryImpl implements CoupleCustomRepository {
 
     @Override
     public boolean existsByMemberId(Long memberId) {
-        Integer fetchOne = queryFactory
+        return queryFactory
                 .selectOne()
                 .from(couple)
                 .where(couple.coupleMale.memberId.eq(memberId)
                         .or(couple.coupleFemale.memberId.eq(memberId)))
-                .fetchFirst();
-
-        return fetchOne != null;
+                .fetchFirst() != null;
     }
 }
