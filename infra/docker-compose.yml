@@ -25,7 +25,7 @@ services:
       - ./saju-frontend/dist:/usr/share/nginx/html:ro
 #      - /etc/nginx:/etc/nginx
 #      - /home/ubuntu/nginx-proxy.conf:/etc/nginx/conf.d/default.conf
-    restart: always
+#    restart: always
     networks:
       - app-network
 
@@ -84,7 +84,7 @@ services:
     container_name: saju-frontend
     ports:
       - "3000:80"
-    restart: always
+#    restart: always
     networks:
       - app-network
 
