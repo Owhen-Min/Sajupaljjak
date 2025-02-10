@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { post } from '../../api/apiService';
-
+import useGet from '../../hooks/useGet';
 const Verify = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +11,7 @@ const Verify = () => {
       const code = new URL(window.location.href).searchParams.get("code");
       try {
         // 백엔드 서버로 인가 코드 전송
-        const { data } = await post('api/auth/login/kakao', { code });
+        const { data } = await useGet('api/auth/login/kakao?code='+{ code }, "login");
         localStorage.setItem('email', data.email);
 
         // 토큰이 없는 경우 (회원가입 필요)

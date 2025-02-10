@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { get } from '../api/apiService';
+import useGet from '../hooks/useGet';
 import SajuUserBubble from './SajuUserBubble';
 
 function formatRelativeTime(dateString) {
@@ -157,13 +157,13 @@ function ArticleList({ selectedElement, onArticleClick }) {
       {articles.map((article) => (
         <div 
           key={article.articleId}
-          className="article-card bg-white p-4 mb-4 rounded-lg shadow cursor-pointer"
+          className="article-card bg-white p-4 mb-4 rounded-lg shadow cursor-pointer opacity-90"
           onClick={() => onArticleClick(article.articleId)}
         >
           <div className="flex items-end">
             <SajuUserBubble skyElement={article.boardType} />
           </div>
-          <h3 className="text-lg font-semibold">{article.title}</h3>
+          <h3 className="text-lg font-semibold"> {article.title}</h3>
           <p className="text-gray-700 line-clamp-2">{article.content}</p>
           <div className="flex justify-between items-center mt-2">
 
