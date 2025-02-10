@@ -4,6 +4,7 @@ import useGet from "../../hooks/useGet";
 // 테스트 데이터
 import { testUsers } from "../../data/user";
 import BottomNav from "../../components/BottomNav";
+import TopBar2 from "../../components/TopBar2";
 
 function MatchReport() {
    const { userId } = useParams();
@@ -18,6 +19,7 @@ function MatchReport() {
 
   return (
     <div>
+      <TopBar2/ >
       <div>
         <img src={user.profileImage} alt={`${user.name}'s profile`} />
       </div>

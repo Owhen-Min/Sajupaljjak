@@ -12,7 +12,7 @@ function MyPage() {
         <UserCard user={testUsers[0]} className="mb-6" />
 
         <nav className="p-4">
-          <ul className="space-y-4">
+          <ul className="pt-4 space-y-4 text-lg">
           <li>
               <Link
                 to="edit-profile"
