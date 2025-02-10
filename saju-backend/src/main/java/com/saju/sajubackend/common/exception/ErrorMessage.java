@@ -37,7 +37,10 @@ public enum ErrorMessage {
     INVALID_SOLO_STATUS_CODE("유효하지 않은 솔로 상태 코드입니다."),
     INVALID_SOLO_STATUS_LABEL("유효하지 않은 솔로 상태 값입니다."),
 
-    INVITE_CODE_NOT_FOUND("유효하지 않은 초대 코드입니다");
+    // couple
+    INVITE_CODE_NOT_FOUND("유효하지 않은 초대 코드입니다"),
+
+    COUPLE_YEAR_NOT_FOUND("해당 남녀 천간 조합의 커플 운세를 찾을 수 없습니다.");
 
     private final String message;
 }
