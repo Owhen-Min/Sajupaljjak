@@ -16,7 +16,7 @@ public class LoginResponse {
     private int cityCode;
     private Religion religion;
     private int age;
-    //    private int celestial_stem_id;
+//    private int celestial_stem_id;
     private String intro;
     private TokenInfo token;
 

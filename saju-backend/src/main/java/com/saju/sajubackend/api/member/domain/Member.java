@@ -10,17 +10,17 @@ import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.converter.*;
 import com.saju.sajubackend.common.enums.*;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
+@Builder
+@ToString
 @Table(name = "MEMBER")
 public class Member {
     @Id
@@ -36,7 +36,7 @@ public class Member {
 
     @Convert(converter = RelationshipStatusConverter.class)
     @Column(nullable = false)
-    private RelationshipStatus relationship;
+    private RelationshipStatus relation;
 
     @Column(nullable = false, length = 30)
     private String nickname;
@@ -75,26 +75,7 @@ public class Member {
     @Column
     private CelestialStem celestialStem;
 
-    @Builder
-    private Member(Long memberId, LocalDate bday, LocalDateTime btime, RelationshipStatus relationship, String nickname, String intro, String profileImg, Integer height, Integer cityCode, SmokingStatus smoking, DrinkingFrequency drinking, Religion religion, Gender gender, CelestialStem celestialStem) {
-        this.memberId = memberId;
-        this.bday = bday;
-        this.btime = btime;
-        this.relationship = relationship;
-        this.nickname = nickname;
-        this.intro = intro;
-        this.profileImg = profileImg;
-        this.height = height;
-        this.cityCode = cityCode;
-        this.age = age;
-        this.smoking = smoking;
-        this.drinking = drinking;
-        this.religion = religion;
-        this.gender = gender;
-        this.celestialStem = celestialStem;
-    }
-
-    public void updateRelationship(RelationshipStatus relationship) {
-        this.relationship = relationship;
+    public void updateRelationship(RelationshipStatus isCouple) {
+        this.relation = relation;
     }
 }

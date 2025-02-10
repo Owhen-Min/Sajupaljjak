@@ -5,12 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.FailResponse;
 
-@RestControllerAdvice
+@RestControllerAdvice(annotations = {RestController.class})
 public class ControllerExceptionAdvice {
 
 	@ExceptionHandler(BaseException.class)

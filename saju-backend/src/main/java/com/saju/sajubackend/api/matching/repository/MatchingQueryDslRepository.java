@@ -93,7 +93,7 @@ public class MatchingQueryDslRepository {
     }
 
     private BooleanExpression isSolo() {
-        return member.relationship.eq(RelationshipStatus.SOLO);
+        return member.relation.eq(RelationshipStatus.SOLO);
     }
 
     private BooleanExpression matchCelestialStem(Set<CelestialStem> compatibleStems) {
