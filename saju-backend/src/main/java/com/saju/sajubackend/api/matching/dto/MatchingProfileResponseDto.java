@@ -4,21 +4,29 @@ import com.saju.sajubackend.api.couple.domain.CoupleYear;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.saju.domain.Saju;
 
-import java.util.List;
+public record MatchingProfileResponseDto(
 
-public record MatchingMemberDetialResponseDto(
-
-        MatchingMemberResponseDto matchingMemberResponseDto,
-        List<String> saju,
-        String content
+        long id,
+        String nickname,
+        int score,
+        String profileImage,
+        int cityCode,
+        int age,
+        String celestialStem,
+        String introduction,
+        String year,
+        String month,
+        String day,
+        String time,
+        String harmony,
+        String chemi,
+        String good,
+        String bad,
+        String advice
 ) {
 
-    public static MatchingMemberDetialResponseDto fromEntity(Member matchingMember, Integer score, Saju saju, CoupleYear coupleYear) {
-        return new MatchingMemberDetialResponseDto(
-                MatchingMemberResponseDto.fromEntity(matchingMember, score),
-                List.of(saju.getTimely(), saju.getDaily(), saju.getMonthly(), saju.getYearly()),
-                formatContent(coupleYear)
-        );
+    public static MatchingProfileResponseDto fromEntity(Member matchingMember, Integer score, Saju saju, CoupleYear coupleYear) {
+        return null;
     }
 
     private static String formatContent(CoupleYear coupleYear) {

@@ -1,7 +1,7 @@
 package com.saju.sajubackend.api.matching.controller;
 
-import com.saju.sajubackend.api.matching.dto.MatchingMemberDetialResponseDto;
 import com.saju.sajubackend.api.matching.dto.MatchingMemberResponseDto;
+import com.saju.sajubackend.api.matching.dto.MatchingProfileResponseDto;
 import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.service.MatchingService;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class MatchingController {
     }
 
     @GetMapping("/{partnerId}")
-    public ResponseEntity<MatchingMemberDetialResponseDto> getMatchingProfile(
+    public ResponseEntity<MatchingProfileResponseDto> getMatchingProfile(
             @PathVariable Long partnerId, Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(matchingService.getMatchingMemberProfile(memberId, partnerId));
