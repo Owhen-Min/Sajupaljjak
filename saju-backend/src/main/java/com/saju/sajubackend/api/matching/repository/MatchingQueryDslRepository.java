@@ -1,52 +1,36 @@
 package com.saju.sajubackend.api.matching.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.common.enums.CelestialStem;
-import com.saju.sajubackend.common.enums.Gender;
-import com.saju.sajubackend.common.enums.RelationshipStatus;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.saju.sajubackend.api.filter.domain.QFilter.filter;
-import static com.saju.sajubackend.api.filter.domain.QRegionFilter.regionFilter;
-import static com.saju.sajubackend.api.filter.domain.QReligionFilter.religionFilter;
 import static com.saju.sajubackend.api.member.domain.QMember.member;
-import static com.saju.sajubackend.api.saju.domain.QScore.score1;
 
-@RequiredArgsConstructor
 @Repository
-public class MatchingQueryDslRepository {
+public class MatchingQueryDslRepository extends MatchingBaseRepository {
 
-    private final JPAQueryFactory queryFactory;
+    public MatchingQueryDslRepository(JPAQueryFactory queryFactory) {
+        super(queryFactory);
+    }
 
-    public Map<Member, Long> findMatchingMembers(Long memberId, long maginot, int count) {
+    public Map<Member, Integer> findMatchingMembers(Long memberId, long maginot, int count) {
         // 1. 회원 정보 조회
-        Member foundMember = queryFactory
-                .selectFrom(member)
-                .where(member.memberId.eq(memberId))
-                .fetchOne();
+        Member foundMember = findMember(memberId);
 
         if (foundMember == null) return Collections.emptyMap();
 
         // 2. 필터 정보 조회
-        Filter foundFilter = queryFactory
-                .selectFrom(filter)
-                .where(filter.member.eq(foundMember))
-                .fetchOne();
+        Filter foundFilter = findFilter(foundMember);
 
         // 3. 80점 이상인 천간과 점수 조회
-        Map<CelestialStem, Long> compatibleStemsMap = getCompatibleCelestialStems(foundMember.getCelestialStem(), maginot);
+        Map<CelestialStem, Integer> compatibleStemsMap = getCompatibleCelestialStems(foundMember.getCelestialStem(), maginot);
 
         // 4. 상대 필터링
         List<Member> candidates = queryFactory
@@ -68,7 +52,7 @@ public class MatchingQueryDslRepository {
         return selectedCandidates.stream()
                 .collect(Collectors.toMap(
                         member -> member,
-                        member -> compatibleStemsMap.getOrDefault(member.getCelestialStem(), 0L)
+                        member -> compatibleStemsMap.getOrDefault(member.getCelestialStem(), 0)
                 ));
     }
 
