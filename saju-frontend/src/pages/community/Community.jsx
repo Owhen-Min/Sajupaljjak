@@ -9,7 +9,7 @@ import ArticleList from "../../components/ArticleList";
 
 function Community() {
   const [selectedElement, setSelectedElement] = useState('전체');
-  const [selectedPillar, setSelectedPillar] = useState('전체');
+  const [selectedPillar, setSelectedPillar] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -25,8 +25,14 @@ function Community() {
       <div className="flex-grow overflow-y-auto">
         <CommunityFilterBubble 
           selectedElement={selectedElement} 
+          selectedPillar={selectedPillar}
           onElementSelect={setSelectedElement}
-          onClick={() => console.log(selectedElement)}
+          onPillarSelect={setSelectedPillar}
+          onClick={() => {
+            console.log(selectedElement);
+            console.log(selectedPillar);
+          }
+          }
         />
         <div className="flex items-center gap-3 px-4 pt-4 mb-2">
           <Input 

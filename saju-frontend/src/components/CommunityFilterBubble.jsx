@@ -3,7 +3,9 @@ import SajuUserBubble from './SajuUserBubble';
 
 function CommunityFilterBubble({ 
   selectedElement, 
+  selectedPillar,
   onElementSelect, 
+  onPillarSelect,
   selectingElement = true, // true: 천간만 선택 가능, false: 오행도 선택 가능
   showAll = true, // 전체 옵션 표시 여부
   ...props 
@@ -31,17 +33,18 @@ function CommunityFilterBubble({
 
   const handleButtonClick = (filterId) => {
     if (selectingElement && filterId !== 'all') {
-      // selectingElement가 true일 때는 오행 버튼 클릭 시 드롭다운만 토글
+      // 오행 버튼 클릭 시 드롭다운만 토글
       setOpenDropdownId(openDropdownId === filterId ? null : filterId);
     } else {
-      // selectingElement가 false이거나 '전체' 버튼일 때만 선택 가능
+      // '전체' 버튼이나 selectingElement가 false일 때는 element 선택
       onElementSelect(filterId);
+      onPillarSelect(null); // pillar 선택 초기화
       setOpenDropdownId(null);
     }
   };
 
   const handleSkyElementClick = (skyElement) => {
-    onElementSelect(skyElement);
+    onPillarSelect(skyElement);
     setOpenDropdownId(null);
   };
 
@@ -88,7 +91,7 @@ function CommunityFilterBubble({
                     <div 
                       key={skyElement}
                       onClick={() => handleSkyElementClick(skyElement)}
-                      className={`cursor-pointer ${selectedElement === skyElement ? 'ring-2 ring-offset-2' : ''}`}
+                      className={`cursor-pointer ${selectedPillar === skyElement ? 'ring-2 ring-offset-2' : ''}`}
                     >
                       <SajuUserBubble skyElement={skyElement} size="small" />
                     </div>

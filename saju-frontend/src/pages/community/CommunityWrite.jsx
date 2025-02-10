@@ -4,6 +4,7 @@ import { useState } from "react";
 
 function CommunityWrite() {
   const [selectedElement, setSelectedElement] = useState('전체');
+  const [selectedPillar, setSelectedPillar] = useState('');
   return (
     <div>
       <TopBar2 
@@ -13,10 +14,10 @@ function CommunityWrite() {
       <CommunityFilterBubble
         selectedElement={selectedElement}
         onElementSelect={setSelectedElement}
+        onPillarSelect={setSelectedPillar}
         selectingElement={false}
         showAll={false}
       />
-
 
       <h1>글쓰기</h1>
     </div>
