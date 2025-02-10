@@ -7,7 +7,7 @@ function Error() {
   return (
     <div className="error pt-10">
       <img src={logo} alt="logo" className="w-full mb-10" />
-      <h1 className="text-2xl font-bold text-blue-500 text-center mt-10">Coming Soon...</h1>
+      <h1 className="text-2xl font-bold text-red-500 text-center mt-10">Coming Soon...</h1>
     </div>
 
   );
