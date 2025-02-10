@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class InviteService {
@@ -34,7 +36,7 @@ public class InviteService {
     }
 
     @Transactional
-    public void createCouple(Long joinerId, String inviterCode) {
+    public void createCouple(Long joinerId, String inviterCode, LocalDateTime startDate) {
         Long inviterId = inviteRepository.findMemberIdByCode(inviterCode)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.INVITE_CODE_NOT_FOUND));
 
@@ -43,13 +45,11 @@ public class InviteService {
         Member joiner = memberRepository.findById(joinerId)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
 
+        Couple couple = Couple.of(inviter, joiner, startDate);
+
         inviter.updateRelationship(RelationshipStatus.COUPLE);
         joiner.updateRelationship(RelationshipStatus.COUPLE);
 
-        Couple couple = Couple.builder()
-                .coupleMale(inviter)
-                .coupleFemale(joiner)
-                .build();
         coupleRepository.save(couple);
 
         inviteRepository.deleteBothCode(inviterId, joinerId);

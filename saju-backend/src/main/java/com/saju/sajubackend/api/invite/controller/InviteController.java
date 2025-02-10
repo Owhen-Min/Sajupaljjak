@@ -24,7 +24,7 @@ public class InviteController {
     public ResponseEntity<Void> createCouple(@RequestBody CoupleCreateRequestDto request) {
         // TODO: 토큰에서 가져오기
         Long joinerId = 2L;
-        inviteService.createCouple(joinerId, request.invitingCode());
+        inviteService.createCouple(joinerId, request.invitingCode(), request.startDate());
         return ResponseEntity.ok().build();
     }
 }
