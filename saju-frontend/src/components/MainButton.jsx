@@ -2,7 +2,7 @@ export const MainButton = ({ className, children, half, ...props }) => (
     <button
       className={`
         px-3
-        text-base font-medium text-white
+        font-medium text-white
         bg-[#666666]
         border-none
         rounded-lg
