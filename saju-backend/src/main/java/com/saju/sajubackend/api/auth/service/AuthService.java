@@ -1,18 +1,24 @@
 package com.saju.sajubackend.api.auth.service;
 
 import com.saju.sajubackend.api.auth.dto.LoginResponse;
+import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.domain.MemberSocial;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.member.repository.MemberSocialRepository;
+import com.saju.sajubackend.common.enums.*;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.UnAuthorizedException;
 import com.saju.sajubackend.common.jwt.JwtProvider;
+import com.saju.sajubackend.common.util.CelestialStemCalculator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -69,25 +75,71 @@ public class AuthService {
         return jwtProvider.createAccessToken(userId);
     }
 
-    @Transactional
-    public Member registerNewMember(String email, String name) {
-        // 새로운 Member 생성 로직
-        Member member = Member.builder()
-                .build(); // 필요한 기본값들 설정
-
-        // MemberSocial 생성 및 연결
-        MemberSocial memberSocial = MemberSocial.builder()
-                .member(member)
-                .email(email)
-                .name(name)
-                .build();
-
-        memberRepository.save(member);
-        memberSocialRepository.save(memberSocial);
-        return member;
-    }
-
     public boolean isExistingMember(String email) {
         return memberSocialRepository.existsByEmail(email);
     }
+
+    @Transactional
+    public LoginResponse signup(SignupRequest request) {
+        // 닉네임 중복 확인
+        if (memberRepository.existsByNickname(request.getNickname())) {
+            throw new BaseException(HttpStatus.CONFLICT, ErrorMessage.DUPLICATE_NICKNAME);
+        }
+        System.out.println(request.toString());
+        // 생년월일 파싱 및 천간 계산
+        LocalDate birthDate = LocalDate.parse(request.getBday());
+        String celestialStem = CelestialStemCalculator.calculateCelestialStem(birthDate);
+
+        // Member 엔티티 생성
+        Member member = Member.builder()
+                .bday(birthDate)
+                .btime(LocalDateTime.parse(request.getBday() + "T" + request.getBtime()))
+                .relation(RelationshipStatus.fromLabel(request.getRelation()))
+                .nickname(request.getNickname())
+                .intro(request.getIntro())
+                .profileImg(request.getProfileImg())
+                .height(request.getHeight())
+                .cityCode(request.getCityCode())
+                .smoking(SmokingStatus.fromLabel(request.getSmoking()))
+                .drinking(DrinkingFrequency.fromLabel(request.getDrinking()))
+                .religion(Religion.fromLabel(request.getReligion()))
+                .gender(Gender.fromLabel(request.getGender()))
+                .celestialStem(CelestialStem.fromLabel(celestialStem))
+                .relation(RelationshipStatus.fromLabel(request.getRelation()))
+                .age(request.getAge())
+                .build();
+        Member savedMember = memberRepository.save(member);
+
+        // MemberSocial 엔티티 생성
+        MemberSocial memberSocial = MemberSocial.builder()
+                .member(savedMember)
+                .name(request.getName())
+                .email(request.getEmail())
+                .build();
+        System.out.println(memberSocial.toString());
+        memberSocialRepository.save(memberSocial);
+
+        // 토큰 생성
+        String accessToken = jwtProvider.createAccessToken(savedMember.getMemberId());
+        String refreshToken = jwtProvider.createRefreshToken(savedMember.getMemberId());
+
+        // LoginResponse 생성 및 반환
+        return LoginResponse.ofSuccess(
+                savedMember.getNickname(),
+                savedMember.getProfileImg(),
+                savedMember.getCityCode(),
+                savedMember.getReligion(),
+                savedMember.getAge(),
+                savedMember.getIntro(),
+                LoginResponse.TokenInfo.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
+                        .build()
+        );
+    }
+
+    public boolean checkNicknameAvailability(String nickname) {
+        return !memberRepository.existsByNickname(nickname);
+    }
+
 }

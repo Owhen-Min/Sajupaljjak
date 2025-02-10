@@ -6,11 +6,13 @@ import com.saju.sajubackend.api.saju.dto.SoloLifeDto;
 import com.saju.sajubackend.api.saju.dto.SoloYearDto;
 import com.saju.sajubackend.api.saju.service.FortuneService;
 import com.saju.sajubackend.api.saju.service.SajuService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/fortune")
 public class SajuController {
