@@ -1,13 +1,14 @@
-package com.saju.sajubackend.api.matching;
+package com.saju.sajubackend.api.matching.dto;
 
 import com.saju.sajubackend.api.member.domain.Member;
 
 import java.time.LocalDate;
 
-public record MemberListResponseDto(
+public record MatchingMemberResponseDto(
+
         Long id,
         String nickname,
-        long score,
+        int score,
         String profileImage,
         Integer region,
         int age,
@@ -15,8 +16,8 @@ public record MemberListResponseDto(
         String introduction
 ) {
 
-    public static MemberListResponseDto fromEntity(Member member, long score) {
-        return new MemberListResponseDto(
+    public static MatchingMemberResponseDto fromEntity(Member member, int score) {
+        return new MatchingMemberResponseDto(
                 member.getMemberId(),
                 member.getNickname(),
                 score,
