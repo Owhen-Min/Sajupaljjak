@@ -18,8 +18,8 @@ const TopBar = () => {
   return (
     <header className="w-full px-4 py-2 flex justify-between items-center bg-white border-b border-gray-200">
       <div>
-        <div className="text-2xl font-noto pl-1">{title}</div>
-        {/* <div className="text-3xl font-gapyeong pl-1">{title}</div> */}
+        {/* <div className="text-2xl font-noto pl-1">{title}</div> */}
+        <div className="text-3xl font-gapyeong pl-1">{title}</div>
       </div>
       <div>
         <Link to="/mypage">

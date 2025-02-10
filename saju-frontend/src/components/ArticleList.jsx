@@ -20,7 +20,7 @@ function formatRelativeTime(dateString) {
   }
 }
 
-function ArticleList({ selectedElement, onArticleClick }) {
+function ArticleList({ selectedElement, onArticleClick, className }) {
 //   const {
 //     data,
 //     isLoading,
@@ -153,7 +153,7 @@ function ArticleList({ selectedElement, onArticleClick }) {
       ];
 
   return (
-    <div className="article-list p-4">
+    <div className={`article-list p-4 ${className}`}>
       {articles.map((article) => (
         <div 
           key={article.articleId}

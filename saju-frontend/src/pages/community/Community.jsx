@@ -60,8 +60,8 @@ function Community() {
           />
         </div>
         <ArticleList 
-
           onArticleClick={(articleId) => navigate(`/community/${articleId}`)}
+          className="pb-12"
         />
       </div>
       <BottomNav />

@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import TopBar2 from '../../components/TopBar2';
 import Input from '../../components/Input';
 import SajuUserBubble from '../../components/SajuUserBubble';
+import MainButton from '../../components/MainButton';
 
 // formatRelativeTime 함수 추가
 function formatRelativeTime(dateString) {
@@ -129,15 +130,13 @@ function CommunityView() {
           <div className="flex comment-input-section bg-white p-4 rounded-lg justify-between shadow mb-4">
             <Input
               placeholder="댓글을 입력하세요"
-              className="w-4/5"
+              className="w-4/5 mr-2"
             />
-            <button 
-              className="px-3 h-auto bg-[#ffffff] outline-2 outline-offset-2 outline-solid text-black rounded-lg hover:bg-[#ff8562] transition-colors"
+            <MainButton
+              className="w-1/5"
             >
               확인
-            </button>
-
-
+            </MainButton>
           </div>
         </div>
       </div>

@@ -21,13 +21,14 @@ function SignUpAdditional() {
         />
       </div>
       <MainButton 
+        className="w-1/2 py-3 mt-3"
         onClick={() => {
           if (selected === '솔로') {navigate('/auth/preference')}
           else if (selected === '커플') {navigate('/auth/coupleinvitation')}
         }}
-        half={true}>
+      >
         다음
-        </MainButton>
+      </MainButton>
     </div>
   );
 }

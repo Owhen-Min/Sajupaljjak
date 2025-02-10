@@ -148,7 +148,7 @@ function CoupleInvitation() {
   };
 
   return (
-    <div className="couple-invitation flex flex-col relative justify-center min-h-screen bg-gray-50">
+    <div className="couple-invitation flex flex-col relative justify-center min-h-screen bg-gray-50 pb-3">
       <TopBar2 mainText={'커플 초대'} />
       <div className="invitation flex flex-col items-center px-6 mt-2 space-y-6">
         <div className="text-center space-y-4">
@@ -215,14 +215,15 @@ function CoupleInvitation() {
           />
         </div>
 
-        <div className="w-full max-w-md space-y-4 mt-8">
+        <div className="w-full max-w-md space-y-2 mt-8">
           <MainButton 
             onClick={handleStartMatching}
             children={'시작하기'}
+            className="w-full py-3"
           />
           <MainButton
             onClick={handleMatchComplete}
-            className="whitespace-pre-line"
+            className="w-full py-3"
             children={'상대방이\n입력했습니다'}
           />
         </div>
