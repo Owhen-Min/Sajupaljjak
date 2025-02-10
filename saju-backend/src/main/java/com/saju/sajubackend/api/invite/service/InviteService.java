@@ -70,4 +70,8 @@ public class InviteService {
         return (inviter.getGender() == Gender.MALE && joiner.getGender() == Gender.FEMALE) ||
                 (inviter.getGender() == Gender.FEMALE && joiner.getGender() == Gender.MALE);
     }
+
+    public boolean confirmCouple(Long memberId) {
+        return coupleRepository.existsByMemberId(memberId);
+    }
 }
