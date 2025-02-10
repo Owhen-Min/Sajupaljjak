@@ -1,6 +1,5 @@
 package com.saju.sajubackend.api.auth.controller;
 
-import com.saju.sajubackend.api.auth.dto.ApiResponse;
 import com.saju.sajubackend.api.auth.dto.LoginResponse;
 import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.auth.service.AuthService;
@@ -35,16 +34,16 @@ public class AuthController {
     public ResponseEntity<?> checkNickname(@RequestParam String nickname) {
         if (!isValidNickname(nickname)) {
             return ResponseEntity.badRequest()
-                    .body(new ApiResponse(400, "닉네임은 2-20자의 한글, 영문, 숫자만 사용 가능합니다"));
+                    .body("닉네임은 2-20자의 한글, 영문, 숫자만 사용 가능합니다");
         }
 
         boolean isAvailable = authService.checkNicknameAvailability(nickname);
         if (!isAvailable) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ApiResponse(409, "이미 존재하는 닉네임입니다"));
+                    .body("이미 존재하는 닉네임입니다");
         }
 
-        return ResponseEntity.ok(new ApiResponse(200, "사용 가능한 닉네임입니다"));
+        return ResponseEntity.ok("사용 가능한 닉네임입니다");
     }
 
     private boolean isValidNickname(String nickname) {

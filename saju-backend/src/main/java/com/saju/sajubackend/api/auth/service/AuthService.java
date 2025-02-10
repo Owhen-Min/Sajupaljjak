@@ -75,24 +75,6 @@ public class AuthService {
         return jwtProvider.createAccessToken(userId);
     }
 
-//    @Transactional
-//    public Member registerNewMember(String email, String name) {
-//        // 새로운 Member 생성 로직
-//        Member member = Member.builder()
-//                .build(); // 필요한 기본값들 설정
-//
-//        // MemberSocial 생성 및 연결
-//        MemberSocial memberSocial = MemberSocial.builder()
-//                .member(member)
-//                .email(email)
-//                .name(name)
-//                .build();
-//
-//        memberRepository.save(member);
-//        memberSocialRepository.save(memberSocial);
-//        return member;
-//    }
-
     public boolean isExistingMember(String email) {
         return memberSocialRepository.existsByEmail(email);
     }
@@ -127,7 +109,6 @@ public class AuthService {
                 .age(request.getAge())
                 .build();
         Member savedMember = memberRepository.save(member);
-        System.out.println(savedMember.toString());
 
         // MemberSocial 엔티티 생성
         MemberSocial memberSocial = MemberSocial.builder()
