@@ -2,7 +2,10 @@ package com.saju.sajubackend.api.board.domain;
 
 import com.saju.sajubackend.common.entity.BaseTimeEntity;
 import com.saju.sajubackend.api.member.domain.Member;
+import com.saju.sajubackend.common.enums.Element;
+import com.saju.sajubackend.common.enums.CelestialStem;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "BOARD")
 public class Board extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -30,11 +34,13 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column(name = "main_type", nullable = false, length = 100)
-    private String mainType;
+    @Convert(converter = com.saju.sajubackend.common.converter.ElementConverter.class)
+    @Column(name = "main_type", nullable = false)
+    private Element mainType;
 
-    @Column(name = "sub_type", nullable = false, length = 100)
-    private String subType;
+    @Convert(converter = com.saju.sajubackend.common.converter.CelestialStemConverter.class)
+    @Column(name = "sub_type", nullable = false)
+    private CelestialStem subType;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
@@ -43,11 +49,17 @@ public class Board extends BaseTimeEntity {
     private String content;
 
     @Builder
-    private Board(Long boardId, Member member, String mainType, String subType, String title, String content) {
+    private Board(Long boardId, Member member, Element mainType, CelestialStem subType, String title, String content) {
         this.boardId = boardId;
         this.member = member;
         this.mainType = mainType;
         this.subType = subType;
+        this.title = title;
+        this.content = content;
+    }
+
+    // 게시글 수정을 위한 메서드
+    public void update(String title, String content) {
         this.title = title;
         this.content = content;
     }

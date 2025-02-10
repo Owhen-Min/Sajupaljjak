@@ -56,59 +56,6 @@ public class MatchingQueryDslRepository extends MatchingBaseRepository {
                 ));
     }
 
-    private Map<CelestialStem, Long> getCompatibleCelestialStems(CelestialStem celestialStem, long maginot) {
-        return queryFactory
-                .select(score1.target, score1.score)
-                .from(score1)
-                .where(
-                        score1.source.eq(celestialStem)
-                                .and(score1.score.goe(maginot))
-                )
-                .fetch()
-                .stream()
-                .collect(Collectors.toMap(
-                        tuple -> tuple.get(score1.target),
-                        tuple -> tuple.get(1, Long.class)
-                ));
-    }
-
-    private BooleanExpression isOppositeGender(Gender gender) {
-        return member.gender.ne(gender);
-    }
-
-    private BooleanExpression isSolo() {
-        return member.relation.eq(RelationshipStatus.SOLO);
-    }
-
-    private BooleanExpression matchCelestialStem(Set<CelestialStem> compatibleStems) {
-        return member.celestialStem.in(compatibleStems);
-    }
-
-    private BooleanExpression matchReligion(Filter filter) {
-        return member.religion.in(
-                JPAExpressions.select(religionFilter.religion)
-                        .from(religionFilter)
-                        .where(religionFilter.filter.eq(filter))
-        );
-    }
-
-    private BooleanExpression matchRegion(Filter filter) {
-        return member.cityCode.in(
-                JPAExpressions.select(regionFilter.cityCode)
-                        .from(regionFilter)
-                        .where(regionFilter.filter.eq(filter))
-        );
-    }
-
-    private BooleanExpression matchFilter(Filter filter) {
-        LocalDate maxBirthDay = LocalDate.now().minusYears(filter.getMinAge());
-        LocalDate minBirthDay = LocalDate.now().minusYears(filter.getMaxAge());
-
-        return member.smoking.eq(filter.getSmoking())
-                .and(member.drinking.eq(filter.getDrinking()))
-                .and(member.height.between(filter.getMinHeight(), filter.getMaxHeight()))
-                .and(member.bday.between(minBirthDay, maxBirthDay));
-    }
 
     private List<Member> random(List<Member> candidates, int limit) {
         Collections.shuffle(candidates);
