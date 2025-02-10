@@ -44,5 +44,6 @@ sonarqube {
         property "sonar.projectKey", "saju"
         property "sonar.host.url", "http://i12a408.p.ssafy.io:8500"
         property "sonar.login", "sqa_03f6c1aef9ef7b6a3e0e5ac52248cb42f71af532"
+        property "sonar.java.binaries", layout.buildDirectory.dir("classes/java/main").get().asFile.absolutePath
     }
 }
