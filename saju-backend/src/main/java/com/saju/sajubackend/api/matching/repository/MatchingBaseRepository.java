@@ -11,6 +11,7 @@ import com.saju.sajubackend.common.enums.RelationshipStatus;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,9 @@ public abstract class MatchingBaseRepository {
     }
 
     protected Map<CelestialStem, Integer> getCompatibleCelestialStems(CelestialStem celestialStem, long maginot) {
+
+        Random random = new Random();
+
         return queryFactory
                 .select(score1.target, score1.score)
                 .from(score1)
@@ -51,7 +55,11 @@ public abstract class MatchingBaseRepository {
                 .stream()
                 .collect(Collectors.toMap(
                         tuple -> tuple.get(score1.target),
-                        tuple -> tuple.get(1, Integer.class)
+                        tuple -> {
+                            int originalScore = tuple.get(1, Integer.class);
+                            int randomScore = random.nextInt(7) - 3;   // -3 ~ +3 랜덤 값 생성
+                            return Math.max(0, originalScore + randomScore); // 음수 방지
+                        }
                 ));
     }
 
