@@ -44,7 +44,7 @@ public class MatchingService {
     }
 
     public MemberListResponseDto getMembers(Long memberId, Integer cursor) {
-        List<Member> members = matchingPaginationRepository.findMembers(memberId, cursor, PAGE_SIZE + 1); // hasNext인지 확인하기 위해 pageSize보다 1개 더 가져옴
-        Map<String, Integer> scores;
+        Map<Member, Integer> members = matchingPaginationRepository.findMembers(memberId, cursor, PAGE_SIZE + 1); // hasNext인지 확인하기 위해 pageSize보다 1개 더 가져옴
+        return MemberListResponseDto.fromEntity(members);
     }
 }
