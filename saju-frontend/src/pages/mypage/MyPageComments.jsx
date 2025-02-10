@@ -1,7 +1,11 @@
+import React from 'react';
+import {TopBar2} from '../../components/TopBar2';
+
+
 function MyPageComments() {
   return (
     <div>
-      <h1>MyPageComments</h1>
+      <TopBar2 mainText={"내가 쓴 댓글"} />
     </div>
   );
 }
