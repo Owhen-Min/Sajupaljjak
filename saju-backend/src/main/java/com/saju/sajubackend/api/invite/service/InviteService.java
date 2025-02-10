@@ -6,11 +6,14 @@ import com.saju.sajubackend.api.invite.dto.InviteCreateResponseDto;
 import com.saju.sajubackend.api.invite.repository.InviteRepository;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
+import com.saju.sajubackend.common.enums.Gender;
 import com.saju.sajubackend.common.enums.RelationshipStatus;
 import com.saju.sajubackend.common.exception.BadRequestException;
+import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,7 +48,15 @@ public class InviteService {
         Member joiner = memberRepository.findById(joinerId)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
 
-        Couple couple = Couple.of(inviter, joiner, startDate);
+        if (!isValidGenderPair(inviter, joiner)) {
+            throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_GENDER_COMBINATION);
+        }
+
+        Couple couple = Couple.builder()
+                .coupleMale(inviter.getGender() == Gender.MALE ? inviter : joiner)
+                .coupleFemale(inviter.getGender() == Gender.FEMALE ? inviter : joiner)
+                .startDate(startDate)
+                .build();
 
         inviter.updateRelationship(RelationshipStatus.COUPLE);
         joiner.updateRelationship(RelationshipStatus.COUPLE);
@@ -53,5 +64,10 @@ public class InviteService {
         coupleRepository.save(couple);
 
         inviteRepository.deleteBothCode(inviterId, joinerId);
+    }
+
+    private boolean isValidGenderPair(Member inviter, Member joiner) {
+        return (inviter.getGender() == Gender.MALE && joiner.getGender() == Gender.FEMALE) ||
+                (inviter.getGender() == Gender.FEMALE && joiner.getGender() == Gender.MALE);
     }
 }
