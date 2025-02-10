@@ -34,16 +34,14 @@ public class CoupleLife {
     @Column(nullable = false)
     private String advice;
 
-    @Convert(converter = CelestialStemConverter.class)
     @Column(nullable = false)
-    private CelestialStem male;
+    private String male;
 
-    @Convert(converter = CelestialStemConverter.class)
     @Column(nullable = false)
-    private CelestialStem female;
+    private String female;
 
     @Builder
-    private CoupleLife(Long coupleLifeId, String harmony, String chemi, String good, String bad, String advice, CelestialStem male, CelestialStem female) {
+    private CoupleLife(Long coupleLifeId, String harmony, String chemi, String good, String bad, String advice, String male, String female) {
         this.coupleLifeId = coupleLifeId;
         this.harmony = harmony;
         this.chemi = chemi;
