@@ -1,4 +1,4 @@
-import React from "react";
+import SajuUserBubble from "./SajuUserBubble";
 import { Link } from "react-router-dom";
 import Heart from "./Heart";
 
@@ -29,6 +29,7 @@ const UserCard = ({ user }) => {
             </div>
           </div>
           <Heart score={user.score} />
+
         </div>
       </div>
     </Link>

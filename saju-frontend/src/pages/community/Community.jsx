@@ -20,9 +20,9 @@ function Community() {
 
 
   return (
-    <div className="community-page flex flex-col h-screen">
+    <div className="community-page flex flex-col">
       <TopBar />
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto relative">
         <CommunityFilterBubble 
           selectedElement={selectedElement} 
           selectedPillar={selectedPillar}
@@ -34,36 +34,30 @@ function Community() {
           }
           }
         />
-        <div className="flex items-center gap-3 px-4 pt-4 mb-2">
+        <div className="flex items-center gap-3 px-4 pt-2">
           <Input 
-
             type="text" 
             placeholder="게시글 검색하기" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-4/5"
+            className="w-full py-[7px]"
           />
           <MainButton 
-            children="검색"
-
-            onClick={() => navigate('/community/write')}
-            half={true}
-            className="w-1/5 py-4"
-          />
-        </div>
-        <div className="px-4 py-2 flex items-center justify-between gap-3">
-          <MainButton 
-            children="글쓰기"
-            onClick={() => navigate('/community/write')}
-            half={true}
-            className="w-full py-2"
+            children="⌕"
+            onClick={() => console.log(searchQuery)}
+            className="w-[50px] h-[40px] text-2xl"
           />
         </div>
         <ArticleList 
-
           onArticleClick={(articleId) => navigate(`/community/${articleId}`)}
+          className="pb-12"
         />
       </div>
+      <MainButton 
+        children="✎"
+        onClick={() => navigate('/community/write')}
+        className="fixed bottom-[calc(50%-150px)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-2xl shadow-lg max-[400px]:right-5 max-[320px]:right-5"
+      />
       <BottomNav />
     </div>
   );

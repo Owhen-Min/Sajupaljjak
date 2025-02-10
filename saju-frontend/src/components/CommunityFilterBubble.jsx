@@ -34,11 +34,15 @@ function CommunityFilterBubble({
   const handleButtonClick = (filterId) => {
     if (selectingElement && filterId !== 'all') {
       // 오행 버튼 클릭 시 드롭다운만 토글
-      setOpenDropdownId(openDropdownId === filterId ? null : filterId);
-    } else {
-      // '전체' 버튼이나 selectingElement가 false일 때는 element 선택
       onElementSelect(filterId);
       onPillarSelect(null); // pillar 선택 초기화
+      setOpenDropdownId(openDropdownId === filterId ? null : filterId);
+    } else if (!selectingElement) {
+      // '전체' 버튼이나 selectingElement가 false일 때는 element 선택
+      setOpenDropdownId(openDropdownId === filterId ? null : filterId);
+    } else if (filterId === 'all') {
+      onElementSelect(filterId);
+      onPillarSelect(null);
       setOpenDropdownId(null);
     }
   };
