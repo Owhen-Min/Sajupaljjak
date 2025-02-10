@@ -1,5 +1,7 @@
 package com.saju.sajubackend.api.couple.domain;
 
+import com.saju.sajubackend.common.converter.CelestialStemConverter;
+import com.saju.sajubackend.common.enums.CelestialStem;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -17,10 +19,6 @@ public class CoupleYear {
     @Column(name = "couple_year_id")
     private Long coupleYearId;
 
-    @OneToOne
-    @JoinColumn(name = "couple_id", nullable = false)
-    private Couple couple;
-
     @Column(nullable = false)
     private String harmony;
 
@@ -36,14 +34,23 @@ public class CoupleYear {
     @Column(nullable = false)
     private String advice;
 
+    @Convert(converter = CelestialStemConverter.class)
+    @Column(nullable = false)
+    private CelestialStem male;
+
+    @Convert(converter = CelestialStemConverter.class)
+    @Column(nullable = false)
+    private CelestialStem female;
+
     @Builder
-    private CoupleYear(Long coupleYearId, Couple couple, String harmony, String chemi, String good, String bad, String advice) {
+    private CoupleYear(Long coupleYearId, String harmony, String chemi, String good, String bad, String advice, CelestialStem male, CelestialStem female) {
         this.coupleYearId = coupleYearId;
-        this.couple = couple;
         this.harmony = harmony;
         this.chemi = chemi;
         this.good = good;
         this.bad = bad;
         this.advice = advice;
+        this.male = male;
+        this.female = female;
     }
 }
