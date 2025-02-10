@@ -11,8 +11,14 @@ docker build -t infra-frontend /home/ubuntu/jenkins-data/workspace/final/saju-fr
 
 # 2. 빌드된 컨테이너에서 정적 파일 추출
 echo "정적 파일 추출 중..."
+# 기존 dist 디렉토리 삭제 (sudo로 실행)
+sudo rm -rf /home/ubuntu/jenkins-data/workspace/final/saju-frontend/dist
+
+# 임시 컨테이너 생성
 temp_container=$(docker create infra-frontend)
-docker cp ${temp_container}:/app/dist /home/ubuntu/jenkins-data/workspace/final/saju-frontend/
+# sudo로 docker cp를 실행하여 dist 디렉토리를 복사
+sudo docker cp ${temp_container}:/app/dist /home/ubuntu/jenkins-data/workspace/final/saju-frontend/
+# 임시 컨테이너 삭제
 docker rm ${temp_container}
 
 echo "프론트엔드 빌드 산출물이 업데이트되었습니다."
