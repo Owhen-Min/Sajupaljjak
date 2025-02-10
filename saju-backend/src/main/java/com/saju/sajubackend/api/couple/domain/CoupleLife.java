@@ -1,13 +1,8 @@
 package com.saju.sajubackend.api.couple.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import com.saju.sajubackend.common.converter.CelestialStemConverter;
+import com.saju.sajubackend.common.enums.CelestialStem;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,10 +19,6 @@ public class CoupleLife {
     @Column(name = "couple_life_id")
     private Long coupleLifeId;
 
-    @OneToOne
-    @JoinColumn(name = "couple_id", nullable = false)
-    private Couple couple;
-
     @Column(nullable = false)
     private String harmony;
 
@@ -43,14 +34,21 @@ public class CoupleLife {
     @Column(nullable = false)
     private String advice;
 
+    @Column(nullable = false)
+    private String male;
+
+    @Column(nullable = false)
+    private String female;
+
     @Builder
-    private CoupleLife(Long coupleLifeId, Couple couple, String harmony, String chemi, String good, String bad, String advice) {
+    private CoupleLife(Long coupleLifeId, String harmony, String chemi, String good, String bad, String advice, String male, String female) {
         this.coupleLifeId = coupleLifeId;
-        this.couple = couple;
         this.harmony = harmony;
         this.chemi = chemi;
         this.good = good;
         this.bad = bad;
         this.advice = advice;
+        this.male = male;
+        this.female = female;
     }
 }

@@ -1,9 +1,14 @@
 package com.saju.sajubackend.api.matching.repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.saju.sajubackend.api.filter.domain.Filter;
+import com.saju.sajubackend.api.matching.dto.MatchingProfileResponseDto;
 import com.saju.sajubackend.api.member.domain.Member;
+import com.saju.sajubackend.api.member.domain.QMember;
+import com.saju.sajubackend.api.saju.domain.QSaju;
 import com.saju.sajubackend.common.enums.CelestialStem;
+import com.saju.sajubackend.common.enums.Gender;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -11,7 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.saju.sajubackend.api.couple.domain.QCoupleYear.coupleYear;
 import static com.saju.sajubackend.api.member.domain.QMember.member;
+import static com.saju.sajubackend.api.saju.domain.QSaju.saju;
+import static com.saju.sajubackend.api.saju.domain.QScore.score1;
 
 @Repository
 public class MatchingQueryDslRepository extends MatchingBaseRepository {
@@ -56,59 +64,47 @@ public class MatchingQueryDslRepository extends MatchingBaseRepository {
                 ));
     }
 
-    private Map<CelestialStem, Long> getCompatibleCelestialStems(CelestialStem celestialStem, long maginot) {
+    public MatchingProfileResponseDto findMatchingMember(Long memberId, Long partnerId) {
+
+        QMember partner = new QMember("partner");
+        QSaju partnerSaju = new QSaju("partnerSaju");
+
         return queryFactory
-                .select(score1.target, score1.score)
-                .from(score1)
-                .where(
-                        score1.source.eq(celestialStem)
-                                .and(score1.score.goe(maginot))
+                .select(Projections.constructor(
+                        MatchingProfileResponseDto.class,
+                        partner.memberId,
+                        partner.nickname,
+                        score1.score,
+                        partner.profileImg,
+                        partner.cityCode,
+                        partner.age,
+                        partner.celestialStem,
+                        partner.intro,
+                        partnerSaju.yearly,
+                        partnerSaju.monthly,
+                        partnerSaju.daily,
+                        partnerSaju.timely,
+                        coupleYear.harmony,
+                        coupleYear.chemi,
+                        coupleYear.good,
+                        coupleYear.bad,
+                        coupleYear.advice
+                ))
+                .from(member) // 1. 회원 정보 조회
+                .join(partner).on(partner.memberId.eq(partnerId)) // 2. 매칭 상대 정보 조회
+                .leftJoin(score1).on(score1.source.eq(member.celestialStem).and(score1.target.eq(partner.celestialStem))) // 3. 궁합 점수 조회
+                .leftJoin(saju).on(saju.member.eq(member)) // 4. 회원 사주 정보 조회
+                .leftJoin(partnerSaju).on(partnerSaju.member.eq(partner)) // 5. 매칭 상대 사주 정보 조회
+                .leftJoin(coupleYear) // 6. 궁합 리포트 조회
+                .on(member.gender.eq(Gender.MALE) // 6.1 회원이 남성인 경우,
+                        .and(coupleYear.male.eq(saju.daily)).and(coupleYear.female.eq(partnerSaju.daily))
+                        .or(member.gender.eq(Gender.FEMALE) // 6.2 회원이 여성인 경우
+                                .and(coupleYear.male.eq(partnerSaju.daily)).and(coupleYear.female.eq(saju.daily)))
                 )
-                .fetch()
-                .stream()
-                .collect(Collectors.toMap(
-                        tuple -> tuple.get(score1.target),
-                        tuple -> tuple.get(1, Long.class)
-                ));
+                .where(member.memberId.eq(memberId))
+                .fetchOne();
     }
 
-    private BooleanExpression isOppositeGender(Gender gender) {
-        return member.gender.ne(gender);
-    }
-
-    private BooleanExpression isSolo() {
-        return member.relation.eq(RelationshipStatus.SOLO);
-    }
-
-    private BooleanExpression matchCelestialStem(Set<CelestialStem> compatibleStems) {
-        return member.celestialStem.in(compatibleStems);
-    }
-
-    private BooleanExpression matchReligion(Filter filter) {
-        return member.religion.in(
-                JPAExpressions.select(religionFilter.religion)
-                        .from(religionFilter)
-                        .where(religionFilter.filter.eq(filter))
-        );
-    }
-
-    private BooleanExpression matchRegion(Filter filter) {
-        return member.cityCode.in(
-                JPAExpressions.select(regionFilter.cityCode)
-                        .from(regionFilter)
-                        .where(regionFilter.filter.eq(filter))
-        );
-    }
-
-    private BooleanExpression matchFilter(Filter filter) {
-        LocalDate maxBirthDay = LocalDate.now().minusYears(filter.getMinAge());
-        LocalDate minBirthDay = LocalDate.now().minusYears(filter.getMaxAge());
-
-        return member.smoking.eq(filter.getSmoking())
-                .and(member.drinking.eq(filter.getDrinking()))
-                .and(member.height.between(filter.getMinHeight(), filter.getMaxHeight()))
-                .and(member.bday.between(minBirthDay, maxBirthDay));
-    }
 
     private List<Member> random(List<Member> candidates, int limit) {
         Collections.shuffle(candidates);

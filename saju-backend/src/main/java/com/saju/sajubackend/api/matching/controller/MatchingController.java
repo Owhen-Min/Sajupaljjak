@@ -1,15 +1,13 @@
 package com.saju.sajubackend.api.matching.controller;
 
 import com.saju.sajubackend.api.matching.dto.MatchingMemberResponseDto;
+import com.saju.sajubackend.api.matching.dto.MatchingProfileResponseDto;
 import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.service.MatchingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +29,12 @@ public class MatchingController {
                                                             Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(matchingService.getMembers(memberId, cursor));
+    }
+
+    @GetMapping("/{partnerId}")
+    public ResponseEntity<MatchingProfileResponseDto> getMatchingProfile(
+            @PathVariable Long partnerId, Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(matchingService.getMatchingMemberProfile(memberId, partnerId));
     }
 }
