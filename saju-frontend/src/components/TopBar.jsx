@@ -6,6 +6,8 @@ const getTitleFromPath = (pathname) => {
   if (pathname.startsWith("/community")) return "커뮤니티";
   if (pathname.startsWith("/fortune")) return "운세";
   if (pathname.startsWith("/match")) return "매칭";
+  if (pathname.startsWith("/mypage")) return "마이페이지";
+  if (pathname.startsWith("/couple")) return "커플";
   return "";
 };
 
@@ -14,10 +16,10 @@ const TopBar = () => {
   const title = getTitleFromPath(location.pathname);
 
   return (
-    <header className="w-full px-4 py-2 flex justify-between items-center bg-white">
+    <header className="w-full px-4 py-2 flex justify-between items-center bg-white border-b border-gray-200">
       <div>
-        <div className="text-3xl font-dokrip pl-1">{title}</div>
-        {/* <div className="text-3xl font-gapyeong pl-1">{title}</div> */}
+        {/* <div className="text-2xl font-noto pl-1">{title}</div> */}
+        <div className="text-3xl font-gapyeong pl-1">{title}</div>
       </div>
       <div>
         <Link to="/mypage">
@@ -29,6 +31,7 @@ const TopBar = () => {
             />
           </button>
         </Link>
+
       </div>
     </header>
   );

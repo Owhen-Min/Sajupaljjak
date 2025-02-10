@@ -2,12 +2,19 @@
 
   const UserList2 = ({ users }) => {
     return (
-      <div className="user-list flex flex-wrap gap-2 justify-center items-center ">
+      <div className="grid grid-cols-1 gap-4 p-2 justify-items-center">
         {users.map((user) => (
           <UserCard key={user.id} user={user} />
         ))}
       </div>
+    //   <div className="grid grid-cols-1 gap-4 p-2 justify-items-center">
+    //   {users.map((user) => (
+    //     <UserCard key={user.id} user={user} />
+    //   ))}
+    // </div>
+
     );
   };
+  
 
   export default UserList2;

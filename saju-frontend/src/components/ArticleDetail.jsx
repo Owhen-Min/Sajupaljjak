@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { get } from '../api/apiService';
+import { get } from '../api/apiClient';
 
 function ArticleDetail({ articleId, onClose }) {
 //   const { data: article, isLoading, isError } = useQuery({

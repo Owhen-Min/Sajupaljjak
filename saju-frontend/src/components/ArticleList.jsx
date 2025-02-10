@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { get } from '../api/apiService';
+import useGet from '../hooks/useGet';
+import SajuUserBubble from './SajuUserBubble';
 
 function formatRelativeTime(dateString) {
   const now = new Date();
@@ -19,7 +20,7 @@ function formatRelativeTime(dateString) {
   }
 }
 
-function ArticleList({ selectedElement, onArticleClick }) {
+function ArticleList({ selectedElement, onArticleClick, className }) {
 //   const {
 //     data,
 //     isLoading,
@@ -152,21 +153,20 @@ function ArticleList({ selectedElement, onArticleClick }) {
       ];
 
   return (
-    <div className="article-list p-4">
+    <div className={`article-list p-4 ${className}`}>
       {articles.map((article) => (
         <div 
           key={article.articleId}
-          className="article-card bg-white p-4 mb-4 rounded-lg shadow cursor-pointer"
+          className="article-card bg-white p-4 mb-4 rounded-lg shadow cursor-pointer opacity-90"
           onClick={() => onArticleClick(article.articleId)}
         >
-          <div className="flex items-end">
-            <span className="text-sm text-gray-500">{article.boardType}</span>
-            <span className="mx-2 text-black">익명</span>
-            <span className="text-sm text-gray-500">{article.celestialStem}</span>
-          </div>
+          <div className="flex items-end gap-2 mb-2">
+            <SajuUserBubble skyElement={article.boardType}/>
           <h3 className="text-lg font-semibold">{article.title}</h3>
+          </div>
           <p className="text-gray-700 line-clamp-2">{article.content}</p>
           <div className="flex justify-between items-center mt-2">
+
             <span className="text-sm text-gray-500">
               좋아요 {article.likeCount} · 댓글 {article.commentCount}
             </span>

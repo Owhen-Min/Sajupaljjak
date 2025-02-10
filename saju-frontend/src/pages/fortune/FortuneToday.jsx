@@ -1,5 +1,4 @@
 import { TopBar2 } from "../../components/TopBar2";
-import { get } from "../../api/apiService";
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 

@@ -1,15 +1,16 @@
 import { useParams } from "react-router-dom";
-import useFetchData from "../../hooks/useFetchData";
+import useGet from "../../hooks/useGet";
 
 // 테스트 데이터
 import { testUsers } from "../../data/user";
 import BottomNav from "../../components/BottomNav";
+import TopBar2 from "../../components/TopBar2";
 
 function MatchReport() {
    const { userId } = useParams();
    const user = testUsers.find((user) => user.id === parseInt(userId));
 
-  // const { data, isLoading, error } = useFetchData(
+  // const { data, isLoading, error } = useGet(
   //   `/api/match/${userId}`,
   //   "matchData"
   // );
@@ -18,6 +19,7 @@ function MatchReport() {
 
   return (
     <div>
+      <TopBar2/ >
       <div>
         <img src={user.profileImage} alt={`${user.name}'s profile`} />
       </div>

@@ -15,11 +15,11 @@ function Header({ step, children }) {
   };
 
   return (
-    <div className="flex flex-col p-5 border-b border-gray-200">
-      <div className="flex items-center relative mb-2.5">
+    <div className="flex flex-col p-5 border-b border-gray-200 bg-white bg-opacity-80 rounded-xl">
+      <div className="flex items-center relative mb-2.5 opacity-100">
         {children}
       </div>
-      <div className="w-full h-0.5 bg-gray-200 relative">
+      <div className="w-full h-0.5 bg-gray-200 relative opacity-100">
         <div className={`absolute h-full bg-red-500 transition-all duration-300 ${getProgressWidth()}`} />
       </div>
     </div>
@@ -572,17 +572,6 @@ function SignUpPage() {
             <h3 className="input-prompt">프로필 사진을 등록해주세요</h3>
             <div className="input-group">
               <div className="flex flex-col w-full items-center">
-                <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-full mb-4 flex items-center justify-center overflow-hidden">
-                  {formData.profileImage ? (
-                    <img 
-                      src={formData.profileImage} 
-                      alt="프로필 미리보기" 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-gray-400">사진 추가</span>
-                  )}
-                </div>
                 <input
                   type="file"
                   name="profileImage"
@@ -607,9 +596,22 @@ function SignUpPage() {
                 />
                 <label 
                   htmlFor="profileImageInput"
-                  className="bg-red-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-red-600"
+                  className="flex flex-col items-center cursor-pointer w-full"
                 >
-                  사진 선택하기
+                  <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-full mb-4 flex items-center justify-center overflow-hidden hover:border-red-500 transition-colors">
+                    {formData.profileImage ? (
+                      <img 
+                        src={formData.profileImage} 
+                        alt="프로필 미리보기" 
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-black">사진 추가</span>
+                    )}
+                  </div>
+                  <span className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                    사진 선택하기
+                  </span>
                 </label>
                 {errors.profileImage && (
                   <ErrorBubble>
@@ -666,63 +668,72 @@ function SignUpPage() {
 
     return (
       <div className="signup">
-        <button
-          onClick={() => {
-            if (step >= 9) {
-              setStep(8);
-            } else if (step >= 4) {
-              setStep(3);
-            }
-          }}
-          className={`
-            w-6 aspect-square 
-            flex items-center justify-center
-            text-gray-600
-            border border-gray-300 
-            rounded-lg
-            bg-white
-            box-border
-            transition-all duration-300 ease-in-out
-            hover:bg-gray-100
-            focus:outline-none focus:border-[#ff6842] focus:ring-2 focus:ring-[#4CAF50]/20
-            absolute
-          `}
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke="currentColor" 
-            className="w-6 h-6"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M15 19l-7-7 7-7" 
-            />
-          </svg>
-        </button>
-        <Header step={step}>
-        
-          <div className="flex items-center relative w-full">
-            <h1 className="w-full text-center text-base font-semibold">
-              {step >= 9 ? '내 프로필 입력' : step >= 4 ? '내 정보 입력' : '사주 정보 입력'}
-            </h1>
-          </div>
-        </Header>
+        <div className="relative">
+          {step >= 4 && (
+            <button
+              onClick={() => {
+                if (step >= 9) {
+                  setStep(8);
+                } else if (step >= 4) {
+                  setStep(3);
+                }
+              }}
+              className={`
+                w-6 aspect-square 
+                flex items-center justify-center
+                text-gray-600
+                border border-gray-300 
+                rounded-lg
+                bg-white
+                box-border
+                transition-all duration-300 ease-in-out
+                hover:bg-gray-100
+                focus:outline-none focus:border-[#ff6842] focus:ring-2 focus:ring-[#4CAF50]/20
+                absolute
+                top-5 left-5
+                z-10
+              `}
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                className="w-6 h-6"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M15 19l-7-7 7-7" 
+                />
+              </svg>
+            </button>
+          )}
+          <Header step={step}>
+            <div className="flex items-center relative w-full">
+              <h1 className="w-full text-center text-xl font-semibold">
+                {step >= 9 ? '내 프로필 입력' : step >= 4 ? '내 정보 입력' : '사주 정보 입력'}
+              </h1>
+            </div>
+          </Header>
+        </div>
         {renderStep()}
         <div className="button-group">
           {(step === 3 || step === 8) && (
             <MainButton 
               onClick={handleNextStep}
               disabled={step >= maxStep}
+              className="w-full py-3"
             >
               다음
             </MainButton>
           )}
           {step === 12 && (
-            <MainButton onClick={handleSubmit}>
+            <MainButton
+              onClick={handleSubmit}
+              className="w-full py-3"
+            >
               가입하기
             </MainButton>
           )}
