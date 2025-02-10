@@ -1,5 +1,5 @@
 import { TopBar2 } from "../../components/TopBar2";
-import useFetchData from "../../hooks/useFetchData";
+import useGet from "../../hooks/useGet";
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import SajuColumn from "../../components/SajuColumn";
@@ -14,7 +14,7 @@ function FortuneYear() {
     "danger": "2025년 유의할 점은 다음과 같아.\n\n첫째, 건강 관리. 일년 동안 에너지가 떨어질 수 있으니 규칙적인 운동과 충분한 수면이 필요해. 스트레스를 해소할 방법을 미리 찾아두는 것도 좋아.\n\n둘째, 대인관계. 소통에 신경 써야 할 시점이야. 주변 사람들과의 마찰이 생길 수 있으니, 솔직하게 이야기하고 상황을 잘 풀어나가는 게 중요해.\n\n셋째, 재정 관리. 투자나 경제적인 결정에 신중해야 해. 급한 마음에 투자하면 후회할 수 있으니 계획을 잘 세우는 것이 바람직해.\n\n마지막으로, 자기 개발. 새로운 취미나 기술을 배우는 데 시간을 투자하는 게 좋을 것 같아. 흥미를 느낄 만한 활동을 찾아서 균형 잡힌 삶을 지향해.",
     "advice": "2025년은 너에게 변화와 성장이 많은 해가 될 거야. 특히 일과 관련된 기회가 많이 찾아올 수 있으니, 적극적으로 도전해봐. 건강에도 신경 쓰고, 균형 잡힌 생활이 중요해. 주변 사람들과의 소통을 늘려서 지지와 협력을 받는 것도 잊지 말고. 어려움이 닥쳐도 긍정적으로 대처하면 좋은 결과가 따를 거야. 항상 너 자신을 믿어."
 });
-  // const { data: fetchedData, isLoading, error } = useFetchData('/api/fortune/new-year', "FortuneYear");
+  // const { data: fetchedData, isLoading, error } = useGet('/api/fortune/new-year', "FortuneYear");
 
   // useEffect(() => {
   //   if (fetchedData) {
