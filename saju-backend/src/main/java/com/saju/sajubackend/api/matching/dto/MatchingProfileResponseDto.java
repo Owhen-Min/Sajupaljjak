@@ -1,23 +1,55 @@
 package com.saju.sajubackend.api.matching.dto;
 
-public record MatchingProfileResponseDto(
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.saju.sajubackend.common.enums.CelestialStem;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-        long id,
-        String nickname,
-        int score,
-        String profileImage,
-        int cityCode,
-        int age,
-        String celestialStem,
-        String introduction,
-        String year,
-        String month,
-        String day,
-        String time,
-        String harmony,
-        String chemi,
-        String good,
-        String bad,
-        String advice
-) {
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+public class MatchingProfileResponseDto {
+
+    @JsonProperty("id")
+    private long memberId;
+
+    private String nickname;
+
+    private int score;
+
+    @JsonProperty("profileImage")
+    private String profileImg;
+
+    private int cityCode;
+
+    private int age;
+
+    private CelestialStem celestialStem;
+
+    @JsonProperty("introduction")
+    private String intro;
+
+    @JsonProperty("year")
+    private String yearly;
+
+    @JsonProperty("month")
+    private String monthly;
+
+    @JsonProperty("day")
+    private String daily;
+
+    @JsonProperty("time")
+    private String timely;
+
+    private String harmony;
+
+    private String chemi;
+
+    private String good;
+
+    private String bad;
+
+    private String advice;
 }
+
