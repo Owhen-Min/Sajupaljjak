@@ -160,10 +160,10 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
           className="article-card bg-white p-4 mb-4 rounded-lg shadow cursor-pointer opacity-90"
           onClick={() => onArticleClick(article.articleId)}
         >
-          <div className="flex items-end">
-            <SajuUserBubble skyElement={article.boardType} />
+          <div className="flex items-end gap-2 mb-2">
+            <SajuUserBubble skyElement={article.boardType}/>
+          <h3 className="text-lg font-semibold">{article.title}</h3>
           </div>
-          <h3 className="text-lg font-semibold"> {article.title}</h3>
           <p className="text-gray-700 line-clamp-2">{article.content}</p>
           <div className="flex justify-between items-center mt-2">
 

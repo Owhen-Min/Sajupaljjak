@@ -24,23 +24,23 @@ function SajuGrid({ saju }) {
         <div className="grid grid-cols-4 gap-1 text-center">
           <SajuColumn 
             label="시주"
-            top={saju?.time.top}
-            bottom={saju?.time.bottom}
+            top={saju?.time?.[0]}
+            bottom={saju?.time?.[1]}
           />
           <SajuColumn 
             label="일주"
-            top={saju?.day.top}
-            bottom={saju?.day.bottom}
+            top={saju?.day?.[0]}
+            bottom={saju?.day?.[1]}
           />
           <SajuColumn 
             label="월주"
-            top={saju?.month.top}
-            bottom={saju?.month.bottom}
+            top={saju?.month?.[0]}
+            bottom={saju?.month?.[1]}
           />
           <SajuColumn 
             label="연주"
-            top={saju?.year.top}
-            bottom={saju?.year.bottom}
+            top={saju?.year?.[0]}
+            bottom={saju?.year?.[1]}
           />
         </div>
       </div>

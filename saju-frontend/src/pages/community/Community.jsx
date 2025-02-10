@@ -36,27 +36,22 @@ function Community() {
         />
         <div className="flex items-center gap-3 px-4 pt-4 mb-2">
           <Input 
-
             type="text" 
             placeholder="게시글 검색하기" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-4/5"
-          />
+            className="w-full py-[7px]"
+            />
           <MainButton 
-            children="검색"
-
+            children="⌕"
+            onClick={() => console.log(searchQuery)}
+            className="w-[50px] py-[7px]"
+        />
+          <MainButton 
+            children="✎"
             onClick={() => navigate('/community/write')}
             half={true}
-            className="w-1/5 py-4"
-          />
-        </div>
-        <div className="px-4 py-2 flex items-center justify-between gap-3">
-          <MainButton 
-            children="글쓰기"
-            onClick={() => navigate('/community/write')}
-            half={true}
-            className="w-full py-2"
+            className="w-[60px] py-[7px] mx-1"
           />
         </div>
         <ArticleList 

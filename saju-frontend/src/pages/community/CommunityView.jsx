@@ -55,27 +55,30 @@ function CommunityView() {
       likeCount: 1
     }
   ];
-
+  
   return (
     <div className="community-view-page flex flex-col h-screen">
-      <TopBar2/>
+      <TopBar2 mainText=""/>
       <div className="flex-grow overflow-y-auto py-5">
         <div className="article-detail px-4 pb-4">
           <div className="flex items-center py-1">
-            <span className="font-dokrip"><SajuUserBubble skyElement={article.boardType} /> 게시판</span>
           </div>
+              <div className="flex items-center align-middle justify-center mb-3">
+            <span className="font-dokrip text-lg"><SajuUserBubble skyElement={article.boardType} size={"large"}/> 게시판</span>
+              </div>
           <div className="article-card bg-white p-4 rounded-lg shadow mb-4 justify-between">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFCm6U-R7Dh4WAGASSJFN9RaPTnxmDeV1cVqitzJ1yXslCORiVstDy8rB0YgI5YCRkCJo&usqp=CAU"
-                  alt="Profile"
-                  className="w-8 h-8"
-                />
-                <SajuUserBubble skyElement={article.celestialStem} size="normal" />
-              </div>
-
+      <div className="flex items-center bg-gray-100 rounded-lg px-3 p-2 w-full justify-between">
+        <div className="flex items-center">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFCm6U-R7Dh4WAGASSJFN9RaPTnxmDeV1cVqitzJ1yXslCORiVstDy8rB0YgI5YCRkCJo&usqp=CAU"
+          alt="Profile"
+          className="w-8 h-8"
+        />
+        <SajuUserBubble skyElement={article.celestialStem} size="normal"/>
               <span className="text-sm text-gray-500">{formatRelativeTime(article.createdAt)}</span>
+              </div>
+              </div>
             </div>
             <h3 className="text-lg font-semibold mt-2">{article.title}</h3>
             <p className="text-gray-700 whitespace-pre-wrap mt-2">{article.content}</p>
@@ -83,10 +86,9 @@ function CommunityView() {
 
             <div className="flex justify-between items-center mt-4">
               <span className="text-sm text-gray-500">
-                좋아요 {article.likeCount}
               </span>
               <span className="text-sm text-gray-500">
-                신고
+                좋아요 {article.likeCount}
               </span>
             </div>
           </div>
@@ -97,10 +99,10 @@ function CommunityView() {
             </div>
             {comments.map((comment) => (
               <div 
-                key={comment.commentId} 
-                className="comment-card bg-white p-3 rounded-lg shadow mb-2"
+              key={comment.commentId} 
+              className="comment-card bg-white p-3 rounded-lg shadow mb-2"
               >
-                <div className="flex items-end mb-2 justify-between">
+                <div className="flex items-center mb-2 justify-between">
                   <div className="flex items-center">
                     <img
                       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFCm6U-R7Dh4WAGASSJFN9RaPTnxmDeV1cVqitzJ1yXslCORiVstDy8rB0YgI5YCRkCJo&usqp=CAU"

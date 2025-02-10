@@ -37,10 +37,12 @@ function CommunityFilterBubble({
       onElementSelect(filterId);
       onPillarSelect(null); // pillar 선택 초기화
       setOpenDropdownId(openDropdownId === filterId ? null : filterId);
-    } else {
+    } else if (!selectingElement) {
       // '전체' 버튼이나 selectingElement가 false일 때는 element 선택
+      setOpenDropdownId(openDropdownId === filterId ? null : filterId);
+    } else if (filterId === 'all') {
       onElementSelect(filterId);
-      onPillarSelect(null); // pillar 선택 초기화
+      onPillarSelect(null);
       setOpenDropdownId(null);
     }
   };

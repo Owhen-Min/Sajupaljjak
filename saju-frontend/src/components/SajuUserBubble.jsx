@@ -18,7 +18,8 @@ function SajuUserBubble({ skyElement, size = 'normal' }) {
   
   const sizeStyles = {
     small: 'text-xs px-1.5 py-0',
-    normal: 'px-2 py-0'
+    normal: 'px-2 py-0',
+    large: 'text-lg px-3 py-0'
   };
 
   return (

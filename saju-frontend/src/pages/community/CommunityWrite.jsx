@@ -75,15 +75,14 @@ function CommunityWrite() {
         onElementSelect={setSelectedElement}
         onPillarSelect={handlePillarSelect}
         showAll={false}
+        selectingElement={false}
       />
 
-      <div className="flex flex-col p-4 gap-4">
-        {errors.celestialStem && <ErrorBubble>게시판을 선택해주세요</ErrorBubble>}
-
+      {selectedPillar && <div className="flex flex-col p-4 gap-4">
         {selectedPillar && (
           <div className="flex items-center py-1">
             <span className="font-dokrip">
-              <SajuUserBubble skyElement={selectedPillar} /> 게시판
+              <SajuUserBubble skyElement={selectedPillar} size={"large"}/> 게시판
             </span>
           </div>
         )}
@@ -118,6 +117,7 @@ function CommunityWrite() {
           작성하기
         </MainButton>
       </div>
+      }
     </div>
   );
 }
