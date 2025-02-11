@@ -10,7 +10,9 @@ import com.saju.sajubackend.api.saju.dto.SajuDetailResponse;
 import com.saju.sajubackend.api.saju.dto.SajuResponse;
 import com.saju.sajubackend.api.saju.repository.SajuRepository;
 import com.saju.sajubackend.common.exception.ErrorMessage;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -36,6 +38,13 @@ public class SajuService {
     private final SajuRepository sajuRepository;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+//    @Autowired
+//    public SajuService (RedisTemplate<String, Object> redisTemplate,SajuRepository sajuRepository,MemberRepository memberRepository){
+//        this.redisTemplate = redisTemplate;
+//        this.sajuRepository = sajuRepository;
+//        this.memberRepository = memberRepository;
+//    }
 
     @Value("${openai.api-key}")
     private String openAiApiKey;
