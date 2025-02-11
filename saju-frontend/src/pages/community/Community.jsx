@@ -28,11 +28,6 @@ function Community() {
           selectedPillar={selectedPillar}
           onElementSelect={setSelectedElement}
           onPillarSelect={setSelectedPillar}
-          onClick={() => {
-            console.log(selectedElement);
-            console.log(selectedPillar);
-          }
-          }
         />
         <div className="flex items-center gap-3 px-4 pt-2">
           <Input 
