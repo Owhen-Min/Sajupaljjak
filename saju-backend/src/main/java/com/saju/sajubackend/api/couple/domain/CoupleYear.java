@@ -17,10 +17,6 @@ public class CoupleYear {
     @Column(name = "couple_year_id")
     private Long coupleYearId;
 
-    @OneToOne
-    @JoinColumn(name = "couple_id", nullable = false)
-    private Couple couple;
-
     @Column(nullable = false)
     private String harmony;
 
@@ -36,14 +32,21 @@ public class CoupleYear {
     @Column(nullable = false)
     private String advice;
 
+    @Column(nullable = false)
+    private String male;
+
+    @Column(nullable = false)
+    private String female;
+
     @Builder
-    private CoupleYear(Long coupleYearId, Couple couple, String harmony, String chemi, String good, String bad, String advice) {
+    private CoupleYear(Long coupleYearId, String harmony, String chemi, String good, String bad, String advice, String male, String female) {
         this.coupleYearId = coupleYearId;
-        this.couple = couple;
         this.harmony = harmony;
         this.chemi = chemi;
         this.good = good;
         this.bad = bad;
         this.advice = advice;
+        this.male = male;
+        this.female = female;
     }
 }

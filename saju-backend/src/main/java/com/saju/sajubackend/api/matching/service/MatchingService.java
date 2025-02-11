@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.matching.service;
 
 import com.saju.sajubackend.api.matching.dto.MatchingMemberResponseDto;
+import com.saju.sajubackend.api.matching.dto.MatchingProfileResponseDto;
 import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.repository.MatchingPaginationRepository;
 import com.saju.sajubackend.api.matching.repository.MatchingQueryDslRepository;
@@ -46,5 +47,9 @@ public class MatchingService {
     public MemberListResponseDto getMembers(Long memberId, Integer cursor) {
         Map<Member, Integer> members = matchingPaginationRepository.findMembers(memberId, cursor, PAGE_SIZE + 1); // hasNext인지 확인하기 위해 pageSize보다 1개 더 가져옴
         return MemberListResponseDto.fromEntity(members);
+    }
+
+    public MatchingProfileResponseDto getMatchingMemberProfile(Long memberId, Long partnerId) {
+        return matchingQueryDslRepository.findMatchingMember(memberId, partnerId);
     }
 }

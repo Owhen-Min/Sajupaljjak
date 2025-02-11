@@ -1,18 +1,18 @@
-package com.saju.sajubackend.api.invite.repository;
+package com.saju.sajubackend.common.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-@Repository
+@Component
 @RequiredArgsConstructor
-public class InviteRepository {
+public class InviteRedisUtil {
     public final RedisTemplate<String, String> redisTemplate;
     private static final String ID_PREFIX = "invitation:id:";
     private static final String CODE_PREFIX = "invitation:code:";
