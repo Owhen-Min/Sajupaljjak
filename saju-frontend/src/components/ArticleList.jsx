@@ -20,7 +20,7 @@ function formatRelativeTime(dateString) {
   }
 }
 
-function ArticleList({ selectedElement, onArticleClick, className }) {
+function ArticleList({ selectedElement, selectedPillar, onArticleClick, className }) {
 //   const {
 //     data,
 //     isLoading,
@@ -43,7 +43,7 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
     const articles = [
         {
           "articleId": 20,
-          "createdAt": "2025-02-07 00:00:00",
+          "createdAt": "2025-02-11 09:30:00",
           "boardId": 1,
           "boardType": "갑목",
           "celestialStem": "무토",
@@ -54,9 +54,9 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
         },
         {
           "articleId": 19,
-          "createdAt": "2025-02-06 00:00:00",
+          "createdAt": "2025-02-11 00:00:00",
           "boardId": 4,
-          "boardType": "경금",
+          "boardType": "을목",
           "celestialStem": "을목",
           "title": "내 팔자는?",
           "content": "경금이랑 신금이랑 뭐가 다름? 이해가 안됨.",
@@ -65,7 +65,7 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
         },
         {
           "articleId": 8,
-          "createdAt": "2025-01-26 00:00:00",
+          "createdAt": "2025-02-09 00:00:00",
           "boardId": 1,
           "boardType": "병화",
           "celestialStem": "갑목",
@@ -76,9 +76,9 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
         },
         {
           "articleId": 7,
-          "createdAt": "2025-01-25 00:00:00",
+          "createdAt": "2025-02-08 00:00:00",
           "boardId": 3,
-          "boardType": "병화",
+          "boardType": "정화",
           "celestialStem": "무토",
           "title": "내 팔자는?",
           "content": "하... 점괘 보고 왔는데 뭔가 답답함. 누가 좀 알려줘요.",
@@ -87,9 +87,9 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
         },
         {
           "articleId": 6,
-          "createdAt": "2025-01-24 00:00:00",
+          "createdAt": "2025-02-05 00:00:00",
           "boardId": 2,
-          "boardType": "경금",
+          "boardType": "무토",
           "celestialStem": "갑목",
           "title": "오늘의 운세",
           "content": "하... 점괘 보고 왔는데 뭔가 답답함. 누가 좀 알려줘요.",
@@ -100,7 +100,7 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
           "articleId": 5,
           "createdAt": "2025-01-23 00:00:00",
           "boardId": 3,
-          "boardType": "병화",
+          "boardType": "경금",
           "celestialStem": "무토",
           "title": "내 팔자는?",
           "content": "오늘 기분이 이상한데 이거 운세랑 관련 있을까요?",
@@ -111,7 +111,7 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
           "articleId": 4,
           "createdAt": "2025-01-22 00:00:00",
           "boardId": 4,
-          "boardType": "병화",
+          "boardType": "신금",
           "celestialStem": "갑목",
           "title": "어쩌지?",
           "content": "운세 보면 다 나쁜 말만 나오는 거 같은데 왜 그런 거죠?",
@@ -122,7 +122,7 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
           "articleId": 3,
           "createdAt": "2025-01-21 00:00:00",
           "boardId": 1,
-          "boardType": "을목",
+          "boardType": "임수",
           "celestialStem": "을목",
           "title": "이거 맞아?",
           "content": "운세 보면 다 나쁜 말만 나오는 거 같은데 왜 그런 거죠?",
@@ -132,7 +132,7 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
         {
           "articleId": 2,
           "createdAt": "2025-01-20 23:12:00",
-          "boardType": "신금",
+          "boardType": "계수",
           "celestialStem": "기토",
           "title": "이게 뭐임?",
           "content": "뭐임 이게???????????????????????????????????",
@@ -143,7 +143,7 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
           "articleId": 1,
           "createdAt": "2025-01-20 23:12:00",
           "boardId": 1,
-          "boardType": "경금",
+          "boardType": "기토",
           "celestialStem": "기토",
           "title": "경금 뭐임?",
           "content": "나 경금남자 만나봤는데 무슨 생각하는지 1도 모르겠음... 속을 모르겠음... 제발 알려 줘 얄 아려 줘 알목木 알 알 려 줘 알려주며ㅕㄴ 올해안에여자생김ㅅㄱ",
@@ -152,9 +152,26 @@ function ArticleList({ selectedElement, onArticleClick, className }) {
         }
       ];
 
+  // 필터링 로직 추가
+  const filteredArticles = articles.filter(article => {
+    // '전체' 선택시 모든 게시글 표시
+    if (selectedElement === 'all' || !selectedElement) {
+      return true;
+    }
+
+    // selectedPillar가 있는 경우 정확히 일치하는 게시글만 표시
+    if (selectedPillar) {
+      return article.boardType === selectedPillar;
+    }
+
+    // selectedElement만 있는 경우 해당 원소를 포함하는 게시글 표시
+    // 예: '목' 선택시 '갑목'과 '을목' 모두 표시
+    return article.boardType.includes(selectedElement);
+  });
+
   return (
     <div className={`article-list p-4 ${className}`}>
-      {articles.map((article) => (
+      {filteredArticles.map((article) => (
         <div 
           key={article.articleId}
           className="article-card bg-white p-4 mb-4 rounded-lg shadow cursor-pointer opacity-90"

@@ -49,6 +49,8 @@ function Community() {
           />
         </div>
         <ArticleList 
+          selectedElement={selectedElement}
+          selectedPillar={selectedPillar}
           onArticleClick={(articleId) => navigate(`/community/${articleId}`)}
           className="pb-12"
         />
@@ -56,7 +58,7 @@ function Community() {
       <MainButton 
         children="✎"
         onClick={() => navigate('/community/write')}
-        className="fixed bottom-[calc(50%-150px)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-2xl shadow-lg max-[400px]:right-5 max-[320px]:right-5"
+        className="fixed bottom-[calc(20%)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-2xl shadow-lg max-[400px]:right-5 max-[320px]:right-5"
       />
       <BottomNav />
     </div>
