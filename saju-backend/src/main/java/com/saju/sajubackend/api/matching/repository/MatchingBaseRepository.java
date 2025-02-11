@@ -68,7 +68,7 @@ public abstract class MatchingBaseRepository {
     }
 
     protected BooleanExpression isSolo() {
-        return member.relationship.eq(RelationshipStatus.SOLO);
+        return member.relation.eq(RelationshipStatus.SOLO);
     }
 
     protected BooleanExpression matchCelestialStem(Set<CelestialStem> compatibleStems) {
