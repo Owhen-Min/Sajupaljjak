@@ -89,7 +89,6 @@ public class AuthService {
         if (memberRepository.existsByNickname(request.getNickname())) {
             throw new BaseException(HttpStatus.CONFLICT, ErrorMessage.DUPLICATE_NICKNAME);
         }
-        System.out.println(request.toString());
         // 생년월일 파싱 및 시간 파싱
         LocalDate birthDate = LocalDate.parse(request.getBday());
         LocalDateTime birthDateTime = LocalDateTime.parse(request.getBday() + "T" + request.getBtime());
