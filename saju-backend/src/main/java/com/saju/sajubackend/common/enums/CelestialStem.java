@@ -1,5 +1,6 @@
 package com.saju.sajubackend.common.enums;
 
+import com.saju.sajubackend.common.exception.BadRequestException;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import lombok.Getter;
@@ -40,6 +41,17 @@ public enum CelestialStem {
             }
         }
         throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CELESTIAL_STEM_LABEL);
+    }
+
+    public static Element getElementByStem(String stemLabel) {
+        return switch (stemLabel) {
+            case "갑", "을" -> Element.WOOD;
+            case "병", "정" -> Element.FIRE;
+            case "무", "기" -> Element.EARTH;
+            case "경", "신" -> Element.METAL;
+            case "임", "계" -> Element.WATER;
+            default -> throw new BadRequestException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL);
+        };
     }
 }
 
