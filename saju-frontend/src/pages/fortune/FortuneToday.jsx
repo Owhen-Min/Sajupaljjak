@@ -44,7 +44,7 @@ function FortuneToday() {
   // if (error) console.log('에러가 발생했습니다. 샘플 데이터를 표시합니다.');
 
   return (
-    <div className="container mx-auto max-w-3xl pb-5">
+    <div className="fortune mx-auto max-w-3xl pb-5">
       <TopBar2
         url = '/fortune'
         mainText="오늘의 운세"

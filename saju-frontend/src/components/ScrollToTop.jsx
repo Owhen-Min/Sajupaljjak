@@ -6,7 +6,7 @@ const ScrollToTop = () => {
   // 스크롤 위치에 따라 버튼 표시 여부 결정
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 100) {
+      if (window.scrollY > 150) {
         setVisible(true);
       } else {
         setVisible(false);

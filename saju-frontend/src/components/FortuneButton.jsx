@@ -11,7 +11,7 @@ export const FortuneButton = ({ content, url }) => {
   return (
     <button 
       onClick={handleClick}
-      className="w-1/3 py-4 bg-white text-black border-2 border-black rounded-lg hover:bg-gray-100 transition-colors duration-200 text-2xl font-medium font-gapyeong"
+      className="w-1/3 py-4 bg-white text-black border-2 border-pink-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 text-2xl font-medium font-gapyeong"
       aria-label={content}
     >
       {words.map((word, index) => (

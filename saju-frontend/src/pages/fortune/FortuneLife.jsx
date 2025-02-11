@@ -34,7 +34,7 @@ function FortuneLife() {
   // }, [fetchedData]);
 
   return (
-    <div className="container mx-auto max-w-3xl pb-5">
+    <div className="fortune container mx-auto max-w-3xl pb-5">
       <TopBar2 url="/fortune" mainText="평생 운세" />
       <div className="px-4">
         <SajuGrid saju={saju.saju} />

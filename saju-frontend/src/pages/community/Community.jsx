@@ -13,12 +13,6 @@ function Community() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
-  const pillars = [
-    '전체', '갑목', '을목', '병화', '정화', '무토',
-    '기토', '경금', '신금', '임수', '계수'
-  ];
-
-
   return (
     <div className="community-page flex flex-col">
       <TopBar />
@@ -53,7 +47,7 @@ function Community() {
       <MainButton 
         children="✎"
         onClick={() => navigate('/community/write')}
-        className="fixed bottom-[calc(20%)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-2xl shadow-lg max-[400px]:right-5 max-[320px]:right-5"
+        className="fixed bottom-[calc(17%)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-2xl shadow-lg max-[400px]:right-5 max-[320px]:right-5"
       />
       <BottomNav />
     </div>

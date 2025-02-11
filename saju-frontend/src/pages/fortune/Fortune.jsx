@@ -59,7 +59,7 @@ function Fortune() {
     );
   };
   return (
-    <div>
+    <div className="fortune">
       <TopBar />
       <div className="text-lg flex justify-between pt-4 font-gapyeong px-20">
         <h1>오늘의 운세</h1>

@@ -34,7 +34,7 @@ function FortuneYear() {
   // }, [fetchedData]);
 
   return (
-    <div className="container mx-auto max-w-3xl pb-5">
+    <div className="fortune mx-auto max-w-3xl pb-5">
       <TopBar2
         url='/fortune'
         mainText="2025년 운세"

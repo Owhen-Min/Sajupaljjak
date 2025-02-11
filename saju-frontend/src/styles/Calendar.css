@@ -1,44 +1,55 @@
 .react-calendar {
-  font-family: inherit;
+  @apply font-serif;
+  background: linear-gradient(135deg, #ffeef8, #fff0f6);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* 네비게이션 영역을 좀 더 돋보이게 */
 .react-calendar__navigation {
-  @apply h-11 mb-4;
+  @apply h-12 mb-5 bg-pink-100 flex items-center justify-center;
 }
 
 .react-calendar__navigation button {
-  @apply min-w-[44px] bg-transparent text-base text-gray-900;
+  @apply min-w-[44px] bg-transparent text-base text-pink-600 rounded-full;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .react-calendar__navigation button:enabled:hover,
 .react-calendar__navigation button:enabled:focus {
-  @apply bg-gray-50;
+  @apply bg-pink-200;
+  transform: scale(1.05);
 }
 
+/* 달력 타일 스타일 */
 .react-calendar__tile {
-  @apply py-2.5 px-1.5 bg-transparent text-center leading-4 text-sm;
+  @apply py-2.5 px-1.5 bg-transparent text-center leading-4 text-sm transition-colors rounded-lg;
 }
 
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus {
-  @apply bg-gray-50 ;
+  @apply bg-pink-50;
 }
 
+/* 오늘 날짜에 부드러운 테마 강조 */
 .react-calendar__tile--now {
-  @apply bg-gray-100 ;
+  @apply border border-pink-300;
 }
 
+/* 선택된 날짜(활성화 상태)를 커플스러운 핑크톤으로 강조 */
 .react-calendar__tile--active {
-  @apply bg-blue-500  text-white;
+  @apply bg-pink-400 text-white shadow-md;
 }
 
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
-  @apply bg-blue-600;
+  @apply bg-pink-500;
 }
 
+/* 요일 헤더를 좀 더 사랑스럽게 표현 */
 .react-calendar__month-view__weekdays {
-  @apply text-center uppercase font-bold text-xs text-gray-500;
+  @apply text-center uppercase font-bold text-xs text-pink-500 bg-pink-50 py-1;
 }
 
 .react-calendar__month-view__weekdays abbr {
