@@ -1,5 +1,6 @@
 package com.saju.sajubackend.api.board.domain;
 
+
 import com.saju.sajubackend.common.entity.BaseTimeEntity;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.common.enums.Element;
@@ -18,6 +19,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import com.saju.sajubackend.common.converter.ElementConverter;
+import com.saju.sajubackend.common.converter.CelestialStemConverter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,11 +37,11 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Convert(converter = com.saju.sajubackend.common.converter.ElementConverter.class)
+    @Convert(converter = ElementConverter.class)
     @Column(name = "main_type", nullable = false)
     private Element mainType;
 
-    @Convert(converter = com.saju.sajubackend.common.converter.CelestialStemConverter.class)
+    @Convert(converter =CelestialStemConverter.class)
     @Column(name = "sub_type", nullable = false)
     private CelestialStem subType;
 

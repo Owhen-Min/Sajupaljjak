@@ -7,18 +7,16 @@ import com.saju.sajubackend.api.board.dto.response.BoardCreateResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardDetailResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardListResponse;
 import com.saju.sajubackend.api.board.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/community")
+@RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
-
-    public BoardController(BoardService boardService) {
-        this.boardService = boardService;
-    }
 
     /**
      * 게시글 목록 조회 API (무한 스크롤)
