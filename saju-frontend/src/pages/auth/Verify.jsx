@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useGet from '../../hooks/useGet';
 const Verify = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);

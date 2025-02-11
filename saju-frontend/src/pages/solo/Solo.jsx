@@ -3,24 +3,11 @@ import TopBar from "../../components/TopBar";
 import UserList from "../../components/UserList";
 import { Link } from "react-router-dom";
 
-// import useGet from '../../hooks/useGet';
 import { testUsers } from "../../data/user";
 
 
 function Solo() {
-  // const { data: users, isLoading, isError } = useGet('/api/match/top', ['match', 'top']);
-  
-  // if (users){
-  //   console.log(users);
-  // }
 
-  // if (isLoading) {
-  //   return <div>로딩중</div>;
-  // }
-
-  // if (isError) {
-  //   return <div>에러</div>;
-  // }
 
   return (
     <div>

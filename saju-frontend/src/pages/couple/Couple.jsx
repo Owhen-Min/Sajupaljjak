@@ -1,14 +1,8 @@
 import BottomNav from "../../components/BottomNav";
 import Heart from "../../components/Heart";
 import TopBar from "../../components/TopBar";
-import useGet from "../../hooks/useGet";
 
 function Couple() {
-
-  //  const { data, isLoading, error } = useGet("/api/couples", "getCouples");
-
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>Something went wrong: {error.message}</p>;
 
     const data = [
       {

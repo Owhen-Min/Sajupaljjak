@@ -1,5 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import useGet from '../hooks/useGet';
+
 import SajuUserBubble from './SajuUserBubble';
 
 function formatRelativeTime(dateString) {

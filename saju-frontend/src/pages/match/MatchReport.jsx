@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import useGet from "../../hooks/useGet";
 
 // 테스트 데이터
 import { testUsers } from "../../data/user";
@@ -12,15 +11,6 @@ function MatchReport() {
 
    const { userId } = useParams();
    const user = testUsers.find((user) => user.id === parseInt(userId));
-
-  // const { data, isLoading, error } = useGet(
-  //   `/api/match/${userId}`,
-  //   "matchData"
-  // );
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>Error loading match data</p>;
-
-
     
     const saju =  {
       year: '을해',
