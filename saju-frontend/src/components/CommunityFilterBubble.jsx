@@ -14,7 +14,7 @@ function CommunityFilterBubble({
 
   // 오행 필터 옵션 - showAll prop에 따라 필터링
   const elementFilters = [
-    ...(showAll ? [{ id: 'all', label: '전체', color: 'bg-white text-gray-800 border-gray-300' }] : []),
+    ...(showAll ? [{ id: '전체', label: '전체', color: 'bg-white text-gray-800 border-gray-300' }] : []),
     { id: '목', label: '목', color: 'bg-green-100 text-green-800 border-green-300' },
     { id: '화', label: '화', color: 'bg-red-100 text-red-800 border-red-300' },
     { id: '토', label: '토', color: 'bg-yellow-100 text-yellow-800 border-yellow-300' },

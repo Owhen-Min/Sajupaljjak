@@ -155,7 +155,7 @@ function ArticleList({ selectedElement, selectedPillar, onArticleClick, classNam
   // 필터링 로직 추가
   const filteredArticles = articles.filter(article => {
     // '전체' 선택시 모든 게시글 표시
-    if (selectedElement === 'all' || !selectedElement) {
+    if (selectedElement === '전체' || !selectedElement) {
       return true;
     }
 
