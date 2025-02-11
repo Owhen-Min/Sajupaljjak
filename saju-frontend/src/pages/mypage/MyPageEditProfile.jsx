@@ -109,6 +109,9 @@ function MyPageEditProfile() {
         {/* 프로필 사진 */}
         <div className="mb-8">
           <h3 className="text-lg font-medium mb-2">프로필 사진</h3>
+          {errors.profileImage && (
+            <p className="text-red-500 text-sm mb-2">프로필 사진을 선택해주세요</p>
+          )}
           <div className="flex flex-col items-center">
             <input
               type="file"
@@ -155,25 +158,35 @@ function MyPageEditProfile() {
         {/* 닉네임 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">닉네임</h3>
+          {errors.nickname && (
+            <p className="text-red-500 text-sm mb-2">닉네임을 입력해주세요</p>
+          )}
           <Input
             type="text"
             name="nickname"
             value={formData.nickname}
             onChange={handleInputChange}
-            placeholder="닉네임을 입력해주세요"
-            className="w-1/3 h-10 border border-gray-300 rounded-md px-3"
+            placeholder="닉네임"
+            className={`w-1/2 h-10 border rounded-md px-3 ${
+              errors.nickname ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
         </div>
 
         {/* 자기소개 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">자기소개</h3>
+          {errors.introduction && (
+            <p className="text-red-500 text-sm mb-2">자기소개를 입력해주세요</p>
+          )}
           <textarea
             name="introduction"
             value={formData.introduction}
             onChange={handleInputChange}
             placeholder="자기소개를 입력해주세요"
-            className="w-full h-32 p-3 border border-gray-300 rounded-md resize-none"
+            className={`w-full h-32 p-3 border rounded-md resize-none ${
+              errors.introduction ? 'border-red-500' : 'border-gray-300'
+            }`}
             maxLength={500}
           />
         </div>
@@ -181,6 +194,9 @@ function MyPageEditProfile() {
         {/* 종교 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">종교</h3>
+          {errors.religion && (
+            <p className="text-red-500 text-sm mb-2">종교를 선택해주세요</p>
+          )}
           <SelectionGrid
             cols={3}
             options={['무교', '개신교', '불교', '천주교', '기타']}
@@ -192,6 +208,9 @@ function MyPageEditProfile() {
         {/* 흡연 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">흡연</h3>
+          {errors.smoking && (
+            <p className="text-red-500 text-sm mb-2">흡연 여부를 선택해주세요</p>
+          )}
           <SelectionGrid
             cols={3}
             options={['흡연', '비흡연', '금연 중']}
@@ -203,6 +222,9 @@ function MyPageEditProfile() {
         {/* 음주 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">음주</h3>
+          {errors.drinking && (
+            <p className="text-red-500 text-sm mb-2">음주 여부를 선택해주세요</p>
+          )}
           <SelectionGrid
             cols={2}
             options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
@@ -214,6 +236,9 @@ function MyPageEditProfile() {
         {/* 키 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">키</h3>
+          {errors.height && (
+            <p className="text-red-500 text-sm mb-2">키를 선택해주세요</p>
+          )}
           <select
             name="height"
             value={formData.height || "170"}
@@ -229,6 +254,9 @@ function MyPageEditProfile() {
         {/* 거주지 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">거주지</h3>
+          {errors.location && (
+            <p className="text-red-500 text-sm mb-2">거주지를 선택해주세요</p>
+          )}
           <div className="flex gap-2">
             <Dropdown
               name="cityCode"
@@ -236,7 +264,7 @@ function MyPageEditProfile() {
               onChange={(e) => {
                 setFormData(prev => ({ 
                   ...prev, 
-                  cityCode: provinces[e.target.value]?.code || '',
+                  cityCode: e.target.value,
                   dongCode: '' 
                 }));
               }}
@@ -250,37 +278,25 @@ function MyPageEditProfile() {
             {formData.cityCode && (
                   <Dropdown
                     name="dongCode"
-                    value={(() => {
-                      const selectedSi = Object.keys(provinces).find(
-                        key => provinces[key].code === formData.cityCode
-                      );
-                      return Object.keys(provinces[selectedSi]?.sigungu || {}).find(
-                        key => provinces[selectedSi]?.sigungu[key] === formData.dongCode
-                      ) || "";
-                    })()}
+                    value={formData.dongCode}
                     onChange={(e) => {
-                      const selectedSi = Object.keys(provinces).find(
-                        key => provinces[key].code === formData.cityCode
-                      );
-                      const selectedDongCode = provinces[selectedSi]?.sigungu[e.target.value];
                       setFormData(prev => ({ 
                         ...prev, 
-                        dongCode: selectedDongCode
+                        dongCode: e.target.value
                       }));
                     }}
                     placeholder="구/군 선택"
-                    options={Object.keys(provinces[Object.keys(provinces).find(
-                      key => provinces[key].code === formData.cityCode
-                    )].sigungu).map(district => {
+                    options={(() => {
                       const selectedSi = Object.keys(provinces).find(
                         key => provinces[key].code === formData.cityCode
                       );
-                      const districtName = district.replace(selectedSi, '').replace(/^\s+/, '');
-                      return {
-                        value: district,
-                        label: districtName
-                      };
-                    })}
+                      if (!selectedSi) return [];
+                      
+                      return Object.entries(provinces[selectedSi].sigungu).map(([district, code]) => ({
+                        value: code,
+                        label: district.replace(selectedSi, '').trim()
+                      }));
+                    })()}
                     className="flex-1 w-1/3"
                   />
                 )}

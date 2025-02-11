@@ -16,6 +16,9 @@ export const testUsers = [
     height: 180,
     cityCode: "1100000000",
     dongCode: "1117000000",
+    birthDay: "1981-09-01",
+    birthTime: "12:00",
+    birthTimeUnknown: false,
   },
   {
     id: 2,

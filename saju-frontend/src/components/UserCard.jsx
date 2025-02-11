@@ -4,11 +4,11 @@ import Heart from "./Heart";
 
 const UserCard = ({ user }) => {
   return (
-    <Link to={`/match/${user.id}`}>
+    <Link to={`/match/${user.id}`} className="w-full max-w-sm mx-auto">
       <div
-        className="relative w-80 max-w-sm aspect-[4/3] cursor-pointer rounded-3xl"
+        className="relative w-full aspect-[4/3] cursor-pointer rounded-3xl bg-gray-200"
         style={{
-          backgroundImage: `url(${user.profileImage})`,
+          backgroundImage: user.profileImage ? `url(${user.profileImage})` : 'none',
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}

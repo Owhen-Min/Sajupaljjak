@@ -8,10 +8,10 @@ function MyPage() {
   return (
     <div className="flex flex-col h-screen">
       <TopBar2 mainText={"마이페이지"}/>
-      <div className="flex-1 overflow-y-auto p-6 pt-10">
+      <div className="flex-1 overflow-y-auto p-6">
         <UserCard user={testUsers[0]} className="mb-6" />
-        <nav className="p-4">
-          <ul className="overflow-hidden rounded-lg bg-white shadow-sm divide-y divide-gray-100">
+        <nav className="py-4">
+          <ul className="overflow-hidden rounded-lg bg-white shadow divide-y divide-gray-100">
             <li>
               <Link
                 to="edit-profile"

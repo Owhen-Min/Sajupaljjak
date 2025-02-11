@@ -286,10 +286,10 @@ function SignUpPage() {
                     if (numbers.length > 0) {
                       value = numbers.slice(0, 4);
                       if (numbers.length > 4) {
-                        value += '/' + numbers.slice(4, 6);
+                        value += '-' + numbers.slice(4, 6);
                       }
                       if (numbers.length > 6) {
-                        value += '/' + numbers.slice(6);
+                        value += '-' + numbers.slice(6);
                       }
                     }     
                     setFormData(prev => ({
@@ -297,7 +297,7 @@ function SignUpPage() {
                         birthDay: value
                       }));
                     }}
-                    placeholder="2025/01/28"
+                    placeholder="2025-01-28"
                     maxLength="10"
                     style={{ flex: 2 }}
                     className="w-2/3"
