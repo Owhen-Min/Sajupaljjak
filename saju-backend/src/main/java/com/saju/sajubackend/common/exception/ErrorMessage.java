@@ -38,7 +38,8 @@ public enum ErrorMessage {
     INVALID_SOLO_STATUS_LABEL("유효하지 않은 솔로 상태 값입니다."),
 
     // couple
-    INVITE_CODE_NOT_FOUND("유효하지 않은 초대 코드입니다");
+    INVITE_CODE_NOT_FOUND("유효하지 않은 초대 코드입니다"),
+    INVALID_GENDER_COMBINATION("유효하지 않은 성별 조합입니다");
 
     private final String message;
 }
