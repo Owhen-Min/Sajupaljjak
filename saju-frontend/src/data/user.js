@@ -10,6 +10,12 @@ export const testUsers = [
     age: 25,
     memberType: "무토",
     introduction: "찰떡궁합인분 찾습니다^^",
+    religion: '무교',
+    smoking: '비흡연',
+    drinking: '음주 안함',
+    height: 180,
+    cityCode: "1100000000",
+    dongCode: "1117000000",
   },
   {
     id: 2,

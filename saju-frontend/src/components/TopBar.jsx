@@ -27,7 +27,7 @@ const TopBar = () => {
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFCm6U-R7Dh4WAGASSJFN9RaPTnxmDeV1cVqitzJ1yXslCORiVstDy8rB0YgI5YCRkCJo&usqp=CAU"
               alt="Profile"
-              className="w-8 h-8 rounded-full"
+              className="w-10 h-10 rounded-full"
             />
           </button>
         </Link>

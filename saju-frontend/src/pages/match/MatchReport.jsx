@@ -23,10 +23,10 @@ function MatchReport() {
 
     
     const saju =  {
-      year: { top: '을', bottom: '해' },
-      month: { top: '기', bottom: '묘' },
-      day: { top: '임', bottom: '자' },
-      time: { top: '정', bottom: '미' },
+      year: '을해',
+      month: '기묘',
+      day: '임자',
+      time: '정미'
     };
 
   return (

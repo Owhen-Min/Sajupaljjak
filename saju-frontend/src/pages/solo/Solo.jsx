@@ -25,7 +25,7 @@ function Solo() {
   return (
     <div>
       <TopBar />
-      <div className="section-container mt-10">
+      <div className="section-container mt-0">
         <div className="p-5 pb-2 text-2xl font-dokrip">궁합 매칭</div>
         <UserList users={testUsers} />
       </div>

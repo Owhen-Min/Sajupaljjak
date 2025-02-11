@@ -1,9 +1,309 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TopBar2 } from "../../components/TopBar2";
+import { useNavigate } from "react-router-dom";
+import SelectionGrid from "../../components/SelectionGrid";
+import Dropdown from "../../components/Dropdown";
+import MainButton from "../../components/MainButton";
+import Input from "../../components/Input";
+import { provinces } from "../../data/provinceCode";
+import { testUsers } from "../../data/user";
 
 function MyPageEditProfile() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    profileImage: '',
+    nickname: '',
+    introduction: '',
+    religion: '',
+    smoking: '',
+    drinking: '',
+    height: '',
+    cityCode: '',
+    dongCode: '',
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [errors, setErrors] = useState({
+    profileImage: false,
+    nickname: false,
+    introduction: false,
+    religion: false,
+    smoking: false,
+    drinking: false,
+    height: false,
+    location: false,
+  });
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setIsLoading(true);
+        
+        const userData = testUsers[0];
+        
+        // cityCode와 dongCode가 있는지 확인하고, provinces 객체에서 유효한 값인지 검증
+        const cityCode = userData.cityCode || '';
+        const dongCode = userData.dongCode || '';
+        
+        // cityCode가 유효한지 확인
+        const cityExists = Object.values(provinces).some(
+          province => province.code === cityCode
+        );
+
+        setFormData({
+          ...userData,
+          cityCode: cityExists ? cityCode : '',
+          dongCode: cityExists ? dongCode : '',
+        });
+        
+      } catch (error) {
+        console.error('프로필 데이터 로딩 실패:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
+  // 로딩 상태 표시
+  if (isLoading) {
+    return <div className="flex justify-center items-center h-screen">로딩 중...</div>;
+  }
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSelectionChange = (field, selected) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: selected
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      profileImage: !formData.profileImage,
+      nickname: !formData.nickname.trim(),
+      introduction: !formData.introduction.trim(),
+      religion: !formData.religion,
+      smoking: !formData.smoking,
+      drinking: !formData.drinking,
+      height: !formData.height,
+      location: !formData.cityCode || !formData.dongCode
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error);
+  };
+
   return (
-    <TopBar2 mainText={"내 정보 수정하기"} />
+    <div className="edit-profile-page flex flex-col h-screen">
+      <TopBar2 mainText={"내 프로필 수정하기"} />
+      <div className="flex-1 overflow-y-auto p-6 pt-10">
+        {/* 프로필 사진 */}
+        <div className="mb-8">
+          <h3 className="text-lg font-medium mb-2">프로필 사진</h3>
+          <div className="flex flex-col items-center">
+            <input
+              type="file"
+              name="profileImage"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setFormData(prev => ({
+                      ...prev,
+                      profileImage: reader.result
+                    }));
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="hidden"
+              id="profileImageInput"
+            />
+            <label 
+              htmlFor="profileImageInput"
+              className="flex flex-col items-center cursor-pointer"
+            >
+              <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-full mb-4 flex items-center justify-center overflow-hidden hover:border-red-500 transition-colors">
+                {formData.profileImage ? (
+                  <img 
+                    src={formData.profileImage} 
+                    alt="프로필 미리보기" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-gray-500">사진 추가</span>
+                )}
+              </div>
+              <span className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                사진 변경하기
+              </span>
+            </label>
+          </div>
+        </div>
+
+        {/* 닉네임 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">닉네임</h3>
+          <Input
+            type="text"
+            name="nickname"
+            value={formData.nickname}
+            onChange={handleInputChange}
+            placeholder="닉네임을 입력해주세요"
+            className="w-1/3 h-10 border border-gray-300 rounded-md px-3"
+          />
+        </div>
+
+        {/* 자기소개 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">자기소개</h3>
+          <textarea
+            name="introduction"
+            value={formData.introduction}
+            onChange={handleInputChange}
+            placeholder="자기소개를 입력해주세요"
+            className="w-full h-32 p-3 border border-gray-300 rounded-md resize-none"
+            maxLength={500}
+          />
+        </div>
+
+        {/* 종교 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">종교</h3>
+          <SelectionGrid
+            cols={3}
+            options={['무교', '개신교', '불교', '천주교', '기타']}
+            onSelect={(selected) => handleSelectionChange('religion', selected)}
+            selected={formData.religion ? [['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)] : []}
+          />
+        </div>
+
+        {/* 흡연 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">흡연</h3>
+          <SelectionGrid
+            cols={3}
+            options={['흡연', '비흡연', '금연 중']}
+            onSelect={(selected) => handleSelectionChange('smoking', selected)}
+            selected={formData.smoking ? [['흡연', '비흡연', '금연 중'].indexOf(formData.smoking)] : []}
+          />
+        </div>
+
+        {/* 음주 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">음주</h3>
+          <SelectionGrid
+            cols={2}
+            options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
+            onSelect={(selected) => handleSelectionChange('drinking', selected)}
+            selected={formData.drinking ? [['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)] : []}
+          />
+        </div>
+
+        {/* 키 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">키</h3>
+          <select
+            name="height"
+            value={formData.height || "170"}
+            onChange={handleInputChange}
+            className="w-full h-10 border border-gray-300 rounded-md px-3"
+          >
+            {Array.from({ length: 81 }, (_, i) => i + 140).map(height => (
+              <option key={height} value={height}>{height}cm</option>
+            ))}
+          </select>
+        </div>
+
+        {/* 거주지 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-2">거주지</h3>
+          <div className="flex gap-2">
+            <Dropdown
+              name="cityCode"
+              value={formData.cityCode}
+              onChange={(e) => {
+                setFormData(prev => ({ 
+                  ...prev, 
+                  cityCode: provinces[e.target.value]?.code || '',
+                  dongCode: '' 
+                }));
+              }}
+              placeholder="시/도 선택"
+              options={Object.entries(provinces).map(([key, value]) => ({
+                value: value.code,
+                label: key
+              }))}
+              className="flex-1 w-2/3"
+            />
+            {formData.cityCode && (
+                  <Dropdown
+                    name="dongCode"
+                    value={(() => {
+                      const selectedSi = Object.keys(provinces).find(
+                        key => provinces[key].code === formData.cityCode
+                      );
+                      return Object.keys(provinces[selectedSi]?.sigungu || {}).find(
+                        key => provinces[selectedSi]?.sigungu[key] === formData.dongCode
+                      ) || "";
+                    })()}
+                    onChange={(e) => {
+                      const selectedSi = Object.keys(provinces).find(
+                        key => provinces[key].code === formData.cityCode
+                      );
+                      const selectedDongCode = provinces[selectedSi]?.sigungu[e.target.value];
+                      setFormData(prev => ({ 
+                        ...prev, 
+                        dongCode: selectedDongCode
+                      }));
+                    }}
+                    placeholder="구/군 선택"
+                    options={Object.keys(provinces[Object.keys(provinces).find(
+                      key => provinces[key].code === formData.cityCode
+                    )].sigungu).map(district => {
+                      const selectedSi = Object.keys(provinces).find(
+                        key => provinces[key].code === formData.cityCode
+                      );
+                      const districtName = district.replace(selectedSi, '').replace(/^\s+/, '');
+                      return {
+                        value: district,
+                        label: districtName
+                      };
+                    })}
+                    className="flex-1 w-1/3"
+                  />
+                )}
+          </div>
+        </div>
+
+        {/* 저장 버튼 */}
+        <MainButton 
+          onClick={() => {
+            if (validateForm()) {
+              // TODO: 프로필 수정 API 호출
+              console.log('수정된 데이터:', formData);
+              navigate('/mypage');
+            } else {
+              alert('모든 항목을 입력해주세요.');
+            }
+          }}
+          className="w-full py-3 mt-4"
+        >
+          수정하기
+        </MainButton>
+      </div>
+    </div>
   );
 }
 

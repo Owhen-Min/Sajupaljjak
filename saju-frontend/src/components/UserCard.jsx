@@ -19,9 +19,7 @@ const UserCard = ({ user }) => {
               <span className="card-title text-white font-bold">
                 {user.nickname}
               </span>
-              <span className="bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
-                {user.memberType}
-              </span>
+              <SajuUserBubble skyElement={user.memberType} />
               <span className="badge text-white">{user.age}세</span>
             </div>
             <div className="flex space-x-2">
