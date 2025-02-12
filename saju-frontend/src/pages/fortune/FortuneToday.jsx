@@ -1,8 +1,14 @@
 import { TopBar2 } from "../../components/TopBar2";
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
+import {useGet} from "../../hooks/useApi";
 
 function FortuneToday() {
+
+  // const { data, isLoading, error } = useGet("/api/fortune/today");
+  // if (isLoading) return <div>로딩중 ...</div>;
+  // if (error) return <div>에러 : {error.message}</div>;s
+  
   const [data, setData] = useState({
 	  "totalScore" : 60,
 	  "wealthScore" : 100,
@@ -18,30 +24,7 @@ function FortuneToday() {
 		  "study" : "마음이 안정되면서 좋은 성과가 예상됩니다.이전까지 노력을 했는데 좋은 결과가 생기지 않았다면 지금의 순간을 위한 것이라 여겨도 좋습니다. 이전의 노력을 어느 정도 보상받으며 보다 더 의욕도 생길 것입니다."
 		}
   });
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchFortune = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       const response = await get('/fortune/today');
-  //       setData(response.data);
-  //     } catch (err) {
-  //       console.error('운세 데이터를 가져오는데 실패했습니다:', err);
-  //       setError(err);
-  //       // 오류 발생시 샘플 데이터 사용
-  //       setData(sampleResponse);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchFortune();
-  // }, []);
-
-  // if (isLoading) return <div>로딩중...</div>;
-  // if (error) console.log('에러가 발생했습니다. 샘플 데이터를 표시합니다.');
+ 
 
   return (
     <div className="fortune flex flex-col items-center relative mx-auto max-w-3xl pt-10 pb-5">
