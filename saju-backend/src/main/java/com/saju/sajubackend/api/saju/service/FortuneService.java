@@ -33,7 +33,7 @@ public class FortuneService {
                 .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
 
         // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
-        SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely(), saju.getDaily().getLabel())
+        SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely(), saju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "No fortune found for siju: " + saju.getTimely() + " and ilju: " + saju.getDaily()));
 
@@ -56,7 +56,7 @@ public class FortuneService {
 
 
         // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
-        SoloLife fortune = soloLifeRepository.findBySijuAndIlju(saju.getTimely(), saju.getDaily().getLabel())
+        SoloLife fortune = soloLifeRepository.findBySijuAndIlju(saju.getTimely(), saju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "No fortune found for siju: " + saju.getTimely() + " and ilju: " + saju.getDaily()));
 

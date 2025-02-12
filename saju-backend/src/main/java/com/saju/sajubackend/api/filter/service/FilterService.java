@@ -4,6 +4,7 @@ import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.filter.domain.RegionFilter;
 import com.saju.sajubackend.api.filter.domain.ReligionFilter;
 import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
+import com.saju.sajubackend.api.filter.dto.MemberProfileResponse;
 import com.saju.sajubackend.api.filter.repository.FilterRepository;
 import com.saju.sajubackend.api.filter.repository.RegionFilterRepository;
 import com.saju.sajubackend.api.filter.repository.ReligionFilterRepository;
@@ -38,6 +39,26 @@ public class FilterService {
         saveRegionFilters(request.regionFilter(), filter);
         saveReligionFilters(request.toReligionFilters(filter));
     }
+
+
+    public MemberProfileResponse getMemberProfile(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
+
+        return MemberProfileResponse.builder()
+                .name(member.getNickname()) // name 필드 대신 nickname 사용
+                .nickname(member.getNickname())
+                .gender(member.getGender().name()) // Enum → String 변환
+                .profileImage(member.getProfileImg())
+                .cityCode(member.getCityCode())
+                .religion(member.getReligion().name()) // Enum → String 변환
+                .age(member.getAge())
+                .height(member.getHeight())
+                .celestialStem(member.getCelestialStem() != null ? member.getCelestialStem().name() : null) // null 체크
+                .intro(member.getIntro())
+                .build();
+    }
+
 
     private void saveRegionFilters(List<Integer> cityCodes, Filter filter) {
         if (cityCodes.isEmpty()) return;

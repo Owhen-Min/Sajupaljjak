@@ -46,7 +46,8 @@ public class SajuService {
 //        this.memberRepository = memberRepository;
 //    }
 
-    @Value("${openai.api-key}")
+//    @Value("${openai.api-key}")
+    @Value("123")
     private String openAiApiKey;
     private static final String MODEL = "gpt-4o-mini";
 

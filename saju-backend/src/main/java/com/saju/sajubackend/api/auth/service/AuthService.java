@@ -8,6 +8,7 @@ import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.member.repository.MemberSocialRepository;
 import com.saju.sajubackend.api.saju.domain.Saju;
 import com.saju.sajubackend.api.saju.repository.SajuRepository;
+import com.saju.sajubackend.api.token.RefreshToken;
 import com.saju.sajubackend.common.enums.*;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
@@ -32,6 +33,8 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final MemberSocialRepository memberSocialRepository;
     private final SajuRepository sajuRepository;
+    private final RefreshTokenService refreshTokenService;
+    private final AccessTokenRedisService accessTokenRedisService;
 
     @Transactional
     public LoginResponse login(String email) {
@@ -48,16 +51,22 @@ public class AuthService {
         // JWT 토큰 생성
         String accessToken = jwtProvider.createAccessToken(member.getMemberId());
         String refreshToken = jwtProvider.createRefreshToken(member.getMemberId());
-        LoginResponse.TokenInfo tokenInfo = new LoginResponse.TokenInfo(accessToken, refreshToken);
 
-        String name = "나중에";
+
+        // 액세스 토큰을 Redis에 저장 (유효기간 설정 필요)
+        accessTokenRedisService.saveAccessToken(member.getMemberId(), accessToken, jwtProvider.getAccessTokenExpirationTime());
+
+        // 리프레시 토큰을 DB에 저장
+        refreshTokenService.saveRefreshToken(member, refreshToken);
+
+//        String name = "나중에";
         return LoginResponse.ofSuccess(member.getNickname(),
                 member.getProfileImg(),
                 member.getCityCode(),
                 member.getReligion(),
                 member.getAge(),
                 member.getIntro(),
-                tokenInfo);
+                new LoginResponse.TokenInfo(accessToken,refreshToken));
     }
 
     @Transactional
@@ -76,7 +85,15 @@ public class AuthService {
         long userId = jwtProvider.getUserIdFromToken(refreshToken);
 
         // 새로운 AccessToken 발급
-        return jwtProvider.createAccessToken(userId);
+        Optional<RefreshToken> storedToken = refreshTokenService.getRefreshToken(userId);
+        if (storedToken.isEmpty() || !storedToken.get().getRefreshToken().equals(refreshToken)) {
+            throw new UnAuthorizedException(ErrorMessage.INVALID_REFRESH_TOKEN);
+        }
+
+        String newAccessToken = jwtProvider.createAccessToken(userId);
+        accessTokenRedisService.saveAccessToken(userId, newAccessToken, jwtProvider.getAccessTokenExpirationTime());
+
+        return newAccessToken;
     }
 
     public boolean isExistingMember(String email) {
