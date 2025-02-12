@@ -1,8 +1,8 @@
-export const MainButton = ({ className, children, half, ...props }) => (
+export const MainButton = ({ className, children, bgColor = "666666", hoverColor = "525252", ...props }) => (
     <button
       className={`
         px-3
-        text-base font-medium text-white
+        font-medium text-white
         bg-[#666666]
         border-none
         rounded-lg

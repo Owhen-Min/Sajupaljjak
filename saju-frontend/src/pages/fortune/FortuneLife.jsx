@@ -1,5 +1,4 @@
 import { TopBar2 } from "../../components/TopBar2";
-import useGet from '../../hooks/useGet';
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import SajuGrid from '../../components/SajuGrid';
@@ -25,16 +24,9 @@ function FortuneLife() {
     },
   };
 
-  // const { data: fetchedData, isLoading, error } = useGet('/api/fortune/lifetime', "FortuneLife");
-
-  // useEffect(() => {
-  //   if (fetchedData) {
-  //     setData(fetchedData);
-  //   }
-  // }, [fetchedData]);
 
   return (
-    <div className="container mx-auto max-w-3xl pb-5">
+    <div className="fortune flex flex-col items-center relative mx-auto max-w-3xl pt-10 pb-5">
       <TopBar2 url="/fortune" mainText="평생 운세" />
       <div className="px-4">
         <SajuGrid saju={saju.saju} />

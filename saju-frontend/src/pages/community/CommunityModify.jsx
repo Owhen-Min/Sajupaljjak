@@ -58,7 +58,7 @@ function CommunityModify() {
   };
 
   return (
-    <div className="community-write flex flex-col h-screen">
+    <div className="community community-write flex flex-col relative h-screen">
       <TopBar2 
         url="/community"
         mainText="게시글 작성"

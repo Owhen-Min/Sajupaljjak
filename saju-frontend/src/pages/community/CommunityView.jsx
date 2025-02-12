@@ -37,38 +37,36 @@ function CommunityView() {
   const article = {
     "articleId": postId,
     "createdAt": "2025-02-09 16:10:00",
-    "boardType": "임수",
+    "boardType": "신금",
     "celestialStem": "무토",
     "title": "신금 친구랑 싸웠는데, ",
     "content": "신금 친구랑 싸웠는데, 이 성격 대체 어떻게 이해해야 할까요?\n\n정말 이해가 안 되는데 어떻게 해결해야 할까요? 고민이 많습니다...\n\n도와주세요 ㅠㅠ",
     "likeCount": 7,
-    "commentCount": 4
+    "commentCount": 4,
+    "comments": [
+      {
+        commentId: 1,
+  
+        createdAt: "2025-02-07 12:30:00",
+        celestialStem: "갑목",
+  
+        content: "저도 비슷한 경험이 있어요. 시간이 해결해 줄 거예요!",
+      },
+      {
+        commentId: 2,
+        createdAt: "2025-02-07 13:45:00",
+        celestialStem: "임수",
+        content: "신금이랑은 거리를 두는 게 좋을 것 같네요..."
+      }
+    ]
   };
 
   // 댓글 데이터 예시
-  const [comments, setComments] = useState([
-    {
-      commentId: 1,
-
-      createdAt: "2025-02-07 12:30:00",
-      celestialStem: "갑목",
-
-      content: "저도 비슷한 경험이 있어요. 시간이 해결해 줄 거예요!",
-      likeCount: 3
-    },
-    {
-      commentId: 2,
-      createdAt: "2025-02-07 13:45:00",
-      celestialStem: "임수",
-      content: "신금이랑은 거리를 두는 게 좋을 것 같네요...",
-      likeCount: 1
-    }
-  ]);
-
+  const [comments, setComments] = useState(article.comments);
   const [comment, setComment] = useState("");
   
   return (
-    <div className="community-view-page flex flex-col h-screen">
+    <div className="community community-view-page h-screen flex flex-col relative pt-12">
       <TopBar2 
         mainText={
           <span className="flex items-center justify-center">
@@ -77,7 +75,7 @@ function CommunityView() {
           </span>
         }
       />
-      <div className="flex-grow overflow-y-auto py-3 leading-8">
+      <div className="flex-grow overflow-y-auto py-3 leading-8 mt-2">
         <div className="article-detail px-4 pb-4">
           <div className="article-card bg-white p-4 rounded-lg shadow mb-4 py-2 pb-4">
             <span className="user-info items-center px-2 bg-yellow-100 rounded-lg text-black font-dokrip">익명의 {article.celestialStem}</span>
@@ -88,12 +86,12 @@ function CommunityView() {
             <p className="text-gray-700 whitespace-pre-wrap mt-2">{article.content}</p>
             <div className="flex items-center justify-between mt-5">
             <span className="text-sm text-black">좋아요 {article.likeCount}</span>
-            <span className="text-sm text-black">댓글 {comments.length}개</span>
+            <span className="text-sm text-black">댓글 {article.comments.length}개</span>
             </div>
           </div>
 
           <div className="comments-section">
-            {comments.map((comment) => (
+            {article.comments.map((comment) => (
               <div 
               key={comment.commentId} 
               className="comment-card bg-white p-3 rounded-lg shadow mb-2"
@@ -117,7 +115,7 @@ function CommunityView() {
               </div>))}
             </div>
 
-            <div className="flex comment-input-section bg-white p-4 rounded-lg justify-between shadow mb-4">
+            <div className="flex comment-input-section bg-white p-4 rounded-lg justify-between shadow">
               <Input
                 placeholder="댓글을 입력하세요"
                 className="w-4/5 mr-2"

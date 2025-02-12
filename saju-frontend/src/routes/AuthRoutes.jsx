@@ -3,7 +3,6 @@ import LogInPage from '../pages/auth/Login';
 import Welcome from '../pages/auth/Welcome';
 import SignUpAdditional from '../pages/auth/SignUpAdditional';
 import Preference from '../pages/auth/Preference';
-import CoupleInvitation from '../pages/auth/CoupleInvitation';
 import SignUpPage from '../pages/auth/SignUp';
 import Verify from '../pages/auth/Verify';
 
@@ -23,8 +22,6 @@ function AuthRoutes() {
       <Route path="/signup/additional" element={<SignUpAdditional />} />
       {/* 솔로 취향 입력 페이지로 이동하는 경우 */}
       <Route path="/preference" element={<Preference />} />
-      {/* 커플 등록 페이지로 이동하는 경우 */}
-      <Route path="/coupleinvitation" element={<CoupleInvitation />} />
       
     </Routes>
   );

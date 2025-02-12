@@ -19,10 +19,10 @@ function FortuneMy() {
   // 테스트 데이터
   const data = {
     saju: {
-      year: { top: '을', bottom: '해' },
-      month: { top: '기', bottom: '묘' },
-      day: { top: '임', bottom: '자' },
-      time: { top: '정', bottom: '미' },
+      year: '을해',
+      month: '기묘',
+      day: '임자',
+      time: '정미',
     }
   };
 
@@ -31,11 +31,12 @@ function FortuneMy() {
     const counts = { 목: 0, 화: 0, 토: 0, 금: 0, 수: 0 };
     
     Object.values(data.saju).forEach(pillar => {
-      const skyElement = skyStemMapping[pillar.top];
-      const earthElement = earthBranchMapping[pillar.bottom];
+      const skyElement = skyStemMapping[pillar[0]];
+      const earthElement = earthBranchMapping[pillar[1]];
       if (skyElement) counts[skyElement]++;
       if (earthElement) counts[earthElement]++;
     });
+
 
     return counts;
   };
@@ -43,7 +44,7 @@ function FortuneMy() {
   const elementCounts = calculateElementCounts();
 
   return (
-    <div>
+    <div className="fortune flex flex-col items-center relative h-screen pt-10">
       <TopBar2
         url='/fortune'
         mainText="나의 사주"

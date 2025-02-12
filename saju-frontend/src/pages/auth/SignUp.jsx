@@ -6,6 +6,8 @@ import MainButton from '../../components/MainButton';
 import Input from '../../components/Input';
 import { provinces } from '../../data/provinceCode';
 import '../../styles/Signup.css';
+import { useAuth } from '../../hooks/useAuth';
+import { usePost } from '../../hooks/useApi';
 
 function Header({ step, children }) {
   const getProgressWidth = () => {
@@ -37,31 +39,35 @@ function ErrorBubble({ children }) {
 function SignUpPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const postMutation = usePost();
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
+
+  const { email } = useAuth();
+
   const [formData, setFormData] = useState({
-    email: '',
-    name: '',
-    gender: '',
-    birthDay: '',
-    birthTime: '',
+    email: "",
+    name: "",
+    gender: "",
+    bday: "",
+    bTime: "",
     birthTimeUnknown: false,
-    religion: '',
-    smoking: '',
-    drinking: '',
-    height: '170',
-    cityCode: '',
-    dongCode: '',
-    profileImage: '',
-    nickname: '',
-    introduction: '',
+    religion: "",
+    smoking: "",
+    drinking: "",
+    height: "170",
+    cityCode: "",
+    dongCode: "",
+    profileImg: "",
+    nickname: "",
+    introduction: "",
   });
   const [errors, setErrors] = useState({
     name: false,
     gender: false,
-    birthDay: false,
-    birthTime: false,
-    profileImage: false,
+    bday: false,
+    bTime: false,
+    profileImg: false,
     nickname: false,
     religion: false,
     smoking: false,
@@ -72,73 +78,71 @@ function SignUpPage() {
   });
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const emailParam = params.get('email');
-        
-    if (!emailParam) {
-      navigate('/', { replace: true });
-      return;
-  }
-        
-  setFormData(prev => ({ ...prev, email: emailParam }));
+
+    // if (!email) {
+    //   navigate("/", { replace: true });
+    //   return;
+    // }
+
+    setFormData((prev) => ({ ...prev, email: email }));
   }, [navigate, location]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const inputValue = type === 'checkbox' ? checked : value;
-    
-    setFormData(prev => ({
+    const inputValue = type === "checkbox" ? checked : value;
+
+    setFormData((prev) => ({
       ...prev,
-      [name]: inputValue
+      [name]: inputValue,
     }));
-        
+
     if (step < 4) {
       const updatedFormData = { ...formData, [name]: inputValue };
       if (step === 1 && updatedFormData.name) {
         setStep(2);
-      } else if (step === 3 && (
-        (updatedFormData.birthDay && updatedFormData.birthTime) || 
-        (updatedFormData.birthDay && updatedFormData.birthTimeUnknown)
-      )) {
+      } else if (
+        step === 3 &&
+        ((updatedFormData.bday && updatedFormData.bTime) ||
+          (updatedFormData.bday && updatedFormData.birthTimeUnknown))
+      ) {
         setStep(4);
       }
     }
   };
 
   const handleSelectionChange = (field, selected) => {
-    
-    setFormData(prev => {
+    setFormData((prev) => {
       const newFormData = { ...prev, [field]: selected };
-      
+
       if (step < 8) {
-        if (step === 2 && field === 'gender') {
+        if (step === 2 && field === "gender") {
           setTimeout(() => {
             setStep(3);
             setMaxStep(Math.max(maxStep, 4));
           }, 100);
-        } else if (step === 4 && field === 'religion') {
+        } else if (step === 4 && field === "religion") {
           setTimeout(() => {
             setStep(5);
             setMaxStep(Math.max(maxStep, 5));
           }, 100);
-        } else if (step === 5 && field === 'smoking') {
+        } else if (step === 5 && field === "smoking") {
           setTimeout(() => {
             setStep(6);
             setMaxStep(Math.max(maxStep, 6));
           }, 100);
-        } else if (step === 6 && field === 'drinking') {
+        } else if (step === 6 && field === "drinking") {
           setTimeout(() => {
             setStep(7);
             setMaxStep(Math.max(maxStep, 7));
           }, 100);
-        } else if (step === 7 && field === 'height') {
+        } else if (step === 7 && field === "height") {
           setTimeout(() => {
             setStep(8);
             setMaxStep(Math.max(maxStep, 9));
           }, 100);
         }
       }
-      
+
       return newFormData;
     });
   };
@@ -148,8 +152,8 @@ function SignUpPage() {
     const newErrors = {
       name: false,
       gender: false,
-      birthDay: false,
-      birthTime: false,
+      bday: false,
+      bTime: false,
       religion: false,
       smoking: false,
       drinking: false,
@@ -157,7 +161,7 @@ function SignUpPage() {
       location: false,
       nickname: false,
       introduction: false,
-      profileImage: false
+      profileImg: false,
     };
 
     if (currentStep === 3) {
@@ -169,9 +173,13 @@ function SignUpPage() {
         newErrors.gender = true;
         isValid = false;
       }
-      if (!formData.birthDay || formData.birthDay.length !== 10 || 
-          (!formData.birthTimeUnknown && (!formData.birthTime || formData.birthTime.length !== 5))) {
-        newErrors.birthDay = true;
+      if (
+        !formData.bday ||
+        formData.bday.length !== 10 ||
+        (!formData.birthTimeUnknown &&
+          (!formData.bTime || formData.bTime.length !== 5))
+      ) {
+        newErrors.bday = true;
         isValid = false;
       }
     } else if (currentStep === 8) {
@@ -205,13 +213,13 @@ function SignUpPage() {
         newErrors.introduction = true;
         isValid = false;
       }
-      if (!formData.profileImage) {
-        newErrors.profileImage = true;
+      if (!formData.profileImg) {
+        newErrors.profileImg = true;
         isValid = false;
       }
     } else if (currentStep === 12) {
-      if (!formData.profileImage) {
-        newErrors.profileImage = true;
+      if (!formData.profileImg) {
+        newErrors.profileImg = true;
         isValid = false;
       }
       if (!formData.nickname) {
@@ -233,8 +241,8 @@ function SignUpPage() {
       <div className="signup-step">
         {4 > step && step >= 1 && (
           <>
-            <h3 className="input-prompt">이름을 입력해 주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">이름을 입력해 주세요</h3>
+            <div className="input-group mb-6">
               <Input
                 type="text"
                 name="name"
@@ -242,127 +250,138 @@ function SignUpPage() {
                 onChange={handleInputChange}
                 placeholder="이름"
               />
-              {errors.name && (
-                <ErrorBubble>
-                  이름을 입력해주세요
-                </ErrorBubble>
-              )}
+              {errors.name && <ErrorBubble>이름을 입력해주세요</ErrorBubble>}
             </div>
           </>
         )}
-                
+
         {4 > step && step >= 2 && (
           <>
-            <h3 className="input-prompt">성별을 입력해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">성별을 입력해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={2}
-                options={['남성', '여성']}
-                onSelect={(selected) => handleSelectionChange('gender', selected)}
-                selected={formData.gender ? [['남성', '여성'].indexOf(formData.gender)] : []}
+                options={["남성", "여성"]}
+                onSelect={(selected) =>
+                  handleSelectionChange("gender", selected)
+                }
+                selected={
+                  formData.gender
+                    ? [["남성", "여성"].indexOf(formData.gender)]
+                    : []
+                }
               />
-              {errors.gender && (
-                <ErrorBubble>
-                  성별을 선택해주세요
-                </ErrorBubble>
-              )}
+              {errors.gender && <ErrorBubble>성별을 선택해주세요</ErrorBubble>}
             </div>
           </>
         )}
-            
+
         {4 > step && step >= 3 && (
           <>
-            <h3 className="input-prompt">태어난 시간을 입력해주세요.<br/>양력으로 입력해주세요.</h3>
-              <div className="flex items-center gap-2 mt-2">
-                <Input
-                  type="text"
-                  name="birthDay"
-                  value={formData.birthDay}
-                  onChange={(e) => {
-                    let value = e.target.value.replace(/[^\d/]/g, '');
-                    if (value.length > 10) return;
-                    const numbers = value.replace(/\//g, '');      
-                    if (numbers.length > 0) {
-                      value = numbers.slice(0, 4);
-                      if (numbers.length > 4) {
-                        value += '/' + numbers.slice(4, 6);
-                      }
-                      if (numbers.length > 6) {
-                        value += '/' + numbers.slice(6);
-                      }
-                    }     
-                    setFormData(prev => ({
-                        ...prev,
-                        birthDay: value
-                      }));
-                    }}
-                    placeholder="2025/01/28"
-                    maxLength="10"
-                    style={{ flex: 2 }}
-                  />
-                <Input
-                  type="text"
-                  name="birthTime"
-                  value={formData.birthTime}
-                  onChange={(e) => {
-                    let value = e.target.value.replace(/[^\d:]/g, '');
-                    if (value.length > 5) return;      
-                    const numbers = value.replace(/:/g, '');
-                    if (numbers.length > 0) {
-                      value = numbers.slice(0, 2);
-                      if (numbers.length > 2) {
-                        value += ':' + numbers.slice(2);
-                      }
+            <h3 className="input-prompt mb-2">
+              태어난 시간을 입력해주세요.
+              <br />
+              양력으로 입력해주세요.
+            </h3>
+            <div className="flex items-center gap-2 mt-2">
+              <Input
+                type="text"
+                name="bday"
+                value={formData.bday}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/[^\d/]/g, "");
+                  if (value.length > 10) return;
+                  const numbers = value.replace(/\//g, "");
+                  if (numbers.length > 0) {
+                    value = numbers.slice(0, 4);
+                    if (numbers.length > 4) {
+                      value += "-" + numbers.slice(4, 6);
                     }
-                        
-                  setFormData(prev => ({
+                    if (numbers.length > 6) {
+                      value += "-" + numbers.slice(6);
+                    }
+                  }
+                  setFormData((prev) => ({
                     ...prev,
-                    birthTime: value
-                    }));
-                  }}
-                  placeholder="18:00"
-                  maxLength="5"
-                  style={{ flex: 1 }}
-                  disabled={formData.birthTimeUnknown}
-                />
-              </div>
-              <div className="flex items-center gap-2 mt-2">
-                <input
-                  type="checkbox"
-                  id="birthTimeUnknown"
-                  checked={formData.birthTimeUnknown}
-                  onChange={handleBirthTimeUnknown}
-                  style={{ cursor: 'pointer' }}
-                />
-                <label 
-                  htmlFor="birthTimeUnknown"
-                  style={{ cursor: 'pointer', fontSize: '14px' }}
-                >
-                  태어난 시간을 모릅니다
-                </label>
-              </div>
-              {errors.birthDay && (
-                <ErrorBubble>
-                  태어난 시간을 입력해주세요
-                </ErrorBubble>
-              )}
-            </>
-          )}
-            
+                    bday: value,
+                  }));
+                }}
+                placeholder="2025-01-28"
+                maxLength="10"
+                style={{ flex: 2 }}
+                className="w-2/3"
+              />
+              <Input
+                type="text"
+                name="bTime"
+                value={formData.bTime}
+                onChange={(e) => {
+                  let value = e.target.value.replace(/[^\d:]/g, "");
+                  if (value.length > 5) return;
+                  const numbers = value.replace(/:/g, "");
+                  if (numbers.length > 0) {
+                    value = numbers.slice(0, 2);
+                    if (numbers.length > 2) {
+                      value += ":" + numbers.slice(2);
+                    }
+                  }
+
+                  setFormData((prev) => ({
+                    ...prev,
+                    bTime: value,
+                  }));
+                }}
+                placeholder="18:00"
+                maxLength="5"
+                style={{ flex: 1 }}
+                disabled={formData.birthTimeUnknown}
+                className="w-1/3"
+              />
+            </div>
+            <div className="flex items-center gap-2 mt-2">
+              <input
+                type="checkbox"
+                id="birthTimeUnknown"
+                checked={formData.birthTimeUnknown}
+                onChange={handleBirthTimeUnknown}
+                style={{ cursor: "pointer" }}
+              />
+              <label
+                htmlFor="birthTimeUnknown"
+                style={{ cursor: "pointer", fontSize: "14px" }}
+                className="text-gray-500"
+              >
+                태어난 시간을 모릅니다
+              </label>
+            </div>
+            {errors.bday && (
+              <ErrorBubble>태어난 시간을 입력해주세요</ErrorBubble>
+            )}
+          </>
+        )}
+
         {9 > step && step >= 4 && (
           <>
-            <h3 className="input-prompt">종교를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">종교를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={3}
-                options={['무교', '개신교', '불교', '천주교', '기타']}
-                onSelect={(selected) => handleSelectionChange('religion', selected)}
-                selected={formData.religion ? [['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)] : []}
+                options={["무교", "개신교", "불교", "천주교", "기타"]}
+                onSelect={(selected) =>
+                  handleSelectionChange("religion", selected)
+                }
+                selected={
+                  formData.religion
+                    ? [
+                        ["무교", "개신교", "불교", "천주교", "기타"].indexOf(
+                          formData.religion
+                        ),
+                      ]
+                    : []
+                }
               />
               {errors.religion && (
-                <ErrorBubble>
-                  종교를 선택해주세요
-                </ErrorBubble>
+                <ErrorBubble>종교를 선택해주세요</ErrorBubble>
               )}
             </div>
           </>
@@ -370,18 +389,22 @@ function SignUpPage() {
 
         {9 > step && step >= 5 && (
           <>
-            <h3 className="input-prompt">흡연 여부를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">흡연 여부를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={3}
-                options={['흡연', '비흡연', '금연 중']}
-                onSelect={(selected) => handleSelectionChange('smoking', selected)}
-                selected={formData.smoking ? [['흡연', '비흡연', '금연 중'].indexOf(formData.smoking)] : []}
+                options={["흡연", "비흡연", "금연 중"]}
+                onSelect={(selected) =>
+                  handleSelectionChange("smoking", selected)
+                }
+                selected={
+                  formData.smoking
+                    ? [["흡연", "비흡연", "금연 중"].indexOf(formData.smoking)]
+                    : []
+                }
               />
               {errors.smoking && (
-                <ErrorBubble>
-                  흡연 여부를 선택해주세요
-                </ErrorBubble>
+                <ErrorBubble>흡연 여부를 선택해주세요</ErrorBubble>
               )}
             </div>
           </>
@@ -389,19 +412,30 @@ function SignUpPage() {
 
         {9 > step && step >= 6 && (
           <>
-            <h3 className="input-prompt">음주 여부를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">음주 여부를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <SelectionGrid
                 cols={2}
-                options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
-                onSelect={(selected) => handleSelectionChange('drinking', selected)}
-                selected={formData.drinking ? [['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)] : []}
+                options={["음주 안함", "주 1~2회", "주 3~4회", "주 5회 이상"]}
+                onSelect={(selected) =>
+                  handleSelectionChange("drinking", selected)
+                }
+                selected={
+                  formData.drinking
+                    ? [
+                        [
+                          "음주 안함",
+                          "주 1~2회",
+                          "주 3~4회",
+                          "주 5회 이상",
+                        ].indexOf(formData.drinking),
+                      ]
+                    : []
+                }
                 multiSelect={false}
               />
               {errors.drinking && (
-                <ErrorBubble>
-                  음주 여부를 선택해주세요
-                </ErrorBubble>
+                <ErrorBubble>음주 여부를 선택해주세요</ErrorBubble>
               )}
             </div>
           </>
@@ -409,63 +443,69 @@ function SignUpPage() {
 
         {9 > step && step >= 7 && (
           <>
-            <h3 className="input-prompt">키를 입력해주세요</h3>
-            <div className="input-group" style={{ position: 'relative' }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center',
-                justifyContent: 'start',
-                textAlign: 'center',
-                width: '100%',
-              }}>
+            <h3 className="input-prompt mb-2">키를 입력해주세요</h3>
+            <div className="input-group mb-6" style={{ position: "relative" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "start",
+                  textAlign: "center",
+                  width: "100%",
+                }}
+              >
                 <select
                   name="height"
                   value={formData.height || "170"}
                   onChange={(e) => {
                     const selected = e.target.value;
-                    setFormData(prev => ({ ...prev, height: selected }));
+                    setFormData((prev) => ({ ...prev, height: selected }));
                   }}
-                  className="w-30 h-10 text-center text-base border border-gray-300 rounded-md appearance-none cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
+                  className={
+                    "w-30 h-10 text-center border border-gray-300 rounded-md cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
+                  }
                   onClick={(e) => {
                     setStep(8);
                     setMaxStep(Math.max(maxStep, 9));
                   }}
                 >
-                  {Array.from({ length: 81 }, (_, i) => i + 140).map(height => (
-                    <option key={height} value={height} className="pl-2">
-                      {height}cm
-                    </option>
-                  ))}
+                  {Array.from({ length: 81 }, (_, i) => i + 140).map(
+                    (height) => (
+                      <option key={height} value={height} className="pl-2">
+                        {height}cm
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
-              {errors.height && (
-                <ErrorBubble>
-                  키를 입력해주세요
-                </ErrorBubble>
-              )}
+              {errors.height && <ErrorBubble>키를 입력해주세요</ErrorBubble>}
             </div>
           </>
         )}
 
         {9 > step && step >= 8 && (
           <>
-            <h3 className="input-prompt">거주지를 선택해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">거주지를 선택해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-row gap-2.5 w-full">
                 <Dropdown
                   name="cityCode"
-                  value={Object.keys(provinces).find(key => provinces[key].code === formData.cityCode) || ""}
+                  value={
+                    Object.keys(provinces).find(
+                      (key) => provinces[key].code === formData.cityCode
+                    ) || ""
+                  }
                   onChange={(e) => {
-                    setFormData(prev => ({ 
-                      ...prev, 
-                      cityCode: provinces[e.target.value]?.code || '',
-                      dongCode: '' 
+                    setFormData((prev) => ({
+                      ...prev,
+                      cityCode: provinces[e.target.value]?.code || "",
+                      dongCode: "",
                     }));
                   }}
                   placeholder="시/도 선택"
-                  options={Object.keys(provinces).map(province => ({
+                  options={Object.keys(provinces).map((province) => ({
                     value: province,
-                    label: province
+                    label: province,
                   }))}
                   className="flex-1"
                 />
@@ -475,33 +515,44 @@ function SignUpPage() {
                     name="dongCode"
                     value={(() => {
                       const selectedSi = Object.keys(provinces).find(
-                        key => provinces[key].code === formData.cityCode
+                        (key) => provinces[key].code === formData.cityCode
                       );
-                      return Object.keys(provinces[selectedSi]?.sigungu || {}).find(
-                        key => provinces[selectedSi]?.sigungu[key] === formData.dongCode
-                      ) || "";
+                      return (
+                        Object.keys(provinces[selectedSi]?.sigungu || {}).find(
+                          (key) =>
+                            provinces[selectedSi]?.sigungu[key] ===
+                            formData.dongCode
+                        ) || ""
+                      );
                     })()}
                     onChange={(e) => {
                       const selectedSi = Object.keys(provinces).find(
-                        key => provinces[key].code === formData.cityCode
+                        (key) => provinces[key].code === formData.cityCode
                       );
-                      const selectedDongCode = provinces[selectedSi]?.sigungu[e.target.value];
-                      setFormData(prev => ({ 
-                        ...prev, 
-                        dongCode: selectedDongCode
+                      const selectedDongCode =
+                        provinces[selectedSi]?.sigungu[e.target.value];
+                      setFormData((prev) => ({
+                        ...prev,
+                        dongCode: selectedDongCode,
                       }));
                     }}
                     placeholder="구/군 선택"
-                    options={Object.keys(provinces[Object.keys(provinces).find(
-                      key => provinces[key].code === formData.cityCode
-                    )].sigungu).map(district => {
+                    options={Object.keys(
+                      provinces[
+                        Object.keys(provinces).find(
+                          (key) => provinces[key].code === formData.cityCode
+                        )
+                      ].sigungu
+                    ).map((district) => {
                       const selectedSi = Object.keys(provinces).find(
-                        key => provinces[key].code === formData.cityCode
+                        (key) => provinces[key].code === formData.cityCode
                       );
-                      const districtName = district.replace(selectedSi, '').replace(/^\s+/, '');
+                      const districtName = district
+                        .replace(selectedSi, "")
+                        .replace(/^\s+/, "");
                       return {
                         value: district,
-                        label: districtName
+                        label: districtName,
                       };
                     })}
                     className="flex-1"
@@ -509,17 +560,15 @@ function SignUpPage() {
                 )}
               </div>
               {errors.location && (
-                <ErrorBubble>
-                  거주지를 모두 선택해주세요
-                </ErrorBubble>
+                <ErrorBubble>거주지를 모두 선택해주세요</ErrorBubble>
               )}
             </div>
           </>
         )}
         {step >= 9 && (
           <>
-            <h3 className="input-prompt">닉네임을 입력해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">닉네임을 입력해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-col w-full">
                 <Input
                   type="text"
@@ -533,9 +582,7 @@ function SignUpPage() {
                   placeholder="닉네임"
                 />
                 {errors.nickname && (
-                  <ErrorBubble>
-                    닉네임을 입력해주세요
-                  </ErrorBubble>
+                  <ErrorBubble>닉네임을 입력해주세요</ErrorBubble>
                 )}
               </div>
             </div>
@@ -543,8 +590,8 @@ function SignUpPage() {
         )}
         {step >= 10 && (
           <>
-            <h3 className="input-prompt">자기소개를 입력해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">자기소개를 입력해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-col w-full">
                 <textarea
                   name="introduction"
@@ -559,9 +606,7 @@ function SignUpPage() {
                   maxLength={500}
                 />
                 {errors.introduction && (
-                  <ErrorBubble>
-                    자기소개를 입력해주세요
-                  </ErrorBubble>
+                  <ErrorBubble>자기소개를 입력해주세요</ErrorBubble>
                 )}
               </div>
             </div>
@@ -569,21 +614,21 @@ function SignUpPage() {
         )}
         {step >= 11 && (
           <>
-            <h3 className="input-prompt">프로필 사진을 등록해주세요</h3>
-            <div className="input-group">
+            <h3 className="input-prompt mb-2">프로필 사진을 등록해주세요</h3>
+            <div className="input-group mb-6">
               <div className="flex flex-col w-full items-center">
                 <input
                   type="file"
-                  name="profileImage"
+                  name="profileImg"
                   accept="image/*"
                   onChange={(e) => {
                     const file = e.target.files[0];
                     if (file) {
                       const reader = new FileReader();
                       reader.onloadend = () => {
-                        setFormData(prev => ({
+                        setFormData((prev) => ({
                           ...prev,
-                          profileImage: reader.result
+                          profileImg: reader.result,
                         }));
                       };
                       reader.readAsDataURL(file);
@@ -592,17 +637,17 @@ function SignUpPage() {
                     }
                   }}
                   className="hidden"
-                  id="profileImageInput"
+                  id="profileImgInput"
                 />
-                <label 
-                  htmlFor="profileImageInput"
+                <label
+                  htmlFor="profileImgInput"
                   className="flex flex-col items-center cursor-pointer w-full"
                 >
                   <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-full mb-4 flex items-center justify-center overflow-hidden hover:border-red-500 transition-colors">
-                    {formData.profileImage ? (
-                      <img 
-                        src={formData.profileImage} 
-                        alt="프로필 미리보기" 
+                    {formData.profileImg ? (
+                      <img
+                        src={formData.profileImg}
+                        alt="프로필 미리보기"
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -613,10 +658,8 @@ function SignUpPage() {
                     사진 선택하기
                   </span>
                 </label>
-                {errors.profileImage && (
-                  <ErrorBubble>
-                    프로필 사진을 등록해주세요
-                  </ErrorBubble>
+                {errors.profileImg && (
+                  <ErrorBubble>프로필 사진을 등록해주세요</ErrorBubble>
                 )}
               </div>
             </div>
@@ -626,59 +669,60 @@ function SignUpPage() {
     );
   };
 
-    const handleSubmit = () => {
-      // 나중에 백이랑 소통할 때 추가
-        if (validateStep(step)) {
-          console.log('제출된 데이터:', formData);
-        }
-        navigate('/auth/Welcome');
-    };
+  const handleSubmit = () => {
+    // 나중에 백이랑 소통할 때 추가
+    if (validateStep(step)) {
+      console.log("제출된 데이터:", formData);
+      postMutation("api/auth/signup", formData);
+    }
+    navigate("/auth/Welcome");
+  };
 
-    const handleNextStep = () => {
-      if (step < 9) {
-        if (!validateStep(step)) {
-          return;
-        }
-        
-        let nextStep;
-        if (step === 3) {
-          nextStep = Math.min(8, maxStep);
-        } else if (step === 8) {
-          nextStep = Math.min(12, maxStep);
-        }
-        
-        setStep(nextStep);
-        
-        // 페이지 최상단으로 스크롤
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'  // 부드러운 스크롤 효과
-        });
+  const handleNextStep = () => {
+    if (step < 9) {
+      if (!validateStep(step)) {
+        return;
       }
-    };
 
-    const handleBirthTimeUnknown = (e) => {
-      const isChecked = e.target.checked;
-      setFormData(prev => ({
-        ...prev,
-        birthTimeUnknown: isChecked,
-        birthTime: isChecked ? '' : prev.birthTime
-      }));
-    };
+      let nextStep;
+      if (step === 3) {
+        nextStep = Math.min(8, maxStep);
+      } else if (step === 8) {
+        nextStep = Math.min(12, maxStep);
+      }
 
-    return (
-      <div className="signup">
-        <div className="relative">
-          {step >= 4 && (
-            <button
-              onClick={() => {
-                if (step >= 9) {
-                  setStep(8);
-                } else if (step >= 4) {
-                  setStep(3);
-                }
-              }}
-              className={`
+      setStep(nextStep);
+
+      // 페이지 최상단으로 스크롤
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // 부드러운 스크롤 효과
+      });
+    }
+  };
+
+  const handleBirthTimeUnknown = (e) => {
+    const isChecked = e.target.checked;
+    setFormData((prev) => ({
+      ...prev,
+      birthTimeUnknown: isChecked,
+      bTime: isChecked ? "" : prev.bTime,
+    }));
+  };
+
+  return (
+    <div className="signup">
+      <div className="relative">
+        {step >= 4 && (
+          <button
+            onClick={() => {
+              if (step >= 9) {
+                setStep(8);
+              } else if (step >= 4) {
+                setStep(3);
+              }
+            }}
+            className={`
                 w-6 aspect-square 
                 flex items-center justify-center
                 text-gray-600
@@ -693,53 +737,54 @@ function SignUpPage() {
                 top-5 left-5
                 z-10
               `}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              className="w-6 h-6"
             >
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                className="w-6 h-6"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M15 19l-7-7 7-7" 
-                />
-              </svg>
-            </button>
-          )}
-          <Header step={step}>
-            <div className="flex items-center relative w-full">
-              <h1 className="w-full text-center text-xl font-semibold">
-                {step >= 9 ? '내 프로필 입력' : step >= 4 ? '내 정보 입력' : '사주 정보 입력'}
-              </h1>
-            </div>
-          </Header>
-        </div>
-        {renderStep()}
-        <div className="button-group">
-          {(step === 3 || step === 8) && (
-            <MainButton 
-              onClick={handleNextStep}
-              disabled={step >= maxStep}
-              className="w-full py-3"
-            >
-              다음
-            </MainButton>
-          )}
-          {step === 12 && (
-            <MainButton
-              onClick={handleSubmit}
-              className="w-full py-3"
-            >
-              가입하기
-            </MainButton>
-          )}
-        </div>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+        )}
+        <Header step={step}>
+          <div className="flex items-center relative w-full">
+            <h1 className="w-full text-center text-xl font-semibold">
+              {step >= 9
+                ? "내 프로필 입력"
+                : step >= 4
+                ? "내 정보 입력"
+                : "사주 정보 입력"}
+            </h1>
+          </div>
+        </Header>
       </div>
-    );
+      {renderStep()}
+      <div className="button-group">
+        {(step === 3 || step === 8) && (
+          <MainButton
+            onClick={handleNextStep}
+            disabled={step >= maxStep}
+            className="w-full py-3 mt-3"
+          >
+            다음
+          </MainButton>
+        )}
+        {step === 12 && (
+          <MainButton onClick={handleSubmit} className="w-full py-3">
+            가입하기
+          </MainButton>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default SignUpPage;

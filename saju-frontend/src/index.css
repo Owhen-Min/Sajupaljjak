@@ -5,26 +5,32 @@
 
 #root {
   max-width: 400px;
-  min-height: 90vh; /* 모바일 기본값 */
+  min-height: 100vh; /* 모바일 기본값 */
   margin: 0 auto;
   padding: 0 0px;
   box-sizing: border-box;
-  background-image: url("https://img.freepik.com/free-photo/simple-smooth-fabric-textured-background_53876-128518.jpg?t=st=1738822310~exp=1738825910~hmac=4166c8244d998096c324722e5fa240a5339acdaa52d9344595c145af48e041a7&w=1380");
-  /* background-color: #ffffff; */
+  background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 } 
 
-/* 데스크탑 환경 (768px 이상) */
-@media screen and (min-width: 768px) {
-  #root {
-    min-height: 100vh;
-  }
-}
 
 body {
   background-color: #f7f7f7;
 }
 
+.fortune {
+  background-image: url("https://img.freepik.com/free-photo/simple-smooth-fabric-textured-background_53876-128518.jpg?t=st=1738822310~exp=1738825910~hmac=4166c8244d998096c324722e5fa240a5339acdaa52d9344595c145af48e041a7&w=1380");
+  background-size: contain;
+  background-position: center;
+  background-repeat: repeat;
+}
+
+.community {
+  background-image: url("https://img.freepik.com/free-photo/simple-smooth-fabric-textured-background_53876-128518.jpg?t=st=1738822310~exp=1738825910~hmac=4166c8244d998096c324722e5fa240a5339acdaa52d9344595c145af48e041a7&w=1380");
+  background-size: contain;
+  background-position: center;
+  background-repeat: repeat;
+}
 
 @font-face {
     font-family: 'GapyeongHanseokbong-Bold';

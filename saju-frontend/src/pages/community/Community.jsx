@@ -6,59 +6,51 @@ import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import CommunityFilterBubble from "../../components/CommunityFilterBubble";
 import ArticleList from "../../components/ArticleList";
+import { useInfiniteGet } from "../../hooks/useInfiniteGet";
 
 function Community() {
   const [selectedElement, setSelectedElement] = useState('전체');
   const [selectedPillar, setSelectedPillar] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-
-  const pillars = [
-    '전체', '갑목', '을목', '병화', '정화', '무토',
-    '기토', '경금', '신금', '임수', '계수'
-  ];
-
+  const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteGet("/api/community", { type: "", query: "" });
+  if (isLoading) return <div>로딩중 ...</div>;
+  if (error) return <div>에러 : {error.message}</div>;
 
   return (
-    <div className="community-page flex flex-col h-screen">
+    <div className="community community-page h-screen flex flex-col">
       <TopBar />
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-y-auto relative">
         <CommunityFilterBubble 
           selectedElement={selectedElement} 
           selectedPillar={selectedPillar}
           onElementSelect={setSelectedElement}
           onPillarSelect={setSelectedPillar}
-          onClick={() => {
-            console.log(selectedElement);
-            console.log(selectedPillar);
-          }
-          }
         />
-        <div className="flex items-center gap-3 px-4 pt-4 mb-2">
+        <div className="flex items-center gap-3 px-4 pt-2">
           <Input 
             type="text" 
             placeholder="게시글 검색하기" 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full py-[7px]"
-            />
+          />
           <MainButton 
             children="⌕"
             onClick={() => console.log(searchQuery)}
-            className="w-[50px] py-[7px]"
-        />
-          <MainButton 
-            children="✎"
-            onClick={() => navigate('/community/write')}
-            half={true}
-            className="w-[60px] py-[7px] mx-1"
+            className="w-[50px] h-[40px] text-2xl"
           />
         </div>
         <ArticleList 
-          onArticleClick={(articleId) => navigate(`/community/${articleId}`)}
+          articles={data}
           className="pb-12"
         />
       </div>
+      <MainButton 
+        children="✎"
+        onClick={() => navigate('/community/write')}
+        className="fixed bottom-[calc(17%)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-2xl shadow-lg max-[400px]:right-5 max-[320px]:right-5"
+      />
       <BottomNav />
     </div>
   );
