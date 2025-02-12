@@ -10,7 +10,7 @@ function Solo() {
   if (error) return <div>에러 : {error.message}</div>;
 
   return (
-    <div>
+    <div className="solo-page h-screen flex flex-col relative py-14">
       <TopBar />
       <div className="section-container mt-0">
         <div className="p-5 pb-2 text-2xl font-dokrip">궁합 매칭</div>

@@ -8,6 +8,8 @@ import { provinces } from '../../data/provinceCode';
 import '../../styles/Signup.css';
 import { useAuth } from '../../hooks/useAuth';
 import { usePost } from '../../hooks/useApi';
+import * as tf from '@tensorflow/tfjs';
+import * as blazeface from '@tensorflow-models/blazeface';
 
 function Header({ step, children }) {
   const getProgressWidth = () => {
@@ -76,15 +78,24 @@ function SignUpPage() {
     location: false,
     introduction: false,
   });
+  const [isFaceDetecting, setIsFaceDetecting] = useState(false);
+  const [faceDetected, setFaceDetected] = useState(false);
+  const [model, setModel] = useState(null);
 
   useEffect(() => {
-
     // if (!email) {
     //   navigate("/", { replace: true });
     //   return;
     // }
 
     setFormData((prev) => ({ ...prev, email: email }));
+
+    // 모델 로드
+    const loadModel = async () => {
+      const loadedModel = await blazeface.load();
+      setModel(loadedModel);
+    };
+    loadModel();
   }, [navigate, location]);
 
   const handleInputChange = (e) => {
@@ -621,21 +632,7 @@ function SignUpPage() {
                   type="file"
                   name="profileImg"
                   accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => {
-                        setFormData((prev) => ({
-                          ...prev,
-                          profileImg: reader.result,
-                        }));
-                      };
-                      reader.readAsDataURL(file);
-                      setMaxStep(Math.max(maxStep, 12));
-                      setStep(Math.max(maxStep, 12));
-                    }
-                  }}
+                  onChange={handleFileUpload}
                   className="hidden"
                   id="profileImgInput"
                 />
@@ -663,6 +660,16 @@ function SignUpPage() {
                 )}
               </div>
             </div>
+            {isFaceDetecting && (
+              <div className="text-sm text-gray-500 mt-2">
+                얼굴 인식 중...
+              </div>
+            )}
+            {!isFaceDetecting && !faceDetected && formData.profileImg && (
+              <div className="text-sm text-red-500 mt-2">
+                얼굴이 포함된 사진을 업로드해주세요
+              </div>
+            )}
           </>
         )}
       </div>
@@ -708,6 +715,59 @@ function SignUpPage() {
       birthTimeUnknown: isChecked,
       bTime: isChecked ? "" : prev.bTime,
     }));
+  };
+
+  const detectFace = async (imageUrl) => {
+    if (!model) return false;
+    
+    setIsFaceDetecting(true);
+    
+    try {
+      // 이미지 요소 생성
+      const img = new Image();
+      img.src = imageUrl;
+      await new Promise((resolve) => (img.onload = resolve));
+      
+      // 얼굴 감지
+      const predictions = await model.estimateFaces(img, false);
+      setFaceDetected(predictions.length > 0);
+      
+      if (predictions.length === 0) {
+        alert('얼굴이 포함된 사진을 업로드해주세요.');
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('얼굴 감지 중 오류 발생:', error);
+      return false;
+    } finally {
+      setIsFaceDetecting(false);
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const imageUrl = e.target.result;
+        const hasFace = await detectFace(imageUrl);
+        
+        if (hasFace) {
+          setFormData((prev) => ({
+            ...prev,
+            profileImg: imageUrl,
+          }));
+        } else {
+          setFormData((prev) => ({
+            ...prev,
+            profileImg: null,
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (

@@ -21,7 +21,7 @@ function Match() {
 
 
   return (
-    <div>
+    <div className="match-page h-screen flex flex-col relative py-14">
       <TopBar />
       <UserList2 users={data} />
       <BottomNav />
