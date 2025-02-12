@@ -14,6 +14,7 @@ import com.saju.sajubackend.common.exception.ErrorMessage;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,9 +34,9 @@ public class FortuneService {
                 .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
 
         // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
-        SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely(), saju.getDaily().getLabel())
+        SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely().substring(saju.getTimely().length() - 1), saju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No fortune found for siju: " + saju.getTimely() + " and ilju: " + saju.getDaily()));
+                        "No fortune found for siju: " + saju.getTimely().substring(saju.getTimely().length() - 1) + " and ilju: " + saju.getDaily()));
 
         // 엔티티에서 필요한 값만 추출하여 DTO로 변환
         return new SoloYearDto(
@@ -48,7 +49,7 @@ public class FortuneService {
                 fortune.getAdvice()
         );
     }
-
+    @Transactional
     public SoloLifeDto getLifeTimeFortune(Long memberId) {
         // memberID로 해당하는 member 객체를 가져와서 getSiju, getIlju 해서 쓸 예정
 
@@ -56,9 +57,9 @@ public class FortuneService {
 
 
         // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
-        SoloLife fortune = soloLifeRepository.findBySijuAndIlju(saju.getTimely(), saju.getDaily().getLabel())
+        SoloLife fortune = soloLifeRepository.findBySijuAndIlju(saju.getTimely().substring(saju.getTimely().length() - 1), saju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No fortune found for siju: " + saju.getTimely() + " and ilju: " + saju.getDaily()));
+                        "No fortune found for siju: " + saju.getTimely().substring(saju.getTimely().length() - 1) + " and ilju: " + saju.getDaily()));
 
         // 엔티티에서 필요한 값만 추출하여 DTO로 변환
         return new SoloLifeDto(

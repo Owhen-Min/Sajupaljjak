@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/fortune")
 public class SajuController {
 
-    private SajuService sajuService;
-    private FortuneService fortuneService;
+    private final SajuService sajuService;
+    private final FortuneService fortuneService;
 
-    public SajuController(SajuService sajuService, FortuneService fortuneService) {
-        this.sajuService = sajuService;
-        this.fortuneService = fortuneService;
-    }
+//    public SajuController(SajuService sajuService, FortuneService fortuneService) {
+//        this.sajuService = sajuService;
+//        this.fortuneService = fortuneService;
+//    }
 
     // todo : memberId 토큰에서 꺼내기
 
@@ -32,14 +32,14 @@ public class SajuController {
     // 간단한 사주(운세) 조회 API (/api/saju)
     @GetMapping
     public ResponseEntity<SajuResponse> getDailySaju(Long memberId) {
-        SajuResponse response = sajuService.getDailySajuForMember(memberId);
+            SajuResponse response = sajuService.getDailySajuForMember(4L);
         return ResponseEntity.ok(response);
     }
 
     // 오늘의 상세 사주(운세) 조회 API (/api/saju/today)
     @GetMapping("/today")
     public ResponseEntity<SajuDetailResponse> getTodaySajuDetail(Long memberId) {
-        SajuDetailResponse response = sajuService.getTodaySajuDetailForMember(memberId);
+        SajuDetailResponse response = sajuService.getTodaySajuDetailForMember(4L);
         return ResponseEntity.ok(response);
     }
 
@@ -49,14 +49,14 @@ public class SajuController {
     @GetMapping("/new-year")
     public ResponseEntity<SoloYearDto> getNewYearFortune(
            Long memberId) {
-        SoloYearDto fortuneDto = fortuneService.getNewYearFortune(memberId);
+        SoloYearDto fortuneDto = fortuneService.getNewYearFortune(4L);
         return ResponseEntity.ok(fortuneDto);
     }
 
     @GetMapping("/lifetime")
     public ResponseEntity<SoloLifeDto> getLifeTimeFortune(
            Long memberId ) {
-        SoloLifeDto fortuneDto = fortuneService.getLifeTimeFortune(memberId);
+        SoloLifeDto fortuneDto = fortuneService.getLifeTimeFortune(4L);
         return ResponseEntity.ok(fortuneDto);
     }
 

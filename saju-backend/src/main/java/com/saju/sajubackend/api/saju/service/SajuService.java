@@ -63,10 +63,10 @@ public class SajuService {
     public SajuResponse getDailySajuForMember(Long memberId) {
         String redisKey = getDailyKey(memberId);
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        String cached = ops.get(redisKey).toString();
+        Object cached = ops.get(redisKey);
         if (cached != null) {
             try {
-                return objectMapper.readValue(cached, SajuResponse.class);
+                return objectMapper.readValue(cached.toString(), SajuResponse.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -107,10 +107,10 @@ public class SajuService {
     public SajuDetailResponse getTodaySajuDetailForMember(Long memberId) {
         String redisKey = getTodayDetailKey(memberId);
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        String cached = ops.get(redisKey).toString();
+        Object cached = ops.get(redisKey);
         if (cached != null) {
             try {
-                return objectMapper.readValue(cached, SajuDetailResponse.class);
+                return objectMapper.readValue(cached.toString(), SajuDetailResponse.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
