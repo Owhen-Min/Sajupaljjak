@@ -10,7 +10,7 @@ public record MatchingMemberResponseDto(
         String nickname,
         int score,
         String profileImage,
-        Integer region,
+        Long region,
         int age,
         String celestialStem,
         String introduction
