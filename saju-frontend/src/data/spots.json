@@ -1,0 +1,135 @@
+[
+  {
+    "2025-02-13": [
+      {
+        "image": "https://images.unsplash.com/photo-1599033769063-fcd3ef816810?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "element": "목",
+        "title": "경복궁"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1723802303258-8f341715e74d?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "element": "토",
+        "title": "북촌한옥마을"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1626100856386-68942e5ec239?q=80&w=2079&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "element": "금",
+        "title": "인사동"
+      }
+    ]
+  },
+  {
+    "2025-02-14": [
+      {
+        "image": "https://images.unsplash.com/photo-1507000640377-aa7b6dd0d164?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "element": "금",
+        "title": "동대문 디자인 플라자"
+      },
+      {
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Dongdaemun-korean-food-9.jpg/1200px-Dongdaemun-korean-food-9.jpg",
+        "element": "화",
+        "title": "동대문 시장"
+      },
+      {
+        "image": "https://i.namu.wiki/i/eOVv43UHs3HFPClUXvnv8Iw5DpAN8GX3FTIQLni-ieCsTqlQYc0t0NleDTgdROwuLriKFm4DDOxw85YM5AU4zg.webp",
+        "element": "목",
+        "title": "서울로7017"
+      }
+    ]
+  },
+  {
+    "2025-02-15": [
+      {
+        "image": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/64b62c46-1396-11ef-8de1-fafb43b0792c.jpg",
+        "element": "수",
+        "title": "코엑스 아쿠아리움"
+      },
+      {
+        "image": "https://images.unsplash.com/photo-1632908717683-a94696d9c685?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "element": "목",
+        "title": "봉은사"
+      },
+      {
+        "image": "https://i.namu.wiki/i/2aGFg61ZloU7IF-Snf2znUO44T0Pt_u0cPYSZyYv-46Oc_0867hkqhV-bWw95NbPDKZFTKm8PlJUx6DMvSStyA.webp",
+        "element": "화",
+        "title": "예술의전당"
+      }
+    ]
+  },
+  {
+    "2025-02-16": [
+      {
+        "image": "https://media.triple.guide/triple-cms/c_limit,f_auto,h_1024,w_1024/212032b1-f1a7-4909-8aee-49b25fb40ca5.jpeg",
+        "element": "수",
+        "title": "한강공원"
+      },
+      {
+        "image": "https://hangang.seoul.go.kr/www/file/smEditorImage.do?fileDay=202308&fileName=202308220238432ec58eefc97f4fb794c523a00fa87319.jpg",
+        "element": "수",
+        "title": "반포대교 분수"
+      },
+      {
+        "image": "https://parks.seoul.go.kr/file/info/view.do?fIdx=1884",
+        "element": "목",
+        "title": "남산공원"
+      }
+    ]
+  },
+  {
+    "2025-02-17": [
+      {
+        "image": "https://i.namu.wiki/i/yZeKOQ6x8chba-r0OwsmZtUZEsGFGm-WGPAZyDd2b4mrdYypGDuIsavmRomoEo9XRsv0B3NuG8oP_GalDsfmpw.webp",
+        "element": "화",
+        "title": "홍대 거리"
+      },
+      {
+        "image": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Seoul_Cheonggyecheon_night.jpg",
+        "element": "수",
+        "title": "청계천"
+      },
+      {
+        "image": "https://upload.wikimedia.org/wikipedia/commons/f/f6/%EB%8D%95%EC%88%98%EA%B6%81_%EC%A0%84%EA%B2%BD_%282013%29.jpg",
+        "element": "토",
+        "title": "덕수궁"
+      }
+    ]
+  },
+  {
+    "2025-02-18": [
+      {
+        "image": "https://image.kkday.com/v2/image/get/w_960%2Cc_fit%2Cq_55%2Ct_webp/s1.kkday.com/product_118096/20231102082531_hkz2c/jpg",
+        "element": "금",
+        "title": "롯데월드타워 전망대"
+      },
+      {
+        "image": "https://mediahub.seoul.go.kr/uploads/mediahub/2021/09/OOqigfhGtDhEJzIpjsuzufFoeWLYUGPU.jpg",
+        "element": "금",
+        "title": "국립중앙박물관"
+      },
+      {
+        "image": "https://grandpark.seoul.go.kr/asset/images/sub/Introduce/img_7_1_1_sintroduce_01.png",
+        "element": "토",
+        "title": "서울대공원"
+      }
+    ]
+  },
+  {
+    "2025-02-19": [
+      {
+        "image": "https://www.kocis.go.kr/CONTENTS/BOARD/images/333MMCA-131023-4.jpg",
+        "element": "화",
+        "title": "국립현대미술관"
+      },
+      {
+        "image": "https://i.namu.wiki/i/jaWczGNWoVKP_RSi2BdqqffPjUVU80eni3IDj6bDk3pHGkWG_bQA6_i7_v7iECfq3t-j86-QSef0nVPNqyaTBw.webp",
+        "element": "토",
+        "title": "국립민속박물관"
+      },
+      {
+        "image": "https://love.seoul.go.kr/tmda/Pds/Board/seoul_news_write/Editor/plan_030203_1_22.png",
+        "element": "목",
+        "title": "삼청동"
+      }
+    ]
+  }
+]

@@ -1,28 +1,40 @@
 import BottomNav from "../../components/BottomNav";
-import Heart from "../../components/Heart";
 import TopBar2 from "../../components/TopBar2";
-import FortuneButton from "../../components/FortuneButton";
-import SajuUserBubble from "../../components/SajuUserBubble";
-import MainButton from "../../components/MainButton";
-import { useState } from "react";
 import { Calendar } from "../../components/Calendar";
-import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
-import { testUsers } from "../../data/user";
-import UserList from "../../components/UserList";
+import EmblaCarousel from "../../components/EmblaCarousel";
+import couplebg from "../../assets/couplebg.webp";
+import spots from "../../data/spots.json";
+import { useState } from "react";
 
 function CouplePlace() {
   const goodDates = ['2025-02-01','2025-02-22', '2025-02-14']; // YYYY-MM-DD 형식
   const badDates = ['2025-02-03','2025-02-17', '2025-02-23'];
   const navigate = useNavigate();
-  
-  return (
-    <div className="relative flex flex-col justify-center items-center pt-[100px]">
-      <TopBar2 mainText={"데이트 코스 추천"} />
-      <UserList users={testUsers} />
+  const [selectedDate, setSelectedDate] = useState(null);
 
-      <div className="calendar-section flex justify-center items-center mt-5 pt-[23.5px] px-5 w-full max-w-3xl">
-        <Calendar goodDates={goodDates} badDates={badDates} />
+  const handleDateSelect = (date) => {
+    const formattedDate = date.format('YYYY-MM-DD');
+    setSelectedDate(formattedDate);
+  };
+
+  // 선택된 날짜에 해당하는 데이터 찾기
+  const selectedSpots = selectedDate ? 
+    spots.find(spot => spot[selectedDate])?.[selectedDate] || [] : 
+    spots[0]?.[Object.keys(spots[0])[0]] || [];
+
+  return (
+    <div className="flex flex-col min-h-screen py-14 relative justify-center items-center bg-cover bg-center bg-no-repeat" 
+    style={{ backgroundImage: `url(${couplebg})` }}>
+      <TopBar2 mainText={"데이트 코스 추천"} />
+      <EmblaCarousel data={selectedSpots} />
+
+      <div className="flex flex-col p-4 my-2 bg-white rounded-lg bg-opacity-70 items-center justify-center">
+        <Calendar 
+          goodDates={goodDates} 
+          badDates={badDates} 
+          onDateSelect={handleDateSelect}
+        />
       </div>
 
       <BottomNav />

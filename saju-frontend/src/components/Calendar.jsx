@@ -23,9 +23,10 @@ const generateDate = (date) => {
   return arrayOfDate;
 };
 
-export const Calendar = ({ goodDates = [], badDates = [], className }) => {
+export const Calendar = ({ goodDates = [], badDates = [], className, isDisabled = false, onDateSelect }) => {
   const today = dayjs();
   const [date, setDate] = useState(today);
+  const [selectedDate, setSelectedDate] = useState(null);
   const days = ["일", "월", "화", "수", "목", "금", "토"];
   const [records, setRecords] = useState([]);
 
@@ -43,7 +44,7 @@ export const Calendar = ({ goodDates = [], badDates = [], className }) => {
   };
 
   return (
-    <div className={`w-full bg-white rounded-lg p-4 shadow ${className}`}>
+    <div className={`w-full bg-white rounded-lg p-4 py-2 shadow ${className}`}>
       {/* Calendar Header */}
       <div className="flex justify-between items-center mb-4">
         <button 
@@ -112,15 +113,23 @@ export const Calendar = ({ goodDates = [], badDates = [], className }) => {
             )}
             
             <div 
+              onClick={() => {
+                if (!isDisabled && currentMonth) {
+                  setSelectedDate(currentDate);
+                  onDateSelect?.(currentDate);
+                }
+              }}
               className={`
                 h-8 w-8 flex items-center justify-center text-sm
-                cursor-pointer transition-all duration-200
-                hover:bg-gray-100 rounded-full
+                ${isDisabled ? '' : 'cursor-pointer hover:bg-blue-400'}
+                transition-all duration-200
+                rounded-full
                 ${!currentMonth ? 'text-gray-300' : ''}
                 ${!isInRange ? 'opacity-50' : 'opacity-100'}
                 ${currentDate.day() === 0 ? 'text-red-500' : ''}
                 ${currentDate.day() === 6 ? 'text-blue-500' : 'text-gray-700'}
-                ${currentDate.isSame(today, 'day') ? 'border-2 border-blue-500 text-black hover:bg-red-300' : ''}
+                ${currentDate.isSame(today, 'day') ? 'border-2 border-blue-500 text-black' : ''}
+                ${selectedDate && currentDate.isSame(selectedDate, 'day') ? 'bg-blue-300 text-white' : ''}
               `}
             >
               {currentDate.date()}
