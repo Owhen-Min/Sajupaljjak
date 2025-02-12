@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorMessage {
-	// auth
-	ERR_UNAUTORIZED("[ERR] Unauthorized"),
-	MEMBER_NOT_FOUND("존재하지 않는 사용자입니다."),
-	REFRESH_TOKEN_EXPIRED("유효하지 않은 토큰입니다."),
+    // auth
+    ERR_UNAUTORIZED("[ERR] Unauthorized"),
+    MEMBER_NOT_FOUND("존재하지 않는 사용자입니다."),
+    REFRESH_TOKEN_EXPIRED("유효하지 않은 토큰입니다."),
     DUPLICATE_NICKNAME("이미 존재하는 닉네임입니다."),
 
     // ENUM 관련 오류
@@ -38,7 +38,9 @@ public enum ErrorMessage {
     INVALID_SOLO_STATUS_LABEL("유효하지 않은 솔로 상태 값입니다."),
 
     // couple
-    INVITE_CODE_NOT_FOUND("유효하지 않은 초대 코드입니다");
+    COUPLE_NOT_FOUND("존재하지 않는 커플입니다."),
+    INVITE_CODE_NOT_FOUND("유효하지 않은 초대 코드입니다"),
+    INVALID_GENDER_COMBINATION("유효하지 않은 성별 조합입니다");
 
     private final String message;
 }

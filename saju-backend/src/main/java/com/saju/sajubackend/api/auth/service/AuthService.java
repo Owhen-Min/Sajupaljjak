@@ -6,12 +6,15 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.domain.MemberSocial;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.member.repository.MemberSocialRepository;
+import com.saju.sajubackend.api.saju.domain.Saju;
+import com.saju.sajubackend.api.saju.repository.SajuRepository;
 import com.saju.sajubackend.common.enums.*;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.UnAuthorizedException;
 import com.saju.sajubackend.common.jwt.JwtProvider;
 import com.saju.sajubackend.common.util.CelestialStemCalculator;
+import com.saju.sajubackend.common.util.FourPillarsCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final MemberRepository memberRepository;
     private final MemberSocialRepository memberSocialRepository;
+    private final SajuRepository sajuRepository;
 
     @Transactional
     public LoginResponse login(String email) {
@@ -85,15 +89,20 @@ public class AuthService {
         if (memberRepository.existsByNickname(request.getNickname())) {
             throw new BaseException(HttpStatus.CONFLICT, ErrorMessage.DUPLICATE_NICKNAME);
         }
-        System.out.println(request.toString());
-        // 생년월일 파싱 및 천간 계산
+        // 생년월일 파싱 및 시간 파싱
         LocalDate birthDate = LocalDate.parse(request.getBday());
+        LocalDateTime birthDateTime = LocalDateTime.parse(request.getBday() + "T" + request.getBtime());
+
+        //천간 계산
         String celestialStem = CelestialStemCalculator.calculateCelestialStem(birthDate);
+
+        // 사주(연주, 월주, 일주, 시주) 계산
+        FourPillarsCalculator.FourPillars saju = FourPillarsCalculator.calculate(birthDateTime);
 
         // Member 엔티티 생성
         Member member = Member.builder()
                 .bday(birthDate)
-                .btime(LocalDateTime.parse(request.getBday() + "T" + request.getBtime()))
+                .btime(birthDateTime)
                 .relation(RelationshipStatus.fromLabel(request.getRelation()))
                 .nickname(request.getNickname())
                 .intro(request.getIntro())
@@ -109,6 +118,16 @@ public class AuthService {
                 .age(request.getAge())
                 .build();
         Member savedMember = memberRepository.save(member);
+
+        // 사주 저장
+        Saju newSaju = Saju.builder()
+                .member(savedMember)
+                .yearly(saju.yearPillar)  // 연주 (천간 + 지지 포함)
+                .monthly(saju.monthPillar) // 월주 (천간 + 지지 포함)
+                .daily(saju.dayPillar) // 일주 (천간 + 지지 포함)
+                .timely(saju.hourPillar) // 시주 (천간 + 지지 포함)
+                .build();
+        sajuRepository.save(newSaju);
 
         // MemberSocial 엔티티 생성
         MemberSocial memberSocial = MemberSocial.builder()

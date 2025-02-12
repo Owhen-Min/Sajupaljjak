@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.matching.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.matching.dto.MatchingProfileResponseDto;

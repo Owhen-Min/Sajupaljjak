@@ -10,7 +10,9 @@ import com.saju.sajubackend.api.saju.dto.SajuDetailResponse;
 import com.saju.sajubackend.api.saju.dto.SajuResponse;
 import com.saju.sajubackend.api.saju.repository.SajuRepository;
 import com.saju.sajubackend.common.exception.ErrorMessage;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -54,10 +56,10 @@ public class SajuService {
     public SajuResponse getDailySajuForMember(Long memberId) {
         String redisKey = getDailyKey(memberId);
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        String cached = ops.get(redisKey).toString();
+        Object cached = ops.get(redisKey);
         if (cached != null) {
             try {
-                return objectMapper.readValue(cached, SajuResponse.class);
+                return objectMapper.readValue(cached.toString(), SajuResponse.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -98,10 +100,10 @@ public class SajuService {
     public SajuDetailResponse getTodaySajuDetailForMember(Long memberId) {
         String redisKey = getTodayDetailKey(memberId);
         ValueOperations<String, Object> ops = redisTemplate.opsForValue();
-        String cached = ops.get(redisKey).toString();
+        Object cached = ops.get(redisKey);
         if (cached != null) {
             try {
-                return objectMapper.readValue(cached, SajuDetailResponse.class);
+                return objectMapper.readValue(cached.toString(), SajuDetailResponse.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
