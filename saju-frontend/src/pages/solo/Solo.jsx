@@ -3,18 +3,19 @@ import TopBar from "../../components/TopBar";
 import UserList from "../../components/UserList";
 import { Link } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
+import { testUsers } from "../../data/user";
 
 function Solo() {
-  const { data:users, isLoading, error } = useGet("/api/match/top");
-  if (isLoading) return <div>로딩중 ...</div>;
-  if (error) return <div>에러 : {error.message}</div>;
+  // const { data:users, isLoading, error } = useGet("/api/match/top");
+  // if (isLoading) return <div>로딩중 ...</div>;
+  // if (error) return <div>에러 : {error.message}</div>;
 
   return (
     <div className="solo-page h-screen flex flex-col relative py-14">
       <TopBar />
       <div className="section-container mt-0">
         <div className="p-5 pb-2 text-2xl font-dokrip">궁합 매칭</div>
-        <UserList users={ users } />
+        <UserList users={ testUsers } />
       </div>
 
       <div className="mt-10 w-full h- 200 ">

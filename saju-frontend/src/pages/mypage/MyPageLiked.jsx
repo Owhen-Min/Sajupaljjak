@@ -4,7 +4,7 @@ import ArticleList from "../../components/ArticleList";
 
 function MyPageLiked() {
   return (
-    <div>
+    <div className="flex flex-col relative pt-14 h-screen">
       <TopBar2 mainText={"좋아요한 글"} />
       <ArticleList />
     </div>
