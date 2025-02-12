@@ -37,6 +37,7 @@ export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectUser = (state) => state.auth.user;
 export const selectEmail = (state) => state.auth.email;
 
+
 export const { setIsCouple, setIsAuthenticated, setUser, setEmail, resetAuth } =
   authSlice.actions;
 

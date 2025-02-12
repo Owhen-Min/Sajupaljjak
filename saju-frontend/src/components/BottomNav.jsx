@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectIsCouple } from "../store/authSlice";
+import { useAuth } from "../hooks/useAuth";
 
 const BottomNav = () => {
-  const isCouple = useSelector(selectIsCouple);
-
+  const { isCouple } = useAuth();
   return (
     <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[400px] bg-white shadow-lg">
       <div className="flex">

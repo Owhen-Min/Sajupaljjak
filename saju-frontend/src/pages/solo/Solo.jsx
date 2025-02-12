@@ -2,19 +2,19 @@ import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
 import UserList from "../../components/UserList";
 import { Link } from "react-router-dom";
-
-import { testUsers } from "../../data/user";
-
+import { useGet } from "../../hooks/useApi";
 
 function Solo() {
-
+  const { data:users, isLoading, error } = useGet("/api/match/top");
+  if (isLoading) return <div>로딩중 ...</div>;
+  if (error) return <div>에러 : {error.message}</div>;
 
   return (
     <div>
       <TopBar />
       <div className="section-container mt-0">
         <div className="p-5 pb-2 text-2xl font-dokrip">궁합 매칭</div>
-        <UserList users={testUsers} />
+        <UserList users={ users } />
       </div>
 
       <div className="mt-10 w-full h- 200 ">

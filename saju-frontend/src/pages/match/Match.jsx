@@ -2,34 +2,28 @@ import React, { useState, useEffect } from "react";
 import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
 import UserList2 from "../../components/UserList2";
-import { testUsers } from "../../data/user";
+import { useInfiniteGet } from "../../hooks/useInfiniteGet";
 
 function Match() {
-  const [users, setUsers] = useState(testUsers);
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, fetchNextPage, hasNextPage, error, isLoading } = useInfiniteGet("/api/match");
 
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100 &&
-      !isLoading
-    ) {
-      setIsLoading(true);
-      setTimeout(() => {
-        setUsers((prevUsers) => [...prevUsers, ...testUsers]);
-        setIsLoading(false);
-      }, 500);
-    }
-  };
+  console.log(data);
+  if (isLoading) return <div>로딩중 ...</div>;  
+  if (error) return <div>에러 : {error.message}</div>;
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isLoading]);
+  const handleScroll = () =>{
+
+  };  
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, [isLoading]);
+
 
   return (
     <div>
       <TopBar />
-      <UserList2 users={users} />
+      <UserList2 users={data} />
       <BottomNav />
     </div>
   );
