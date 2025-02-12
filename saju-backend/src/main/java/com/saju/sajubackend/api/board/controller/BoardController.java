@@ -6,6 +6,7 @@ import com.saju.sajubackend.api.board.dto.request.CommentCreateRequest;
 import com.saju.sajubackend.api.board.dto.response.BoardCreateResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardDetailResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardListResponse;
+import com.saju.sajubackend.api.board.dto.response.CommentListResponse;
 import com.saju.sajubackend.api.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -108,5 +109,26 @@ public class BoardController {
         Long currentMemberId = 1L; // 테스트용
         boardService.createComment(currentMemberId, boardId, request.getContent());
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * [내가 쓴 게시물 조회]
+     * GET /api/community/my-post
+     */
+    @GetMapping("/my-post")
+    public ResponseEntity<BoardListResponse> getMyPosts(Long memberId) {
+        // 실제 프로젝트에서는 SecurityContext 또는 토큰에서 회원 정보를 가져오게 됩니다.
+        BoardListResponse response = boardService.getMyBoardList(memberId);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * [내가 쓴 댓글 조회]
+     * GET /api/community/my-comment
+     */
+    @GetMapping("/my-comment")
+    public ResponseEntity<CommentListResponse> getMyComments(Long memberId) {
+        CommentListResponse response = boardService.getMyCommentList(memberId);
+        return ResponseEntity.ok(response);
     }
 }
