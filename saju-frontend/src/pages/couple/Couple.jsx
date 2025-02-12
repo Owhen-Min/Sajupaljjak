@@ -20,6 +20,7 @@ function Couple() {
         age: 29,
         profileImage: "https://cdn.pixabay.com/photo/2020/05/09/13/29/photographer-5149664_1280.jpg",
         region: "서울시 동작구",
+
       },
       partner: {
         name: "박효신",

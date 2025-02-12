@@ -1,26 +1,16 @@
 import { useParams } from "react-router-dom";
-import useGet from "../../hooks/useGet";
-
-// 테스트 데이터
-import { testUsers } from "../../data/user";
 import BottomNav from "../../components/BottomNav";
 import TopBar2 from "../../components/TopBar2";
 import SajuGrid from "../../components/SajuGrid";
+import { useGet } from "../../hooks/useApi";
 
 function MatchReport() {
+    const { partnerId} = useParams();
 
-
-   const { userId } = useParams();
-   const user = testUsers.find((user) => user.id === parseInt(userId));
-
-  // const { data, isLoading, error } = useGet(
-  //   `/api/match/${userId}`,
-  //   "matchData"
-  // );
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>Error loading match data</p>;
-
-
+    const { data: user, isLoading, error } = useGet(`/api/match/${partnerId}`);
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>Error loading data.</p>;
+    console.log(user);
     
     const saju =  {
       year: '을해',
@@ -32,7 +22,7 @@ function MatchReport() {
   return (
     <div className="flex flex-col items-center relative h-screen pt-10">
       <TopBar2 />
-      <div>
+      {/* <div>
         <img src={user.profileImage} alt={`${user.name}'s profile`} />
       </div>
       <div className="bg-white h-dvh rounded-t-3xl translate-y-[-2%] p-10">
@@ -51,8 +41,8 @@ function MatchReport() {
         <p>{user.age}</p>
         <p>{user.memberType}</p>
         <p>{user.introduction}</p>
-      </div>
-
+      </div> */}
+      
       <BottomNav />
     </div>
   );

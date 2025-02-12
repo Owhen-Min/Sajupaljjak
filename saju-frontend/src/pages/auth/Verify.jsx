@@ -1,53 +1,70 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useGet from '../../hooks/useGet';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useGet } from "../../hooks/useApi";
+import { useAuth } from "../../hooks/useAuth";
+
 const Verify = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    updateEmail,
+    updateIsCouple,
+    updateUser,
+    updateIsAuthenticated,
+    logout,
+  } = useAuth();
+
+  const code = new URL(window.location.href).searchParams.get("code");
+  const { data, error, isLoading } = useGet(
+    `api/auth/login/kakao?code=${code}`
+  );
+  console.log(data);
 
   useEffect(() => {
-    const processKakaoLogin = async () => {
-      // URL에서 인가 코드 추출
-      const code = new URL(window.location.href).searchParams.get("code");
-      try {
-        // 백엔드 서버로 인가 코드 전송
-        const { data } = await useGet('api/auth/login/kakao?code='+{ code }, "login");
-        localStorage.setItem('email', data.email);
+    if (isLoading) return;
 
-        // 토큰이 없는 경우 (회원가입 필요)
-        if (!data.token) {
-          navigate('/signup');
-          return;
-        }
+    if (error) {
+      console.error(error);
+      window.alert("서버 통신중 오류가 발생했습니1다.");
+      navigate("/auth", { state: { error: error.message } });
+      return;
+    }
 
-        // 토큰 저장
-        localStorage.setItem('accessToken', data.token.accessToken);
-        localStorage.setItem('refreshToken', data.token.refreshToken);
-        localStorage.setItem('isCouple', data.token.isCouple);
-        
-        // isCouple이 null인 경우 (추가 정보 입력 필요)
-        if (data.isCouple === null) {
-          navigate('/auth/additionalSignUp');
-          return;
-        }
+    if (data) {
+      console.log(data);
+      logout();
+      updateEmail(data.email);
 
-        // isCouple 값에 따라 적절한 페이지로 이동
-        localStorage.setItem('isCouple', data.isCouple);
-        navigate(data.isCouple ? '/couple' : '/solo');
-
-      } catch (error) {
-        const errorMessage = error.response?.data?.message || '서버 통신 중 오류가 발생했습니다.';
-        window.alert(errorMessage)
-        navigate('/auth', { state: { error: errorMessage } });
+      if (!data.token) {
+        navigate("/signup");
+        return;
       }
-    };
 
-    processKakaoLogin();
-  }, [navigate]);
+      localStorage.setItem("accessToken", data.token.accessToken);
+      localStorage.setItem("refreshToken", data.token.refreshToken);
+      updateUser(data.user);
+      updateIsAuthenticated(true);
+      updateIsCouple(data.relation);
 
-  if (isLoading) {
-    return <div>로그인 처리 중...</div>;
-  }
+      if (data.isCouple === null) {
+        navigate("/auth/additionalSignUp");
+        return;
+      }
+
+      navigate(data.isCouple ? "/couple" : "/solo");
+    }
+  }, [
+    data,
+    error,
+    isLoading,
+    navigate,
+    updateEmail,
+    updateUser,
+    updateIsAuthenticated,
+    updateIsCouple,
+    logout,
+  ]);
+
+
 
   return null;
 };

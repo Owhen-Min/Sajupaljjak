@@ -6,12 +6,16 @@ import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import CommunityFilterBubble from "../../components/CommunityFilterBubble";
 import ArticleList from "../../components/ArticleList";
+import { useInfiniteGet } from "../../hooks/useInfiniteGet";
 
 function Community() {
   const [selectedElement, setSelectedElement] = useState('전체');
   const [selectedPillar, setSelectedPillar] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteGet("/api/community", { type: "", query: "" });
+  if (isLoading) return <div>로딩중 ...</div>;
+  if (error) return <div>에러 : {error.message}</div>;
 
   return (
     <div className="community community-page h-screen flex flex-col">
@@ -38,9 +42,7 @@ function Community() {
           />
         </div>
         <ArticleList 
-          selectedElement={selectedElement}
-          selectedPillar={selectedPillar}
-          onArticleClick={(articleId) => navigate(`/community/${articleId}`)}
+          articles={data}
           className="pb-12"
         />
       </div>
