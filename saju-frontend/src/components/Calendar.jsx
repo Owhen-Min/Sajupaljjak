@@ -113,7 +113,7 @@ export const Calendar = ({ goodDates = [], badDates = [], className }) => {
             
             <div 
               className={`
-                h-10 w-10 flex items-center justify-center text-sm
+                h-8 w-8 flex items-center justify-center text-sm
                 cursor-pointer transition-all duration-200
                 hover:bg-gray-100 rounded-full
                 ${!currentMonth ? 'text-gray-300' : ''}

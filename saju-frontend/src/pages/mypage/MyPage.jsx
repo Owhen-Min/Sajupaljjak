@@ -3,15 +3,16 @@ import TopBar2 from "../../components/TopBar2";
 import UserCard from "../../components/UserCard";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { testUsers } from "../../data/user";
 
 
 function MyPage() {
-  const { user } = useAuth();
+  const user = testUsers[0];
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col relative h-screen pt-10">
       <TopBar2 mainText={"마이페이지"} />
       <div className="flex-1 overflow-y-auto p-6">
-        <UserCard user={user} className="mb-6" />
+        <UserCard user={user} disabled={true} className="mb-6"/>
         <nav className="py-4">
           <ul className="overflow-hidden rounded-lg bg-white shadow divide-y divide-gray-100">
             <li>
