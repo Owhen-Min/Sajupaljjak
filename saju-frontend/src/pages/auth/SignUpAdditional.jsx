@@ -24,7 +24,7 @@ function SignUpAdditional() {
         className="w-1/2 py-3 mt-3"
         onClick={() => {
           if (selected === '솔로') {navigate('/auth/preference')}
-          else if (selected === '커플') {navigate('/auth/coupleinvitation')}
+          else if (selected === '커플') {navigate('/couple/code')}
         }}
       >
         다음

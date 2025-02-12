@@ -66,7 +66,7 @@ function CommunityView() {
   const [comment, setComment] = useState("");
   
   return (
-    <div className="community community-view-page h-screen flex flex-col">
+    <div className="community community-view-page h-screen flex flex-col relative pt-12">
       <TopBar2 
         mainText={
           <span className="flex items-center justify-center">
@@ -75,7 +75,7 @@ function CommunityView() {
           </span>
         }
       />
-      <div className="flex-grow overflow-y-auto py-3 leading-8">
+      <div className="flex-grow overflow-y-auto py-3 leading-8 mt-2">
         <div className="article-detail px-4 pb-4">
           <div className="article-card bg-white p-4 rounded-lg shadow mb-4 py-2 pb-4">
             <span className="user-info items-center px-2 bg-yellow-100 rounded-lg text-black font-dokrip">익명의 {article.celestialStem}</span>

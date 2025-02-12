@@ -30,7 +30,7 @@ function MatchReport() {
     };
 
   return (
-    <div>
+    <div className="flex flex-col items-center relative h-screen pt-10">
       <TopBar2 />
       <div>
         <img src={user.profileImage} alt={`${user.name}'s profile`} />

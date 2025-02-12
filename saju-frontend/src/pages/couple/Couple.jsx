@@ -6,11 +6,11 @@ import SajuUserBubble from "../../components/SajuUserBubble";
 import MainButton from "../../components/MainButton";
 import { useState } from "react";
 import { Calendar } from "../../components/Calendar";
+import dayjs from "dayjs";
 
 function Couple() {
   const goodDates = ['2025-02-13', '2025-02-14']; // YYYY-MM-DD 형식
   const badDates = ['2025-02-22', '2025-02-23'];
-
   const data = [
     {
       member: {
@@ -32,13 +32,14 @@ function Couple() {
       startDate: "2024-01-01",
     },
   ];
-
+  const diffDays = dayjs().diff(dayjs(data[0].startDate), 'day');
+  
   return (
     <div className="pb-[60px] flex flex-col justify-center items-center">
       <TopBar />
       
         {data.map((couple, index) => (
-          <div key={index} className="w-4/5 my-3 bg-white rounded-md shadow-md py-5 flex justify-between items-center border-t border-gray-100">
+          <div key={index} className="w-11/12 my-3 bg-white rounded-md shadow-md py-5 flex justify-between items-center border-t border-gray-100">
             <div className="flex items-center w-1/5 justify-center">
               <div className="flex flex-col items-center text-center">
                 <SajuUserBubble skyElement={couple.member.memberType} size="small" />
@@ -61,7 +62,7 @@ function Couple() {
             </div>
 
             <div className="w-1/5 flex justify-center">
-              <Heart score={30} size="small" />
+              <Heart score={diffDays} size="small" />
             </div>
 
             <div className="w-1/5 flex justify-center">

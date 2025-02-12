@@ -16,7 +16,7 @@ export default function Heart({ score, size = "normal", ...props }) {
         {...props}
       />
 
-      <p className="font-bold text-white z-10">{score}</p>
+      <p className="font-bold text-white z-10 pb-1">{score}</p>
     </div>
   );
 }

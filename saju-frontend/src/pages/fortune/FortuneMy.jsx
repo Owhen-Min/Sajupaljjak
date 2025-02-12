@@ -44,7 +44,7 @@ function FortuneMy() {
   const elementCounts = calculateElementCounts();
 
   return (
-    <div className="fortune h-screen">
+    <div className="fortune flex flex-col items-center relative h-screen pt-10">
       <TopBar2
         url='/fortune'
         mainText="나의 사주"

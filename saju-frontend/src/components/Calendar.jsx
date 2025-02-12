@@ -23,7 +23,7 @@ const generateDate = (date) => {
   return arrayOfDate;
 };
 
-export const Calendar = ({ goodDates = [], badDates = [] }) => {
+export const Calendar = ({ goodDates = [], badDates = [], className }) => {
   const today = dayjs();
   const [date, setDate] = useState(today);
   const days = ["일", "월", "화", "수", "목", "금", "토"];
@@ -43,7 +43,7 @@ export const Calendar = ({ goodDates = [], badDates = [] }) => {
   };
 
   return (
-    <div className="w-full bg-white rounded-lg p-4 shadow">
+    <div className={`w-full bg-white rounded-lg p-4 shadow ${className}`}>
       {/* Calendar Header */}
       <div className="flex justify-between items-center mb-4">
         <button 
@@ -120,6 +120,7 @@ export const Calendar = ({ goodDates = [], badDates = [] }) => {
                 ${!isInRange ? 'opacity-50' : 'opacity-100'}
                 ${currentDate.day() === 0 ? 'text-red-500' : ''}
                 ${currentDate.day() === 6 ? 'text-blue-500' : 'text-gray-700'}
+                ${currentDate.isSame(today, 'day') ? 'bg-red-500 text-white hover:bg-red-300' : ''}
               `}
             >
               {currentDate.date()}
