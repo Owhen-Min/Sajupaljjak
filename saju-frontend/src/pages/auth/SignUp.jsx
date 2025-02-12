@@ -49,8 +49,8 @@ function SignUpPage() {
     email: "",
     name: "",
     gender: "",
-    birthDay: "",
-    birthTime: "",
+    bday: "",
+    bTime: "",
     birthTimeUnknown: false,
     religion: "",
     smoking: "",
@@ -58,16 +58,16 @@ function SignUpPage() {
     height: "170",
     cityCode: "",
     dongCode: "",
-    profileImage: "",
+    profileImg: "",
     nickname: "",
     introduction: "",
   });
   const [errors, setErrors] = useState({
     name: false,
     gender: false,
-    birthDay: false,
-    birthTime: false,
-    profileImage: false,
+    bday: false,
+    bTime: false,
+    profileImg: false,
     nickname: false,
     religion: false,
     smoking: false,
@@ -102,8 +102,8 @@ function SignUpPage() {
         setStep(2);
       } else if (
         step === 3 &&
-        ((updatedFormData.birthDay && updatedFormData.birthTime) ||
-          (updatedFormData.birthDay && updatedFormData.birthTimeUnknown))
+        ((updatedFormData.bday && updatedFormData.bTime) ||
+          (updatedFormData.bday && updatedFormData.birthTimeUnknown))
       ) {
         setStep(4);
       }
@@ -152,8 +152,8 @@ function SignUpPage() {
     const newErrors = {
       name: false,
       gender: false,
-      birthDay: false,
-      birthTime: false,
+      bday: false,
+      bTime: false,
       religion: false,
       smoking: false,
       drinking: false,
@@ -161,7 +161,7 @@ function SignUpPage() {
       location: false,
       nickname: false,
       introduction: false,
-      profileImage: false,
+      profileImg: false,
     };
 
     if (currentStep === 3) {
@@ -174,12 +174,12 @@ function SignUpPage() {
         isValid = false;
       }
       if (
-        !formData.birthDay ||
-        formData.birthDay.length !== 10 ||
+        !formData.bday ||
+        formData.bday.length !== 10 ||
         (!formData.birthTimeUnknown &&
-          (!formData.birthTime || formData.birthTime.length !== 5))
+          (!formData.bTime || formData.bTime.length !== 5))
       ) {
-        newErrors.birthDay = true;
+        newErrors.bday = true;
         isValid = false;
       }
     } else if (currentStep === 8) {
@@ -213,13 +213,13 @@ function SignUpPage() {
         newErrors.introduction = true;
         isValid = false;
       }
-      if (!formData.profileImage) {
-        newErrors.profileImage = true;
+      if (!formData.profileImg) {
+        newErrors.profileImg = true;
         isValid = false;
       }
     } else if (currentStep === 12) {
-      if (!formData.profileImage) {
-        newErrors.profileImage = true;
+      if (!formData.profileImg) {
+        newErrors.profileImg = true;
         isValid = false;
       }
       if (!formData.nickname) {
@@ -286,8 +286,8 @@ function SignUpPage() {
             <div className="flex items-center gap-2 mt-2">
               <Input
                 type="text"
-                name="birthDay"
-                value={formData.birthDay}
+                name="bday"
+                value={formData.bday}
                 onChange={(e) => {
                   let value = e.target.value.replace(/[^\d/]/g, "");
                   if (value.length > 10) return;
@@ -303,7 +303,7 @@ function SignUpPage() {
                   }
                   setFormData((prev) => ({
                     ...prev,
-                    birthDay: value,
+                    bday: value,
                   }));
                 }}
                 placeholder="2025-01-28"
@@ -313,8 +313,8 @@ function SignUpPage() {
               />
               <Input
                 type="text"
-                name="birthTime"
-                value={formData.birthTime}
+                name="bTime"
+                value={formData.bTime}
                 onChange={(e) => {
                   let value = e.target.value.replace(/[^\d:]/g, "");
                   if (value.length > 5) return;
@@ -328,7 +328,7 @@ function SignUpPage() {
 
                   setFormData((prev) => ({
                     ...prev,
-                    birthTime: value,
+                    bTime: value,
                   }));
                 }}
                 placeholder="18:00"
@@ -354,7 +354,7 @@ function SignUpPage() {
                 태어난 시간을 모릅니다
               </label>
             </div>
-            {errors.birthDay && (
+            {errors.bday && (
               <ErrorBubble>태어난 시간을 입력해주세요</ErrorBubble>
             )}
           </>
@@ -619,7 +619,7 @@ function SignUpPage() {
               <div className="flex flex-col w-full items-center">
                 <input
                   type="file"
-                  name="profileImage"
+                  name="profileImg"
                   accept="image/*"
                   onChange={(e) => {
                     const file = e.target.files[0];
@@ -628,7 +628,7 @@ function SignUpPage() {
                       reader.onloadend = () => {
                         setFormData((prev) => ({
                           ...prev,
-                          profileImage: reader.result,
+                          profileImg: reader.result,
                         }));
                       };
                       reader.readAsDataURL(file);
@@ -637,16 +637,16 @@ function SignUpPage() {
                     }
                   }}
                   className="hidden"
-                  id="profileImageInput"
+                  id="profileImgInput"
                 />
                 <label
-                  htmlFor="profileImageInput"
+                  htmlFor="profileImgInput"
                   className="flex flex-col items-center cursor-pointer w-full"
                 >
                   <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-full mb-4 flex items-center justify-center overflow-hidden hover:border-red-500 transition-colors">
-                    {formData.profileImage ? (
+                    {formData.profileImg ? (
                       <img
-                        src={formData.profileImage}
+                        src={formData.profileImg}
                         alt="프로필 미리보기"
                         className="w-full h-full object-cover"
                       />
@@ -658,7 +658,7 @@ function SignUpPage() {
                     사진 선택하기
                   </span>
                 </label>
-                {errors.profileImage && (
+                {errors.profileImg && (
                   <ErrorBubble>프로필 사진을 등록해주세요</ErrorBubble>
                 )}
               </div>
@@ -706,7 +706,7 @@ function SignUpPage() {
     setFormData((prev) => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      birthTime: isChecked ? "" : prev.birthTime,
+      bTime: isChecked ? "" : prev.bTime,
     }));
   };
 
