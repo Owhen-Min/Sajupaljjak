@@ -32,7 +32,6 @@ public class ChatMessage {
 
     private LocalDateTime sendTime;
 
-    @CreatedDate
     private String messageType;
 
     public ChatMessage(Long chatroomId, String content, Long senderId, LocalDateTime sendTime, String messageType) {
