@@ -1,4 +1,4 @@
-export const MainButton = ({ className, children, half, ...props }) => (
+export const MainButton = ({ className, children, bgColor = "666666", hoverColor = "525252", ...props }) => (
     <button
       className={`
         px-3

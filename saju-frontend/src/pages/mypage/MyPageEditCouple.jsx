@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { TopBar2 } from "../../components/TopBar2";
-import Calendar from "../../components/Calendar";
+import { Calendar } from "../../components/Calendar";
 import MainButton from "../../components/MainButton";
 
 function MyPageEditCouple() {
@@ -60,11 +60,11 @@ function MyPageEditCouple() {
 
         <div className="w-full max-w-md space-y-2 mt-4">
           <h3 className="text-lg font-bold text-center text-gray-700">만난 날짜 수정하기</h3>
-          <Calendar
+          {/* <Calendar
             disableFuture={true}
             onChange={(v) => setMeetDate(v)}
             value={meetDate}
-          />
+          /> */}
         </div>
 
         <MainButton 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import TopBar2 from '../../components/TopBar2';
-import { CustomCalendar } from '../../components/Calendar'
+// import { CustomCalendar } from '../../components/Calendar'
 import MainButton from '../../components/MainButton';
 
 
@@ -208,11 +208,11 @@ function CoupleInvitation() {
 
         <div className="w-full max-w-md space-y-2 mt-4">
           <h3 className="text-lg font-bold text-center text-gray-700">만나기 시작한 날</h3>
-          <CustomCalendar
+          {/* <CustomCalendar
             disableFuture={true}
             onChange={(v) => {setSelectedDate(v)}}
             value={selectedDate}
-          />
+          /> */}
         </div>
 
         <div className="w-full max-w-md space-y-2 mt-8">

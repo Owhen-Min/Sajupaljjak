@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const BottomNav = () => {
   return (
-    <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[400px] bg-white shadow-lg">
+    <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[400px] bg-white shadow-lg z-10">
       <div className="flex">
         <Link to="/solo" className="flex-1 flex flex-col items-center py-2">
           <svg

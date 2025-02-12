@@ -14,7 +14,7 @@ function Community() {
   const navigate = useNavigate();
 
   return (
-    <div className="community-page flex flex-col">
+    <div className="community community-page h-screen flex flex-col">
       <TopBar />
       <div className="flex-grow overflow-y-auto relative">
         <CommunityFilterBubble 
