@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/fortune")
 public class SajuController {
 
-    private SajuService sajuService;
-    private FortuneService fortuneService;
+    private final SajuService sajuService;
+    private final FortuneService fortuneService;
 
-    public SajuController(SajuService sajuService, FortuneService fortuneService) {
-        this.sajuService = sajuService;
-        this.fortuneService = fortuneService;
-    }
+//    public SajuController(SajuService sajuService, FortuneService fortuneService) {
+//        this.sajuService = sajuService;
+//        this.fortuneService = fortuneService;
+//    }
 
     // todo : memberId 토큰에서 꺼내기
 
@@ -32,7 +32,7 @@ public class SajuController {
     // 간단한 사주(운세) 조회 API (/api/saju)
     @GetMapping
     public ResponseEntity<SajuResponse> getDailySaju(Long memberId) {
-        SajuResponse response = sajuService.getDailySajuForMember(memberId);
+            SajuResponse response = sajuService.getDailySajuForMember(memberId);
         return ResponseEntity.ok(response);
     }
 

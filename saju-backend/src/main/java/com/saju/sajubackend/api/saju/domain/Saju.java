@@ -25,9 +25,8 @@ public class Saju {
     private Member member;
 
     // daily 값을 정수로 저장, 프론트에는 enum label(예, "기토") 전달
-    @Convert(converter = CelestialStemConverter.class)
-    @Column(name = "daily", nullable = false)
-    private CelestialStem daily;
+    @Column(name = "daily", nullable = false, length = 30)
+    private String daily;
 
     @Column(name = "monthly", nullable = false, length = 30)
     private String monthly;
@@ -39,7 +38,7 @@ public class Saju {
     private String timely;
 
     @Builder
-    private Saju(Long sajuId, Member member, CelestialStem daily, String monthly, String yearly, String timely) {
+    private Saju(Long sajuId, Member member, String daily, String monthly, String yearly, String timely) {
         this.sajuId = sajuId;
         this.member = member;
         this.daily = daily;

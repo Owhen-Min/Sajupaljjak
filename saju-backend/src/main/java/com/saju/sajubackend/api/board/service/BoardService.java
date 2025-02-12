@@ -60,7 +60,7 @@ public class BoardService {
         List<BoardListResponse.BoardSummary> content = boards.stream().map(board -> {
             // Saju 정보 조회: daily 필드의 label을 가져옴
             Optional<Saju> sajuOpt = sajuRepository.findByMember(board.getMember());
-            String celestialStemLabel = sajuOpt.map(saju -> saju.getDaily().getLabel()).orElse("");
+            String celestialStemLabel = sajuOpt.map(saju -> saju.getDaily()).orElse("");
 
             int commentCount = commentRepository.countByBoard(board);
             int likeCount = 0; // 좋아요 기능이 있다면 별도 조회
@@ -95,7 +95,7 @@ public class BoardService {
 
         Optional<Saju> sajuOpt = sajuRepository.findByMember(board.getMember());
         String celestialStem = sajuOpt
-                .map(saju -> saju.getDaily().getLabel())
+                .map(saju -> saju.getDaily())
                 .orElse("");
         int likeCount = 0;  // 좋아요 기능이 있다면 좋아요 수 조회
         boolean isLiked = false;  // currentMemberId와 좋아요 테이블을 활용해 여부 판단
@@ -116,7 +116,7 @@ public class BoardService {
                 board.getMember().getMemberId(),
                 board.getMainType().getLabel(),    // 예: "금"
                 board.getSubType().getLabel(),     // 예: "경금"
-                sajuOpt.map(saju -> saju.getDaily().getLabel()).orElse(""),  // 예: "기토"
+                sajuOpt.map(saju -> saju.getDaily()).orElse(""),  // 예: "기토"
                 board.getTitle(),
                 board.getContent(),
                 likeCount,
