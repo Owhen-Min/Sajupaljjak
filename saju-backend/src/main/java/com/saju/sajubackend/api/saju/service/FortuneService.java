@@ -13,6 +13,7 @@ import com.saju.sajubackend.api.saju.entity.SoloYear;
 import com.saju.sajubackend.api.saju.repository.*;
 import com.saju.sajubackend.common.enums.Gender;
 import com.saju.sajubackend.common.exception.ErrorMessage;
+import com.saju.sajubackend.common.exception.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,10 +37,10 @@ public class FortuneService {
     public SoloYearDto getNewYearFortune(Long memberId) {
         // Member 조회
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.MEMBER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
         // 해당 회원의 Saju 정보를 DB에서 조회
         Saju saju = sajuRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
         // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
         SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely().substring(saju.getTimely().length() - 1), saju.getDaily())
@@ -84,10 +85,10 @@ public class FortuneService {
     public SajuInfoDto getSajuInfo(Long memberId) {
         // Member 조회
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.MEMBER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
         // 해당 회원의 Saju 정보를 DB에서 조회
         Saju saju = sajuRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
         return new SajuInfoDto(
                 saju.getDaily(),
@@ -100,11 +101,11 @@ public class FortuneService {
     public CoupleYearDto getCoupleNewYearFortune(Long memberId) {
         // 1. 회원(Member) 조회
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.MEMBER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
 
         // 2. 회원의 사주(Saju) 조회
         Saju mySaju = sajuRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
         // 3. 커플(Couple) 정보 조회
         // 예시: 회원이 남성 혹은 여성으로 커플에 속할 수 있으므로 두 방식으로 조회합니다.
 
@@ -127,7 +128,7 @@ public class FortuneService {
         }
 
         Saju partnerSaju = sajuRepository.findByMember(partnerMember)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
         // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
         CoupleYear coupleYear = coupleYearRepository.findByMaleAndFemale(
@@ -152,11 +153,11 @@ public class FortuneService {
     public CoupleLifeDto getCoupleLifeTimeFortune(Long memberId) {
         // 1. 회원(Member) 조회
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.MEMBER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
 
         // 2. 회원의 사주(Saju) 조회
         Saju mySaju = sajuRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
         // 3. 커플(Couple) 정보 조회
         // 예시: 회원이 남성 혹은 여성으로 커플에 속할 수 있으므로 두 방식으로 조회합니다.
 
@@ -179,7 +180,7 @@ public class FortuneService {
         }
 
         Saju partnerSaju = sajuRepository.findByMember(partnerMember)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
         // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
         CoupleLife coupleLife = coupleLifeRepository.findByMaleAndFemale(
