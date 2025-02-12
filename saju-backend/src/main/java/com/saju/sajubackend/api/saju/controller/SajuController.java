@@ -32,14 +32,14 @@ public class SajuController {
     // 간단한 사주(운세) 조회 API (/api/saju)
     @GetMapping
     public ResponseEntity<SajuResponse> getDailySaju(Long memberId) {
-            SajuResponse response = sajuService.getDailySajuForMember(4L);
+            SajuResponse response = sajuService.getDailySajuForMember(memberId);
         return ResponseEntity.ok(response);
     }
 
     // 오늘의 상세 사주(운세) 조회 API (/api/saju/today)
     @GetMapping("/today")
     public ResponseEntity<SajuDetailResponse> getTodaySajuDetail(Long memberId) {
-        SajuDetailResponse response = sajuService.getTodaySajuDetailForMember(4L);
+        SajuDetailResponse response = sajuService.getTodaySajuDetailForMember(memberId);
         return ResponseEntity.ok(response);
     }
 
@@ -49,14 +49,14 @@ public class SajuController {
     @GetMapping("/new-year")
     public ResponseEntity<SoloYearDto> getNewYearFortune(
            Long memberId) {
-        SoloYearDto fortuneDto = fortuneService.getNewYearFortune(4L);
+        SoloYearDto fortuneDto = fortuneService.getNewYearFortune(memberId);
         return ResponseEntity.ok(fortuneDto);
     }
 
     @GetMapping("/lifetime")
     public ResponseEntity<SoloLifeDto> getLifeTimeFortune(
            Long memberId ) {
-        SoloLifeDto fortuneDto = fortuneService.getLifeTimeFortune(4L);
+        SoloLifeDto fortuneDto = fortuneService.getLifeTimeFortune(memberId);
         return ResponseEntity.ok(fortuneDto);
     }
 
