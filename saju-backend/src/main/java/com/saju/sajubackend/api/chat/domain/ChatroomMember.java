@@ -1,15 +1,7 @@
 package com.saju.sajubackend.api.chat.domain;
 
 import com.saju.sajubackend.api.member.domain.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,13 +29,11 @@ public class ChatroomMember {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "last_read_id", nullable = false)
-    private Message lastReadMessage;
+    @Column(name = "last_read_message")
+    private String lastReadMessage;
 
     @Builder
-    private ChatroomMember(Long chatroomMemberId, Member member, Chatroom chatroom, Boolean isActive,
-                          Message lastReadMessage) {
+    private ChatroomMember(Long chatroomMemberId, Member member, Chatroom chatroom, Boolean isActive, String lastReadMessage) {
         this.chatroomMemberId = chatroomMemberId;
         this.member = member;
         this.chatroom = chatroom;

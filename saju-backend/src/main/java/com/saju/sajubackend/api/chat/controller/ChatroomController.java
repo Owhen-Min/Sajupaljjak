@@ -19,7 +19,7 @@ public class ChatroomController {
 
     @PostMapping("/{partnerId}")
     public ResponseEntity<Map<String, Long>> createChatroom(@PathVariable Long partnerId,
-                                                            Long memberId) {
+                                                            Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
         return ResponseEntity.ok(chatroomService.getChatroom(memberId, partnerId));
     }
 }
