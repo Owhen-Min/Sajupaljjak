@@ -39,7 +39,7 @@ function ErrorBubble({ children }) {
 function SignUpPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const postMutation = usePost();
+  const postMutation = usePost;
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
 

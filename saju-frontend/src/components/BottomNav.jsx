@@ -106,7 +106,7 @@ const BottomNav = () => {
       
       }
 
-        <Link to="/chats" className="flex-1 flex flex-col items-center py-2">
+        {/* <Link to="/chats" className="flex-1 flex flex-col items-center py-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -122,7 +122,7 @@ const BottomNav = () => {
             />
           </svg>
           <span className="btm-nav-label text-xs">채팅</span>
-        </Link>
+        </Link> */}
       </div>
     </nav>
   );

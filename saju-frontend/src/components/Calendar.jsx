@@ -120,7 +120,7 @@ export const Calendar = ({ goodDates = [], badDates = [], className }) => {
                 ${!isInRange ? 'opacity-50' : 'opacity-100'}
                 ${currentDate.day() === 0 ? 'text-red-500' : ''}
                 ${currentDate.day() === 6 ? 'text-blue-500' : 'text-gray-700'}
-                ${currentDate.isSame(today, 'day') ? 'bg-red-500 text-white hover:bg-red-300' : ''}
+                ${currentDate.isSame(today, 'day') ? 'border-2 border-blue-500 text-black hover:bg-red-300' : ''}
               `}
             >
               {currentDate.date()}

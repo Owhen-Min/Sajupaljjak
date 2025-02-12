@@ -1,6 +1,6 @@
 import BottomNav from "../../components/BottomNav";
 import Heart from "../../components/Heart";
-import TopBar from "../../components/TopBar";
+import TopBar2 from "../../components/TopBar2";
 import FortuneButton from "../../components/FortuneButton";
 import SajuUserBubble from "../../components/SajuUserBubble";
 import MainButton from "../../components/MainButton";
@@ -9,7 +9,7 @@ import { Calendar } from "../../components/Calendar";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
-function Couple() {
+function CouplePlace() {
   const goodDates = ['2025-02-13', '2025-02-14']; // YYYY-MM-DD 형식
   const badDates = ['2025-02-12', '2025-02-23'];
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ function Couple() {
   
   return (
     <div className="pb-[60px] flex flex-col justify-center items-center">
-      <TopBar />
+      <TopBar2 mainText={"데이트 코스 추천"} />
       
         {data.map((couple, index) => (
           <div key={index} className="w-11/12 my-3 bg-white rounded-md shadow-md py-5 flex justify-between items-center border-t border-gray-100">
@@ -110,4 +110,4 @@ function Couple() {
   );
 }
 
-export default Couple;
+export default CouplePlace;
