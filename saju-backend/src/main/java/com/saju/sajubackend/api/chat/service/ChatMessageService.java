@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class ChatMessageService {
 
-    public Mono<ChatMessage> save(ChatMessage chatMessage) {
+    public Mono<ChatMessage> send(ChatMessage chatMessage) {
         return null;
     }
 }
