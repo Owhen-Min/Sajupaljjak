@@ -34,7 +34,7 @@ public class LackElementCalculator {
         return elementCount;
     }
 
-    public static Element findMostLackingElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
+    public static Element getMostLackElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
         Map<Element, Integer> totalCount = new EnumMap<>(Element.class);
         for (Element element : Element.values()) {
             totalCount.put(element, count1.get(element) + count2.get(element));
