@@ -16,7 +16,7 @@ const TopBar = () => {
   const title = getTitleFromPath(location.pathname);
 
   return (
-    <header className="w-full px-4 py-2 flex justify-between items-center bg-white border-b border-gray-200">
+    <header className="w-full px-4 py-2 flex justify-between items-center absolute top-0 left-0 bg-white border-b border-gray-200">
       <div>
         {/* <div className="text-2xl font-noto pl-1">{title}</div> */}
         <div className="text-3xl font-gapyeong pl-1">{title}</div>

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Calendar } from "../../components/Calendar";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
+import couplebg from "../../assets/couplebg.webp";
 
 function Couple() {
   const goodDates = ['2025-02-13', '2025-02-14']; // YYYY-MM-DD 형식
@@ -38,7 +39,8 @@ function Couple() {
   const diffDays = dayjs().diff(dayjs(data[0].startDate), 'day');
   
   return (
-    <div className="pb-[60px] flex flex-col justify-center items-center">
+    <div className="flex flex-col min-h-screen py-14 relative justify-center items-center bg-cover bg-center bg-no-repeat" 
+      style={{ backgroundImage: `url(${couplebg})` }}>
       <TopBar />
       
         {data.map((couple, index) => (
@@ -96,7 +98,7 @@ function Couple() {
         <FortuneButton content="커플 궁합" url="/couple/compatibility" size="small" />
         <MainButton 
         onClick={() => navigate('/couple/place')}
-        className="w-1/2 font-bold text-xl py-1 bg-[#f4cdd4] hover:bg-[#f0778c] border-2 border-red-500" 
+        className="w-1/3 font-bold text-xl py-2 bg-[#f4cdd4] hover:bg-[#f0778c] border-2 border-red-500" 
         children={<p className="font-gapyeong text-black hover:text-white">사주 기반<br/>데이트 추천</p>} 
         />
       </div>

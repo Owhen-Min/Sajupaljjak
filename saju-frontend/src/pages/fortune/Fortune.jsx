@@ -33,7 +33,7 @@ function Fortune() {
   ];
 
   return (
-    <div className="fortune flex flex-col h-screen items-center">
+    <div className="fortune flex relative pt-14 flex-col h-screen items-center">
       <TopBar />
       <div className="w-11/12 bg-white rounded-2xl p-5 pb-0 my-5 shadow-md bg-opacity-60">
         <div className="flex w-full text-lg bg-gray-50 rounded-full font-gapyeong border-2 border-black px-10 items-center text-center justify-center">
