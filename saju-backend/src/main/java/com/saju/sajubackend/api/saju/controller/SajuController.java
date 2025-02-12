@@ -1,9 +1,6 @@
 package com.saju.sajubackend.api.saju.controller;
 
-import com.saju.sajubackend.api.saju.dto.SajuDetailResponse;
-import com.saju.sajubackend.api.saju.dto.SajuResponse;
-import com.saju.sajubackend.api.saju.dto.SoloLifeDto;
-import com.saju.sajubackend.api.saju.dto.SoloYearDto;
+import com.saju.sajubackend.api.saju.dto.*;
 import com.saju.sajubackend.api.saju.service.FortuneService;
 import com.saju.sajubackend.api.saju.service.SajuService;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +54,24 @@ public class SajuController {
     public ResponseEntity<SoloLifeDto> getLifeTimeFortune(
            Long memberId ) {
         SoloLifeDto fortuneDto = fortuneService.getLifeTimeFortune(memberId);
+        return ResponseEntity.ok(fortuneDto);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<SajuInfoDto> getSajuInfo(Long memberId){
+        SajuInfoDto sajuInfoDto = fortuneService.getSajuInfo(4L);
+        return ResponseEntity.ok(sajuInfoDto);
+    }
+
+    @GetMapping("/couple-new-year")
+    public ResponseEntity<CoupleYearDto> getCoupleNewYearFortune(Long memberId){
+        CoupleYearDto fortuneDto = fortuneService.getCoupleNewYearFortune(memberId);
+        return ResponseEntity.ok(fortuneDto);
+    }
+
+    @GetMapping("/couple-lifetime")
+    public ResponseEntity<CoupleLifeDto> getCoupleLifeTimeFortune(Long memberId){
+        CoupleLifeDto fortuneDto = fortuneService.getCoupleLifeTimeFortune(memberId);
         return ResponseEntity.ok(fortuneDto);
     }
 
