@@ -1,22 +1,25 @@
 package com.saju.sajubackend.common.config;
 
-import com.saju.sajubackend.common.websocket.ChatWebSocketHandler;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 @Configuration
-@EnableWebSocket
-@RequiredArgsConstructor
-public class WebSocketConfig implements WebSocketConfigurer {
-
-    private final ChatWebSocketHandler chatWebSocketHandler;
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(chatWebSocketHandler, "/ws/chats")
-                .setAllowedOrigins("*"); // CORS 설정
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws") // 연결 엔드포인트
+                .setAllowedOrigins("*") // CORS 설정
+                .withSockJS(); // WebSocket을 지원하지 않는 환경 대비(나중에 프론트에서도 설정 필요)
+    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/topic"); // 백엔드 -> 프론트 주소
+        registry.setApplicationDestinationPrefixes("/app"); // 프론트 -> 백엔드 주소
     }
 }
