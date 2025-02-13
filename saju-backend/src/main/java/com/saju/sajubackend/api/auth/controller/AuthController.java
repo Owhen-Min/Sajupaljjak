@@ -10,12 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-//@RequestMapping("/api/auth")
-//@RestController
-
-@RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@RestController
 public class AuthController {
 
     private final KakaoAuthService kakaoAuthService;

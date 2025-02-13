@@ -1,6 +1,5 @@
 package com.saju.sajubackend.api.auth.service;
 
-import com.saju.sajubackend.api.auth.dto.KakaoUserResponse;
 import com.saju.sajubackend.api.auth.dto.LoginResponse;
 import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.member.domain.Member;
@@ -9,7 +8,6 @@ import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.member.repository.MemberSocialRepository;
 import com.saju.sajubackend.api.saju.domain.Saju;
 import com.saju.sajubackend.api.saju.repository.SajuRepository;
-import com.saju.sajubackend.api.token.RefreshToken;
 import com.saju.sajubackend.common.enums.*;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
@@ -18,7 +16,6 @@ import com.saju.sajubackend.common.jwt.JwtProvider;
 import com.saju.sajubackend.common.util.CelestialStemCalculator;
 import com.saju.sajubackend.common.util.FourPillarsCalculator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -36,45 +32,32 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final MemberSocialRepository memberSocialRepository;
     private final SajuRepository sajuRepository;
-    private final RefreshTokenService refreshTokenService;
-    private final AccessTokenRedisService accessTokenRedisService;
 
     @Transactional
-    public LoginResponse login(KakaoUserResponse kakaoUserResponse) {
-        String email = kakaoUserResponse.getKakao_account().getEmail();
-        log.info("🔎 [로그인 요청] 카카오 이메일: {}", email);
-
+    public LoginResponse login(String email) {
         // 이메일로 회원 조회
         Optional<Member> optionalMember = memberSocialRepository.findMemberByEmail(email);
 
         // 회원가입 안되어 있는 경우
         if (optionalMember.isEmpty()) {
-            log.warn("❌ [로그인 실패] 이메일 '{}'로 가입된 회원 없음", email);
             return LoginResponse.ofFailure(email);
         }
 
         Member member = optionalMember.get();
-        log.info("✅ [로그인 성공] 회원 정보: {}", member);
 
         // JWT 토큰 생성
         String accessToken = jwtProvider.createAccessToken(member.getMemberId());
         String refreshToken = jwtProvider.createRefreshToken(member.getMemberId());
+        LoginResponse.TokenInfo tokenInfo = new LoginResponse.TokenInfo(accessToken, refreshToken);
 
-
-        // 액세스 토큰을 Redis에 저장 (유효기간 설정 필요)
-        accessTokenRedisService.saveAccessToken(member.getMemberId(), accessToken, jwtProvider.getAccessTokenExpirationTime());
-
-        // 리프레시 토큰을 DB에 저장
-        refreshTokenService.saveRefreshToken(member, refreshToken);
-
-//        String name = "나중에";
+        String name = "나중에";
         return LoginResponse.ofSuccess(member.getNickname(),
                 member.getProfileImg(),
                 member.getCityCode(),
                 member.getReligion(),
                 member.getAge(),
                 member.getIntro(),
-                new LoginResponse.TokenInfo(accessToken,refreshToken));
+                tokenInfo);
     }
 
     @Transactional
@@ -93,15 +76,7 @@ public class AuthService {
         long userId = jwtProvider.getUserIdFromToken(refreshToken);
 
         // 새로운 AccessToken 발급
-        Optional<RefreshToken> storedToken = refreshTokenService.getRefreshToken(userId);
-        if (storedToken.isEmpty() || !storedToken.get().getRefreshToken().equals(refreshToken)) {
-            throw new UnAuthorizedException(ErrorMessage.INVALID_REFRESH_TOKEN);
-        }
-
-        String newAccessToken = jwtProvider.createAccessToken(userId);
-        accessTokenRedisService.saveAccessToken(userId, newAccessToken, jwtProvider.getAccessTokenExpirationTime());
-
-        return newAccessToken;
+        return jwtProvider.createAccessToken(userId);
     }
 
     public boolean isExistingMember(String email) {

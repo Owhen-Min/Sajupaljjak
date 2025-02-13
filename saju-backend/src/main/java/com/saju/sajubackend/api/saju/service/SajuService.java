@@ -39,19 +39,7 @@ public class SajuService {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-<<<<<<< HEAD
     @Value("${openai.api-key}")
-=======
-//    @Autowired
-//    public SajuService (RedisTemplate<String, Object> redisTemplate,SajuRepository sajuRepository,MemberRepository memberRepository){
-//        this.redisTemplate = redisTemplate;
-//        this.sajuRepository = sajuRepository;
-//        this.memberRepository = memberRepository;
-//    }
-
-//    @Value("${openai.api-key}")
-    @Value("123")
->>>>>>> feat/#23-members
     private String openAiApiKey;
     private static final String MODEL = "gpt-4o-mini";
 
