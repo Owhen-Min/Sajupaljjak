@@ -10,7 +10,7 @@ function ChatsRoutes() {
       <Route path="/" element={<Chats />} />
       <Route path="random" element={<ChatRandom />} />
       <Route path=":chatId" element={<Chat />} />
-      <Route path=":chatId/video" element={<ChatVideo />} />
+      {/* <Route path=":chatId/video" element={<ChatVideo />} /> */}
     </Routes>
   );
 }

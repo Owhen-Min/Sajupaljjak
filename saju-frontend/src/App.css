@@ -1,12 +1,3 @@
-.onboarding {
-  padding-top: 10vh;
-  padding-bottom: 20vh;
-}
-
-.onboarding img {
-  width: 100%;
-  height: auto;
-} 
 
 .login {
   padding-top: 10vh;
@@ -16,10 +7,6 @@
   height: auto;
   margin-bottom: 20vh;
 } 
-
-.onboarding {
-  text-align: center;
-}
 
 h2 {
   margin-bottom: 10px;

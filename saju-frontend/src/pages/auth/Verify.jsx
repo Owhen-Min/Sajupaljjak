@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 const Verify = () => {
   const navigate = useNavigate();
   const {
+    updateMemberId,
     updateEmail,
     updateIsCouple,
     updateUser,
@@ -41,6 +42,9 @@ const Verify = () => {
 
       localStorage.setItem("accessToken", data.token.accessToken);
       localStorage.setItem("refreshToken", data.token.refreshToken);
+      localStorage.setItem("memberId", data.memberId);
+      
+      updateMemberId(data.memberId);
       updateUser(data.user);
       updateIsAuthenticated(true);
       updateIsCouple(data.relation);
@@ -57,6 +61,7 @@ const Verify = () => {
     error,
     isLoading,
     navigate,
+    updateMemberId,
     updateEmail,
     updateUser,
     updateIsAuthenticated,

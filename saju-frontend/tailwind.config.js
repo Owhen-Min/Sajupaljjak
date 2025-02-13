@@ -8,10 +8,15 @@ export default {
           '0%': { opacity: '0' },
           '50%': { opacity: '1' },
           '100%': { opacity: '0' }
+        },
+        'slide-up': {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' }
         }
       },
       animation: {
-        'fade-in-out': 'fade-in-out 2s ease-in-out'
+        'fade-in-out': 'fade-in-out 2s ease-in-out',
+        'slide-up': 'slide-up 0.3s ease-out'
       }
     },
   },

@@ -10,43 +10,241 @@ function Chats() {
 
   const data = [
     {
-      chatRoomId: 1,
-      partner: {
-        id: 2,
-        nickname: "hong",
-        name: "홍길동",
-        profileImage: "imgUrl~",
-        celestialStem: "무토",
-        age: 21,
+      "36": { 
+        "chatRoom": {
+          "id": 36,
+          "partner": {
+            "id": 2,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "무토",
+          },
+        },
+        "message": {
+          "lastMessage": "집에 가고 싶어요",
+          "lastSendTime": "2025-02-13T12:12:32", 
+          "newMessageCount":5,
+        },
       },
-      message: {
-        lastMessage: "제발좀읽으세요",
-        lastSendTime: "2023-08-22T15:14:32", // 프론트가 편한 형식으로 변경
-        newMessageCount: 12,
+      "25": { 
+        "chatRoom": {
+          "id": 25,
+          "partner": {
+            "id": 5,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "신금",
+          },
+        },
+        "message": {
+          "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+          "lastSendTime": "2025-02-13T12:12:32",
+          "newMessageCount": 12,
+        },
       },
-    },
-    {
-      chatRoomId: 2,
-      partner: {
-        id: 4,
-        nickname: "kim",
-        name: "이종문",
-        profileImage: "imgUrl~",
-        celestialStem: "무토",
-        age: 21,
+       "276": { 
+        "chatRoom": {
+          "id": 276,
+          "partner": {
+            "id": 2,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "무토",
+          },
+        },
+        "message": {
+          "lastMessage": "집에 가고 싶어요",
+          "lastSendTime": "2025-02-13T12:12:32", 
+          "newMessageCount": 7,
+        },
       },
-      message: {
-        lastMessage: "두번째",
-        lastSendTime: "2023-08-22T14:14:32",
-        newMessageCount: 12,
+      "5": { 
+        "chatRoom": {
+          "id": 5,
+          "partner": {
+            "id": 5,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "신금",
+          },
+        },
+        "message": {
+          "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+          "lastSendTime": "2025-02-13T12:12:32",
+          "newMessageCount": 6,
+        },
+      },
+ 
+      "16": { 
+        "chatRoom": {
+          "id": 16,
+          "partner": {
+            "id": 2,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "무토",
+          },
+        },
+        "message": {
+          "lastMessage": "집에 가고 싶어요",
+          "lastSendTime": "2025-02-13T14:12:32", 
+          "newMessageCount": 2,
+        },
+      },
+      "17": { 
+        "chatRoom": {
+          "id": 17,
+          "partner": {
+            "id": 5,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "신금",
+          },
+        },
+        "message": {
+          "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+          "lastSendTime": "2025-02-13T12:12:32",
+          "newMessageCount": 0,
+        },
+      },
+
+      "18": { 
+        "chatRoom": {
+          "id": 18,
+          "partner": {
+            "id": 2,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "무토",
+          },
+        },
+        "message": {
+          "lastMessage": "집에 가고 싶어요",
+          "lastSendTime": "2025-02-13T12:12:32", 
+          "newMessageCount": 0,
+        },
+      },
+      "19": { 
+        "chatRoom": {
+          "id": 19,
+          "partner": {
+            "id": 5,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "신금",
+          },
+        },
+        "message": {
+          "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+          "lastSendTime": "2025-02-13T12:12:32",
+          "newMessageCount": 0,
+        },
+      },
+      "20": { 
+        "chatRoom": {
+          "id": 20,
+          "partner": {
+            "id": 2,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "무토",
+          },
+        },
+        "message": {
+          "lastMessage": "집에 가고 싶어요",
+          "lastSendTime": "2025-02-13T12:12:32", 
+          "newMessageCount": 0,
+        },
+      },
+      "21": { 
+        "chatRoom": {
+          "id": 21,
+          "partner": {
+            "id": 5,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "신금",
+          },
+        },
+        "message": {
+          "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+          "lastSendTime": "2025-02-13T12:12:32",
+          "newMessageCount": 0,
+        },
+      },
+      "22": { 
+        "chatRoom": {
+          "id": 22,
+          "partner": {
+            "id": 2,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "무토",
+          },
+        },
+        "message": {
+          "lastMessage": "집에 가고 싶어요",
+          "lastSendTime": "2025-02-13T12:12:32", 
+          "newMessageCount": 0,
+        },
+      },
+      "23": { 
+        "chatRoom": {
+          "id": 23,
+          "partner": {
+            "id": 5,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "신금",
+          },
+        },
+        "message": {
+          "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+          "lastSendTime": "2025-02-13T12:12:32",
+          "newMessageCount": 0,
+        },
+      },
+      "24": { 
+        "chatRoom": {
+          "id": 24,
+          "partner": {
+            "id": 2,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "무토",
+          },
+        },
+        "message": {
+          "lastMessage": "집에 가고 싶어요",
+          "lastSendTime": "2025-02-13T12:12:32", 
+          "newMessageCount": 0,
+        },
+      },
+      "27": { 
+        "chatRoom": {
+          "id": 27,
+          "partner": {
+            "id": 5,
+            "nickname": "hong",
+            "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+            "celestialStem": "신금",
+          },
+        },
+        "message": {
+          "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+          "lastSendTime": "2025-02-13T12:12:32",
+          "newMessageCount": 0,
+        },
       },
     },
   ];
 
   return (
-    <div>
+    <div className="flex flex-col h-screen relative py-[56.5px]">
       <TopBar />
-      <ChatList chats={data} />
+      <div className="flex-grow overflow-y-auto scrollbar-hidden">
+        <ChatList chats={data} />
+      </div>
       <BottomNav />
     </div>
   );
