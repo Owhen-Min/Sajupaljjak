@@ -1,4 +1,4 @@
-import { TopBar2 } from "../../components/TopBar2";
+import {TopBar2} from "../../components/TopBar2";
 import Input from "../../components/Input";
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from "react";
