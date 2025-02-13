@@ -3,6 +3,7 @@ package com.saju.sajubackend.common.jwt;
 import java.io.IOException;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class jwtFilter extends OncePerRequestFilter {
@@ -32,33 +34,50 @@ public class jwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (request.getMethod().toUpperCase().equals("OPTIONS")) { // OPTIONS 메서드는 안전하므로 별도의 인증 필요 없음 (필터 종료)
-            response.setStatus(HttpStatus.OK.value());
+        String requestURI = request.getRequestURI();
+        String method = request.getMethod();
+        log.info("🛠 [JWT 필터] 요청 URI: {} | METHOD: {}", requestURI, method);
 
-            // CORS 헤더 추가
-            response.setHeader("Access-Control-Allow-Origin", "*"); // 모든 출처 허용 (혹은 특정 출처만 허용)
+        if (method.equalsIgnoreCase("OPTIONS")) {
+            log.info("✅ [CORS OPTIONS 요청] 필터를 건너뜀");
+            response.setStatus(HttpStatus.OK.value());
+            response.setHeader("Access-Control-Allow-Origin", "*");
             response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With");
-
             return;
         }
-
-        String requestURI = request.getRequestURI();
 
         // 예외 URL에 해당하면 필터를 건너뜀
         if (EXCLUDE_URLS.contains(requestURI)) {
+            log.info("✅ [예외 URL 요청] 필터를 건너뜀: {}", requestURI);
             filterChain.doFilter(request, response);
             return;
         }
+        String authorizationHeader = request.getHeader("Authorization");
+        log.info("🔍 [JWT 필터] Authorization Header: {}", authorizationHeader);
 
         try {
             String accessToken = getJwtFromRequest(request);
 
-            if (accessToken != null && jwtProvider.validateToken(accessToken)) {
-                request.setAttribute("memberId", jwtProvider.getUserIdFromToken(accessToken));
+            if (accessToken == null) {
+                log.warn("❌ [JWT 필터] Authorization 헤더 없음! 요청 URI: {}", requestURI);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
+            log.info("🔑 [JWT 필터] 추출된 Access Token: {}", accessToken);
+
+            if (jwtProvider.validateToken(accessToken)) {
+                Long memberId = jwtProvider.getUserIdFromToken(accessToken);
+                request.setAttribute("memberId", memberId);
+                log.info("✅ [JWT 인증 성공] memberId: {}", memberId);
+            } else {
+                log.warn("❌ [JWT 인증 실패] 유효하지 않은 토큰! 요청 URI: {}", requestURI);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
         } catch (Exception e) {
-            System.err.println("Authentication error: " + e.getMessage());
+            log.error("❌ [JWT 필터] 인증 오류: {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
