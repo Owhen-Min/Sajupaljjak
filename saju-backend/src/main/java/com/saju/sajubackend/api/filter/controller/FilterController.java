@@ -36,17 +36,30 @@ public class FilterController {
     }
 
     private Long extractMemberIdFromToken(HttpServletRequest request) {
+        System.out.println("==== Request Headers ====");
+        request.getHeaderNames().asIterator()
+                .forEachRemaining(header -> System.out.println(header + ": " + request.getHeader(header)));
+
         String token = request.getHeader("Authorization");
+        System.out.println("🔹 Received Token: " + token);
+
         if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7); // "Bearer " 제거
+            token = token.substring(7);
+            System.out.println("🔹 Extracted Token: " + token);
         } else {
+            System.out.println("🚨 JWT 토큰이 요청에서 누락됨!");
             throw new RuntimeException("JWT 토큰이 필요합니다.");
         }
 
         if (!jwtProvider.validateToken(token)) {
+            System.out.println("❌ 유효하지 않은 JWT 토큰: " + token);
             throw new RuntimeException("유효하지 않은 JWT 토큰입니다.");
         }
 
-        return jwtProvider.getUserIdFromToken(token);
+        Long userId = jwtProvider.getUserIdFromToken(token);
+        System.out.println("✅ Extracted User ID from Token: " + userId);
+
+        return userId;
     }
+
 }

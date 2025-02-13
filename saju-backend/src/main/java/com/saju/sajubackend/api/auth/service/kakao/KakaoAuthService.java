@@ -23,14 +23,15 @@ public class KakaoAuthService {
     @Value("${oauth.kakao.client-id}")
     private String clientId;
 
-    @Value("${oauth.kakao.redirect-uri}")
+    @Value("http://localhost:8080/api/auth/login/kakao")
     private String redirectUri;
 
     public LoginResponse socialLogin(String code) {
         // 1. 인가코드로 액세스 토큰 요청
         KakaoTokenResponse tokenResponse = getKakaoAccessToken(code);
 
-        System.out.println(tokenResponse.getAccess_token());
+
+        System.out.println("::::::::::::::::::::::::::::::::::::::"+tokenResponse.getAccess_token());
 
         // 2. 액세스 토큰으로 카카오 사용자 정보 요청
         KakaoUserResponse userInfo = getKakaoUserInfo(tokenResponse.getAccess_token());
