@@ -41,6 +41,7 @@ const Verify = () => {
 
       localStorage.setItem("accessToken", data.token.accessToken);
       localStorage.setItem("refreshToken", data.token.refreshToken);
+      // localStorage.setItem("memberId", data.token.accessToken);
       updateUser(data.user);
       updateIsAuthenticated(true);
       updateIsCouple(data.relation);
