@@ -2,6 +2,7 @@ package com.saju.sajubackend.api.chat.service;
 
 import com.saju.sajubackend.api.chat.domain.Chatroom;
 import com.saju.sajubackend.api.chat.domain.ChatroomMember;
+import com.saju.sajubackend.api.chat.dto.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.repository.ChatroomMemberRespository;
 import com.saju.sajubackend.api.chat.repository.ChatroomQueryDslRepository;
 import com.saju.sajubackend.api.chat.repository.ChatroomRepository;
@@ -26,25 +27,23 @@ public class ChatroomService {
     private final ChatroomMemberRespository chatroomMemberRespository;
     private final MemberRepository memberRepository;
 
-    private final String JSON_PROPERTY = "chatRoomId";
-
     @Transactional
-    public Map<String, Long> getChatroom(Long memberId, Long partnerId) {
+    public ChatroomResponseDto getChatroom(Long memberId, Long partnerId) {
         // 1. 채팅방이 존재하는지 확인
         Long chatroomId = chatroomQueryDslRepository.findChatroom(memberId, partnerId);
-
-        if (Objects.nonNull(chatroomId)) return Map.of(JSON_PROPERTY, chatroomId);
-
-        // 2. 채팅방 생성
         Member loginMember = findMember(memberId);
         Member matchingMember = findMember(partnerId);
 
-        Chatroom chatroom = saveChatroom(loginMember, matchingMember); // 채팅방 생성
+        // 2. 채팅방 생성
+        if (Objects.isNull(chatroomId)) {
+            Chatroom chatroom = saveChatroom(loginMember, matchingMember); // 채팅방 생성
+            chatroomId = chatroom.getChatroomId();
 
-        saveChatroomMember(loginMember, chatroom); // 채팅방 멤버 생성
-        saveChatroomMember(matchingMember, chatroom);
+            saveChatroomMember(loginMember, chatroom); // 채팅방 멤버 생성
+            saveChatroomMember(matchingMember, chatroom);
+        }
 
-        return Map.of(JSON_PROPERTY, chatroom.getChatroomId());
+        return ChatroomResponseDto.fromEntity(chatroomId, loginMember, matchingMember);
     }
 
     private void saveChatroomMember(Member member, Chatroom chatroom) {

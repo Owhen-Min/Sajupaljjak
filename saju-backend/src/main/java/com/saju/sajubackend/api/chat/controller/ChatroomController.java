@@ -1,5 +1,6 @@
 package com.saju.sajubackend.api.chat.controller;
 
+import com.saju.sajubackend.api.chat.dto.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.service.ChatroomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,8 @@ public class ChatroomController {
     private final ChatroomService chatroomService;
 
     @PostMapping("/{partnerId}")
-    public ResponseEntity<Map<String, Long>> createChatroom(@PathVariable Long partnerId,
-                                                            Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
+    public ResponseEntity<ChatroomResponseDto> createChatroom(@PathVariable Long partnerId,
+                                                              Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
         return ResponseEntity.ok(chatroomService.getChatroom(memberId, partnerId));
     }
 }
