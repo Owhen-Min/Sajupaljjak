@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://i12a408.p.ssafy.io/',
-  // baseURL: 'http://localhost:8080/',
+  // baseURL: 'https://i12a408.p.ssafy.io/',
+  baseURL: 'http://localhost:8080/',
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",

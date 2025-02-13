@@ -669,14 +669,12 @@ function SignUpPage() {
     );
   };
 
-  const handleSubmit = () => {
-    // 나중에 백이랑 소통할 때 추가
-    if (validateStep(step)) {
-      console.log("제출된 데이터:", formData);
-      postMutation("api/auth/signup", formData);
-    }
-    navigate("/auth/Welcome");
-  };
+const handleSubmit = () => {
+  if (validateStep(step)) {
+    postMutation.mutate({ uri: "api/auth/signup", payload: formData });
+  }
+  navigate("/auth/Welcome");
+};
 
   const handleNextStep = () => {
     if (step < 9) {
