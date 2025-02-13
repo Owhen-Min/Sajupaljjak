@@ -43,13 +43,13 @@ public enum CelestialStem {
         throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CELESTIAL_STEM_LABEL);
     }
 
-    public static Element getElementByStem(String stemLabel) {
+    public static Element getElementByStem(char stemLabel) {
         return switch (stemLabel) {
-            case "갑", "을" -> Element.WOOD;
-            case "병", "정" -> Element.FIRE;
-            case "무", "기" -> Element.EARTH;
-            case "경", "신" -> Element.METAL;
-            case "임", "계" -> Element.WATER;
+            case '갑', '을' -> Element.WOOD;
+            case '병', '정' -> Element.FIRE;
+            case '무', '기' -> Element.EARTH;
+            case '경', '신' -> Element.METAL;
+            case '임', '계' -> Element.WATER;
             default -> throw new BadRequestException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL);
         };
     }

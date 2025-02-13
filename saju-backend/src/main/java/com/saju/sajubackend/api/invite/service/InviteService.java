@@ -7,15 +7,15 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.saju.domain.Saju;
 import com.saju.sajubackend.api.saju.repository.SajuRepository;
-import com.saju.sajubackend.common.enums.Element;
 import com.saju.sajubackend.common.enums.Gender;
 import com.saju.sajubackend.common.enums.RelationshipStatus;
 import com.saju.sajubackend.common.exception.BadRequestException;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
+import com.saju.sajubackend.common.util.ElementCalculator;
+import com.saju.sajubackend.common.util.ElementInfo;
 import com.saju.sajubackend.common.util.InviteRedisUtil;
-import com.saju.sajubackend.common.util.LackElementCalculator;
 import com.saju.sajubackend.common.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,13 +61,14 @@ public class InviteService {
             throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_GENDER_COMBINATION);
         }
 
-        Element lackElement = getLackElement(inviter, joiner);
+        ElementInfo lackAndPlenty = getLackAndPlentyElement(inviter, joiner);
 
         Couple couple = Couple.builder()
                 .coupleMale(inviter.getGender() == Gender.MALE ? inviter : joiner)
                 .coupleFemale(inviter.getGender() == Gender.FEMALE ? inviter : joiner)
                 .startDate(startDate)
-                .lackElement(lackElement)
+                .lackElement(lackAndPlenty.lack())
+                .plentyElement(lackAndPlenty.plenty())
                 .build();
 
         inviter.updateRelationship(RelationshipStatus.COUPLE);
@@ -83,7 +84,7 @@ public class InviteService {
                 (inviter.getGender() == Gender.FEMALE && joiner.getGender() == Gender.MALE);
     }
 
-    private Element getLackElement(Member inviter, Member joiner) {
+    private ElementInfo getLackAndPlentyElement(Member inviter, Member joiner) {
         Saju inviterSaju = sajuRepository.findByMember(inviter)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.SAJU_NOT_FOUND));
         Saju joinerSaju = sajuRepository.findByMember(joiner)
@@ -92,10 +93,10 @@ public class InviteService {
         List<String> inviterSajuList = extractSajuElements(inviterSaju);
         List<String> joinerSajuList = extractSajuElements(joinerSaju);
 
-        Element lackElement = LackElementCalculator.getLackElement(
-                LackElementCalculator.calculateElementCount(inviterSajuList),
-                LackElementCalculator.calculateElementCount(joinerSajuList));
-        return lackElement;
+        ElementInfo elementInfo = ElementCalculator.getLackAndPlentyElement(
+                ElementCalculator.calculateElementCount(inviterSajuList),
+                ElementCalculator.calculateElementCount(joinerSajuList));
+        return elementInfo;
     }
 
     private List<String> extractSajuElements(Saju saju) {

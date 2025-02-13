@@ -3,12 +3,15 @@ package com.saju.sajubackend.common.util;
 import com.saju.sajubackend.common.enums.CelestialStem;
 import com.saju.sajubackend.common.enums.Element;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-public class LackElementCalculator {
+public class ElementCalculator {
     public static Map<Element, Integer> calculateElementCount(List<String> saju) {
         Map<Element, Integer> elementCount = new EnumMap<>(Element.class);
         for (Element element : Element.values()) {
@@ -16,15 +19,13 @@ public class LackElementCalculator {
         }
         for (String part : saju) {
             if (part == null || part.length() != 2) continue;
-            String stem = part.substring(0, 1);
-            String branch = part.substring(1, 2);
 
-            Element stemElement = CelestialStem.getElementByStem(stem);
+            Element stemElement = CelestialStem.getElementByStem(part.charAt(0));
             if (stemElement != null) {
                 elementCount.put(stemElement, elementCount.getOrDefault(stemElement, 0) + 1);
             }
 
-            List<Element> branchElements = getElementsByBranch(branch.charAt(0));
+            List<Element> branchElements = getElementsByBranch(part.charAt(1));
             if (branchElements != null) {
                 for (Element element : branchElements) {
                     elementCount.put(element, elementCount.getOrDefault(element, 0) + 1);
@@ -34,20 +35,14 @@ public class LackElementCalculator {
         return elementCount;
     }
 
-    public static Element getLackElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
+    public static ElementInfo getLackAndPlentyElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
         Map<Element, Integer> totalCount = new EnumMap<>(Element.class);
         for (Element element : Element.values()) {
             totalCount.put(element, count1.get(element) + count2.get(element));
         }
-        return Collections.min(totalCount.entrySet(), Map.Entry.comparingByValue()).getKey();
-    }
-
-    public static Element getPlentyElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
-        Map<Element, Integer> totalCount = new EnumMap<>(Element.class);
-        for (Element element : Element.values()) {
-            totalCount.put(element, count1.get(element) + count2.get(element));
-        }
-        return Collections.max(totalCount.entrySet(), Map.Entry.comparingByValue()).getKey();
+        return new ElementInfo(
+                Collections.min(totalCount.entrySet(), Map.Entry.comparingByValue()).getKey(),
+                Collections.max(totalCount.entrySet(), Map.Entry.comparingByValue()).getKey());
     }
 
     public static List<Element> getElementsByBranch(char branch) {
@@ -66,5 +61,15 @@ public class LackElementCalculator {
             case '해' -> List.of(Element.WATER, Element.WOOD);
             default -> Collections.emptyList();
         };
+    }
+
+    public static List<Element> getDayElements(LocalDate date) {
+        String dayPillar = FourPillarsCalculator.calculateDayPillar(LocalDateTime.of(date, LocalTime.MIDNIGHT));
+
+        Element elementByStem = CelestialStem.getElementByStem(dayPillar.charAt(0));
+        List<Element> elementsByBranch = ElementCalculator.getElementsByBranch(dayPillar.charAt(1));
+
+        elementsByBranch.add(elementByStem);
+        return elementsByBranch;
     }
 }

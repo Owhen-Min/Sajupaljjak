@@ -38,12 +38,17 @@ public class Couple extends BaseTimeEntity {
     @Column(name = "lack_element")
     private Element lackElement;
 
+    @Convert(converter = ElementConverter.class)
+    @Column(name = "plenty_element")
+    private Element plentyElement;
+
     @Builder
-    private Couple(Long coupleId, Member coupleMale, Member coupleFemale, LocalDateTime startDate, Element lackElement) {
+    private Couple(Long coupleId, Member coupleMale, Member coupleFemale, LocalDateTime startDate, Element lackElement, Element plentyElement) {
         this.coupleId = coupleId;
         this.coupleMale = coupleMale;
         this.coupleFemale = coupleFemale;
         this.startDate = startDate;
         this.lackElement = lackElement;
+        this.plentyElement = plentyElement;
     }
 }
