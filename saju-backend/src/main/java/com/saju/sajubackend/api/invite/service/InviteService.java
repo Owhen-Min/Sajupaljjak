@@ -92,7 +92,7 @@ public class InviteService {
         List<String> inviterSajuList = extractSajuElements(inviterSaju);
         List<String> joinerSajuList = extractSajuElements(joinerSaju);
 
-        Element lackElement = LackElementCalculator.getMostLackElement(
+        Element lackElement = LackElementCalculator.getLackElement(
                 LackElementCalculator.calculateElementCount(inviterSajuList),
                 LackElementCalculator.calculateElementCount(joinerSajuList));
         return lackElement;

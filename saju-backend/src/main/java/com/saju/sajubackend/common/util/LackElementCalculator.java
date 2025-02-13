@@ -34,7 +34,7 @@ public class LackElementCalculator {
         return elementCount;
     }
 
-    public static Element getMostLackElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
+    public static Element getLackElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
         Map<Element, Integer> totalCount = new EnumMap<>(Element.class);
         for (Element element : Element.values()) {
             totalCount.put(element, count1.get(element) + count2.get(element));
@@ -42,7 +42,15 @@ public class LackElementCalculator {
         return Collections.min(totalCount.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 
-    private static List<Element> getElementsByBranch(char branch) {
+    public static Element getPlentyElement(Map<Element, Integer> count1, Map<Element, Integer> count2) {
+        Map<Element, Integer> totalCount = new EnumMap<>(Element.class);
+        for (Element element : Element.values()) {
+            totalCount.put(element, count1.get(element) + count2.get(element));
+        }
+        return Collections.max(totalCount.entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
+
+    public static List<Element> getElementsByBranch(char branch) {
         return switch (branch) {
             case '자' -> List.of(Element.WATER);
             case '축' -> List.of(Element.EARTH, Element.WATER, Element.METAL);
