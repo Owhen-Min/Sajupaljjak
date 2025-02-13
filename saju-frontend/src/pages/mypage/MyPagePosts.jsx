@@ -8,7 +8,7 @@ function MyPagePosts(){
     if (isLoading) return <div>로딩중 ...</div>;
     if (error) return <div>에러 : {error.message}</div>;
     return (
-      <div>
+      <div className="flex flex-col relative pt-14 h-screen">
         <TopBar2 mainText={"내가 쓴 글"} />
         <ArticleList articles={data} className="" />
       </div>

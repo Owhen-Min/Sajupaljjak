@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  memberId: "",
   isCouple: false,
   isAuthenticated: false,
   user: null,
@@ -11,6 +12,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setMemberId: (state, action) => {
+      state.memberId = action.payload;
+    },
     setIsCouple: (state, action) => {
       state.isCouple = action.payload;
     },
@@ -24,6 +28,7 @@ const authSlice = createSlice({
       state.email = action.payload;
     },
     resetAuth: (state) => {
+      state.memberId = "";
       state.isCouple = false;
       state.isAuthenticated = false;
       state.user = null;
@@ -32,13 +37,14 @@ const authSlice = createSlice({
   },
 });
 
+export const selectMemberId = (state) => state.auth.memberId;
 export const selectIsCouple = (state) => state.auth.isCouple;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectUser = (state) => state.auth.user;
 export const selectEmail = (state) => state.auth.email;
 
 
-export const { setIsCouple, setIsAuthenticated, setUser, setEmail, resetAuth } =
+export const {setMemberId, setIsCouple, setIsAuthenticated, setUser, setEmail, resetAuth } =
   authSlice.actions;
 
 export default authSlice.reducer;

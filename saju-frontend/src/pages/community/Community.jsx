@@ -7,20 +7,21 @@ import MainButton from "../../components/MainButton";
 import CommunityFilterBubble from "../../components/CommunityFilterBubble";
 import ArticleList from "../../components/ArticleList";
 import { useInfiniteGet } from "../../hooks/useInfiniteGet";
+import articles from "../../data/articles.json";
 
 function Community() {
   const [selectedElement, setSelectedElement] = useState('전체');
   const [selectedPillar, setSelectedPillar] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteGet("/api/community", { type: "", query: "" });
-  if (isLoading) return <div>로딩중 ...</div>;
-  if (error) return <div>에러 : {error.message}</div>;
-
+  // const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteGet("/api/community", { type: "", query: "" });
+  // if (isLoading) return <div>로딩중 ...</div>;
+  // if (error) return <div>에러 : {error.message}</div>;
+  const data = articles;
   return (
-    <div className="community community-page h-screen flex flex-col">
+    <div className="community community-page h-screen flex flex-col relative py-14">
       <TopBar />
-      <div className="flex-grow overflow-y-auto relative">
+      <div className="flex-grow overflow-y-auto relative scrollbar-hidden">
         <CommunityFilterBubble 
           selectedElement={selectedElement} 
           selectedPillar={selectedPillar}
@@ -43,7 +44,6 @@ function Community() {
         </div>
         <ArticleList 
           articles={data}
-          className="pb-12"
         />
       </div>
       <MainButton 

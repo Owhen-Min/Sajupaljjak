@@ -4,7 +4,6 @@ export const MainButton = ({ className, children, bgColor = "666666", hoverColor
         px-3
         font-medium text-white
         bg-[#666666]
-        border-none
         rounded-lg
         cursor-pointer
         shadow-sm

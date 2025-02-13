@@ -1,7 +1,7 @@
 import SajuColumn from './SajuColumn';
 import ElementChart from './ElementChart';
 
-function SajuGrid({ saju }) {
+function SajuGrid({ saju, className, title=true, ...props }) {
   // 천간과 지지의 원소 매핑
   const skyStemMapping = {
     '갑': '목', '을': '목', '병': '화', '정': '화', 
@@ -17,10 +17,12 @@ function SajuGrid({ saju }) {
   
   return (
     <>
-      <div className="mt-6 bg-white rounded-xl p-4 shadow-sm">
-        <h3 className="text-lg font-semibold text-gray-800 mb-3">
-          📊 사주 팔자
-        </h3>
+      <div className={`mt-6 bg-white rounded-xl p-4 shadow-sm ${className}`} {...props}>
+        {title && (
+          <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            📊 사주 팔자
+          </h3>
+        )}
         <div className="grid grid-cols-4 gap-1 text-center">
           <SajuColumn 
             label="시주"
