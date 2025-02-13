@@ -21,7 +21,7 @@ function Community() {
   return (
     <div className="community community-page h-screen flex flex-col relative py-14">
       <TopBar />
-      <div className="flex-grow overflow-y-auto relative">
+      <div className="flex-grow overflow-y-auto relative scrollbar-hidden">
         <CommunityFilterBubble 
           selectedElement={selectedElement} 
           selectedPillar={selectedPillar}
