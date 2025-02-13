@@ -1,5 +1,6 @@
 package com.saju.sajubackend.api.auth.service;
 
+import com.saju.sajubackend.api.auth.dto.KakaoUserResponse;
 import com.saju.sajubackend.api.auth.dto.LoginResponse;
 import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.member.domain.Member;
@@ -17,6 +18,7 @@ import com.saju.sajubackend.common.jwt.JwtProvider;
 import com.saju.sajubackend.common.util.CelestialStemCalculator;
 import com.saju.sajubackend.common.util.FourPillarsCalculator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -37,16 +40,21 @@ public class AuthService {
     private final AccessTokenRedisService accessTokenRedisService;
 
     @Transactional
-    public LoginResponse login(String email) {
+    public LoginResponse login(KakaoUserResponse kakaoUserResponse) {
+        String email = kakaoUserResponse.getKakao_account().getEmail();
+        log.info("🔎 [로그인 요청] 카카오 이메일: {}", email);
+
         // 이메일로 회원 조회
         Optional<Member> optionalMember = memberSocialRepository.findMemberByEmail(email);
 
         // 회원가입 안되어 있는 경우
         if (optionalMember.isEmpty()) {
+            log.warn("❌ [로그인 실패] 이메일 '{}'로 가입된 회원 없음", email);
             return LoginResponse.ofFailure(email);
         }
 
         Member member = optionalMember.get();
+        log.info("✅ [로그인 성공] 회원 정보: {}", member);
 
         // JWT 토큰 생성
         String accessToken = jwtProvider.createAccessToken(member.getMemberId());

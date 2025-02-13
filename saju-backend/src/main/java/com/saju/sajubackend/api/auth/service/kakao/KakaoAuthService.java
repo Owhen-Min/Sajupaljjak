@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class KakaoAuthService {
@@ -23,21 +24,21 @@ public class KakaoAuthService {
     @Value("${oauth.kakao.client-id}")
     private String clientId;
 
-    @Value("http://localhost:8080/api/auth/login/kakao")
+    @Value("https://i12a408.p.ssafy.io/api/auth/login/kakao")
     private String redirectUri;
 
     public LoginResponse socialLogin(String code) {
         // 1. 인가코드로 액세스 토큰 요청
         KakaoTokenResponse tokenResponse = getKakaoAccessToken(code);
-
-
-        System.out.println("::::::::::::::::::::::::::::::::::::::"+tokenResponse.getAccess_token());
+        log.info("✅ [카카오 인가코드 사용] 액세스 토큰 받음: {}", tokenResponse.getAccess_token());
 
         // 2. 액세스 토큰으로 카카오 사용자 정보 요청
         KakaoUserResponse userInfo = getKakaoUserInfo(tokenResponse.getAccess_token());
+        log.info("✅ [카카오 사용자 정보 조회] 사용자 정보: {}", userInfo);
 
         // 3. 회원가입 및 로그인 처리
-        return processKakaoUser(userInfo);
+//        return processKakaoUser(userInfo);
+        return authService.login(userInfo);
     }
 
     private KakaoTokenResponse getKakaoAccessToken(String code) {
@@ -64,18 +65,18 @@ public class KakaoAuthService {
     }
 
 
-    private LoginResponse processKakaoUser(KakaoUserResponse kakaoUserResponse) {
-        String email = kakaoUserResponse.getKakao_account().getEmail();
-
-        // 이메일로 기존 회원 확인
-        if (!authService.isExistingMember(email)) {
-            // 신규 회원인 경우 이메일만 반환
-            return LoginResponse.builder()
-                    .email(email)
-                    .build();
-        }
-
-        // 기존 회원인 경우 로그인 처리
-        return authService.login(email);
-    }
+//    private LoginResponse processKakaoUser(KakaoUserResponse kakaoUserResponse) {
+//        String email = kakaoUserResponse.getKakao_account().getEmail();
+//
+//        // 이메일로 기존 회원 확인
+//        if (!authService.isExistingMember(email)) {
+//            // 신규 회원인 경우 이메일만 반환
+//            return LoginResponse.builder()
+//                    .email(email)
+//                    .build();
+//        }
+//
+//        // 기존 회원인 경우 로그인 처리
+//        return authService.login(email);
+//    }
 }
