@@ -17,19 +17,18 @@ function FortuneMy() {
     '술': '토', '해': '수', '자': '수', '축': '토'
   };
 
-  // 테스트 데이터
-  // const { data, isLoading, error } = useGet("/api/fortune/??");
-  // if(isLoading) return <div>로딩중...</div>;
-  // if(error) console.log('에러가 발생했습니다');
+  const { data, isLoading, error } = useGet("/api/fortune/info");
+  if(isLoading) return <div>로딩중...</div>;
+  if(error) console.log('에러가 발생했습니다');
 
-  const data = {
-    saju: {
-      year: '을해',
-      month: '기묘',
-      day: '임자',
-      time: '정미',
-    }
-  };
+  // const data = {
+  //   saju: {
+  //     year: '을해',
+  //     month: '기묘',
+  //     day: '임자',
+  //     time: '정미',
+  //   }
+  // };
 
   // 원소 개수 계산
   const calculateElementCounts = () => {

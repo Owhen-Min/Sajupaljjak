@@ -5,37 +5,37 @@ import { FortuneButton } from "../../components/FortuneButton";
 import {useGet} from "../../hooks/useApi";
 
 function Fortune() {
-  //  const { data, isLoading, error } = useGet("/api/fortune/today");
-  //   if (isLoading) return <div>로딩중 ...</div>;
-  //   if (error) return <div>에러 : {error.message}</div>;
+   const { data, isLoading, error } = useGet("/api/fortune/today");
+    if (isLoading) return <div>로딩중 ...</div>;
+    if (error) return <div>에러 : {error.message}</div>;
 
-  const data = [
-    {
-      subject: '총운',
-      value: 80,
-      fullMark: 100,
-    },
-    {
-      subject: '재물운',
-      value: 90,
-      fullMark: 100,
-    },
-    {
-      subject: '건강운',
-      value: 85,
-      fullMark: 100,
-    },
-    {
-      subject: '연애운',
-      value: 75,
-      fullMark: 100,
-    },
-    {
-      subject: '학업운',
-      value: 95,
-      fullMark: 100,
-    },
-  ];
+  // const data = [
+  //   {
+  //     subject: '총운',
+  //     value: 80,
+  //     fullMark: 100,
+  //   },
+  //   {
+  //     subject: '재물운',
+  //     value: 90,
+  //     fullMark: 100,
+  //   },
+  //   {
+  //     subject: '건강운',
+  //     value: 85,
+  //     fullMark: 100,
+  //   },
+  //   {
+  //     subject: '연애운',
+  //     value: 75,
+  //     fullMark: 100,
+  //   },
+  //   {
+  //     subject: '학업운',
+  //     value: 95,
+  //     fullMark: 100,
+  //   },
+  // ];
 
   return (
     <div className="fortune flex flex-col h-screen items-center">
