@@ -6,8 +6,8 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.saju.domain.Saju;
 import com.saju.sajubackend.api.saju.dto.*;
-import com.saju.sajubackend.api.saju.entity.CoupleLife;
-import com.saju.sajubackend.api.saju.entity.CoupleYear;
+import com.saju.sajubackend.api.saju.entity.CoupleLifeFortune;
+import com.saju.sajubackend.api.saju.entity.CoupleYearFortune;
 import com.saju.sajubackend.api.saju.entity.SoloLife;
 import com.saju.sajubackend.api.saju.entity.SoloYear;
 import com.saju.sajubackend.api.saju.repository.*;
@@ -18,9 +18,6 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.swing.text.html.Option;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -131,7 +128,7 @@ public class FortuneService {
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
         // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
-        CoupleYear coupleYear = coupleYearRepository.findByMaleAndFemale(
+        CoupleYearFortune coupleYearFortune = coupleYearRepository.findByMaleAndFemale(
                         mySaju.getTimely(),
                         partnerSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -139,7 +136,7 @@ public class FortuneService {
                                 + " and ilju: " + partnerSaju.getDaily()));
 
         // 7. DTO 변환 후 반환
-        return CoupleYearDto.fromEntity(coupleYear);
+        return CoupleYearDto.fromEntity(coupleYearFortune);
     }
     public CoupleLifeDto getCoupleLifeTimeFortune(Long memberId) {
         // 1. 회원(Member) 조회
@@ -174,7 +171,7 @@ public class FortuneService {
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
         // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
-        CoupleLife coupleLife = coupleLifeRepository.findByMaleAndFemale(
+        CoupleLifeFortune coupleLifeFortune = coupleLifeRepository.findByMaleAndFemale(
                         mySaju.getTimely(),
                         partnerSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -183,14 +180,14 @@ public class FortuneService {
 
         // 7. DTO 변환 후 반환
         return new CoupleLifeDto(
-                coupleLife.getCoupleLifeId(),
-                coupleLife.getMale(),
-                coupleLife.getFemale(),
-                coupleLife.getHarmony(),
-                coupleLife.getChemi(),
-                coupleLife.getGood(),
-                coupleLife.getBad(),
-                coupleLife.getAdvice()
+                coupleLifeFortune.getCoupleLifeId(),
+                coupleLifeFortune.getMale(),
+                coupleLifeFortune.getFemale(),
+                coupleLifeFortune.getHarmony(),
+                coupleLifeFortune.getChemi(),
+                coupleLifeFortune.getGood(),
+                coupleLifeFortune.getBad(),
+                coupleLifeFortune.getAdvice()
         );
     }
 }
