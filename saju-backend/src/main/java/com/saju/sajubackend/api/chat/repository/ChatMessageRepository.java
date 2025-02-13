@@ -1,26 +1,14 @@
 package com.saju.sajubackend.api.chat.repository;
 
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
 
-@RequiredArgsConstructor
+import java.util.List;
+
 @Repository
-public class ChatMessageRepository {
+public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
 
-    private final ReactiveMongoTemplate reactiveMongoTemplate;
-
-    public Flux<ChatMessage> getMessages(String chatroomId) {
-        Query query = new Query(Criteria.where("chatroomId").is(chatroomId))
-                .with(Sort.by(Sort.Direction.ASC, "sendTime"));
-
-        System.out.println("#########" + query);
-        return reactiveMongoTemplate.find(query, ChatMessage.class);
-    }
+    List<ChatMessage> findByChatroomId(String chatroomId);
 }
 

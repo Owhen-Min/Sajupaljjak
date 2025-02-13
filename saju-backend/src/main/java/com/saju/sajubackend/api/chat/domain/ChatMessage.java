@@ -7,12 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
-
-import java.time.LocalDateTime;
 
 @Document(collection = "chat_message")
 @Getter
@@ -24,23 +21,15 @@ public class ChatMessage {
     @Id
     private String id;
 
-    private Long chatroomId;
+    private String chatroomId;
 
     private String content;
 
-    private Long senderId;
+    private String senderId;
 
-    private LocalDateTime sendTime;
+    private String sendTime;
 
     private String messageType;
-
-    public ChatMessage(Long chatroomId, String content, Long senderId, LocalDateTime sendTime, String messageType) {
-        this.chatroomId = chatroomId;
-        this.content = content;
-        this.senderId = senderId;
-        this.sendTime = sendTime;
-        this.messageType = messageType;
-    }
 
     public void validateMessageType() {
         if (!MessageTypeValidator.isValidType(this.messageType)) {
