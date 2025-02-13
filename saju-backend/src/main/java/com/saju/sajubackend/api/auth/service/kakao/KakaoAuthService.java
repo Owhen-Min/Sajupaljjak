@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class KakaoAuthService {
         // 1. 인가코드로 액세스 토큰 요청
         KakaoTokenResponse tokenResponse = getKakaoAccessToken(code);
 
-        System.out.println(tokenResponse.getAccess_token());
+        System.out.println("인가코드로 액세스 토큰 요청 후"+tokenResponse.getAccess_token());
 
         // 2. 액세스 토큰으로 카카오 사용자 정보 요청
         KakaoUserResponse userInfo = getKakaoUserInfo(tokenResponse.getAccess_token());
@@ -40,6 +42,16 @@ public class KakaoAuthService {
     }
 
     private KakaoTokenResponse getKakaoAccessToken(String code) {
+        System.out.println("\n====================== [OAuth 요청 시작] ======================");
+        System.out.println("[STEP 1] 프론트엔드에서 받은 Authorization Code: " + code);
+        System.out.println("[STEP 2] 요청 대상 URL: https://kauth.kakao.com/oauth/token");
+        System.out.println("[STEP 3] 요청 파라미터:");
+        System.out.println("         - client_id: " + clientId);
+        System.out.println("         - redirect_uri: " + redirectUri);
+        System.out.println("         - grant_type: authorization_code");
+        System.out.println("         - code: " + code);
+        System.out.println("==============================================================\n");
+
         return webClient.post()
                 .uri("https://kauth.kakao.com/oauth/token")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -49,11 +61,25 @@ public class KakaoAuthService {
                         .with("code", code))
                 .retrieve()
                 .bodyToMono(KakaoTokenResponse.class)
+                .doOnRequest(n -> System.out.println("\n✅ [STEP 4] Kakao API에 요청 전송..."))
+                .doOnNext(response -> {
+                    System.out.println("\n🎉 [STEP 5] 토큰 수신 성공!");
+                    System.out.println("[STEP 6] Kakao Access Token: " + response.getAccess_token());
+                    System.out.println("[STEP 7] Kakao Refresh Token: " + response.getRefresh_token());
+                    System.out.println("\n====================== [OAuth 요청 종료] ======================\n");
+                })
+                .doOnError(error -> {
+                    System.out.println("\n❌ [STEP 5] Kakao API 요청 실패!");
+                    System.out.println("     - 에러 메시지: " + error.getMessage());
+                    System.out.println("     - 원인: " + (error instanceof WebClientResponseException.BadRequest ? "400 Bad Request (인가 코드 재사용/만료)" : "기타 오류"));
+                    System.out.println("\n====================== [OAuth 요청 종료] ======================\n");
+                })
                 .block(); // 동기 실행 (비동기 사용 시 block() 제거)
     }
 
 
     private KakaoUserResponse getKakaoUserInfo(String accessToken) {
+        System.out.println("카카오 사용자 정보 요청 하기~~~~");
         return webClient.get()
                 .uri("https://kapi.kakao.com/v2/user/me") // 카카오 사용자 정보 요청 URL
                 .headers(headers -> headers.setBearerAuth(accessToken)) // Bearer Token 설정

@@ -1,7 +1,7 @@
 package com.saju.sajubackend.api.saju.dto;
 
 
-import com.saju.sajubackend.api.saju.entity.CoupleYear;
+import com.saju.sajubackend.api.saju.entity.CoupleYearFortune;
 
 public record CoupleYearDto(
         Long id,
@@ -13,19 +13,19 @@ public record CoupleYearDto(
         String bad,
         String advice
 ) {
-    public static CoupleYearDto fromEntity(CoupleYear coupleYear) {
-        if (coupleYear == null) {
+    public static CoupleYearDto fromEntity(CoupleYearFortune coupleYearFortune) {
+        if (coupleYearFortune == null) {
             return null; // 예외 처리
         }
         return new CoupleYearDto(
-                coupleYear.getCoupleYearId(),
-                coupleYear.getMale(),
-                coupleYear.getFemale(),
-                coupleYear.getHarmony(),
-                coupleYear.getChemi(),
-                coupleYear.getGood(),
-                coupleYear.getBad(),
-                coupleYear.getAdvice()
+                coupleYearFortune.getCoupleYearId(),
+                coupleYearFortune.getMale(),
+                coupleYearFortune.getFemale(),
+                coupleYearFortune.getHarmony(),
+                coupleYearFortune.getChemi(),
+                coupleYearFortune.getGood(),
+                coupleYearFortune.getBad(),
+                coupleYearFortune.getAdvice()
         );
     }
 }
