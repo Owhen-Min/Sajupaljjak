@@ -7,6 +7,7 @@ import com.saju.sajubackend.api.board.dto.request.BoardUpdateRequest;
 import com.saju.sajubackend.api.board.dto.response.BoardCreateResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardDetailResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardListResponse;
+import com.saju.sajubackend.api.board.dto.response.CommentListResponse;
 import com.saju.sajubackend.api.board.repository.BoardRepository;
 import com.saju.sajubackend.api.board.repository.CommentRepository;
 import com.saju.sajubackend.api.member.domain.Member;
@@ -197,5 +198,71 @@ public class BoardService {
                 .content(content)
                 .build();
         commentRepository.save(comment);
+    }
+
+    // ──────────────────────────────────────────────
+    // 신규 메서드: 내가 쓴 게시물 조회
+    // ──────────────────────────────────────────────
+
+    /**
+     * 내가 쓴 게시물 조회
+     * 현재 회원이 작성한 게시글을 조회하여 BoardListResponse DTO로 반환합니다.
+     *
+     * @param memberId 현재 로그인한 회원 id
+     * @return BoardListResponse DTO (내가 쓴 게시물 목록)
+     */
+    @Transactional(readOnly = true)
+    public BoardListResponse getMyBoardList(Long memberId) {
+        // 회원이 작성한 게시물 조회: board.member.memberId == memberId
+        List<Board> boards = boardRepository.findByMemberMemberId(memberId);
+
+        // DTO 매핑
+        List<BoardListResponse.BoardSummary> content = boards.stream().map(board -> {
+            Optional<Saju> sajuOpt = sajuRepository.findByMember(board.getMember());
+            String celestialStemLabel = sajuOpt.map(saju -> saju.getDaily()).orElse("");
+            int commentCount = commentRepository.countByBoard(board);
+            int likeCount = 0;
+            return new BoardListResponse.BoardSummary(
+                    board.getBoardId(),
+                    board.getMainType().getLabel(),
+                    board.getSubType().getLabel(),
+                    celestialStemLabel,
+                    board.getTitle(),
+                    board.getContent(),
+                    likeCount,
+                    commentCount,
+                    board.getCreatedAt()
+            );
+        }).collect(Collectors.toList());
+
+        // 단순 조회이므로 페이징 처리는 생략 (hasNext=false, nextCursor=null)
+        return new BoardListResponse(content, false, null);
+    }
+
+    // ──────────────────────────────────────────────
+    // 신규 메서드: 내가 쓴 댓글 조회
+    // ──────────────────────────────────────────────
+
+    /**
+     * 내가 쓴 댓글 조회
+     * 현재 회원이 작성한 댓글을 조회하여 CommentListResponse DTO로 반환합니다.
+     *
+     * @param memberId 현재 로그인한 회원 id
+     * @return CommentListResponse DTO (내가 쓴 댓글 목록)
+     */
+    @Transactional(readOnly = true)
+    public CommentListResponse getMyCommentList(Long memberId) {
+        // 회원이 작성한 댓글 조회: comment.member.memberId == memberId
+        List<Comment> comments = commentRepository.findByMemberMemberId(memberId);
+        List<CommentListResponse.CommentSummary> content = comments.stream().map(comment ->
+                new CommentListResponse.CommentSummary(
+                        comment.getMember().getMemberId(),
+                        comment.getMember().getNickname(),
+                        comment.getContent(),
+                        comment.getCreatedAt()
+                )
+        ).collect(Collectors.toList());
+
+        return new CommentListResponse(content, false, null);
     }
 }
