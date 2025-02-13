@@ -1,10 +1,13 @@
 package com.saju.sajubackend.api.chat.service;
 
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
-import com.saju.sajubackend.common.util.ChatRedisUtil;
+import com.saju.sajubackend.api.chat.repository.ChatMemberQueryDslRepository;
+import com.saju.sajubackend.api.chat.repository.ChatMessageRepository;
+import com.saju.sajubackend.common.exception.BaseException;
+import com.saju.sajubackend.common.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
@@ -12,21 +15,31 @@ import java.time.LocalDateTime;
 @Service
 public class ChatMessageService {
 
-    private final ChatRedisUtil chatRedisUtil;
+    private final ChatMemberQueryDslRepository chatMemberQueryDslRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
-    public Mono<ChatMessage> send(ChatMessage chatMessage) {
+    public ChatMessage send(ChatMessage chatMessage) {
+        isValid(chatMessage);
         ChatMessage validMessage = createChatMessage(chatMessage);
-        chatRedisUtil.createCache(validMessage); // Redis stream에 채팅 메시지 저장
-        return Mono.just(validMessage); // 비동기로 응답
+        chatMessageRepository.save(validMessage);
+        return validMessage;
+    }
+
+    private void isValid(ChatMessage chatMessage) {
+        chatMessage.validateMessageType();
+        Long chatroomId = Long.parseLong(chatMessage.getChatroomId());
+        Long memberId = Long.parseLong(chatMessage.getSenderId());
+
+        if (!chatMemberQueryDslRepository.existsByChatroomAndMember(chatroomId, memberId))
+            throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM_ID);
     }
 
     private ChatMessage createChatMessage(ChatMessage chatMessage) {
-        chatMessage.validateMessageType();
         return ChatMessage.builder()
                 .chatroomId(chatMessage.getChatroomId())
                 .content(chatMessage.getContent())
                 .senderId(chatMessage.getSenderId())
-                .sendTime(LocalDateTime.now()) // 생성 시간 설정
+                .sendTime(LocalDateTime.now().toString()) // 생성 시간 설정
                 .messageType(chatMessage.getMessageType())
                 .build();
     }

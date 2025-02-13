@@ -14,12 +14,9 @@ public class ChatMessageController {
     private final ChatMessageService chatMessageService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/chat")
+    @MessageMapping("/chats")
     public void sendMessage(ChatMessage chatMessage) {
-        chatMessageService.send(chatMessage)
-                .doOnSuccess(savedMessage -> {
-                    messagingTemplate.convertAndSend("/topic/" + savedMessage.getChatroomId(), savedMessage);
-                })
-                .subscribe();
+        ChatMessage message = chatMessageService.send(chatMessage);
+        messagingTemplate.convertAndSend("/topic/" + message.getChatroomId(), message);
     }
 }
