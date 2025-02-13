@@ -55,13 +55,8 @@ public class PlaceService {
                 .filter(list -> !list.isEmpty())
                 .orElseGet(() -> placeRepository.findPlacesByElementOnly(lack));
 
-        return places
-                .stream()
-                .map(place -> new PlaceResponseDto(
-                        place.getName(),
-                        place.getAddress(),
-                        getImage(place.getName())
-                ))
+        return places.stream()
+                .map(place -> PlaceResponseDto.fromEntity(place, getImage(place.getName())))
                 .toList();
     }
 

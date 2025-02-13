@@ -1,8 +1,23 @@
 package com.saju.sajubackend.api.place.dto;
 
+import com.saju.sajubackend.api.place.domain.Place;
+
 public record PlaceResponseDto(
+        Long id,
         String name,
         String region,
-        String image
+        String element,
+        String image,
+        String description
 ) {
+    public static PlaceResponseDto fromEntity(Place place, String img) {
+        return new PlaceResponseDto(
+                place.getPlaceId(),
+                place.getName(),
+                place.getAddress(),
+                place.getElement().getLabel(),
+                img,
+                place.getDescription()
+        );
+    }
 }
