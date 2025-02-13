@@ -49,9 +49,10 @@ function Match() {
   // }, [isLoading]);
 
   return (
-    <div>
+    <div className="match-page h-screen flex flex-col relative py-14 px-5">
       <TopBar />
       {/* {isLoading ? <MagnifyingGlass /> : <UserList2 users={data} />} */}
+      {isLoading ? <MagnifyingGlass /> : <UserList2 users={testUsers} />}
 
       <BottomNav />
     </div>

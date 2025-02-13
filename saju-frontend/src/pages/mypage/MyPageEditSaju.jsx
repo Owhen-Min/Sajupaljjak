@@ -228,12 +228,11 @@ function MyPageEditSaju() {
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen relative pt-14 flex flex-col px-5">
       <TopBar2 mainText={"내 사주 수정하기"} />
       <div className="flex-1 p-5">
-
         <div className="mb-6">
-          <h3 className="input-prompt mb-2">이름</h3>
+          <h3 className="input-prompt font-semibold text-xl mb-2">이름</h3>
           <Input
             type="text"
             name="name"
@@ -247,12 +246,14 @@ function MyPageEditSaju() {
             <div className="mb-6">
               <SajuGrid
                 saju={sajuData}
+                title={false}
+                className="border-t-2 border-gray-100"
               />
             </div>
           )}
 
         <div className="mb-6">
-          <h3 className="input-prompt mb-2">생년월일을 양력으로 입력해주세요.</h3>
+          <h3 className="input-prompt font-semibold text-xl mb-2">생년월일을 양력으로 입력해주세요.</h3>
           <div className="flex items-center gap-2">
             <Input
               type="text"

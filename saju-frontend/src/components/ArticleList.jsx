@@ -21,7 +21,7 @@ function formatRelativeTime(dateString) {
 
 const ArticleList = ({ articles, className }) =>{
 
-  const navigate = useNavigate();x  
+  const navigate = useNavigate();
 
    return (
      <div className={`article-list p-4 ${className}`}>

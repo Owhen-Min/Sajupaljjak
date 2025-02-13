@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.webp';
+import logo from '../../assets/logo.png';
 
 
 function OnboardingPage() {
@@ -25,8 +25,11 @@ function OnboardingPage() {
   };
 
   return (
-    <div className="onboarding">
-      <img src={logo} alt="logo" />
+    <div className="onboarding bg-gray-100 h-screen py-20 text-center">
+      <div className="flex flex-col justify-center items-center w-full h-auto px-8 mb-20">
+        <img src={logo} alt="logo" className="w-1/2 h-1/2 mb-5" />
+        <h1 className="text-5xl font-gapyeong"><span className="text-black">사주팔</span><span className="text-red-500">짝</span></h1>
+      </div>
       <h4 className="onboarding-title text-blue-500">상태에 따른 분기점</h4>
       <div className="onboarding-buttons">
         <button onClick={handleNotLoggedIn}>

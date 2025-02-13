@@ -6,7 +6,6 @@ import Dropdown from '../../components/Dropdown';
 import MainButton from '../../components/MainButton';
 import { provinces } from '../../data/provinceCode';
 import RangeSlider from '../../components/RangeSlider';
-import '../../styles/SignUp.css';
 
 function ErrorBubble({ children }) {
   return (

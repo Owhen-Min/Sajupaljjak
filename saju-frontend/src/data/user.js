@@ -1,15 +1,18 @@
 export const testUsers = [
   {
     id: 1,
-    name: "박효신",
-    nickname: "박효신",
+    nickname: "대장나무",
     score: 99,
     profileImage:
       "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
-    region: 1123123123,
     age: 25,
+    region: "서울시 용산구",
     memberType: "무토",
     introduction: "찰떡궁합인분 찾습니다^^",
+    year: "을해",
+    month: "기묘",
+    day: "임자",
+    time: "정미",
     religion: '무교',
     smoking: '비흡연',
     drinking: '음주 안함',
@@ -19,6 +22,11 @@ export const testUsers = [
     birthDay: "1981-09-01",
     birthTime: "12:00",
     birthTimeUnknown: false,
+    "harmony": "두분의 궁합은 어쩌구 저쩌구 이러쿵 저러쿵 아주 잘 맞으시고 멋지신데요 아니 왠지 노래 잘부르게 생기셨는데 혹시 가수 아니신가요",
+    "chemi": "케미가 아주 좋으시구 저쩌구",
+    "good": "ㅁㄴㅇㄼㄷ",
+    "bad": "ㅁㄴㅇㅎㄹ",
+    "advice": "ㅂㅈㄷㅈㅂㄱㅎ"
   },
   {
     id: 2,

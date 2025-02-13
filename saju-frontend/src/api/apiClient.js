@@ -15,8 +15,14 @@ apiClient.interceptors.request.use(
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
-    return config;
+    const memberId = localStorage.getItem("memberId");
+    if (memberId) {
+      config.params = config.params || {};
+      config.params.memberId = memberId;
+    }
+    return config ;
   },
+  
   (error) => {
     return Promise.reject(error);
   }
