@@ -16,13 +16,13 @@ function Couple() {
   const navigate = useNavigate();
   
   return (
-    <div className="flex flex-col min-h-screen py-[60px] relative justify-center items-center bg-cover bg-center bg-no-repeat" 
+    <div className="flex flex-col min-h-screen py-[60px] relative justify-center  items-center bg-cover bg-center bg-no-repeat" 
       style={{ backgroundImage: `url(${couplebg})` }}>
-      <div className="flex flex-col w-11/12 mx-2 p-2 my-2 bg-white rounded-lg bg-opacity-70 items-center justify-center">
-      <TopBar />
-        {coupleData.map((couple, index) => (
-          <CoupleProfile key={index} couple={couple} />
-        ))}
+      <div className="flex flex-col w-11/12 mx-2 p-2 my-2 bg-white rounded-lg bg-opacity-70 gap-y-2 items-center justify-center">
+        <TopBar />
+          {coupleData.map((couple, index) => (
+            <CoupleProfile key={index} couple={couple} />
+          ))}
 
         <div className="fortune-section flex flex-wrap w-full items-center justify-center gap-2 px-1 pb-2">
           <FortuneButton content="커플 신년" url="/couple/year" size="small" />
@@ -37,7 +37,7 @@ function Couple() {
         <div className="calendar-section flex justify-center items-center py-2 px-3 w-full max-w-3xl">
           <Calendar goodDates={goodDates} badDates={badDates} isDisabled={true} />
         </div>
-        </div>
+      </div>
       <BottomNav />
     </div>
   );

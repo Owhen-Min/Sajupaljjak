@@ -33,7 +33,7 @@ function Fortune() {
   ];
 
   return (
-    <div className="fortune flex relative py-[60px] flex-col min-h-screen items-center">
+    <div className="fortune flex relative py-[60px] flex-col min-h-screen justify-center gap-y-5 items-center">
       <TopBar />
       <div className="flex flex-col justify-center items-center w-11/12 bg-white rounded-2xl p-5 pb-0 my-2 mb-4 shadow-md bg-opacity-60">
         <div className="flex w-2/5 text-lg bg-gray-50 rounded-3xl font-gapyeong border border-black px-2 items-center text-center justify-center">
