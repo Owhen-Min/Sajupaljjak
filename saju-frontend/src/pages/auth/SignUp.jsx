@@ -215,7 +215,7 @@ function SignUpPage() {
         newErrors.location = true;
         isValid = false;
       }
-    } else if (currentStep === 11) {
+    } else if (currentStep === 12) {
       if (!formData.nickname) {
         newErrors.nickname = true;
         isValid = false;
@@ -677,10 +677,10 @@ function SignUpPage() {
   };
 
 const handleSubmit = () => {
+  console.log(formData);
   if (validateStep(step)) {
     postMutation.mutate({ uri: "api/auth/signup", payload: formData });
   }
-  navigate("/auth/Welcome");
 };
 
   const handleNextStep = () => {
@@ -756,7 +756,9 @@ const handleSubmit = () => {
           setFormData((prev) => ({
             ...prev,
             profileImg: imageUrl,
-          }));
+          }))
+          setMaxStep(Math.max(maxStep, 12));
+          setStep(Math.max(maxStep, 12));
         } else {
           setFormData((prev) => ({
             ...prev,

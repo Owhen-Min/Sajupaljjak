@@ -17,7 +17,7 @@ function SajuGrid({ saju, className, title=true, ...props }) {
   
   return (
     <>
-      <div className={`mt-6 bg-white rounded-xl p-4 shadow-sm ${className}`} {...props}>
+      <div className={`bg-white rounded-xl p-4 shadow-sm ${className}`} {...props}>
         {title && (
           <h3 className="text-lg font-semibold text-gray-800 mb-3">
             📊 사주 팔자

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-export const BackButton = ({ url }) => {
+export const BackButton = ({ url, className }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -25,7 +25,7 @@ export const BackButton = ({ url }) => {
         transition-all duration-300 ease-in-out
         hover:bg-gray-100
         focus:outline-none focus:border-[#ff6842] focus:ring-2 focus:ring-[#4CAF50]/20
-        absolute left-2
+        absolute left-2 ${className}
       `}
     >
       <svg 

@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import SajuUserBubble from "./SajuUserBubble";
+import { useSwipeable } from "react-swipeable";
 
 const ChatList = ({ chats }) => {
   const navigate = useNavigate();
@@ -25,14 +27,32 @@ const ChatList = ({ chats }) => {
     navigate(`/chats/${chatRoomId}`); // 채팅방으로 이동
   };
 
-  return (
-    <div className="flex flex-col h-full">
-      {Object.entries(chats[0])
-        .sort(([, a], [, b]) => new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime))
-        .map(([chatRoomId, chatData]) => (
+  const renderSwipeableChat = (chatRoomId, chatData) => {
+    const swipeHandlers = useSwipeable({
+      onSwipedLeft: () => {
+        const element = document.getElementById(`chat-content-${chatRoomId}`);
+        if (element) {
+          element.style.transform = 'translateX(-80px)';
+        }
+      },
+      onSwipedRight: () => {
+        const element = document.getElementById(`chat-content-${chatRoomId}`);
+        if (element) {
+          element.style.transform = 'translateX(0)';
+        }
+      },
+    });
+
+    return (
+      <div key={chatRoomId} className="h-[100px]">
+        <div className="relative h-full">
+          <div className="absolute right-0 top-0 h-full w-20 bg-red-500 flex items-center justify-center">
+            <span className="text-white font-medium">나가기</span>
+          </div>
           <div
-            key={chatRoomId}
-            className="chat-card flex items-center justify-between bg-white px-3 py-3 mb- rounded-md border border-gray-200 shadow-lg cursor-pointer opacity-90 hover:opacity-100 transition"
+            {...swipeHandlers}
+            id={`chat-content-${chatRoomId}`}
+            className="absolute inset-0 chat-card flex items-center justify-between bg-white px-3 py-5 rounded-md border border-gray-200 cursor-pointer opacity-100 hover:bg-gray-50 transition transform duration-200 ease-in-out overflow-hidden"
             onClick={() => handleChatClick(chatRoomId)}
           >
             <div className="flex w-2/12 justify-center items-center">
@@ -42,13 +62,16 @@ const ChatList = ({ chats }) => {
                 className="w-14 h-14 rounded-full object-cover object-center"
               />
             </div>
-            <div className="flex w-7/12 flex-col">
-              <h3 className="text-lg font-semibold">{chatData.chatRoom.partner.nickname}</h3>
-              <p className="w-full truncate text-gray-700">
+            <div className="flex w-7/12 flex-col gap-y-1">  
+              <div className="flex items-center gap-x-2">
+                <SajuUserBubble skyElement={chatData.chatRoom.partner.celestialStem} size="normal" />
+                <h3 className="text-xl font-semibold">{chatData.chatRoom.partner.nickname}</h3>
+              </div>
+              <p className="w-full truncate text-gray-700 ml-1">
                 {chatData.message.lastMessage}
               </p>
             </div>
-            <div className="flex w-2/12 flex-col items-end gap-y-1">
+            <div className="flex w-2/12 flex-col items-end gap-y-2">
               <span className="text-sm text-gray-500">
                 {formatRelativeTime(chatData.message.lastSendTime)}
               </span>
@@ -57,7 +80,16 @@ const ChatList = ({ chats }) => {
               </span>
             </div>
           </div>
-        ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="flex flex-col h-full gap-20">
+      {Object.entries(chats[0])
+        .sort(([, a], [, b]) => new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime))
+        .map(([chatRoomId, chatData]) => renderSwipeableChat(chatRoomId, chatData))}
     </div>
   );
 };

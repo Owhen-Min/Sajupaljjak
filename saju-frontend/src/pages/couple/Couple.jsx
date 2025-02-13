@@ -11,14 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { coupleData } from "../../data/coupleData";
 
 function Couple() {
-  const goodDates = ['2025-02-13', '2025-02-14']; // YYYY-MM-DD 형식
-  const badDates = ['2025-02-12', '2025-02-23'];
+  const [goodDates, setGoodDates] = useState(['2025-02-13', '2025-02-14']); // YYYY-MM-DD 형식
+  const [badDates, setBadDates] = useState(['2025-02-12', '2025-02-23']);
   const navigate = useNavigate();
   
   return (
-    <div className="flex flex-col min-h-screen py-[60px] relative justify-center  items-center bg-cover bg-center bg-no-repeat" 
+    <div className="flex flex-col h-screen py-[58px] relative justify-center items-center bg-cover bg-center bg-no-repeat scrollbar-hidden" 
       style={{ backgroundImage: `url(${couplebg})` }}>
-      <div className="flex flex-col w-11/12 mx-2 p-2 my-2 bg-white rounded-lg bg-opacity-70 gap-y-2 items-center justify-center">
+      <div className="flex flex-col w-11/12 mx-2 p-2 bg-white rounded-lg bg-opacity-70 gap-y-2 items-center justify-center">
         <TopBar />
           {coupleData.map((couple, index) => (
             <CoupleProfile key={index} couple={couple} />
@@ -34,7 +34,7 @@ function Couple() {
           />
         </div>
 
-        <div className="calendar-section flex justify-center items-center py-2 px-3 w-full max-w-3xl">
+        <div className="calendar-section flex justify-center items-center py-2 px-3 w-full my-0">
           <Calendar goodDates={goodDates} badDates={badDates} isDisabled={true} />
         </div>
       </div>
