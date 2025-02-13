@@ -152,7 +152,7 @@ function Chats() {
         },
         "message": {
           "lastMessage": "집에 가고 싶어요",
-          "lastSendTime": "2025-02-13T12:12:32", 
+          "lastSendTime": "2025-02-13T16:50:32", 
           "newMessageCount": 0,
         },
       },
@@ -168,7 +168,7 @@ function Chats() {
         },
         "message": {
           "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
-          "lastSendTime": "2025-02-13T12:12:32",
+          "lastSendTime": "2025-02-12T12:12:32",
           "newMessageCount": 0,
         },
       },
