@@ -2,8 +2,14 @@ import { TopBar2 } from "../../components/TopBar2";
 import { useState, useEffect } from "react";
 import ReactMarkdown from 'react-markdown';
 import SajuColumn from "../../components/SajuColumn";
+import {useGet} from "../../hooks/useApi";
 
 function FortuneYear() {
+
+  // const { data, isLoading, error } = useGet("/api/fortune/new-year");
+  // if (isLoading) return <div>로딩중 ...</div>;
+  // if (error) return <div>에러 : {error.message}</div>;
+
   const [data, setData] = useState({
     "id": 12,
     "siju": "해",

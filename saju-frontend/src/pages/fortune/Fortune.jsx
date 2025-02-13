@@ -2,8 +2,13 @@ import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts';
 import { FortuneButton } from "../../components/FortuneButton";
+import {useGet} from "../../hooks/useApi";
 
 function Fortune() {
+  //  const { data, isLoading, error } = useGet("/api/fortune/today");
+  //   if (isLoading) return <div>로딩중 ...</div>;
+  //   if (error) return <div>에러 : {error.message}</div>;
+
   const data = [
     {
       subject: '총운',
@@ -37,7 +42,7 @@ function Fortune() {
       <TopBar />
       <div className="w-11/12 bg-white rounded-2xl p-5 pb-0 my-5 shadow-md bg-opacity-60">
         <div className="flex w-full text-lg bg-gray-50 rounded-full font-gapyeong border-2 border-black px-10 items-center text-center justify-center">
-          <h1>오늘의 운세: 80점</h1>
+          <h1>오늘의 운세 : {data[0].value}점</h1>
         </div>
         <PentagonChart data={data}/>
       </div>

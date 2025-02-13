@@ -1,6 +1,7 @@
 import SajuGrid from "../../components/SajuGrid";
 import TopBar2 from "../../components/TopBar2";
 import ElementChart from "../../components/ElementChart";
+import {useGet} from "../../hooks/useApi";
 
 function FortuneMy() {
   // 천간과 지지의 원소 매핑
@@ -17,6 +18,10 @@ function FortuneMy() {
   };
 
   // 테스트 데이터
+  // const { data, isLoading, error } = useGet("/api/fortune/??");
+  // if(isLoading) return <div>로딩중...</div>;
+  // if(error) console.log('에러가 발생했습니다');
+
   const data = {
     saju: {
       year: '을해',
