@@ -24,6 +24,7 @@ public class AuthController {
 
     @GetMapping("/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam String code) {
+        log.info("✅ [AuthController] : {}", code);
         LoginResponse loginResponse = kakaoAuthService.socialLogin(code);
         return ResponseEntity.ok(loginResponse);
     }
