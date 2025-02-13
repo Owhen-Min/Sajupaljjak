@@ -11,4 +11,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     // 댓글은 생성시간 오름차순 정렬하여 조회
     List<Comment> findByBoardOrderByCreatedAtAsc(Board board);
+    List<Comment> findByMemberMemberId(Long memberId);
 }
