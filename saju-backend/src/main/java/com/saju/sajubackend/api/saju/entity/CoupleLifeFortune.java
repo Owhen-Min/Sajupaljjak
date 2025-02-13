@@ -6,14 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "COUPLE_YEAR_FORTUNE")
+@Table(name = "COUPLE_LIFE_FORTUNE")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CoupleYear {
+public class CoupleLifeFortune {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long coupleYearId;
+    private Long coupleLifeId;
 
     private String male;
     private String female;
