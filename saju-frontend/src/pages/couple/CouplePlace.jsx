@@ -24,12 +24,14 @@ function CouplePlace() {
     spots[0]?.[Object.keys(spots[0])[0]] || [];
 
   return (
-    <div className="flex flex-col min-h-screen py-14 relative justify-center items-center bg-cover bg-center bg-no-repeat" 
+    <div className="flex flex-col min-h-screen py-[60px] relative justify-center items-center bg-cover bg-center bg-no-repeat" 
     style={{ backgroundImage: `url(${couplebg})` }}>
       <TopBar2 mainText={"데이트 코스 추천"} />
-      <EmblaCarousel data={selectedSpots} />
+      <div className="mx-4 bg-white rounded-lg bg-opacity-70">
+        <EmblaCarousel data={selectedSpots} />
+      </div>
 
-      <div className="flex flex-col p-4 my-2 bg-white rounded-lg bg-opacity-70 items-center justify-center">
+      <div className="flex flex-col w-11/12 p-4 my-2 bg-white rounded-lg bg-opacity-70 items-center justify-center">
         <Calendar 
           goodDates={goodDates} 
           badDates={badDates} 
