@@ -24,7 +24,7 @@ public class KakaoAuthService {
     @Value("${oauth.kakao.client-id}")
     private String clientId;
 
-    @Value("http://localhost:8080/api/auth/login/kakao")
+    @Value("${oauth.kakao.redirect-uri}")
     private String redirectUri;
 
     public LoginResponse socialLogin(String code) {
