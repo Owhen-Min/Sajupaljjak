@@ -78,4 +78,16 @@ public class Member {
     public void updateRelationship(RelationshipStatus isCouple) {
         this.relation = relation;
     }
+    // 필터 수정을 위한 update 메서드들
+    public void updateSmoking(SmokingStatus smoking) {
+        this.smoking = smoking;
+    }
+
+    public void updateDrinking(DrinkingFrequency drinking) {
+        this.drinking = drinking;
+    }
+
+    public void updateReligion(Religion religion) {
+        this.religion = religion;
+    }
 }
