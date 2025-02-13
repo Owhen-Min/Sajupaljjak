@@ -19,7 +19,7 @@ public class ChatHistoryController {
     private final ChatHistoryService chatHistoryService;
 
     @GetMapping("/{chatroomId}")
-    public ResponseEntity<List<ChatMessageResponseDto>> getChatMessages(@PathVariable Long chatroomId, Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
+    public ResponseEntity<List<ChatMessageResponseDto>> getChatMessages(@PathVariable String chatroomId, Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
         return ResponseEntity.ok(chatHistoryService.getChatHistory(chatroomId, memberId));
     }
 }

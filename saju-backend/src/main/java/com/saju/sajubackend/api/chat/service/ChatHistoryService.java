@@ -19,10 +19,10 @@ public class ChatHistoryService {
     private final ChatroomRepository chatroomRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    public List<ChatMessageResponseDto> getChatHistory(Long chatroomId, Long memberId) {
-        isAuthorized(chatroomId, memberId);
+    public List<ChatMessageResponseDto> getChatHistory(String chatroomId, Long memberId) {
+        isAuthorized(Long.parseLong(chatroomId), memberId);
 
-        return chatMessageRepository.findByChatroomId(String.valueOf(chatroomId))
+        return chatMessageRepository.findByChatroomId(chatroomId)
                 .stream()
                 .map(ChatMessageResponseDto::fromDocument)
                 .toList();
