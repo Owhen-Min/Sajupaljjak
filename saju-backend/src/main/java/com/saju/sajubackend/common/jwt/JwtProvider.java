@@ -76,4 +76,12 @@ public class JwtProvider {
                 .getPayload()
                 .getSubject());
     }
+
+    /**
+     * 액세스 토큰의 만료 시간을 반환
+     * @return 밀리초 단위의 만료 시간
+     */
+    public long getAccessTokenExpirationTime() {
+        return ACCESS_TOKEN_EXPIRE_TIME;
+    }
 }
