@@ -7,6 +7,8 @@ import MainButton from "../../components/MainButton";
 import Input from "../../components/Input";
 import { provinces } from "../../data/provinceCode";
 import { testUsers } from "../../data/user";
+import * as blazeface from '@tensorflow-models/blazeface';
+import '@tensorflow/tfjs';
 
 function MyPageEditProfile() {
   const navigate = useNavigate();
@@ -22,6 +24,8 @@ function MyPageEditProfile() {
     dongCode: '',
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [model, setModel] = useState(null);
+  const [faceDetectionError, setFaceDetectionError] = useState(false);
 
   const [errors, setErrors] = useState({
     profileImage: false,
@@ -66,6 +70,56 @@ function MyPageEditProfile() {
     fetchUserProfile();
   }, []);
 
+  useEffect(() => {
+    const loadModel = async () => {
+      try {
+        const loadedModel = await blazeface.load();
+        setModel(loadedModel);
+      } catch (error) {
+        console.error('얼굴 인식 모델 로딩 실패:', error);
+      }
+    };
+    loadModel();
+  }, []);
+
+  const detectFace = async (imageUrl) => {
+    if (!model) return false;
+
+    const img = new Image();
+    img.src = imageUrl;
+    
+    return new Promise((resolve) => {
+      img.onload = async () => {
+        try {
+          const predictions = await model.estimateFaces(img, false);
+          resolve(predictions.length > 0);
+        } catch (error) {
+          console.error('얼굴 인식 실패:', error);
+          resolve(false);
+        }
+      };
+    });
+  };
+
+  const handleImageUpload = async (file) => {
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const imageUrl = reader.result;
+      const hasFace = await detectFace(imageUrl);
+      
+      if (hasFace) {
+        setFormData(prev => ({
+          ...prev,
+          profileImage: imageUrl
+        }));
+        setFaceDetectionError(false);
+      } else {
+        setFaceDetectionError(true);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   // 로딩 상태 표시
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen">로딩 중...</div>;
@@ -103,14 +157,17 @@ function MyPageEditProfile() {
   };
 
   return (
-    <div className="edit-profile-page flex flex-col h-screen">
+    <div className="edit-profile-page flex flex-col relative pt-14 h-screen">
       <TopBar2 mainText={"내 프로필 수정하기"} />
-      <div className="flex-1 overflow-y-auto p-6 pt-10">
+      <div className="flex-1 overflow-y-auto px-6 pt-2">
         {/* 프로필 사진 */}
         <div className="mb-8">
           <h3 className="text-lg font-medium mb-2">프로필 사진</h3>
           {errors.profileImage && (
             <p className="text-red-500 text-sm mb-2">프로필 사진을 선택해주세요</p>
+          )}
+          {faceDetectionError && (
+            <p className="text-red-500 text-sm mb-2">얼굴이 포함된 사진을 업로드해주세요</p>
           )}
           <div className="flex flex-col items-center">
             <input
@@ -120,14 +177,7 @@ function MyPageEditProfile() {
               onChange={(e) => {
                 const file = e.target.files[0];
                 if (file) {
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setFormData(prev => ({
-                      ...prev,
-                      profileImage: reader.result
-                    }));
-                  };
-                  reader.readAsDataURL(file);
+                  handleImageUpload(file);
                 }
               }}
               className="hidden"

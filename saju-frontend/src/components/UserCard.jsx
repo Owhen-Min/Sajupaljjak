@@ -2,11 +2,18 @@ import SajuUserBubble from "./SajuUserBubble";
 import { Link } from "react-router-dom";
 import Heart from "./Heart";
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, disabled, className, ...props }) => {
   return (
-    <Link to={`/match/${user.id}`} className="w-full max-w-sm mx-auto">
+    <Link 
+      to={disabled ? '#' : `/match/${user.id}`} 
+      className={`w-full max-w-sm mx-auto ${
+          disabled && 'pointer-events-none'
+        } ${className}`} 
+      onClick={(e) => disabled && e.preventDefault()}
+      {...props}
+    >
       <div
-        className="relative w-full aspect-[4/3] cursor-pointer rounded-3xl bg-gray-200"
+        className={`relative w-full aspect-[4/3] rounded-3xl bg-gray-200`}
         style={{
           backgroundImage: user.profileImage ? `url(${user.profileImage})` : 'none',
           backgroundSize: "cover",

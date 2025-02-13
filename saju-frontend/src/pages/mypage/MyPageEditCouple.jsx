@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { TopBar2 } from "../../components/TopBar2";
-import { Calendar } from "../../components/Calendar";
 import MainButton from "../../components/MainButton";
+import Input from "../../components/Input";
+import CoupleProfile from "../../components/CoupleProfile";
+import { coupleData } from "../../data/coupleData";
 
 function MyPageEditCouple() {
   const [meetDate, setMeetDate] = useState('2024-01-01');
@@ -48,36 +50,54 @@ function MyPageEditCouple() {
     alert('헤어지기 처리 완료');
   };
 
+  const handleDateChange = (e) => {
+    const newValue = e.target.value;
+    setMeetDate(newValue);
+    
+    // 날짜 변경 시 즉시 일수 계산
+    const start = new Date(newValue);
+    const today = new Date();
+    const diffTime = Math.abs(today - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    setDaysCount(diffDays);
+  };
+
   return(
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col relative pt-14 min-h-screen bg-gray-50">
       <TopBar2 mainText={"커플 정보 수정하기"} />
       
       <div className="flex flex-col items-center px-6 mt-8 space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-2xl font-bold text-gray-800">우리가 만난 지</h2>
-          <p className="text-3xl font-bold text-primary-500">{daysCount}일</p>
-        </div>
+        <CoupleProfile couple={coupleData[0]} />
+
 
         <div className="w-full max-w-md space-y-2 mt-4">
           <h3 className="text-lg font-bold text-center text-gray-700">만난 날짜 수정하기</h3>
-          {/* <Calendar
-            disableFuture={true}
-            onChange={(v) => setMeetDate(v)}
-            value={meetDate}
-          /> */}
+          <div className="flex justify-center">
+            <Input
+              type="date"
+              max={new Date().toISOString().split('T')[0]}
+              value={meetDate}
+              onChange={handleDateChange}
+              onKeyDown={(e) => {
+                e.preventDefault();
+              }}
+              className="w-1/2 text-center"
+            />
+          </div>
         </div>
 
         <MainButton 
           onClick={handleSave}
           children={'저장하기'}
-          className="w-full max-w-md py-3 mt-4"
+          className="w-2/3 max-w-md py-3 mt-4 bg-red-500 text-white"
         />
-
-        <MainButton 
-          onClick={handleBreakUp}
-          children={'헤어지기'}
-          className="w-1/2 max-w-md py-3 mt-4"
-        />
+        <div className="flex w-full justify-end">
+          <MainButton 
+            onClick={handleBreakUp}
+            children={'헤어지기'}
+            className="w-1/5 max-w-md py-3 mt-14 text-[8px]"
+          />
+        </div>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ function MyPageLiked() {
   if (error) return <div>에러 : {error.message}</div>;
   
   return (
-    <div>
+    <div className="flex flex-col relative pt-14 h-screen">
       <TopBar2 mainText={"좋아요한 글"} />
       <ArticleList articles={data} className="" />
     </div>

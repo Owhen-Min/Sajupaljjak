@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import TopBar2 from '../../components/TopBar2';
 import MainButton from '../../components/MainButton';
+import Input from '../../components/Input';
 
 
 function CoupleCode() {
@@ -104,13 +105,17 @@ function CoupleCode() {
       return;
     }
 
-    // if (!selectedDate) {
-    //   alert('만나기 시작한 날을 선택해주세요.');
-    //   return;
-    // }
+    if (inputCode === coupleCode.code) {
+      alert('본인 외의 코드를 입력해주세요.');
+      return;
+    }
+
+    if (!selectedDate) {
+      alert('만나기 시작한 날을 선택해주세요.');
+      return;
+    }
 
     try {
-      navigate('/couple');
 
       // API 호출 로직 (실제 구현 시 주석 해제)
       // const response = await fetch('api/matching', {
@@ -132,7 +137,6 @@ function CoupleCode() {
       // }
 
       // 임시 구현
-      console.log('선택된 날짜:', selectedDate);
       navigate('/couple');
     } catch (error) {
       console.error('매칭 시도 실패:', error);
@@ -146,10 +150,21 @@ function CoupleCode() {
     navigate('/couple');
   };
 
+  const handleDateChange = (e) => {
+    const newValue = e.target.value;
+    // 날짜 형식 검증 (YYYY-MM-DD)
+    const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+    
+    if (!newValue || dateRegex.test(newValue)) {
+      // 유효한 날짜이거나 빈 값인 경우에만 상태 업데이트
+      setSelectedDate(newValue);
+    }
+  };
+
   return (
     <div className="couple-invitation flex flex-col relative justify-center min-h-screen bg-gray-50 pb-3">
       <TopBar2 mainText={'커플 초대'} />
-      <div className="invitation flex flex-col items-center px-6 mt-2 space-y-6">
+      <div className="invitation flex flex-col items-center px-6 space-y-6">
         <div className="text-center space-y-4">
           <h1 className="text-2xl font-bold text-gray-800">당신의 커플 코드</h1>
           <h2 
@@ -205,25 +220,31 @@ function CoupleCode() {
           </div>
         </div>
 
-        <div className="w-full max-w-md space-y-2 mt-4">
+        <div className="w-full max-w-md space-y-2 mt-4 flex flex-col justify-center items-center">
           <h3 className="text-lg font-bold text-center text-gray-700">만나기 시작한 날</h3>
-          {/* <CustomCalendar
-            disableFuture={true}
-            onChange={(v) => {setSelectedDate(v)}}
+          <Input
+            type="date"
+            max={new Date().toISOString().split('T')[0]}
             value={selectedDate}
-          /> */}
+            onChange={handleDateChange}
+            onKeyDown={(e) => {
+              // 키보드 입력 방지
+              e.preventDefault();
+            }}
+            className="w-1/2 text-center"
+          />
         </div>
 
-        <div className="w-full max-w-md space-y-2 mt-8">
+        <div className="w-full max-w-md space-y-2 mt-8 flex flex-col justify-center items-center gap-2">
           <MainButton 
             onClick={handleStartMatching}
             children={'시작하기'}
-            className="w-full py-3"
+            className="w-3/4 py-3 bg-red-300"
           />
           <MainButton
             onClick={handleMatchComplete}
-            className="w-full py-3"
-            children={'상대방이\n입력했습니다'}
+            className="w-3/4 py-3 bg-blue-300"
+            children={'상대방이 입력했습니다'}
           />
         </div>
       </div>
