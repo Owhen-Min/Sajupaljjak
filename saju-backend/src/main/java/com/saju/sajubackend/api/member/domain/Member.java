@@ -69,6 +69,6 @@ public class Member {
     private CelestialStem celestialStem;
 
     public void updateRelationship(RelationshipStatus isCouple) {
-        this.relation = relation;
+        this.relation = isCouple;
     }
 }
