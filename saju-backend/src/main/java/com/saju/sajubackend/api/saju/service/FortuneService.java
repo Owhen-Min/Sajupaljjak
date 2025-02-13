@@ -139,16 +139,7 @@ public class FortuneService {
                                 + " and ilju: " + partnerSaju.getDaily()));
 
         // 7. DTO 변환 후 반환
-        return new CoupleYearDto(
-                coupleYear.getCoupleYearId(),
-                coupleYear.getMale(),
-                coupleYear.getFemale(),
-                coupleYear.getHarmony(),
-                coupleYear.getChemi(),
-                coupleYear.getGood(),
-                coupleYear.getBad(),
-                coupleYear.getAdvice()
-        );
+        return CoupleYearDto.fromEntity(coupleYear);
     }
     public CoupleLifeDto getCoupleLifeTimeFortune(Long memberId) {
         // 1. 회원(Member) 조회
