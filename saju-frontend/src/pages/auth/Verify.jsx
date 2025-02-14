@@ -19,12 +19,7 @@ const Verify = () => {
   const { data, error, isLoading } = useGet(
     requestSent.current ? null : `api/auth/login/kakao?code=${code}`
   );
-
-  useEffect(() => {
-    if (!requestSent.current && code) {
-      requestSent.current = true;
-    }
-  }, [code]);
+  console.log(data);
 
   useEffect(() => {
     if (isLoading) return;
