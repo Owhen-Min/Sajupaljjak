@@ -18,19 +18,14 @@ export const useGet = (uri, options = {}) => {
   });
 };
 
-export const usePost = (uri, payload) => {
+export const usePost = (options = {}) => {
   return useMutation({
-    mutationFn: async (payload = payload, config = {}) => {
+    mutationFn: async ({ uri, payload, config = {} }) => {
       console.log("POST Request Payload:", payload);
       const response = await apiClient.post(uri, payload, config);
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log("POST Response Data:", data);
-    },
-    onError: (error) => {
-      console.error("POST Error:", error);
-    },
+    ...options
   });
 };
 

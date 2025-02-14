@@ -10,7 +10,7 @@ export default function SquareCarousel({ users }) {
     key: index,
     content: (
       <div
-        class="w-48 h-48 mt-5 flex items-center justify-center text-white bg-red-400 text-2xl font-bold rounded-xl cursor-pointer "
+        className="w-48 h-48 mt-5 flex items-center justify-center text-white bg-red-400 text-2xl font-bold rounded-xl cursor-pointer "
         onClick={() => setGoToSlide(index)}
       >
         <UserCard user={users[index]} />
