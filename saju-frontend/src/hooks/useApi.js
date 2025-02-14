@@ -64,3 +64,13 @@ export const useDelete = () => {
     },
   });
 };
+
+
+export const usePatch = () => {
+  return useMutation({
+    mutationFn: async ({ uri, payload, config = {} }) => {
+      const response = await apiClient.patch(uri, payload, config);
+      return response.data;
+    },
+  });
+};

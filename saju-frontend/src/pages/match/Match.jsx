@@ -13,7 +13,7 @@ function Match() {
   console.log(data);
   if (isLoading)
     return (
-      <div className="flex w-full h-screen items-center justify-center flex-col bg-red-100 gap-y-4">
+      <div className="flex w-full h-screen items-center justify-center flex-col gap-y-4">
         <AnimationHeartLoader />
         <TypeAnimation
           sequence={[
@@ -32,7 +32,7 @@ function Match() {
           cursor={true}
           repeat={Infinity}
           style={{
-            color: "#ff7270",
+            color: "#fe6363",
             fontWeight: 700,
             fontSize: "16px",
             display: "inline-block",

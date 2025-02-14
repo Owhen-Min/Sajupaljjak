@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "react-router-dom";
 const getTitleFromPath = (pathname) => {
   if (pathname.startsWith("/solo")) return "솔로";
@@ -19,7 +18,7 @@ const TopBar = () => {
     <header className="w-full px-4 shadow-md py-2 flex justify-between items-center absolute top-0 left-0 bg-white border-b border-gray-200">
       <div>
         {/* <div className="text-2xl font-noto pl-1">{title}</div> */}
-        <div className="text-3xl font-gapyeong pl-1">{title}</div>
+        <div className="text-3xl font-HanmaH pl-1">{title}</div>
       </div>
       <div>
         <Link to="/mypage">
@@ -31,7 +30,6 @@ const TopBar = () => {
             />
           </button>
         </Link>
-
       </div>
     </header>
   );

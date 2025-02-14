@@ -86,7 +86,7 @@ function SignUpPage() {
       navigate("/auth/welcome");
     },
     onError: (error) => {
-      console.error("회원가입 실패:", error);
+      alert(`회원가입 실패: ${error}`);
     }
   });
 
@@ -179,7 +179,7 @@ function SignUpPage() {
       location: false,
       nickname: false,
       intro: false,
-      profileImg: false,
+      // profileImg: false,
     };
 
     if (currentStep === 3) {
@@ -230,23 +230,10 @@ function SignUpPage() {
         newErrors.intro = true;
         isValid = false;
       }
-      if (!formData.profileImg) {
-        newErrors.profileImg = true;
-        isValid = false;
-      }
-    } else if (currentStep === 12) {
-      if (!formData.profileImg) {
-        newErrors.profileImg = true;
-        isValid = false;
-      }
-      if (!formData.nickname) {
-        newErrors.nickname = true;
-        isValid = false;
-      }
-      if (!formData.intro) {
-        newErrors.intro = true;
-        isValid = false;
-      }
+      // if (!formData.profileImg) {
+      //   newErrors.profileImg = true;
+      //   isValid = false;
+      // }
     }
 
     setErrors(newErrors);
@@ -348,7 +335,7 @@ function SignUpPage() {
                     btime: value,
                   }));
                 }}
-                placeholder="18:00"
+                placeholder="00:00"
                 maxLength="5"
                 style={{ flex: 1 }}
                 disabled={formData.birthTimeUnknown}
@@ -718,7 +705,7 @@ function SignUpPage() {
     setFormData((prev) => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      btime: isChecked ? "" : prev.btime,
+      btime: isChecked ? "00:00" : prev.btime,
     }));
   };
 

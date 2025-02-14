@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 const BottomNav = () => {
   const { isCouple } = useAuth();
   return (
-    <nav className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[400px] bg-white shadow-lg z-10">
+    <nav className="fixed bottom-0 border-2 border-t-2 pt-2 left-1/2 transform -translate-x-1/2 w-[400px] bg-white shadow-lg z-10">
       <div className="flex">
         <Link to="/solo" className="flex-1 flex flex-col items-center py-2">
           <svg
@@ -102,9 +102,7 @@ const BottomNav = () => {
             </svg>
             <span className="btm-nav-label text-xs">매칭</span>
           </Link>
-        )
-      
-      }
+        )}
 
         <Link to="/chats" className="flex-1 flex flex-col items-center py-2">
           <svg
