@@ -36,7 +36,7 @@ const Verify = () => {
       updateEmail(data.email);
 
       if (!data.token) {
-        navigate("/signup");
+        navigate("/auth/signup");
         return;
       }
 
