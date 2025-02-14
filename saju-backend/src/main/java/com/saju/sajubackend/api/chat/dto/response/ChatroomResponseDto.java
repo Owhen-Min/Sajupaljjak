@@ -18,4 +18,8 @@ public class ChatroomResponseDto {
         this.partner = partner;
         this.message = message;
     }
+
+    public static ChatroomResponseDto from() {
+
+    }
 }

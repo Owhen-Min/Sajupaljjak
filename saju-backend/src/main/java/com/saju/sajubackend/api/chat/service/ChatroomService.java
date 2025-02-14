@@ -4,6 +4,7 @@ import com.saju.sajubackend.api.chat.domain.ChatMessage;
 import com.saju.sajubackend.api.chat.domain.Chatroom;
 import com.saju.sajubackend.api.chat.domain.ChatroomMember;
 import com.saju.sajubackend.api.chat.domain.LastMessage;
+import com.saju.sajubackend.api.chat.dto.ChatPartnerDto;
 import com.saju.sajubackend.api.chat.dto.request.ChatroomLeaveRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -103,13 +105,50 @@ public class ChatroomService {
 
     public List<ChatroomResponseDto> getAllChatrooms(Long memberId) {
         // 1. 회원의 모든 채팅 방 + 상대방 정보 구하기
+        List<ChatPartnerDto> partners = chatroomQueryDslRepository.findChatPartnersByMemberId(memberId);
 
-        // 2. 안 읽은 메시지 개수 구하기
+        // 2. memberId와 chatroomId로 LastMessage 찾기(몽고 DB LastMessage)
+        List<LastMessage> lastMessages = partners.stream()
+                .map(partner ->
+                        lastMessageRepository.findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(String.valueOf(partner.getChatroomId()), String.valueOf(memberId))
+                                .orElse(null))
+                .toList();
 
-        // 3. 마지막 메시지 구하기
+        List<ChatroomResponseDto> response = new ArrayList<>();
+
+        // 3. 채팅방별로 읽지 않은 메시지 개수 확인 & 최신 메시지 조회
+        for (int i = 0; i < partners.size(); i++) {
+            ChatPartnerDto partner = partners.get(i);
+            String chatroomId = String.valueOf(partner.getChatroomId());
+
+            LastMessage lastMessage = lastMessages.get(i);
+            String lastMessageTime = (lastMessage != null) ? lastMessage.getLastMessageTime() : "1970-01-01T00:00:00";
+
+            // 4. MongoDB에서 읽지 않은 메시지 개수 조회
+            long unreadCount = chatMessageRepository.countUnreadMessages(chatroomId, lastMessageTime);
+
+            // 5. 안 읽은 메시지가 있다면 최신 메시지 가져오기
+            ChatMessage latestMessage = null;
+            if (unreadCount > 0) {
+                List<ChatMessage> latestMessages = chatMessageRepository.findLatestMessageByChatroomId(chatroomId, PageRequest.of(0, 1));
+                latestMessage = latestMessages.isEmpty() ? null : latestMessages.get(0);
+            }
+
+            response.add(new ChatroomResponseDto(
+                    partner.getChatroomId(),
+                    new PartnerDto(partner.getPartnerId(), partner.getNickname(), partner.getProfileImg(), partner.getCelestialStem()),
+                    new MessageDto(
+                            latestMessage != null ? latestMessage.getContent() : "",
+                            latestMessage != null ? latestMessage.getSendTime() : "",
+                            unreadCount
+                    )
+            ));
+        }
+
+        return response;
     }
 
-    public ChatroomResponseDto updateChatroom(String chatroomId) {
-        // 1. 채팅
-    }
+//    public ChatroomResponseDto updateChatroom(String chatroomId) {
+//        // 1. 채팅
+//    }
 }
