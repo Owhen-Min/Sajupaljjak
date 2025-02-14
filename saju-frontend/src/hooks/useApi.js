@@ -50,7 +50,7 @@ export const usePut = () => {
   });
 };
 
-export const useDelete = () => {
+export const useDelete = (uri) => {
   return useMutation({
     mutationFn: async ({ uri, config = {} }) => {
       const response = await apiClient.delete(uri, config);

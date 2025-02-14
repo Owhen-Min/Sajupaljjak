@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import SajuUserBubble from "./SajuUserBubble";
 import { useSwipeable } from "react-swipeable";
 import { useState } from "react";
-
+import { useDelete } from "../hooks/useApi";
 const ChatList = ({ chats }) => {
   const navigate = useNavigate();
   const [openChatId, setOpenChatId] = useState(null);
+  const deleteChat = useDelete();
 
   function formatRelativeTime(dateString) {
     const now = new Date();
@@ -49,6 +50,14 @@ const ChatList = ({ chats }) => {
         }
         setOpenChatId(chatRoomId);
       },
+
+      onSwipedRight: () => {
+        const element = document.getElementById(`chat-content-${chatRoomId}`);
+        if (element) {
+          element.style.transform = 'translateX(0)';
+        }
+        setOpenChatId(chatRoomId);
+      },
       
       onTouchEndOrOnMouseUp: () => {
         setTimeout(() => {
@@ -61,10 +70,12 @@ const ChatList = ({ chats }) => {
     return (
       <div key={chatRoomId} className="relative flex flex-col">
         <div className="relative w-full">
-          <div className="absolute right-0 top-0 h-full">
-            <div className="goout-button h-full w-20 bg-red-500 flex items-center justify-center">
-              <span className="text-white font-medium">나가기</span>
-            </div>
+          <div className="absolute right-0 top-0 h-full goout-button h-full w-20 bg-red-500 flex items-center justify-center cursor-pointer"
+          onClick={() => {
+            deleteChat.mutate({uri: `/chats/${chatRoomId}`});
+          }}
+          >
+            <span className="text-white font-medium">나가기</span>
           </div>
           <div
             {...swipeHandlers}
