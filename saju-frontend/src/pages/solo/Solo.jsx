@@ -11,6 +11,7 @@ import Lottie from "lottie-react";
 import { GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { FaHandHoldingHeart } from "react-icons/fa";
 import GalaxyBg from "../../assets/images/galaxy.jpg";
+import UserCard from "../../components/UserCard";
 
 function Solo() {
   // const { data: users, isLoading, error } = useGet("/api/match/top");
@@ -26,11 +27,11 @@ function Solo() {
 
   return (
     <div
-      className="relative  h-screen w-full bg-cover bg-center"
-      // style={{ backgroundImage: `url(${GalaxyBg})` }}
+      className="relative h-screen w-full bg-cover bg-center"
+      style={{ backgroundImage: `url(${GalaxyBg})` }}
     >
       <TopBar />
-
+      <div className="bg-white bg-opacity-20 h-screen pt-[60px] rounded-lg text-gray-200">
       <div className="section-container mt-8">
         <div className="flex items-center flex-row text-2xl pl-3 gap-x-2">
           <FaHandHoldingHeart className="text-red-600" />
@@ -51,10 +52,10 @@ function Solo() {
           ></motion.div>
         </div> */}
         <div className="pl-3 font-bold mt-1">
-          <span>익명의 상대방과 3분의 설레임을 느껴보세요!</span>
+          <span>궁합이 잘 맞는 사람과 대화해보세요</span>
         </div>
         {/* <UserList users={users} /> */}
-        <SquareCarousel />
+        <SquareCarousel users={testUsers} />
 
 
 
@@ -109,6 +110,7 @@ function Solo() {
             </div>
           </div>
         </Link>
+        </div>
       </div>
 
       {/* 랜덤 채팅 연결하는 부분  UserCard컴포넌트에 이미지 아무거나 넣고 */}
