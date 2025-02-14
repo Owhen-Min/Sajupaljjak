@@ -40,11 +40,9 @@ function ErrorBubble({ children }) {
 
 function SignUpPage() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { email } = useAuth();
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
-
-  const { email } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -81,21 +79,31 @@ function SignUpPage() {
   const [faceDetected, setFaceDetected] = useState(false);
   const [model, setModel] = useState(null);
 
+  const signupMutation = usePost({
+    onSuccess: (data) => {
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      navigate("/auth/welcome");
+    },
+    onError: (error) => {
+      console.error("회원가입 실패:", error);
+    }
+  });
+
   useEffect(() => {
-    // if (!email) {
-    //   navigate("/", { replace: true });
-    //   return;
-    // }
+    if (!email) {
+      navigate("/", { replace: true });
+      return;
+    }
 
     setFormData((prev) => ({ ...prev, email: email }));
 
-    // 모델 로드
     const loadModel = async () => {
       const loadedModel = await blazeface.load();
       setModel(loadedModel);
     };
     loadModel();
-  }, [navigate, location]);
+  }, [navigate, email]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -193,7 +201,6 @@ function SignUpPage() {
         isValid = false;
       }
     } else if (currentStep === 8) {
-      // 내 정보 입력 단계 검증
       if (!formData.religion) {
         newErrors.religion = true;
         isValid = false;
@@ -675,25 +682,14 @@ function SignUpPage() {
     );
   };
 
-const handleSubmit = () => {
-  console.log(formData);
-  if (validateStep(step)) {
-    const {data, isPending, error} = usePost("/api/auth/signup", formData);
-    if (data) {
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      navigate("/auth/welcome");
-    }
-    if(error) {
-      console.error(error);
-    }
-    if (isPending) {
-      console.log("가입 중...");
+  const handleSubmit = () => {
+    if (validateStep(step)) {
+      signupMutation.mutate({
+        uri: "/api/auth/signup",
+        payload: formData
+      });
     }
   };
-}
-
-
 
   const handleNextStep = () => {
     if (step < 9) {
@@ -710,10 +706,9 @@ const handleSubmit = () => {
 
       setStep(nextStep);
 
-      // 페이지 최상단으로 스크롤
       window.scrollTo({
         top: 0,
-        behavior: "smooth", // 부드러운 스크롤 효과
+        behavior: "smooth",
       });
     }
   };
@@ -733,12 +728,10 @@ const handleSubmit = () => {
     setIsFaceDetecting(true);
     
     try {
-      // 이미지 요소 생성
       const img = new Image();
       img.src = imageUrl;
       await new Promise((resolve) => (img.onload = resolve));
       
-      // 얼굴 감지
       const predictions = await model.estimateFaces(img, false);
       setFaceDetected(predictions.length > 0);
       
