@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
 import { useAuth } from "../../hooks/useAuth";
 
 const Verify = () => {
   const navigate = useNavigate();
+  const requestSent = useRef(false);
   const {
     updateMemberId,
     updateEmail,
@@ -16,9 +17,14 @@ const Verify = () => {
 
   const code = new URL(window.location.href).searchParams.get("code");
   const { data, error, isLoading } = useGet(
-      `api/auth/login/kakao?code=${code}`
+    requestSent.current ? null : `api/auth/login/kakao?code=${code}`
   );
-  console.log(data);
+
+  useEffect(() => {
+    if (!requestSent.current && code) {
+      requestSent.current = true;
+    }
+  }, [code]);
 
   useEffect(() => {
     if (isLoading) return;
