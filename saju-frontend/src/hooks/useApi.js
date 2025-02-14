@@ -8,7 +8,10 @@ export const useGet = (uri, options = {}) => {
       const response = await apiClient.get(uri);
       return response.data;
     },
+<<<<<<< HEAD
     retry : 0,
+=======
+>>>>>>> front
     ...options,
     onSuccess: (data) => {
       console.log("GET Response Data:", data);
@@ -19,19 +22,27 @@ export const useGet = (uri, options = {}) => {
   });
 };
 
+<<<<<<< HEAD
 export const usePost = () => {
+=======
+export const usePost = (options = {}) => {
+>>>>>>> front
   return useMutation({
     mutationFn: async ({ uri, payload, config = {} }) => {
       console.log("POST Request Payload:", payload);
       const response = await apiClient.post(uri, payload, config);
       return response.data;
     },
+<<<<<<< HEAD
     onSuccess: (data) => {
       console.log("POST Response Data:", data);
     },
     onError: (error) => {
       console.error("POST Error:", error);
     },
+=======
+    ...options
+>>>>>>> front
   });
 };
 
@@ -51,7 +62,11 @@ export const usePut = () => {
   });
 };
 
+<<<<<<< HEAD
 export const useDelete = () => {
+=======
+export const useDelete = (uri) => {
+>>>>>>> front
   return useMutation({
     mutationFn: async ({ uri, config = {} }) => {
       const response = await apiClient.delete(uri, config);

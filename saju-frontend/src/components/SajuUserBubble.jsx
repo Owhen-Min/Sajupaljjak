@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 function SajuUserBubble({ skyElement, size = 'normal' }) {
+=======
+function SajuUserBubble({ skyElement, size = 'normal', onClick }) {
+>>>>>>> front
   // 천간오행 스타일 매핑
   const elementStyles = {
     '갑목': { bg: 'bg-green-200', text: 'text-green-800', border: 'border-green-300', hanja: '甲' },

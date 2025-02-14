@@ -7,7 +7,10 @@ import com.saju.sajubackend.api.board.dto.request.BoardUpdateRequest;
 import com.saju.sajubackend.api.board.dto.response.BoardCreateResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardDetailResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardListResponse;
+<<<<<<< HEAD
 import com.saju.sajubackend.api.board.dto.response.CommentListResponse;
+=======
+>>>>>>> front
 import com.saju.sajubackend.api.board.repository.BoardRepository;
 import com.saju.sajubackend.api.board.repository.CommentRepository;
 import com.saju.sajubackend.api.member.domain.Member;
@@ -199,6 +202,7 @@ public class BoardService {
                 .build();
         commentRepository.save(comment);
     }
+<<<<<<< HEAD
 
     // ──────────────────────────────────────────────
     // 신규 메서드: 내가 쓴 게시물 조회
@@ -265,4 +269,6 @@ public class BoardService {
 
         return new CommentListResponse(content, false, null);
     }
+=======
+>>>>>>> front
 }

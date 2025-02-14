@@ -6,7 +6,10 @@ import com.saju.sajubackend.api.board.dto.request.CommentCreateRequest;
 import com.saju.sajubackend.api.board.dto.response.BoardCreateResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardDetailResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardListResponse;
+<<<<<<< HEAD
 import com.saju.sajubackend.api.board.dto.response.CommentListResponse;
+=======
+>>>>>>> front
 import com.saju.sajubackend.api.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -110,6 +113,7 @@ public class BoardController {
         boardService.createComment(currentMemberId, boardId, request.getContent());
         return ResponseEntity.ok().build();
     }
+<<<<<<< HEAD
 
     /**
      * [내가 쓴 게시물 조회]
@@ -131,4 +135,6 @@ public class BoardController {
         CommentListResponse response = boardService.getMyCommentList(memberId);
         return ResponseEntity.ok(response);
     }
+=======
+>>>>>>> front
 }

@@ -37,9 +37,15 @@ function Community() {
             className="w-full py-[7px]"
           />
           <MainButton 
+<<<<<<< HEAD
             children="⌕"
             onClick={() => console.log(searchQuery)}
             className="w-[50px] h-[40px] text-2xl"
+=======
+            children="🔍"
+            onClick={() => console.log(searchQuery)}
+            className="w-[50px] h-[40px] text-2xl py-0 bg-[#f8f8f7] hover:bg-[#a9a59f] border border-gray-300"
+>>>>>>> front
           />
         </div>
         <ArticleList 
@@ -47,9 +53,15 @@ function Community() {
         />
       </div>
       <MainButton 
+<<<<<<< HEAD
         children="✎"
         onClick={() => navigate('/community/write')}
         className="fixed bottom-[calc(17%)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-2xl shadow-lg max-[400px]:right-5 max-[320px]:right-5"
+=======
+        children="✏️"
+        onClick={() => navigate('/community/write')}
+        className="fixed bg-[#bcb8b1] hover:bg-[#a9a59f] bottom-[calc(17%)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-4xl shadow-lg max-[400px]:right-5 max-[320px]:right-5 text-center"
+>>>>>>> front
       />
       <BottomNav />
     </div>

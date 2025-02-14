@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -86,3 +87,97 @@ body {
 .font-noto {
     font-family: 'NotoSansKR', sans-serif;
 }
+=======
+   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+ 
+
+
+  #root {
+    max-width: 400px;
+    min-height: 100vh; /* 모바일 기본값 */
+    margin: 0 auto;
+    padding: 0 0px;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: "Noto Sans KR", sans-serif;
+  } 
+
+
+  body {
+    background-color: #f7f7f7;
+  }
+
+  .fortune {
+    background-image: url("https://img.freepik.com/free-photo/simple-smooth-fabric-textured-background_53876-128518.jpg?t=st=1738822310~exp=1738825910~hmac=4166c8244d998096c324722e5fa240a5339acdaa52d9344595c145af48e041a7&w=1380");
+    background-size: contain;
+    background-position: center;
+    background-repeat: repeat;
+  }
+
+  .community {
+    background-image: url("https://img.freepik.com/free-photo/simple-smooth-fabric-textured-background_53876-128518.jpg?t=st=1738822310~exp=1738825910~hmac=4166c8244d998096c324722e5fa240a5339acdaa52d9344595c145af48e041a7&w=1380");
+    background-size: contain;
+    background-position: center;
+    background-repeat: repeat;
+  }
+
+  @font-face {
+      font-family: 'GapyeongHanseokbong-Bold';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2312-1@1.1/GapyeongHanseokbong-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+  }
+  .font-a{
+      font-family: 'GapyeongHanseokbong-Bold', sans-serif;
+  }
+
+  @font-face {
+      font-family: 'Dokrip';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.1/Dokrip.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+  }
+
+  .font-dokrip {
+      font-family: 'Dokrip', sans-serif;
+  }
+
+  @font-face {
+      font-family: 'GapyeongHanseokbong-Bold';
+      src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2312-1@1.1/GapyeongHanseokbong-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+  }
+
+  .font-gapyeong {
+      font-family: 'GapyeongHanseokbong-Bold', sans-serif;
+  }
+
+  @layer utilities {
+    /* Chrome, Safari and Opera */
+    .scrollbar-hidden::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scrollbar-hidden {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+    }
+  }
+
+  @font-face {
+      font-family: 'NotoSansKR';
+      src: url('./assets/fonts/NotoSansKR-Medium.ttf') format('woff2');
+      font-weight: bold;
+      font-style: normal;
+  }
+
+  .font-noto {
+      font-family: 'NotoSansKR', sans-serif;
+  }
+>>>>>>> front

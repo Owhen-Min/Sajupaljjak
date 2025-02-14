@@ -4,7 +4,10 @@ import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.filter.domain.RegionFilter;
 import com.saju.sajubackend.api.filter.domain.ReligionFilter;
 import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
+<<<<<<< HEAD
 import com.saju.sajubackend.api.filter.dto.MemberProfileResponse;
+=======
+>>>>>>> front
 import com.saju.sajubackend.api.filter.repository.FilterRepository;
 import com.saju.sajubackend.api.filter.repository.RegionFilterRepository;
 import com.saju.sajubackend.api.filter.repository.ReligionFilterRepository;
@@ -40,6 +43,7 @@ public class FilterService {
         saveReligionFilters(request.toReligionFilters(filter));
     }
 
+<<<<<<< HEAD
 
     public MemberProfileResponse getMemberProfile(Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -60,6 +64,8 @@ public class FilterService {
     }
 
 
+=======
+>>>>>>> front
     private void saveRegionFilters(List<Integer> cityCodes, Filter filter) {
         if (cityCodes.isEmpty()) return;
 

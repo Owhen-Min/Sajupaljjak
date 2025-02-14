@@ -7,7 +7,10 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.saju.domain.Saju;
 import com.saju.sajubackend.api.saju.dto.SajuDetailResponse;
+<<<<<<< HEAD
 import com.saju.sajubackend.api.saju.dto.SajuInfoDto;
+=======
+>>>>>>> front
 import com.saju.sajubackend.api.saju.dto.SajuResponse;
 import com.saju.sajubackend.api.saju.repository.SajuRepository;
 import com.saju.sajubackend.common.exception.ErrorMessage;
@@ -53,8 +56,11 @@ public class SajuService {
         return "saju:today:" + memberId;
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> front
     // 회원의 사주 정보를 활용해 오늘의 운세(간단 버전) 조회
     public SajuResponse getDailySajuForMember(Long memberId) {
         String redisKey = getDailyKey(memberId);
@@ -231,5 +237,8 @@ public class SajuService {
         LocalDateTime midnight = now.plusDays(1).with(LocalTime.MIDNIGHT);
         return Duration.between(now, midnight).getSeconds();
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> front
 }

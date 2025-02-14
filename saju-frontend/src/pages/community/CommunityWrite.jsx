@@ -1,6 +1,9 @@
 import { TopBar2 } from "../../components/TopBar2";
 import Input from "../../components/Input";
+<<<<<<< HEAD
 import CommunityFilterBubble from "../../components/CommunityFilterBubble";
+=======
+>>>>>>> front
 import { useState } from "react";
 import SajuUserBubble from '../../components/SajuUserBubble';
 import MainButton from "../../components/MainButton";
@@ -15,7 +18,11 @@ function ErrorBubble({ children }) {
 
 function CommunityWrite() {
   const [selectedElement, setSelectedElement] = useState('');
+<<<<<<< HEAD
   const [selectedPillar, setSelectedPillar] = useState('');
+=======
+  const [selectedPillar, setSelectedPillar] = useState('게시판 천간 선택');
+>>>>>>> front
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -31,7 +38,11 @@ function CommunityWrite() {
     const newErrors = {
       title: formData.title.trim() === '',
       content: formData.content.trim() === '',
+<<<<<<< HEAD
       celestialStem: !selectedPillar,
+=======
+      celestialStem: selectedPillar === '게시판 천간 선택',
+>>>>>>> front
     };
 
     setErrors(newErrors);
@@ -63,13 +74,26 @@ function CommunityWrite() {
     }));
   };
 
+<<<<<<< HEAD
   return (
     <div className="community community-write flex flex-col relative h-screen pt-12">
+=======
+  const skyElementOptions = ['갑목', '을목', '병화', '정화', '무토', '기토', '경금', '신금', '임수', '계수'];
+    
+
+  const handleSkyElementChange = (e) => {
+    handlePillarSelect(e.target.value);
+  };
+
+  return (
+    <div className="community community-write flex flex-col relative min-h-screen pt-[60px]">
+>>>>>>> front
       <TopBar2 
         url="/community"
         mainText="게시글 작성"
       />
       
+<<<<<<< HEAD
       <CommunityFilterBubble
         selectedElement={selectedElement}
         onElementSelect={setSelectedElement}
@@ -86,6 +110,40 @@ function CommunityWrite() {
             </span>
           </div>
         )}
+=======
+      <div className="flex flex-col p-4 px-6 gap-4 ">
+        <li className="group w-1/2 relative dropdown px-2 py-2 cursor-pointer text-base uppercase list-none tracking-wide border rounded-lg shadow-sm bg-white">
+          {skyElementOptions.includes(selectedPillar) ? (
+            <div className="flex items-center gap-2">
+              <SajuUserBubble skyElement={selectedPillar} size="normal"/>
+              <span className="font-bold">게시판</span>
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              {selectedPillar}
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          )}
+          <div className="group-hover:block dropdown-menu absolute hidden h-auto">
+
+          <ul className="top-0 w-30 bg-white shadow px-2 py-2">
+              {skyElementOptions.map(option => (
+                <li className="py-1" key={option}>
+                  <div onClick={() => handlePillarSelect(option)}>
+                    <SajuUserBubble skyElement={option} size="normal"/>
+                  </div>
+                </li>
+              ))}
+          </ul>
+          </div>
+      </li>
+        {errors.celestialStem && <ErrorBubble>천간을 선택해주세요</ErrorBubble>}
+>>>>>>> front
 
         <div>
           <Input
@@ -117,7 +175,10 @@ function CommunityWrite() {
           작성하기
         </MainButton>
       </div>
+<<<<<<< HEAD
       }
+=======
+>>>>>>> front
     </div>
   );
 }
