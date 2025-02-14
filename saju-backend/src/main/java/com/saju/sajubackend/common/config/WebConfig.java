@@ -17,7 +17,7 @@ public class WebConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true); // 인증 정보(쿠키, 헤더) 포함 허용
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // 허용할 프론트엔드 URL
+        config.setAllowedOrigins(List.of("https://i12a408.p.ssafy.io")); // 허용할 프론트엔드 URL
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
         config.setAllowedHeaders(List.of("*")); // 모든 요청 헤더 허용
 

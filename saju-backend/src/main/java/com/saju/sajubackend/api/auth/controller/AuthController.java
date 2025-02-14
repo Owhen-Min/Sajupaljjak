@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://i12a408.p.ssafy.io")
 public class AuthController {
 
     private final KakaoAuthService kakaoAuthService;
