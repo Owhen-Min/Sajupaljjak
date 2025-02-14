@@ -18,9 +18,9 @@ export const useGet = (uri, options = {}) => {
   });
 };
 
-export const usePost = () => {
+export const usePost = (uri, payload) => {
   return useMutation({
-    mutationFn: async ({ uri, payload, config = {} }) => {
+    mutationFn: async (payload = payload, config = {}) => {
       console.log("POST Request Payload:", payload);
       const response = await apiClient.post(uri, payload, config);
       return response.data;
@@ -50,7 +50,7 @@ export const usePut = () => {
   });
 };
 
-export const useDelete = () => {
+export const useDelete = (uri) => {
   return useMutation({
     mutationFn: async ({ uri, config = {} }) => {
       const response = await apiClient.delete(uri, config);

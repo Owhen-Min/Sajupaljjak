@@ -679,8 +679,19 @@ function SignUpPage() {
 const handleSubmit = () => {
   console.log(formData);
   if (validateStep(step)) {
-    postMutation.mutate({ uri: "api/auth/signup", payload: formData });
+    const {data, isPending, error} = usePost("/api/auth/signup", formData);
+    if (data) {
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      navigate("/auth/welcome");
+    }
+    if(error) {
+      console.error(error);
+    if (isPending) {
+      console.log("가입 중...");
+    }
   }
+
 };
 
   const handleNextStep = () => {
