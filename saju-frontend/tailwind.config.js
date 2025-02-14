@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import daisyui from "daisyui";
+
 export default {
   content: ["./src/**/*.{html,jsx,js}"],
   theme: {
@@ -20,5 +22,5 @@ export default {
       }
     },
   },
-  plugins: [import("daisyui"), import("tailwind-scrollbar-hide")],
+  plugins: [daisyui, import("tailwind-scrollbar-hide")],
 };
