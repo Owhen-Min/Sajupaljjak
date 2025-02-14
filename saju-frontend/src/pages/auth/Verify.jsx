@@ -16,7 +16,7 @@ const Verify = () => {
 
   const code = new URL(window.location.href).searchParams.get("code");
   const { data, error, isLoading } = useGet(
-    `https://i12a408.p.ssafy.io/api/auth/login/kakao?code=${code}`
+    `api/auth/login/kakao?code=${code}`
   );
   console.log(data);
 
