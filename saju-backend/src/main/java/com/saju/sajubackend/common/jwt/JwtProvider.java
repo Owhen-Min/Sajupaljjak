@@ -27,11 +27,20 @@ public class JwtProvider {
     private final RedisTemplate<String, Object> redisTemplate;
 
     @PostConstruct
+//    protected void init() {
+//        log.info("✅ [JWT 초기화] Secret Key 설정 시작...");
+//        log.info("✅ [JWT Secret Key (Before Encoding)] {}", secretKey);
+//        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+//        log.info("✅ [JWT Secret Key (After Encoding)] {}", secretKey);
+//    }
     protected void init() {
-        log.info("✅ [JWT 초기화] Secret Key 설정 시작...");
-        log.info("✅ [JWT Secret Key (Before Encoding)] {}", secretKey);
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        log.info("✅ [JWT Secret Key (After Encoding)] {}", secretKey);
+        log.info("✅ [JWT Secret Key] {}", secretKey);
+
+        // Base64 인코딩 제거 (Secret Key가 이미 Base64라면 decode 필요)
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey);
+        log.info("✅ [JWT Secret Key (Decoded)] {}", keyBytes);
+
+        log.info("✅ [JWT Secret Key Initialization Completed]");
     }
 
     public String createAccessToken(long memberId) {
@@ -69,6 +78,14 @@ public class JwtProvider {
         log.info("✅ [JWT 생성] Token 생성 완료 | Expire Time: {} ms", expireTime);
         return token;
     }
+//private String createToken(Claims claims, Date now, long expireTime) {
+//    return Jwts.builder()
+//            .claims(claims)
+//            .issuedAt(now)
+//            .expiration(new Date(now.getTime() + expireTime))
+//            .signWith(Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey))) // 수정된 부분
+//            .compact();
+//}
 
     public boolean validateToken(String token) {
         try {

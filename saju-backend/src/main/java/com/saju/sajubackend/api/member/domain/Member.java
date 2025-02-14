@@ -52,6 +52,9 @@ public class Member {
     @Column(name = "city_code")
     private Integer cityCode;
 
+    @Column(name = "dong_code")
+    private Integer dongCode;
+
     @Column(name = "age")
     private Integer age;
 

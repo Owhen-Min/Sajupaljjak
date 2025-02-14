@@ -48,14 +48,17 @@ public class FilterService {
         return MemberProfileResponse.builder()
                 .name(member.getNickname()) // name 필드 대신 nickname 사용
                 .nickname(member.getNickname())
-                .gender(member.getGender().name()) // Enum → String 변환
+                .gender(member.getGender().getLabel()) // Enum → String 변환
                 .profileImage(member.getProfileImg())
                 .cityCode(member.getCityCode())
-                .religion(member.getReligion().name()) // Enum → String 변환
+                .dongCode(member.getDongCode())
+                .religion(member.getReligion().getLabel()) // Enum → String 변환
                 .age(member.getAge())
                 .height(member.getHeight())
-                .celestialStem(member.getCelestialStem() != null ? member.getCelestialStem().name() : null) // null 체크
+                .celestialStem(member.getCelestialStem() != null ? member.getCelestialStem().getLabel() : null) // label 반환
                 .intro(member.getIntro())
+                .smoking(member.getSmoking().getLabel())
+                .drinking(member.getDrinking().getLabel())
                 .build();
     }
 

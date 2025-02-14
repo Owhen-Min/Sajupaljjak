@@ -134,6 +134,7 @@ public class AuthService {
                 .profileImg(request.getProfileImg())
                 .height(request.getHeight())
                 .cityCode(request.getCityCode())
+                .dongCode(request.getDongCode())
                 .smoking(SmokingStatus.fromLabel(request.getSmoking()))
                 .drinking(DrinkingFrequency.fromLabel(request.getDrinking()))
                 .religion(Religion.fromLabel(request.getReligion()))
