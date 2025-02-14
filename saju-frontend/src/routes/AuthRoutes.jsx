@@ -13,7 +13,7 @@ function AuthRoutes() {
       {/* 로그인으로 이동하는 경우 */}
       <Route path="/" element={<LogInPage />} />
       {/* 로그인 검증으로 이동하는 경우 */}
-      <Route path="/verify" element={<Verify />} />
+      <Route path="/auth/verify" element={<Verify />} />
       {/* 회원가입으로 이동하는 경우 */}
       <Route path="/signup" element={<SignUpPage />} />
       {/* 회원가입 완료 페이지로 이동하는 경우 (솔로, 커플 추가정보 입력해야 함)*/}
