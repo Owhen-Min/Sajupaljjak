@@ -5,7 +5,7 @@ const ChatList = ({ chats }) => {
   const navigate = useNavigate();
 
   const handleChatClick = (chatRoomId) => {
-    navigate(`/chat/${chatRoomId}`); // 채팅방으로 이동
+    navigate(`/chats/${chatRoomId}`); // 채팅방으로 이동
   };
 
   return (
