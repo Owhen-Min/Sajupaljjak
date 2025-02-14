@@ -2,6 +2,8 @@ package com.saju.sajubackend.api.chat.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import static com.saju.sajubackend.api.chat.domain.QChatroom.chatroom;
+import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMember;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +26,19 @@ public class ChatroomQueryDslRepository {
                                 )
                 )
                 .fetchOne();
+    }
+
+    public Boolean existChatMember(Long chatroomId, Long memberId) {
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(chatroomMember)
+                .where(
+                        chatroomMember.chatroom.chatroomId.eq(chatroomId),
+                        chatroomMember.member.memberId.eq(memberId),
+                        chatroomMember.isActive.isTrue()
+                )
+                .fetchOne();
+
+        return fetchOne != null;
     }
 }

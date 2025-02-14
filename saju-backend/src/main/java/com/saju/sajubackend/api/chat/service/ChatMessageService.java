@@ -31,7 +31,7 @@ public class ChatMessageService {
         Long memberId = Long.parseLong(chatMessage.getSenderId());
 
         if (!chatMemberQueryDslRepository.existsByChatroomAndMember(chatroomId, memberId))
-            throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM_ID);
+            throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
     }
 
     private ChatMessage createChatMessage(ChatMessage chatMessage) {

@@ -1,12 +1,9 @@
-package com.saju.sajubackend.api.chat.dto;
+package com.saju.sajubackend.api.chat.dto.response;
 
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

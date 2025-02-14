@@ -1,7 +1,7 @@
 package com.saju.sajubackend.api.chat.service;
 
 import com.saju.sajubackend.api.chat.domain.Chatroom;
-import com.saju.sajubackend.api.chat.dto.ChatMessageResponseDto;
+import com.saju.sajubackend.api.chat.dto.response.ChatMessageResponseDto;
 import com.saju.sajubackend.api.chat.repository.ChatMessageRepository;
 import com.saju.sajubackend.api.chat.repository.ChatroomRepository;
 import com.saju.sajubackend.common.exception.BadRequestException;
@@ -30,7 +30,7 @@ public class ChatHistoryService {
 
     private void isAuthorized(Long chatroomId, Long memberId) {
         Chatroom chatroom = chatroomRepository.findById(chatroomId)
-                .orElseThrow(() -> new BadRequestException(ErrorMessage.INVALID_CHAT_ROOM_ID));
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.INVALID_CHAT_ROOM));
 
         if (isChatMember(chatroom, memberId)) throw new UnAuthorizedException(ErrorMessage.ERR_UNAUTORIZED);
     }

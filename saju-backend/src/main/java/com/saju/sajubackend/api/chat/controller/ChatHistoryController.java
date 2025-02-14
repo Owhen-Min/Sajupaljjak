@@ -1,6 +1,6 @@
 package com.saju.sajubackend.api.chat.controller;
 
-import com.saju.sajubackend.api.chat.dto.ChatMessageResponseDto;
+import com.saju.sajubackend.api.chat.dto.response.ChatMessageResponseDto;
 import com.saju.sajubackend.api.chat.service.ChatHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
