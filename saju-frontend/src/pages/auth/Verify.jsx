@@ -36,6 +36,7 @@ const Verify = () => {
       updateEmail(data.email);
 
       if (!data.token) {
+        alert("회원가입이 필요합니다.");
         navigate("/auth/signup");
         return;
       }
