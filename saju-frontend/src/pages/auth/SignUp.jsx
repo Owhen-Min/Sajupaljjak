@@ -59,7 +59,7 @@ function SignUpPage() {
     dongCode: "",
     profileImg: "",
     nickname: "",
-    introduction: "",
+    intro: "",
   });
   const [errors, setErrors] = useState({
     name: false,
@@ -73,7 +73,7 @@ function SignUpPage() {
     drinking: false,
     height: false,
     location: false,
-    introduction: false,
+    intro: false,
   });
   const [isFaceDetecting, setIsFaceDetecting] = useState(false);
   const [faceDetected, setFaceDetected] = useState(false);
@@ -178,7 +178,7 @@ function SignUpPage() {
       height: false,
       location: false,
       nickname: false,
-      introduction: false,
+      intro: false,
       profileImg: false,
     };
 
@@ -226,8 +226,8 @@ function SignUpPage() {
         newErrors.nickname = true;
         isValid = false;
       }
-      if (!formData.introduction) {
-        newErrors.introduction = true;
+      if (!formData.intro) {
+        newErrors.intro = true;
         isValid = false;
       }
       if (!formData.profileImg) {
@@ -243,8 +243,8 @@ function SignUpPage() {
         newErrors.nickname = true;
         isValid = false;
       }
-      if (!formData.introduction) {
-        newErrors.introduction = true;
+      if (!formData.intro) {
+        newErrors.intro = true;
         isValid = false;
       }
     }
@@ -611,8 +611,8 @@ function SignUpPage() {
             <div className="input-group mb-6">
               <div className="flex flex-col w-full">
                 <textarea
-                  name="introduction"
-                  value={formData.introduction}
+                  name="intro"
+                  value={formData.intro}
                   onChange={(e) => {
                     handleInputChange(e);
                     setMaxStep(Math.max(maxStep, 11));
@@ -622,7 +622,7 @@ function SignUpPage() {
                   className="w-full h-32 p-3 border border-gray-300 rounded-md resize-none text-base"
                   maxLength={500}
                 />
-                {errors.introduction && (
+                {errors.intro && (
                   <ErrorBubble>자기소개를 입력해주세요</ErrorBubble>
                 )}
               </div>
