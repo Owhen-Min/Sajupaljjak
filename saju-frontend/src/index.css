@@ -106,6 +106,18 @@ body {
   font-family: "GapyeongHanseokbong-Bold", sans-serif;
 }
 
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-main1 {
+  font-family: "Pretendard-Regular", sans-serif;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .scrollbar-hidden::-webkit-scrollbar {
@@ -152,7 +164,7 @@ body {
 }
 
 .font-nanumNeo {
-  font-family: "NanumSquareHeavy", sans-serif;
+  font-family: "NanumSquareNeoExtraBold", sans-serif;
 }
 
 @font-face {

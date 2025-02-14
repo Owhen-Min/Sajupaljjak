@@ -67,7 +67,7 @@ export default function SquareCarousel() {
   }, [slides.length]);
 
   return (
-    <div className="w-[90%] h-64 mx-auto flex">
+    <div className="w-[90%] h-60 mx-auto flex">
       <Carousel
         slides={slides}
         goToSlide={goToSlide}
