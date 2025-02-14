@@ -22,6 +22,10 @@ const Verify = () => {
   console.log(data);
 
   useEffect(() => {
+    if (!requestSent.current && code) {
+      requestSent.current = true;
+    }
+
     if (isLoading) return;
 
     if (error) {
