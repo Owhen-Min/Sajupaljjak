@@ -8,6 +8,7 @@ export const useGet = (uri, options = {}) => {
       const response = await apiClient.get(uri);
       return response.data;
     },
+    retry : 0,
     ...options,
     onSuccess: (data) => {
       console.log("GET Response Data:", data);
