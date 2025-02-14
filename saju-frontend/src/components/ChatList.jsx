@@ -1,9 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import SajuUserBubble from "./SajuUserBubble";
 import { useSwipeable } from "react-swipeable";
-
+import { useState } from "react";
+import { useDelete } from "../hooks/useApi";
 const ChatList = ({ chats }) => {
   const navigate = useNavigate();
+  const [openChatId, setOpenChatId] = useState(null);
+  const deleteChat = useDelete();
 
   function formatRelativeTime(dateString) {
     const now = new Date();
@@ -28,32 +31,57 @@ const ChatList = ({ chats }) => {
   };
 
   const renderSwipeableChat = (chatRoomId, chatData) => {
+    const [isDragging, setIsDragging] = useState(false);
+
     const swipeHandlers = useSwipeable({
+      onSwipeStart: () => {
+        setIsDragging(true);
+        if (openChatId && openChatId !== chatRoomId) {
+          const prevElement = document.getElementById(`chat-content-${openChatId}`);
+          if (prevElement) {
+            prevElement.style.transform = 'translateX(0)';
+          }
+        }
+      },
       onSwipedLeft: () => {
         const element = document.getElementById(`chat-content-${chatRoomId}`);
         if (element) {
           element.style.transform = 'translateX(-80px)';
         }
+        setOpenChatId(chatRoomId);
       },
+
       onSwipedRight: () => {
         const element = document.getElementById(`chat-content-${chatRoomId}`);
         if (element) {
           element.style.transform = 'translateX(0)';
         }
+        setOpenChatId(chatRoomId);
       },
+      
+      onTouchEndOrOnMouseUp: () => {
+        setTimeout(() => {
+          setIsDragging(false);
+        }, 100);
+      },
+      trackMouse: true
     });
 
     return (
-      <div key={chatRoomId} className="h-[100px]">
-        <div className="relative h-full">
-          <div className="absolute right-0 top-0 h-full w-20 bg-red-500 flex items-center justify-center">
+      <div key={chatRoomId} className="relative flex flex-col">
+        <div className="relative w-full">
+          <div className="absolute right-0 top-0 h-full goout-button h-full w-20 bg-red-500 flex items-center justify-center cursor-pointer"
+          onClick={() => {
+            deleteChat.mutate({uri: `/chats/${chatRoomId}`});
+          }}
+          >
             <span className="text-white font-medium">나가기</span>
           </div>
           <div
             {...swipeHandlers}
             id={`chat-content-${chatRoomId}`}
-            className="absolute inset-0 chat-card flex items-center justify-between bg-white px-3 py-5 rounded-md border border-gray-200 cursor-pointer opacity-100 hover:bg-gray-50 transition transform duration-200 ease-in-out overflow-hidden"
-            onClick={() => handleChatClick(chatRoomId)}
+            className="w-full chat-card flex items-center bg-white pl-3 py-5 border border-gray-200 cursor-pointer opacity-100 hover:bg-gray-50 transition transform duration-200 ease-in-out gap-x-3 overflow-x-hidden select-none"
+            onClick={() => !isDragging && handleChatClick(chatRoomId)}
           >
             <div className="flex w-2/12 justify-center items-center">
               <img
@@ -86,7 +114,7 @@ const ChatList = ({ chats }) => {
   };
 
   return (
-    <div className="flex flex-col h-full gap-20">
+    <div className="flex flex-col h-full">
       {Object.entries(chats[0])
         .sort(([, a], [, b]) => new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime))
         .map(([chatRoomId, chatData]) => renderSwipeableChat(chatRoomId, chatData))}

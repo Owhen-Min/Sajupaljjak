@@ -115,7 +115,7 @@ function SignUpPage() {
         ((updatedFormData.bday && updatedFormData.bTime) ||
           (updatedFormData.bday && updatedFormData.birthTimeUnknown))
       ) {
-        setStep(4);
+        setStep(3);
       }
     }
   };

@@ -1,7 +1,7 @@
 export const MainButton = ({ className, children, bgColor = "666666", hoverColor = "525252", ...props }) => (
     <button
       className={`
-        px-3
+        flex items-center justify-center
         font-medium text-white
         bg-[#666666]
         rounded-lg
@@ -15,7 +15,7 @@ export const MainButton = ({ className, children, bgColor = "666666", hoverColor
       `}
       {...props}
     >
-      {children}
+      <span className="text-center py-auto">{children}</span>
     </button>
   );
   
