@@ -1,9 +1,9 @@
 package com.saju.sajubackend.api.matching.controller;
 
-import com.saju.sajubackend.api.matching.dto.MatchingMemberResponseDto;
-import com.saju.sajubackend.api.matching.dto.MatchingProfileResponseDto;
-import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
+import com.saju.sajubackend.api.matching.dto.*;
 import com.saju.sajubackend.api.matching.service.MatchingService;
+import com.saju.sajubackend.api.member.domain.Member;
+import com.saju.sajubackend.api.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,7 @@ import java.util.List;
 public class MatchingController {
 
     private final MatchingService matchingService;
+    private final MemberService memberService;
 
     @GetMapping("/top")
     public ResponseEntity<List<MatchingMemberResponseDto>> getMatchingMembers(Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
@@ -36,5 +37,18 @@ public class MatchingController {
             @PathVariable Long partnerId, Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(matchingService.getMatchingMemberProfile(memberId, partnerId));
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<MemberFilterResponse> getMemberFilter(Long memberId) {
+        Member member = memberService.getMember(memberId);
+        return ResponseEntity.ok(MemberFilterResponse.from(member));
+    }
+
+    @PutMapping("/filter")
+    public ResponseEntity<Void> updateMemberFilter(Long memberId,
+                                                   @RequestBody MemberFilterRequest request) {
+        memberService.updateMemberFilter(memberId, request);
+        return ResponseEntity.ok().build();
     }
 }

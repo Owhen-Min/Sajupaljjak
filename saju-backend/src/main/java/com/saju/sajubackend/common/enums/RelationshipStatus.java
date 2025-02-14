@@ -25,6 +25,9 @@ public enum RelationshipStatus {
     }
 
     public static RelationshipStatus fromLabel(String label) {
+        if (label == null || label.isBlank()) {
+            return null;
+        }
         for (RelationshipStatus status : RelationshipStatus.values()) {
             if (status.label.equals(label)) return status;
 
