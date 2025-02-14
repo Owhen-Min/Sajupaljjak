@@ -6,7 +6,7 @@ import Dropdown from "../../components/Dropdown";
 import MainButton from "../../components/MainButton";
 import Input from "../../components/Input";
 import { provinces } from "../../data/provinceCode";
-import { testUsers } from "../../data/user";
+import { useGet, usePut } from "../../hooks/useApi";
 import * as blazeface from '@tensorflow-models/blazeface';
 import '@tensorflow/tfjs';
 
@@ -23,7 +23,6 @@ function MyPageEditProfile() {
     cityCode: '',
     dongCode: '',
   });
-  const [isLoading, setIsLoading] = useState(true);
   const [model, setModel] = useState(null);
   const [faceDetectionError, setFaceDetectionError] = useState(false);
 
@@ -38,10 +37,11 @@ function MyPageEditProfile() {
     location: false,
   });
 
+  const { data, isLoading, error } = useGet('/api/members');
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        setIsLoading(true);
         
         const userData = testUsers[0];
         
@@ -157,12 +157,11 @@ function MyPageEditProfile() {
   };
 
   return (
-    <div className="edit-profile-page flex flex-col relative pt-14 h-screen">
+    <div className="edit-profile-page flex flex-col relative pt-[60px] pb-5 min-h-screen">
       <TopBar2 mainText={"내 프로필 수정하기"} />
       <div className="flex-1 overflow-y-auto px-6 pt-2">
         {/* 프로필 사진 */}
-        <div className="mb-8">
-          <h3 className="text-lg font-medium mb-2">프로필 사진</h3>
+        <div className="mb-5">
           {errors.profileImage && (
             <p className="text-red-500 text-sm mb-2">프로필 사진을 선택해주세요</p>
           )}
