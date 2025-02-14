@@ -1,44 +1,29 @@
-import SajuUserBubble from "./SajuUserBubble";
-import { Link } from "react-router-dom";
-import Heart from "./Heart";
-
-const UserCard = ({ user, disabled, className, ...props }) => {
+export default function UserCard({ user }) {
   return (
-    <Link 
-      to={disabled ? '#' : `/match/${user.id}`} 
-      className={`w-full max-w-sm mx-auto ${
-          disabled && 'pointer-events-none'
-        } ${className}`} 
-      onClick={(e) => disabled && e.preventDefault()}
-      {...props}
-    >
-      <div
-        className={`relative w-full aspect-[4/3] rounded-3xl bg-gray-200`}
-        style={{
-          backgroundImage: user.profileImage ? `url(${user.profileImage})` : 'none',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute bottom-0 w-full bg-gray-900 bg-opacity-40 p-4 rounded-b-3xl flex items-center justify-between">
-          <div className="flex flex-col space-y-2">
-            <div className="flex space-x-2">
-              <span className="card-title text-white font-bold">
-                {user.nickname}
-              </span>
-              <SajuUserBubble skyElement={user.memberType} />
-              <span className="badge text-white">{user.age}세</span>
-            </div>
-            <div className="flex space-x-2">
-              <p className="text-white">{user.introduction  }</p>
-            </div>
-          </div>
-          <Heart score={user.score} />
-
+    <div className="w-72 h-72 shadow-xl rounded-xl font-nanumNeo">
+      {/* 이미지 박스 -> 여기에 텍스트 정보가 포함 되어야함 */}
+      <div className="w-60 h-60 relative">
+        <div>
+          <img src={user.profileImage} className="rounded-t-xl" />
         </div>
       </div>
-    </Link>
-  );
-};
+      <div className="absolute bottom-0 w-full bg-gradient-to-t from-black via-black/60 to-transparent text-white p-4">
+        <div className="text-lg font-semibold ">{user.nickname}</div>
+        <div className="text-sm opacity-90">
+          {user.age}세 · {user.celestialStem}
+        </div>
+        <div className="text-xs mt-2 opacity-80 ">{user.introduction}</div>
+      </div>
 
-export default UserCard;
+      {/* 하단 버튼 */}
+      <div className="flex justify-around rounded-b-xl h-[3rem] items-center w-full">
+        <div className="text-xl pt-1 bg-green-700 hover:bg-green-600 rounded-bl-xl w-[50%] h-full flex items-center justify-center">
+          채팅하기
+        </div>
+        <div className=" text-xl pt-1 bg-red-700 hover:bg-red-600 w-[50%] rounded-br-xl h-full flex items-center justify-center">
+          화상채팅
+        </div>
+      </div>
+    </div>
+  );
+}
