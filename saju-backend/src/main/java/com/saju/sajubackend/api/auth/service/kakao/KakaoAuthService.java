@@ -43,10 +43,10 @@ public class KakaoAuthService {
 
     public KakaoTokenResponse getKakaoAccessToken(String code) {
         // 요청 전 로그 출력
-        log.info("=== [카카오 토큰 요청] ===");
-        log.info("Authorization Code: {}", code);
-        log.info("Client ID: {}", clientId);
-        log.info("Redirect URI: {}", redirectUri);
+        logger.info("=== [카카오 토큰 요청] ===");
+        logger.info("Authorization Code: {}", code);
+        logger.info("Client ID: {}", clientId);
+        logger.info("Redirect URI: {}", redirectUri);
 
         try {
             KakaoTokenResponse response = webClient.post()
@@ -58,15 +58,15 @@ public class KakaoAuthService {
                             .with("code", code))
                     .retrieve()
                     .bodyToMono(KakaoTokenResponse.class)
-                    .doOnSuccess(res -> log.info("카카오 응답 성공: {}", res))
-                    .doOnError(error -> log.error("카카오 요청 실패: {}", error.getMessage()))
+                    .doOnSuccess(res -> logger.info("카카오 응답 성공: {}", res))
+                    .doOnError(error -> logger.error("카카오 요청 실패: {}", error.getMessage()))
                     .block(); // 동기 실행 (비동기 사용 시 block() 제거)
 
             // 요청 후 응답 로그 출력
-            log.info("=== [카카오 응답 완료] ===");
+            logger.info("=== [카카오 응답 완료] ===");
             return response;
         } catch (Exception e) {
-            log.error("카카오 토큰 요청 중 예외 발생: {}", e.getMessage(), e);
+            logger.error("카카오 토큰 요청 중 예외 발생: {}", e.getMessage(), e);
             throw new RuntimeException("카카오 토큰 요청 실패", e);
         }
     }
