@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TopBar2 from '../../components/TopBar2';
 import MainButton from '../../components/MainButton';
 import Input from '../../components/Input';
-
+import { useGet, usePost } from '../../hooks/useApi';
 
 function CoupleCode() {
   const navigate = useNavigate();
@@ -11,9 +11,15 @@ function CoupleCode() {
     code: '',
     expiresAt: null,
   });
+
   const [copied, setCopied] = useState(false);
   const [inputCode, setInputCode] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
+
+  const { data, isLoading, error } = useGet('/api/couple/code');
+  const { mutate: createCoupleCode } = usePost('/api/couple/code');
+  const { refetch: checkConfirm } = useGet('/api/inviting/confirm');
+  
 
   useEffect(() => {
     const loadCoupleCode = async () => {
@@ -37,8 +43,9 @@ function CoupleCode() {
       }
 
       try {
-        const code = 'ABCD 098A';
-        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+        const code = data.invitingCode;
+        // ttl이 초 단위로 오므로, 현재 시간에 ttl을 더해서 만료 시간 계산
+        const expiresAt = new Date(Date.now() + data.ttl * 1000).toISOString();
         
         // 로컬 스토리지에 저장
         localStorage.setItem('coupleCode', code);
@@ -54,7 +61,7 @@ function CoupleCode() {
     };
 
     loadCoupleCode();
-  }, []);
+  }, [data]); 
 
   // 남은 시간을 표시하기 위한 상태
   const [remainingTime, setRemainingTime] = useState('');
@@ -116,27 +123,10 @@ function CoupleCode() {
     }
 
     try {
-
-      // API 호출 로직 (실제 구현 시 주석 해제)
-      // const response = await fetch('api/matching', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ 
-      //     code: inputCode,
-      //     startDate: selectedDate.toISOString().split('T')[0] // YYYY-MM-DD 형식
-      //   }),
-      // });
-      // const data = await response.json();
-      
-      // if (data.success) {
-      //   navigate('/matching-standby');
-      // } else {
-      //   alert('유효하지 않은 커플 코드입니다.');
-      // }
-
-      // 임시 구현
+      createCoupleCode({
+        invitingCode: inputCode,
+        startDate: selectedDate.toISOString().split('T')[0]
+      });
       navigate('/couple');
     } catch (error) {
       console.error('매칭 시도 실패:', error);
@@ -145,9 +135,17 @@ function CoupleCode() {
   };
 
   // 상대방이 입력했습니다 버튼 핸들러
-  const handleMatchComplete = () => {
-    // Todo: 서버에서 로그인 정보 받아오는 과정 추가해야 함.
-    navigate('/couple');
+  const handleMatchComplete = async () => {
+    try {
+      const response = await checkConfirm();
+      if (response.data.status === 200) {
+        navigate('/couple');
+      } else if (response.data.status === 202) {
+        alert("상대가 아직 코드를 입력하지 않았습니다.");
+      }
+    } catch (error) {
+      console.error('매칭 확인 중 오류 발생:', error);
+    }
   };
 
   const handleDateChange = (e) => {
