@@ -49,7 +49,7 @@ function SignUpPage() {
     name: "",
     gender: "",
     bday: "",
-    bTime: "",
+    btime: "",
     birthTimeUnknown: false,
     religion: "",
     smoking: "",
@@ -65,7 +65,7 @@ function SignUpPage() {
     name: false,
     gender: false,
     bday: false,
-    bTime: false,
+    btime: false,
     profileImg: false,
     nickname: false,
     religion: false,
@@ -120,7 +120,7 @@ function SignUpPage() {
         setStep(2);
       } else if (
         step === 3 &&
-        ((updatedFormData.bday && updatedFormData.bTime) ||
+        ((updatedFormData.bday && updatedFormData.btime) ||
           (updatedFormData.bday && updatedFormData.birthTimeUnknown))
       ) {
         setStep(3);
@@ -171,7 +171,7 @@ function SignUpPage() {
       name: false,
       gender: false,
       bday: false,
-      bTime: false,
+      btime: false,
       religion: false,
       smoking: false,
       drinking: false,
@@ -195,7 +195,7 @@ function SignUpPage() {
         !formData.bday ||
         formData.bday.length !== 10 ||
         (!formData.birthTimeUnknown &&
-          (!formData.bTime || formData.bTime.length !== 5))
+          (!formData.btime || formData.btime.length !== 5))
       ) {
         newErrors.bday = true;
         isValid = false;
@@ -330,8 +330,8 @@ function SignUpPage() {
               />
               <Input
                 type="text"
-                name="bTime"
-                value={formData.bTime}
+                name="btime"
+                value={formData.btime}
                 onChange={(e) => {
                   let value = e.target.value.replace(/[^\d:]/g, "");
                   if (value.length > 5) return;
@@ -345,7 +345,7 @@ function SignUpPage() {
 
                   setFormData((prev) => ({
                     ...prev,
-                    bTime: value,
+                    btime: value,
                   }));
                 }}
                 placeholder="18:00"
@@ -718,7 +718,7 @@ function SignUpPage() {
     setFormData((prev) => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      bTime: isChecked ? "" : prev.bTime,
+      btime: isChecked ? "" : prev.btime,
     }));
   };
 
