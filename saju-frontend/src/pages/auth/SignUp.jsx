@@ -348,7 +348,7 @@ function SignUpPage() {
                     btime: value,
                   }));
                 }}
-                placeholder="18:00"
+                placeholder="00:00"
                 maxLength="5"
                 style={{ flex: 1 }}
                 disabled={formData.birthTimeUnknown}
@@ -718,7 +718,7 @@ function SignUpPage() {
     setFormData((prev) => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      btime: isChecked ? "" : prev.btime,
+      btime: isChecked ? "00:00" : prev.btime,
     }));
   };
 
