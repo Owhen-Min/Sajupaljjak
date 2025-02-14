@@ -43,7 +43,7 @@ function MyPageEditProfile() {
     const fetchUserProfile = async () => {
       try {
         
-        const userData = testUsers[0];
+        const userData = data;
         
         // cityCode와 dongCode가 있는지 확인하고, provinces 객체에서 유효한 값인지 검증
         const cityCode = userData.cityCode || '';
