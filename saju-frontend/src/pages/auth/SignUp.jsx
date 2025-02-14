@@ -179,7 +179,6 @@ function SignUpPage() {
       location: false,
       nickname: false,
       intro: false,
-      profileImg: false,
     };
 
     if (currentStep === 3) {
@@ -228,10 +227,6 @@ function SignUpPage() {
       }
       if (!formData.intro) {
         newErrors.intro = true;
-        isValid = false;
-      }
-      if (!formData.profileImg) {
-        newErrors.profileImg = true;
         isValid = false;
       }
     } else if (currentStep === 12) {
