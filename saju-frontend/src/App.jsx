@@ -1,14 +1,16 @@
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import AppRoutes from './routes/AppRoutes.jsx';
-import './App.css';
+import { BrowserRouter as Router } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+import AppRoutes from "./routes/AppRoutes.jsx";
+import "./App.css";
 
 function App() {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+  <Router>
+    <ScrollToTop />
+    <AppRoutes />
+  </Router>
   );
+
 }
 
-export default App; 
+export default App;
