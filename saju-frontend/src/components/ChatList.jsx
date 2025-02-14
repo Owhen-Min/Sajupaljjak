@@ -5,6 +5,7 @@ import { useState } from "react";
 
 const ChatList = ({ chats }) => {
   const navigate = useNavigate();
+  const [openChatId, setOpenChatId] = useState(null);
 
   function formatRelativeTime(dateString) {
     const now = new Date();
@@ -34,19 +35,21 @@ const ChatList = ({ chats }) => {
     const swipeHandlers = useSwipeable({
       onSwipeStart: () => {
         setIsDragging(true);
+        if (openChatId && openChatId !== chatRoomId) {
+          const prevElement = document.getElementById(`chat-content-${openChatId}`);
+          if (prevElement) {
+            prevElement.style.transform = 'translateX(0)';
+          }
+        }
       },
       onSwipedLeft: () => {
         const element = document.getElementById(`chat-content-${chatRoomId}`);
         if (element) {
           element.style.transform = 'translateX(-80px)';
         }
+        setOpenChatId(chatRoomId);
       },
-      onSwipedRight: () => {
-        const element = document.getElementById(`chat-content-${chatRoomId}`);
-        if (element) {
-          element.style.transform = 'translateX(0)';
-        }
-      },
+      
       onTouchEndOrOnMouseUp: () => {
         setTimeout(() => {
           setIsDragging(false);
