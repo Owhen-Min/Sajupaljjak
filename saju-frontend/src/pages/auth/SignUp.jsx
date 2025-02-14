@@ -41,7 +41,6 @@ function ErrorBubble({ children }) {
 function SignUpPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const postMutation = usePost;
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
 
@@ -687,12 +686,14 @@ const handleSubmit = () => {
     }
     if(error) {
       console.error(error);
+    }
     if (isPending) {
       console.log("가입 중...");
     }
-  }
+  };
+}
 
-};
+
 
   const handleNextStep = () => {
     if (step < 9) {
