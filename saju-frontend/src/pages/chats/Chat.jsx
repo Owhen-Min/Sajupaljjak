@@ -1,6 +1,7 @@
 
 import React from 'react';
 import MessageList  from "../../components/MessageList";
+import TopBar2 from "../../components/TopBar2";
 
 const Chat = () => {
 	const messages = [
@@ -11,7 +12,7 @@ const Chat = () => {
       isMine: false,
       profileImage:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임임",
+      nickName: "상대방닉네임",
     },
     {
       id: 2,
@@ -29,7 +30,7 @@ const Chat = () => {
       isMine: false,
       profileImage:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임임",
+      nickName: "상대방닉네임",
     },
     {
       id: 4,
@@ -47,7 +48,7 @@ const Chat = () => {
       isMine: false,
       profileImage:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임임",
+      nickName: "상대방닉네임",
     },
     {
       id: 6,
@@ -65,7 +66,7 @@ const Chat = () => {
       isMine: false,
       profileImage:
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임임",
+      nickName: "상대방닉네임",
     },
     {
       id: 8,
@@ -78,13 +79,34 @@ const Chat = () => {
     },
   ];
 	return (
-    <div>
-      <MessageList messages={messages} />
-			<input placeholder='내용 입력'/>
-			<button>전송</button>
+    <div className="bg-red-50">
+      <div className="preference flex flex-col relative justify-center min-h-screen">
+        <TopBar2 mainText="상대방닉네임" />
+        <MessageList messages={messages} />
+        <div className="fixed bottom-0 flex justify-between items-center">
+          <input
+            type="text"
+            placeholder="메세지를 입력해주세요"
+            className="input input-bordered input-secondary"
+          />
+          <button className="btn btn-active btn-secondary ml-1">전송</button>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default Chat;
 
+
+// const messages = [
+//     {
+//       id: 1,
+//       message: "안녕하세요!",
+//       sentAt: "10:30 AM",
+//       isMine: false,
+//       profileImage:
+//         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+//       nickName: "상대방닉네임임",
+//     },
+//   ]

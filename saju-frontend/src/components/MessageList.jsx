@@ -4,7 +4,7 @@ import MessageItem from "./MessageItem";
 
 const MessageList = ({ messages }) => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5;">
       {messages.map((message) => (
         <div
           key={message.id}
