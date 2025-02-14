@@ -8,13 +8,17 @@ export const useGet = (uri, options = {}) => {
       const response = await apiClient.get(uri);
       return response.data;
     },
-    retry : 0,
+    retry: 0,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     ...options,
     onSuccess: (data) => {
       console.log("GET Response Data:", data);
+      options.onSuccess?.(data);
     },
     onError: (error) => {
       console.error("GET Error:", error);
+      options.onError?.(error);
     },
   });
 };

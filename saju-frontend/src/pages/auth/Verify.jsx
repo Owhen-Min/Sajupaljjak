@@ -17,9 +17,14 @@ const Verify = () => {
 
   const code = new URL(window.location.href).searchParams.get("code");
   const { data, error, isLoading } = useGet(
-    requestSent.current ? null : `api/auth/login/kakao?code=${code}`
+    code ? `api/auth/login/kakao?code=${code}` : null,
+    {
+      staleTime: Infinity,
+      cacheTime: 0,
+      enabled: !!code,
+    }
   );
-  console.log(data);
+  console.log(`첫 응답 : ${data}`);
 
   useEffect(() => {
     if (!requestSent.current && code) {
@@ -30,13 +35,13 @@ const Verify = () => {
 
     if (error) {
       console.error(error);
-      window.alert("서버 통신중 오류가 발생했습니1다.");
+      window.alert("서버 통신중 오류가 발생했습니다.");
       navigate("/auth", { state: { error: error.message } });
       return;
     }
 
     if (data) {
-      console.log(data);
+      console.log(`둘 째 응답 : ${data}`);
       logout();
       updateEmail(data.email);
 
