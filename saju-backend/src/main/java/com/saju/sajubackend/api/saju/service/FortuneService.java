@@ -1,6 +1,5 @@
 package com.saju.sajubackend.api.saju.service;
 
-<<<<<<< HEAD
 import com.saju.sajubackend.api.couple.domain.Couple;
 import com.saju.sajubackend.api.couple.repository.CoupleRepository;
 import com.saju.sajubackend.api.member.domain.Member;
@@ -15,19 +14,6 @@ import com.saju.sajubackend.api.saju.repository.*;
 import com.saju.sajubackend.common.enums.Gender;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
-=======
-import com.saju.sajubackend.api.member.domain.Member;
-import com.saju.sajubackend.api.member.repository.MemberRepository;
-import com.saju.sajubackend.api.saju.domain.Saju;
-import com.saju.sajubackend.api.saju.dto.SoloLifeDto;
-import com.saju.sajubackend.api.saju.dto.SoloYearDto;
-import com.saju.sajubackend.api.saju.entity.SoloLife;
-import com.saju.sajubackend.api.saju.entity.SoloYear;
-import com.saju.sajubackend.api.saju.repository.SajuRepository;
-import com.saju.sajubackend.api.saju.repository.SoloLifeRepository;
-import com.saju.sajubackend.api.saju.repository.SoloYearRepository;
-import com.saju.sajubackend.common.exception.ErrorMessage;
->>>>>>> front
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,27 +27,17 @@ public class FortuneService {
     private final SoloYearRepository soloYearRepository;
     private final SajuRepository sajuRepository;
     private final MemberRepository memberRepository;
-<<<<<<< HEAD
     private final CoupleLifeRepository coupleLifeRepository;
     private final CoupleYearRepository coupleYearRepository;
     private final CoupleRepository coupleRepository;
-=======
->>>>>>> front
 
     public SoloYearDto getNewYearFortune(Long memberId) {
         // Member 조회
         Member member = memberRepository.findById(memberId)
-<<<<<<< HEAD
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
         // 해당 회원의 Saju 정보를 DB에서 조회
         Saju saju = sajuRepository.findByMember(member)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
-=======
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.MEMBER_NOT_FOUND.getMessage()));
-        // 해당 회원의 Saju 정보를 DB에서 조회
-        Saju saju = sajuRepository.findByMember(member)
-                .orElseThrow(() -> new RuntimeException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL.getMessage()));
->>>>>>> front
 
         // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
         SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely().substring(saju.getTimely().length() - 1), saju.getDaily())
@@ -102,7 +78,6 @@ public class FortuneService {
                 fortune.getAdvice()
         );
     }
-<<<<<<< HEAD
 
     public SajuInfoDto getSajuInfo(Long memberId) {
         // Member 조회
@@ -215,6 +190,4 @@ public class FortuneService {
                 coupleLifeFortune.getAdvice()
         );
     }
-=======
->>>>>>> front
 }

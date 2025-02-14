@@ -7,10 +7,7 @@ const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-<<<<<<< HEAD
   withCredentials: true,
-=======
->>>>>>> front
 });
 
 apiClient.interceptors.request.use(
@@ -24,21 +21,13 @@ apiClient.interceptors.request.use(
       config.params = config.params || {};
       config.params.memberId = memberId;
     }
-<<<<<<< HEAD
-    return config ;
-  },
-  
-=======
     return config;
   },
->>>>>>> front
   (error) => {
     return Promise.reject(error);
   }
 );
 
-<<<<<<< HEAD
-=======
 // response 인터셉터 추가
 apiClient.interceptors.response.use(
   (response) => response,
@@ -51,5 +40,4 @@ apiClient.interceptors.response.use(
   }
 );
 
->>>>>>> front
 export default apiClient;

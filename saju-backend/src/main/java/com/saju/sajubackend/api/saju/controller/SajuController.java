@@ -1,13 +1,6 @@
 package com.saju.sajubackend.api.saju.controller;
 
-<<<<<<< HEAD
 import com.saju.sajubackend.api.saju.dto.*;
-=======
-import com.saju.sajubackend.api.saju.dto.SajuDetailResponse;
-import com.saju.sajubackend.api.saju.dto.SajuResponse;
-import com.saju.sajubackend.api.saju.dto.SoloLifeDto;
-import com.saju.sajubackend.api.saju.dto.SoloYearDto;
->>>>>>> front
 import com.saju.sajubackend.api.saju.service.FortuneService;
 import com.saju.sajubackend.api.saju.service.SajuService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +57,6 @@ public class SajuController {
         return ResponseEntity.ok(fortuneDto);
     }
 
-<<<<<<< HEAD
     @GetMapping("/info")
     public ResponseEntity<SajuInfoDto> getSajuInfo(Long memberId){
         SajuInfoDto sajuInfoDto = fortuneService.getSajuInfo(4L);
@@ -83,6 +75,4 @@ public class SajuController {
         return ResponseEntity.ok(fortuneDto);
     }
 
-=======
->>>>>>> front
 }

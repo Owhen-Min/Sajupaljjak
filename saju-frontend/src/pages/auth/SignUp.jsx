@@ -41,10 +41,6 @@ function ErrorBubble({ children }) {
 function SignUpPage() {
   const navigate = useNavigate();
   const location = useLocation();
-<<<<<<< HEAD
-  const postMutation = usePost;
-=======
->>>>>>> front
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
 
@@ -119,11 +115,7 @@ function SignUpPage() {
         ((updatedFormData.bday && updatedFormData.bTime) ||
           (updatedFormData.bday && updatedFormData.birthTimeUnknown))
       ) {
-<<<<<<< HEAD
-        setStep(4);
-=======
         setStep(3);
->>>>>>> front
       }
     }
   };
@@ -686,11 +678,6 @@ function SignUpPage() {
 const handleSubmit = () => {
   console.log(formData);
   if (validateStep(step)) {
-<<<<<<< HEAD
-    postMutation.mutate({ uri: "api/auth/signup", payload: formData });
-  }
-};
-=======
     const {data, isPending, error} = usePost("/api/auth/signup", formData);
     if (data) {
       localStorage.setItem("accessToken", data.accessToken);
@@ -707,7 +694,6 @@ const handleSubmit = () => {
 }
 
 
->>>>>>> front
 
   const handleNextStep = () => {
     if (step < 9) {

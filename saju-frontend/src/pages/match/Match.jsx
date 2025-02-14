@@ -3,20 +3,6 @@ import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
 import UserList2 from "../../components/UserList2";
 import { useInfiniteGet } from "../../hooks/useInfiniteGet";
-<<<<<<< HEAD
-import { testUsers } from "../../data/user";
-
-function Match() {
-  // const { data, fetchNextPage, hasNextPage, error, isLoading } = useInfiniteGet("/api/match");
-
-  // console.log(data);
-  // if (isLoading) return <div>로딩중 ...</div>;  
-  // if (error) return <div>에러 : {error.message}</div>;
-
-  const handleScroll = () =>{
-
-  };  
-=======
 import AnimationHeartLoader from "../../components/AnimationHeartLoader";
 import { TypeAnimation } from "react-type-animation";
 
@@ -57,26 +43,17 @@ function Match() {
   if (error) return <div>에러 : {error.message}</div>;
 
   const handleScroll = () => {};
->>>>>>> front
   // useEffect(() => {
   //   window.addEventListener("scroll", handleScroll);
   //   return () => window.removeEventListener("scroll", handleScroll);
   // }, [isLoading]);
 
-<<<<<<< HEAD
-
-  return (
-    <div className="match-page h-screen flex flex-col relative py-14 px-5">
-      <TopBar />
-      <UserList2 users={testUsers} />
-=======
   return (
     <div className="match-page h-screen flex flex-col relative py-14 px-5">
       <TopBar />
       {/* {isLoading ? <MagnifyingGlass /> : <UserList2 users={data} />} */}
       {isLoading ? <MagnifyingGlass /> : <UserList2 users={testUsers} />}
 
->>>>>>> front
       <BottomNav />
     </div>
   );

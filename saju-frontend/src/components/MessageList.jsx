@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-
-function MessageList({ messages }) {
-	return (
-		<ul>
-			{messages.map((message) => (
-				<li key={message.id}>{message.text}</li>
-			))}
-		</ul>
-	);
-}
-
-export default MessageList;
-=======
 import React from "react";
 
 import MessageItem from "./MessageItem";
@@ -34,4 +20,3 @@ const MessageList = ({ messages }) => {
 };
 
 export default MessageList;
->>>>>>> front

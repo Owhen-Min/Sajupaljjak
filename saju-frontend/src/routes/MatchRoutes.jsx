@@ -7,11 +7,7 @@ function MatchRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Match />} />
-<<<<<<< HEAD
-      <Route path=":userId" element={<MatchReport />} />
-=======
       <Route path=":partnerId" element={<MatchReport />} />
->>>>>>> front
       <Route path="filter" element={<MatchFilter />} />
     </Routes>
   );
