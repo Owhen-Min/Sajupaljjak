@@ -90,7 +90,7 @@ function SignUpPage() {
           console.log("회원가입 성공 응답 데이터:", data);
           localStorage.setItem("accessToken", data.accessToken);
           localStorage.setItem("refreshToken", data.refreshToken);
-          navigate("auth/welcome");
+          navigate("/auth/welcome");
         },
         onError: (error) => {
           console.error("회원가입 실패", error);
