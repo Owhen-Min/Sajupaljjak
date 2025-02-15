@@ -7,8 +7,8 @@ import { useGet } from "../../hooks/useApi";
 
 function MyPageComments() {
   const navigate = useNavigate();
-  const { data, isLoading, error } = useGet("/api/community/my-comment");
-  if (isLoading) return <div>로딩중 ...</div>;
+  const { data, isPending, error } = useGet("/api/community/my-comment");
+  if (isPending) return <div>로딩중 ...</div>;
   if (error) return <div>에러 : {error.message}</div>;
 
   return (

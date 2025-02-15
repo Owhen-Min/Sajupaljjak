@@ -8,6 +8,7 @@ import BottomNav from "../../components/BottomNav";
 import StarButton from "../../components/StarButton";
 import Random from "../../assets/animations/random.json";
 import Lottie from "lottie-react";
+import { useGet } from "../../hooks/useApi";
 
 const users = [
   {
@@ -45,6 +46,8 @@ const users = [
 const Solo = () => {
   // 현재 슬라이드 인덱스
   const [currentIndex, setCurrentIndex] = useState(0);
+  // const {data, isPending, error } = useGet("api/match/top");
+  // const users = data;
 
   // 5초마다 자동 슬라이드
   useEffect(() => {
@@ -69,6 +72,8 @@ const Solo = () => {
   const goToSlide = (index) => {
     setCurrentIndex(index);
   };
+  if (isPending) return <div>로딩중 이미지</div>;
+  if (error) return <div>에러 : {error.message}</div>;
 
   return (
     <div className="w-full h-full font-nanumNeo">

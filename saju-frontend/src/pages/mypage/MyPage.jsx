@@ -7,6 +7,7 @@ import { testUsers } from "../../data/user";
 
 function MyPage() {
   const user = testUsers[0];
+  // const {user} = useAuth();
   return (
     <div className="flex flex-col relative h-screen pt-10">
       <TopBar2 mainText={"마이페이지"} />

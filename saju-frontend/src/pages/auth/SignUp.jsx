@@ -84,10 +84,7 @@ function SignUpPage() {
   const submit = (uri, payload) => {
     console.log("회원가입 요청 데이터:", payload);
     mutation.mutate(
-      {
-        uri: uri,
-        payload: payload,
-      },
+      { uri,payload},
       {
         onSuccess: (data) => {
           console.log("회원가입 성공 응답 데이터:", data);
