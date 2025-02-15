@@ -24,7 +24,7 @@ public class KakaoAuthService {
     @Value("${oauth.kakao.client-id}")
     private String clientId;
 
-    @Value("http://localhost:8080/api/auth/login/kakao")
+    @Value("${oauth.kakao.redirect-uri}")
     private String redirectUri;
 
     public LoginResponse socialLogin(String code) {
@@ -41,17 +41,34 @@ public class KakaoAuthService {
         return authService.login(userInfo);
     }
 
-    private KakaoTokenResponse getKakaoAccessToken(String code) {
-        return webClient.post()
-                .uri("https://kauth.kakao.com/oauth/token")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData("grant_type", "authorization_code")
-                        .with("client_id", clientId)
-                        .with("redirect_uri", redirectUri)
-                        .with("code", code))
-                .retrieve()
-                .bodyToMono(KakaoTokenResponse.class)
-                .block(); // 동기 실행 (비동기 사용 시 block() 제거)
+    public KakaoTokenResponse getKakaoAccessToken(String code) {
+        // 요청 전 로그 출력
+        log.info("=== [카카오 토큰 요청] ===");
+        log.info("Authorization Code: {}", code);
+        log.info("Client ID: {}", clientId);
+        log.info("Redirect URI: {}", redirectUri);
+
+        try {
+            KakaoTokenResponse response = webClient.post()
+                    .uri("https://kauth.kakao.com/oauth/token")
+                    .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                    .body(BodyInserters.fromFormData("grant_type", "authorization_code")
+                            .with("client_id", clientId)
+                            .with("redirect_uri", redirectUri)
+                            .with("code", code))
+                    .retrieve()
+                    .bodyToMono(KakaoTokenResponse.class)
+                    .doOnSuccess(res -> log.info("카카오 응답 성공: {}", res))
+                    .doOnError(error -> log.error("카카오 요청 실패: {}", error.getMessage()))
+                    .block(); // 동기 실행 (비동기 사용 시 block() 제거)
+
+            // 요청 후 응답 로그 출력
+            log.info("=== [카카오 응답 완료] ===");
+            return response;
+        } catch (Exception e) {
+            log.error("카카오 토큰 요청 중 예외 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("카카오 토큰 요청 실패", e);
+        }
     }
 
 

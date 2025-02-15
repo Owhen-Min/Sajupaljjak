@@ -28,7 +28,7 @@ public record CoupleResponseDto(
             Long memberId,
             String nickname,
             String profileImage,
-            Integer region,
+            Long region,
             int age,
             String celestialStem
     ) {
