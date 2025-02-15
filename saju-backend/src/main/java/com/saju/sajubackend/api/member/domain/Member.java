@@ -1,13 +1,7 @@
 package com.saju.sajubackend.api.member.domain;
 
-import com.saju.sajubackend.common.converter.DrinkingFrequencyConverter;
-import com.saju.sajubackend.common.converter.ReligionConverter;
-import com.saju.sajubackend.common.converter.SmokingStatusConverter;
-import com.saju.sajubackend.common.enums.CelestialStem;
-import com.saju.sajubackend.common.enums.DrinkingFrequency;
-import com.saju.sajubackend.common.enums.Religion;
-import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.converter.*;
+import com.saju.sajubackend.common.entity.BaseTimeEntity;
 import com.saju.sajubackend.common.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
