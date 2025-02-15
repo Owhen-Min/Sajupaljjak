@@ -10,7 +10,6 @@ const Verify = () => {
     updateMemberId,
     updateEmail,
     updateIsCouple,
-    updateUser,
     updateIsAuthenticated,
     logout,
   } = useAuth();
@@ -24,8 +23,9 @@ const Verify = () => {
       enabled: !!code,
     }
   );
-  console.log(`첫 응답 : ${data}`);
-
+  if (data){
+    console.log(`첫 응답 : ${data}`);
+  }
   useEffect(() => {
     if (!requestSent.current && code) {
       requestSent.current = true;
@@ -45,7 +45,7 @@ const Verify = () => {
       logout();
       updateEmail(data.email);
       console.log(`받은 이메일 :  ${data.email}`);
-      if (!data.token) {
+      if (data.email) {
         alert("회원가입이 필요합니다.");
         navigate("/auth/signup");
         return;
@@ -56,7 +56,6 @@ const Verify = () => {
       localStorage.setItem("memberId", data.memberId);
       
       updateMemberId(data.memberId);
-      updateUser(data.user);
       updateIsAuthenticated(true);
       updateIsCouple(data.relation);
 
@@ -74,7 +73,6 @@ const Verify = () => {
     navigate,
     updateMemberId,
     updateEmail,
-    updateUser,
     updateIsAuthenticated,
     updateIsCouple,
     logout,

@@ -5,13 +5,12 @@ import SajuGrid from '../../components/SajuGrid';
 import {useGet} from "../../hooks/useApi";
 
 const FortuneLife = () => {
-  const { data, isLoading, error } = useGet("/api/fortune/lifetime");
-  const { saju, isLoadingSaju, errorSaju } = useGet("/api/fortune/info");
+  const { data, isPending, error } = useGet("/api/fortune/lifetime");
+  const { data:saju, isPending : isPendingSaju, error : errorSaju } = useGet("/api/fortune/info");
 
-  if (isLoading) return <div>로딩중 ...</div>;
+  if (isPending) return <div>로딩중 ...</div>;
   if (error) return <div>에러 : {error.message}</div>;
-  
-  if (isLoadingSaju) return <div>사주 로딩중 ...</div>;
+  if (isPendingSaju) return <div>사주 로딩중 ...</div>;
   if (errorSaju) return <div> 사주 에러 : {errorSaju.message}</div>;
   // const data = {
   //   id: 12,

@@ -17,9 +17,9 @@ function FortuneMy() {
     '술': '토', '해': '수', '자': '수', '축': '토'
   };
 
-  const { data, isLoading, error } = useGet("/api/fortune/info");
-  if(isLoading) return <div>로딩중...</div>;
-  if(error) console.log('에러가 발생했습니다');
+  const { data, isPending, error } = useGet("/api/fortune/info");
+  if(isPending) return <div>로딩중...</div>;
+  if(error) return <div>`에러 : ${error}` </div>;
 
   // const data = {
   //   saju: {

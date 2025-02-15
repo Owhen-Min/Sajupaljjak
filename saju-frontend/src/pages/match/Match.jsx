@@ -9,8 +9,6 @@ import { TypeAnimation } from "react-type-animation";
 function Match() {
   const { data, fetchNextPage, hasNextPage, error, isLoading } =
     useInfiniteGet("/api/match");
-
-  console.log(data);
   if (isLoading)
     return (
       <div className="flex w-full h-screen items-center justify-center flex-col gap-y-4">
