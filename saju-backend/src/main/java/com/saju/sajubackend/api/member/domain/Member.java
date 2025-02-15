@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.member.domain;
 
 import com.saju.sajubackend.common.converter.*;
+import com.saju.sajubackend.common.entity.BaseTimeEntity;
 import com.saju.sajubackend.common.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Table(name = "MEMBER")
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -43,7 +44,7 @@ public class Member {
     private Integer height;
 
     @Column(name = "city_code")
-    private Integer cityCode;
+    private Long cityCode;
 
     @Column(name = "age")
     private Integer age;

@@ -13,10 +13,10 @@ public class LoginResponse {
     private String email;
     private String nickname;
     private String profile_img;
-    private int cityCode;
+    private long cityCode;
     private Religion religion;
     private int age;
-//    private int celestial_stem_id;
+    //    private int celestial_stem_id;
     private String intro;
     private TokenInfo token;
 
@@ -28,7 +28,7 @@ public class LoginResponse {
     }
 
     // 성공시 응답 속성 싹 다 받기
-    public static LoginResponse ofSuccess(String nickname, String profile_img, int cityCode, Religion religion, int age,
+    public static LoginResponse ofSuccess(String nickname, String profile_img, long cityCode, Religion religion, int age,
                                           String intro, TokenInfo token) {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.nickname = nickname;
