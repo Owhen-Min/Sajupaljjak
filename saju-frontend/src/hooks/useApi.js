@@ -8,7 +8,6 @@ export const useGet = (uri, options = {}) => {
       const response = await apiClient.get(uri);
       return response.data;
     },
-    retry: 0,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     ...options,
@@ -23,14 +22,13 @@ export const useGet = (uri, options = {}) => {
   });
 };
 
-export const usePost = (options = {}) => {
+export const usePost = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload, config = {} }) => {
+    mutationFn: async ({ uri, payload }) => {
       console.log("POST Request Payload:", payload);
-      const response = await apiClient.post(uri, payload, config);
+      const response = await apiClient.post(uri, payload);
       return response.data;
-    },
-    ...options
+    }, 
   });
 };
 

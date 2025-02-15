@@ -13,7 +13,8 @@ export default function SquareCarousel({ users }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // 사용자 추천 데이터
-  const users = [
+  // 이종문 : 에러나서 user1으로 수정했습니다
+  const users1 = [
     {
       id: 1,
       nickname: "이종문",
