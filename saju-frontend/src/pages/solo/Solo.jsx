@@ -72,8 +72,8 @@ const Solo = () => {
   const goToSlide = (index) => {
     setCurrentIndex(index);
   };
-  if (isPending) return <div>로딩중 이미지</div>;
-  if (error) return <div>에러 : {error.message}</div>;
+  // if (isPending) return <div>로딩중 이미지</div>;
+  // if (error) return <div>에러 : {error.message}</div>;
 
   return (
     <div className="w-full h-full font-nanumNeo">

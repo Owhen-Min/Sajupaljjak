@@ -8,13 +8,13 @@ import profile1 from "../assets/images/profile1.jpeg";
 import profile2 from "../assets/images/profile2.jpeg";
 import profile3 from "../assets/images/profile3.jpeg";
 
-export default function SquareCarousel({ users }) {
+export default function SquareCarousel({ users1 }) {
   const [goToSlide, setGoToSlide] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // 사용자 추천 데이터
   // 이종문 : 에러나서 user1으로 수정했습니다
-  const users1 = [
+  const users = [
     {
       id: 1,
       nickname: "이종문",
