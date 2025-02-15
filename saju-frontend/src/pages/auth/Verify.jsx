@@ -16,7 +16,7 @@ const Verify = () => {
   } = useAuth();
 
   const code = new URL(window.location.href).searchParams.get("code");
-  const { data, error, isLoading } = useGet(
+  const { data, error, isPending } = useGet(
     code ? `api/auth/login/kakao?code=${code}` : null,
     {
       staleTime: Infinity,
@@ -31,7 +31,7 @@ const Verify = () => {
       requestSent.current = true;
     }
 
-    if (isLoading) return;
+    if (isPending) return;
 
     if (error) {
       console.error(error);
@@ -44,7 +44,7 @@ const Verify = () => {
       console.log(`둘 째 응답 : ${data}`);
       logout();
       updateEmail(data.email);
-
+      console.log(`받은 이메일 :  ${data.email}`);
       if (!data.token) {
         alert("회원가입이 필요합니다.");
         navigate("/auth/signup");
@@ -70,7 +70,7 @@ const Verify = () => {
   }, [
     data,
     error,
-    isLoading,
+    isPending,
     navigate,
     updateMemberId,
     updateEmail,
