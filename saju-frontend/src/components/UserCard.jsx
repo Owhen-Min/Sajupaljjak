@@ -1,29 +1,37 @@
+// UserCard.js
+import React from "react";
+
 export default function UserCard({ user }) {
   return (
-    <div className="font-main1 relative w-64 h-64 shadow-xl rounded-xl  bg-gradient-to-t from-black/60 via-black/60 to-transparent">
-      {/* 이미지 박스 -> 여기에 텍스트 정보가 포함 되어야함 */}
-      <div className="w-60 h-60">
-        <div>
-          <img src={user.profileImage} className="rounded-t-xl" />
-        </div>
+    <div className="rounded-xl overflow-hidden shadow-lg bg-white">
+      <div className="relative w-full aspect-square">
+        <img
+          src={user.profileImage}
+          alt={user.nickname}
+          className="w-full h-full object-cover"
+        />
       </div>
-      <div className="absolute bottom-0 rounded-b-xl w-full bg-gradient-to-t from-black via-black/90 to-transparent text-white p-4">
-        <div className="text-lg font-extrabold">{user.nickname}</div>
-        <div className="text-sm opacity-90">
-          {user.age}세 · {user.celestialStem}
+      <div className="p-4 text-left">
+        <h2 className="text-lg font-semibold text-gray-800 mb-2">
+          {user.nickname}
+        </h2>
+        <div className="flex items-center space-x-2 text-sm text-gray-600 mb-1">
+          <span>점수: {user.score}</span>
+          <span>|</span>
+          <span>나이: {user.age}</span>
         </div>
-        <div className="text-xs opacity-80 ">{user.introduction}</div>
-        <div className="flex justify-around rounded-b-xl items-center w-full mt-2">
-          <div className="text-sm py-1 bg-[#fb4949c1] rounded-xl w-[45%] h-[80%] flex items-center justify-center">
+        <p className="text-sm text-gray-600">지역: {user.region}</p>
+        <p className="text-sm text-gray-600 mb-2">천간: {user.celestialStem}</p>
+        <p className="text-sm text-gray-600 italic mb-4">{user.introduction}</p>
+        <div className="flex space-x-3">
+          <button className="flex-1 bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white px-4 py-2 rounded-full text-sm shadow-md hover:opacity-90 active:scale-95 transition">
             채팅하기
-          </div>
-          <div className=" text-sm py-1 bg-[#fb4949c1] w-[45%] rounded-xl h-[80%] flex items-center justify-center">
+          </button>
+          <button className="flex-1 bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white px-4 py-2 rounded-full text-sm shadow-md hover:opacity-90 active:scale-95 transition">
             화상채팅
-          </div>
+          </button>
         </div>
       </div>
-
-      {/* 하단 버튼 */}
     </div>
   );
 }
