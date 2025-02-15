@@ -115,10 +115,10 @@ function SignUpPage() {
   // });
 
   useEffect(() => {
-    // if (!email) {
-    //   navigate("/", { replace: true });
-    //   return;
-    // }
+    if (!email) {
+      navigate("/", { replace: true });
+      return;
+    }
 
     // setFormData((prev) => ({ ...prev, email: email }));
 
