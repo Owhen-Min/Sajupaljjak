@@ -45,7 +45,7 @@ const Verify = () => {
       logout();
       updateEmail(data.email);
       console.log(`받은 이메일 :  ${data.email}`);
-      if (data.email) {
+      if (!data.token) {
         alert("회원가입이 필요합니다.");
         navigate("/auth/signup");
         return;
