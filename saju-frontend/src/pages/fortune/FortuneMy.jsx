@@ -33,14 +33,14 @@ function FortuneMy() {
     축: "토",
   };
 
-  // const { data, isPending, error } = useGet("/api/fortune/info");
+  const { data, isPending, error } = useGet("/api/fortune/info");
 
-  const data = {
-    year: "을해",
-    month: "기묘",
-    day: "임자",
-    time: "정미",
-  };
+  // const data = {
+  //   year: "을해",
+  //   month: "기묘",
+  //   day: "임자",
+  //   time: "정미",
+  // };
 
   // 원소 개수 계산
   const calculateElementCounts = () => {
@@ -57,8 +57,8 @@ function FortuneMy() {
   };
 
   const elementCounts = calculateElementCounts();
-  // if(isPending) return <div>로딩중...</div>;
-  // if(error) return <div>`에러 : ${error}` </div>;
+  if(isPending) return <div>로딩중...</div>;
+  if(error) return <div>`에러 : ${error}` </div>;
   return (
     <div className="fortune flex flex-col items-center relative h-screen pt-10">
       <TopBar2 url="/fortune" mainText="나의 사주" />
