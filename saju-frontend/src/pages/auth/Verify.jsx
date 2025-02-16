@@ -41,7 +41,7 @@ const Verify = () => {
 
     if (data) {
       logout();
-      const { tokens, ...userData } = data;
+      const { token, ...userData } = data;
       console.log(`받은 데이터 :  ${data}`);
       updateEmail(data.email);
       console.log(`받은 이메일 :  ${data.email}`);
@@ -51,8 +51,8 @@ const Verify = () => {
         return;
       }
 
-      localStorage.setItem("accessToken", tokens.accessToken);
-      localStorage.setItem("refreshToken", tokens.refreshToken);
+      localStorage.setItem("accessToken", token.accessToken);
+      localStorage.setItem("refreshToken", token.refreshToken);
       localStorage.setItem("memberId", data.memberId);
       
       updateUser(userData);
