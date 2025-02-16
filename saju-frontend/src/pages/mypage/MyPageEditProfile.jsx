@@ -15,7 +15,7 @@ function MyPageEditProfile() {
   const [formData, setFormData] = useState({
     profileImage: '',
     nickname: '',
-    introduction: '',
+    intro: '',
     religion: '',
     smoking: '',
     drinking: '',
@@ -29,7 +29,7 @@ function MyPageEditProfile() {
   const [errors, setErrors] = useState({
     profileImage: false,
     nickname: false,
-    introduction: false,
+    intro: false,
     religion: false,
     smoking: false,
     drinking: false,
@@ -44,6 +44,7 @@ function MyPageEditProfile() {
     const fetchUserProfile = async () => {
       try {
         const userData = data;
+        console.log(userData);
         
         // cityCode와 dongCode가 있는지 확인하고, provinces 객체에서 유효한 값인지 검증
         const cityCode = userData.cityCode || '';
@@ -194,7 +195,7 @@ function MyPageEditProfile() {
     const newErrors = {
       profileImage: !formData.profileImage,
       nickname: !formData.nickname.trim(),
-      introduction: !formData.introduction.trim(),
+      intro: !formData.intro.trim(),
       religion: !formData.religion,
       smoking: !formData.smoking,
       drinking: !formData.drinking,
@@ -336,16 +337,16 @@ function MyPageEditProfile() {
         {/* 자기소개 */}
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-2">자기소개</h3>
-          {errors.introduction && (
+          {errors.intro && (
             <p className="text-red-500 text-sm mb-2">자기소개를 입력해주세요</p>
           )}
           <textarea
-            name="introduction"
-            value={formData.introduction}
+            name="intro"
+            value={formData.intro}
             onChange={handleInputChange}
             placeholder="자기소개를 입력해주세요"
             className={`w-full h-32 p-3 border rounded-md resize-none ${
-              errors.introduction ? 'border-red-500' : 'border-gray-300'
+              errors.intro ? 'border-red-500' : 'border-gray-300'
             }`}
             maxLength={500}
           />

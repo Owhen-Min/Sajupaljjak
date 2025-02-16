@@ -114,8 +114,8 @@ function ErrorBubble({ children }) {
 function MyPageEditSaju() {
   const [formData, setFormData] = useState({
     name: "",
-    birthDay: "",
-    birthTime: "",
+    bday: "",
+    btime: "",
     birthTimeUnknown: false,
   });
 
@@ -123,25 +123,26 @@ function MyPageEditSaju() {
 
   const [errors, setErrors] = useState({
     name: false,
-    birthDay: false,
-    birthTime: false,
+    bday: false,
+    btime: false,
   });
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
         const userData = data;
+        console.log(userData);
         
         setFormData({
           name: userData.name || "",
-          birthDay: userData.birthDay || "",
-          birthTime: userData.birthTimeUnknown ? "00:00" : (userData.birthTime || ""),
+          bday: userData.bday || "",
+          btime: userData.birthTimeUnknown ? "00:00" : (userData.btime || ""),
           birthTimeUnknown: userData.birthTimeUnknown || false,
         });
 
         // 초기 사주 계산
-        if (userData.birthDay) {
-          const initialSaju = calculateSaju(userData.birthDay, userData.birthTime);
+        if (userData.bday) {
+          const initialSaju = calculateSaju(userData.bday, userData.btime);
           setSajuData(initialSaju);
         }
         
@@ -163,20 +164,20 @@ function MyPageEditSaju() {
     }));
   };
 
-  const handleBirthTimeUnknown = (e) => {
+  const handlebirthTimeUnknown = (e) => {
     const isChecked = e.target.checked;
     setFormData(prev => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      birthTime: isChecked ? "00:00" : prev.birthTime
+      btime: isChecked ? "00:00" : ""
     }));
   };
 
   const validateForm = () => {
     const newErrors = {
       name: false,
-      birthDay: false,
-      birthTime: false,
+      bday: false,
+      btime: false,
     };
 
     let isValid = true;
@@ -186,9 +187,9 @@ function MyPageEditSaju() {
       isValid = false;
     }
 
-    if (!formData.birthDay || formData.birthDay.length !== 10 || 
-        (!formData.birthTimeUnknown && (!formData.birthTime || formData.birthTime.length !== 5))) {
-      newErrors.birthDay = true;
+    if (!formData.bday || formData.bday.length !== 10 || 
+        (!formData.birthTimeUnknown && (!formData.btime || formData.btime.length !== 5))) {
+      newErrors.bday = true;
       isValid = false;
     }
 
@@ -196,21 +197,21 @@ function MyPageEditSaju() {
     return isValid;
   };
 
-  const calculateSaju = (birthDay, birthTime) => {
-    if (!birthDay) return null;
+  const calculateSaju = (bday, btime) => {
+    if (!bday) return null;
 
-    const [year, month, day] = birthDay.split('-').map(Number);
+    const [year, month, day] = bday.split('-').map(Number);
     let dateTime = new Date(year, month - 1, day);
 
-    if (birthTime) {
-      const [hours, minutes] = birthTime.split(':').map(Number);
+    if (btime) {
+      const [hours, minutes] = btime.split(':').map(Number);
       dateTime.setHours(hours, minutes);
     }
 
     const yearPillar = calculateYearPillar(dateTime);
     const monthPillar = calculateMonthPillar(dateTime);
     const dayPillar = calculateDayPillar(dateTime);
-    const hourPillar = birthTime ? calculateHourPillar(dayPillar, dateTime) : null;
+    const hourPillar = btime ? calculateHourPillar(dayPillar, dateTime) : null;
 
     return {
       year: yearPillar,
@@ -222,7 +223,7 @@ function MyPageEditSaju() {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      const saju = calculateSaju(formData.birthDay, formData.birthTime);
+      const saju = calculateSaju(formData.bday, formData.btime);
       setSajuData(saju);
       console.log("사주 계산 결과:", saju);
       // TODO: API 호출 로직 추가
@@ -263,8 +264,8 @@ function MyPageEditSaju() {
           <div className="flex items-center gap-2">
             <Input
               type="text"
-              name="birthDay"
-              value={formData.birthDay}
+              name="bday"
+              value={formData.bday}
               onChange={(e) => {
                 let value = e.target.value.replace(/[^\d/]/g, "");
                 if (value.length > 10) return;
@@ -280,7 +281,7 @@ function MyPageEditSaju() {
                 }     
                 setFormData(prev => ({
                   ...prev,
-                  birthDay: value
+                  bday: value
                 }));
               }}
               placeholder="2025-01-28"
@@ -289,8 +290,8 @@ function MyPageEditSaju() {
             />
             <Input
               type="text"
-              name="birthTime"
-              value={formData.birthTime}
+              name="btime"
+              value={formData.btime}
               onChange={(e) => {
                 let value = e.target.value.replace(/[^\d:]/g, "");
                 if (value.length > 5) return;      
@@ -303,7 +304,7 @@ function MyPageEditSaju() {
                 }
                 setFormData(prev => ({
                   ...prev,
-                  birthTime: value
+                  btime: value
                 }));
               }}
               placeholder="18:00"
@@ -317,7 +318,7 @@ function MyPageEditSaju() {
               type="checkbox"
               id="birthTimeUnknown"
               checked={formData.birthTimeUnknown}
-              onChange={handleBirthTimeUnknown}
+              onChange={handlebirthTimeUnknown}
               style={{ cursor: "pointer" }}
             />
             <label 
@@ -328,7 +329,7 @@ function MyPageEditSaju() {
               태어난 시간을 모릅니다
             </label>
           </div>
-          {errors.birthDay && <ErrorBubble>태어난 시간을 입력해주세요</ErrorBubble>}
+          {errors.bday && <ErrorBubble>태어난 시간을 입력해주세요</ErrorBubble>}
         </div>
 
         <MainButton 
