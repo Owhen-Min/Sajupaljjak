@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   memberId: "",
-  isCouple: false,
+  isCouple: 0,
   isAuthenticated: false,
   user: null,
   email: "",
@@ -29,7 +29,7 @@ const authSlice = createSlice({
     },
     resetAuth: (state) => {
       state.memberId = "";
-      state.isCouple = false;
+      state.isCouple = 0;
       state.isAuthenticated = false;
       state.user = null;
       state.email = "";
