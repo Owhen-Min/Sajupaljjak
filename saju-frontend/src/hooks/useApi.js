@@ -24,19 +24,19 @@ export const useGet = (uri, options = {}) => {
 
 export const usePost = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload }) => {
+    mutationFn: async ({ uri, payload = {} }) => {
       console.log("POST Request Payload:", payload);
       const response = await apiClient.post(uri, payload);
       return response.data;
-    }, 
+    },
   });
 };
 
 export const usePut = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload, config = {} }) => {
+    mutationFn: async ({ uri, payload = {} }) => {
       console.log("PUT Request Payload:", payload);
-      const response = await apiClient.put(uri, payload, config);
+      const response = await apiClient.put(uri, payload);
       return response.data;
     },
     onSuccess: (data) => {
@@ -50,8 +50,8 @@ export const usePut = () => {
 
 export const useDelete = () => {
   return useMutation({
-    mutationFn: async ({ uri, config = {} }) => {
-      const response = await apiClient.delete(uri, config);
+    mutationFn: async ({ uri }) => {
+      const response = await apiClient.delete(uri);
       return response.data;
     },
     onSuccess: (data) => {
@@ -66,8 +66,9 @@ export const useDelete = () => {
 
 export const usePatch = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload, config = {} }) => {
-      const response = await apiClient.patch(uri, payload, config);
+    mutationFn: async ({ uri, payload = {}}) => {
+      console.log("PATCH Request Payload:", payload);
+      const response = await apiClient.patch(uri, payload);
       return response.data;
     },
   });

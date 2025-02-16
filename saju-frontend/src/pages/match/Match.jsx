@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
 import UserList2 from "../../components/UserList2";
-import { useInfiniteGet } from "../../hooks/useInfiniteGet";
+// import { useInfiniteGet } from "../../hooks/useInfiniteGet";
+import { useGet } from "../../hooks/useApi";
+
 import AnimationHeartLoader from "../../components/AnimationHeartLoader";
 import { TypeAnimation } from "react-type-animation";
 
 function Match() {
-  const { data, fetchNextPage, hasNextPage, error, isLoading } =
-    useInfiniteGet("/api/match");
-  if (isLoading)
+  // const { data, fetchNextPage, hasNextPage, error, isLoading } =
+  //   useInfiniteGet("/api/match");
+  const { data, error, isPending } = useGet("/api/match");
+
+  if (isPending)
     return (
       <div className="flex w-full h-screen items-center justify-center flex-col gap-y-4">
         <AnimationHeartLoader />
@@ -50,8 +54,8 @@ function Match() {
     <div className="match-page h-screen flex flex-col relative py-14 px-5">
       <TopBar />
       {/* {isLoading ? <MagnifyingGlass /> : <UserList2 users={data} />} */}
-      {isLoading ? <MagnifyingGlass /> : <UserList2 users={testUsers} />}
-
+      {/* {isPending ? <MagnifyingGlass /> : <UserList2 users={testUsers} />} */}
+      <UserList2 users={data} />
       <BottomNav />
     </div>
   );

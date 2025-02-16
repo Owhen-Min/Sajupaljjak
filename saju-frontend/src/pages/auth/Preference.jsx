@@ -6,6 +6,7 @@ import Dropdown from '../../components/Dropdown';
 import MainButton from '../../components/MainButton';
 import { provinces } from '../../data/provinceCode';
 import RangeSlider from '../../components/RangeSlider';
+import { usePost} from '../../hooks/useApi';
 
 function ErrorBubble({ children }) {
   return (

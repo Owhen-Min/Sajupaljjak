@@ -4,10 +4,21 @@ import UserCard from "../../components/UserCard";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { testUsers } from "../../data/user";
+import {useGet} from "../../hooks/useApi";
+import { useEffect } from "react";
 
 function MyPage() {
   const user = testUsers[0];
-  // const {user} = useAuth();
+
+  // const [user, setUser] = useState(null);
+  // const { data, isPending, error } = useGet("/api/user");
+  // useEffect(()=>{
+  //   if (data){
+  //     setUser(data);
+  //   }
+  // })
+  // if (isPending) return <p>Loading...</p>;
+  // if (error) return <p>Error loading data.</p>;
   return (
     <div className="flex flex-col relative h-screen pt-10">
       <TopBar2 mainText={"마이페이지"} />

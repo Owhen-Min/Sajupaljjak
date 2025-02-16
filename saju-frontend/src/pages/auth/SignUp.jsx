@@ -43,7 +43,7 @@ function SignUpPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
-  const email  = useAuth().email;
+  const {email, updateUser, user }  = useAuth();
 
   const [formData, setFormData] = useState({
     email: email,
@@ -84,13 +84,16 @@ function SignUpPage() {
   const submit = (uri, payload) => {
     console.log("회원가입 요청 데이터:", payload);
     mutation.mutate(
-      { uri,payload},
+      { uri,payload },
       {
         onSuccess: (data) => {
           console.log("회원가입 성공 응답 데이터:", data);
-          localStorage.setItem("accessToken", data.accessToken);
-          localStorage.setItem("refreshToken", data.refreshToken);
-          navigate("auth/welcome");
+          const { tokens, ...userData } = data;
+          localStorage.setItem("accessToken", tokens.accessToken);
+          localStorage.setItem("refreshToken", tokens.refreshToken);
+          updateUser(userData);
+          console.log(user);
+          navigate("/auth/welcome");
         },
         onError: (error) => {
           console.error("회원가입 실패", error);

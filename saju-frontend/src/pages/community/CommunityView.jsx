@@ -5,6 +5,7 @@ import SajuUserBubble from '../../components/SajuUserBubble';
 import SajuAuthorBubble from '../../components/SajuAuthorBubble';
 import MainButton from '../../components/MainButton';
 import { useState } from 'react';
+import {useGet, usePost} from '../../hooks/useApi';
 
 // formatRelativeTime 함수 추가
 function formatRelativeTime(dateString) {

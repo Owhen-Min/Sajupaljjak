@@ -3,6 +3,7 @@ import Input from "../../components/Input";
 import { useState } from "react";
 import SajuUserBubble from '../../components/SajuUserBubble';
 import MainButton from "../../components/MainButton";
+import { usePost } from "../../hooks/useApi";
 
 function ErrorBubble({ children }) {
   return (

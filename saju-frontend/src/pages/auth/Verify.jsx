@@ -7,6 +7,7 @@ const Verify = () => {
   const navigate = useNavigate();
   const requestSent = useRef(false);
   const {
+    updateUser,
     updateMemberId,
     updateEmail,
     updateIsCouple,
@@ -23,9 +24,7 @@ const Verify = () => {
       enabled: !!code,
     }
   );
-  if (data){
-    console.log(`첫 응답 : ${data}`);
-  }
+
   useEffect(() => {
     if (!requestSent.current && code) {
       requestSent.current = true;
@@ -41,8 +40,9 @@ const Verify = () => {
     }
 
     if (data) {
-      console.log(`둘 째 응답 : ${data}`);
       logout();
+      const { tokens, ...userData } = data;
+      console.log(`받은 데이터 :  ${data}`);
       updateEmail(data.email);
       console.log(`받은 이메일 :  ${data.email}`);
       if (!data.token) {
@@ -51,13 +51,14 @@ const Verify = () => {
         return;
       }
 
-      localStorage.setItem("accessToken", data.token.accessToken);
-      localStorage.setItem("refreshToken", data.token.refreshToken);
+      localStorage.setItem("accessToken", tokens.accessToken);
+      localStorage.setItem("refreshToken", tokens.refreshToken);
       localStorage.setItem("memberId", data.memberId);
       
+      updateUser(userData);
       updateMemberId(data.memberId);
-      updateIsAuthenticated(true);
       updateIsCouple(data.relation);
+      updateIsAuthenticated(true);
 
       if (data.isCouple === null) {
         navigate("/auth/additionalSignUp");
@@ -76,8 +77,9 @@ const Verify = () => {
     updateIsAuthenticated,
     updateIsCouple,
     logout,
+    code,
+    updateUser,
   ]);
-
 
 
   return null;

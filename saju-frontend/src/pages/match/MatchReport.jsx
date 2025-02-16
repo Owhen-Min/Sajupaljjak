@@ -5,13 +5,15 @@ import SajuGrid from "../../components/SajuGrid";
 import Heart from "../../components/Heart";
 import { useGet, usePost } from "../../hooks/useApi";
 import { testUsers } from "../../data/user";
+import { useNavigate } from "react-router-dom";
 
 function MatchReport() {
   const { partnerId } = useParams();
+  const navigate = useNavigate();
   const { mutate: requestMatch, isLoading } = usePost(null, {
     onSuccess: (response) => {
       const chatRoomId = response.chatRoomId;
-      navigate(`/chat/${chatRoomId}`);
+      navigate(`/chats/${chatRoomId}`);
     },
     onError: (error) => {
       if (error.message === 'Network Error') {

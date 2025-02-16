@@ -46,8 +46,7 @@ const users = [
 const Solo = () => {
   // 현재 슬라이드 인덱스
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const {data, isPending, error } = useGet("api/match/top");
-  // const users = data;
+  // const {data:users, isPending, error } = useGet("api/match/top");
 
   // 5초마다 자동 슬라이드
   useEffect(() => {
