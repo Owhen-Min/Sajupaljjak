@@ -46,15 +46,15 @@ function CoupleCode() {
         const code = data.invitingCode;
         // ttl이 초 단위로 오므로, 현재 시간에 ttl을 더해서 만료 시간 계산
         const expiresAt = new Date(Date.now() + data.ttl * 1000).toISOString();
+        setCoupleCode({
+          code: code.slice(0, 4) + ' ' + code.slice(4),
+          expiresAt: expiresAt,
+        });
         
         // 로컬 스토리지에 저장
         localStorage.setItem('coupleCode', code);
         localStorage.setItem('codeExpiresAt', expiresAt);
         
-        setCoupleCode({
-          code: code.slice(0, 4) + ' ' + code.slice(4),
-          expiresAt: expiresAt,
-        });
       } catch (error) {
         console.error('커플 코드 발급 실패:', error);
       }
@@ -107,7 +107,7 @@ function CoupleCode() {
 
   // 시작하기 버튼 핸들러
   const handleStartMatching = async () => {
-    if (!inputCode.trim()) {
+    if (!inputCode.trim() || inputCode.length !== 9) {
       alert('커플 코드를 입력해주세요.');
       return;
     }
@@ -144,7 +144,7 @@ function CoupleCode() {
         alert("상대가 아직 코드를 입력하지 않았습니다.");
       }
     } catch (error) {
-      console.error('매칭 확인 중 오류 발생:', error);
+      alert('매칭 확인 중 오류 발생: ' + error.message);
     }
   };
 
