@@ -802,10 +802,46 @@ function SignUpPage() {
         const hasFace = await detectFace(imageUrl);
         
         if (hasFace) {
+          // WebP로 변환하는 함수
+          const convertToWebP = (imageData) => {
+            return new Promise((resolve) => {
+              const img = new Image();
+              img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxSize = 1024;
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > maxSize || height > maxSize) {
+                  if (width > height) {
+                    height = (height * maxSize) / width;
+                    width = maxSize;
+                  } else {
+                    width = (width * maxSize) / height;
+                    height = maxSize;
+                  }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // WebP 형식으로 변환하고 resolve로 결과 반환
+                resolve(canvas.toDataURL('image/webp', 0.8));
+              };
+              img.src = imageData;
+            });
+          };
+
+          // 이미지를 WebP로 변환
+          const webpDataUrl = await convertToWebP(imageUrl);
+          
           setFormData((prev) => ({
             ...prev,
-            profileImg: imageUrl,
-          }))
+            profileImg: webpDataUrl,
+          }));
           setMaxStep(Math.max(maxStep, 12));
           setStep(Math.max(maxStep, 12));
         } else {
