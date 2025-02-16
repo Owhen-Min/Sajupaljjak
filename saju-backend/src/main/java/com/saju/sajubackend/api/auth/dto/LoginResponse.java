@@ -2,7 +2,6 @@ package com.saju.sajubackend.api.auth.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.saju.sajubackend.common.enums.RelationshipStatus;
-import com.saju.sajubackend.common.enums.Religion;
 import lombok.*;
 
 @Getter
@@ -15,7 +14,7 @@ public class LoginResponse {
     private String name;
     private String email;
     private String nickname;
-    private String relation;
+    private RelationshipStatus relation;
     private String profile_img;
     private long cityCode;
     private String religion;
@@ -32,8 +31,8 @@ public class LoginResponse {
     }
 
     // 성공시 응답 속성 싹 다 받기
-    public static LoginResponse ofSuccess(Long memberId, String name, String nickname, String relation, String profile_img, long cityCode, String religion, int age,
-                                          String celestial_stem_id,String intro, TokenInfo token) {
+    public static LoginResponse ofSuccess(Long memberId, String name, String nickname, RelationshipStatus relation, String profile_img, long cityCode, String religion, int age,
+                                          String celestial_stem_id, String intro, TokenInfo token) {
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.member_id = memberId;
         loginResponse.name = name;
@@ -43,7 +42,7 @@ public class LoginResponse {
         loginResponse.cityCode = cityCode;
         loginResponse.religion = religion;
         loginResponse.age = age;
-        loginResponse.celestial_stem_id=celestial_stem_id;
+        loginResponse.celestial_stem_id = celestial_stem_id;
         loginResponse.intro = intro;
         loginResponse.token = token;
         return loginResponse;
