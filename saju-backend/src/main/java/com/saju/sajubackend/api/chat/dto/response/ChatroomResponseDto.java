@@ -11,13 +11,17 @@ public class ChatroomResponseDto {
 
     private Long chatRoomId;
 
+    private Long memberId;
+
     private ChatMemberResponseDto partner;
 
     private LastMessageResponseDto message;
 
     @Builder
-    private ChatroomResponseDto(Long chatRoomId, ChatMemberResponseDto partner, LastMessageResponseDto message) {
+    private ChatroomResponseDto(Long chatRoomId, Long memberId, ChatMemberResponseDto partner,
+                               LastMessageResponseDto message) {
         this.chatRoomId = chatRoomId;
+        this.memberId = memberId;
         this.partner = partner;
         this.message = message;
     }

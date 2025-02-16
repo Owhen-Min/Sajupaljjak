@@ -6,9 +6,11 @@ import static com.saju.sajubackend.api.chat.domain.QChatroom.chatroom;
 import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMember;
 import static com.saju.sajubackend.api.member.domain.QMember.member;
 
+import com.saju.sajubackend.api.chat.domain.QChatroom;
 import com.saju.sajubackend.api.chat.dto.ChatPartnerDto;
 import com.saju.sajubackend.api.member.domain.Member;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -76,7 +78,6 @@ public class ChatroomQueryDslRepository {
                 ));
     }
 
-
     private List<Long> findActiveChatrooms(Long memberId) {
         return queryFactory
                 .select(chatroomMember.chatroom.chatroomId)
@@ -84,5 +85,16 @@ public class ChatroomQueryDslRepository {
                 .where(chatroomMember.member.memberId.eq(memberId)
                         .and(chatroomMember.isActive.isTrue()))
                 .fetch();
+    }
+
+    public Long findOpponentMemberId(Long chatroomId, Long memberId) {
+        return queryFactory
+                .select(
+                        chatroom.member1.memberId.when(memberId).then(chatroom.member2.memberId)
+                                .otherwise(chatroom.member1.memberId)
+                )
+                .from(chatroom)
+                .where(chatroom.chatroomId.eq(chatroomId))
+                .fetchOne();
     }
 }

@@ -27,8 +27,8 @@ public class ChatMessageController {
         messagingTemplate.convertAndSend("/topic/" + message.getChatroomId(), message);
 
         // 채팅방 목록 갱신
-//        ChatroomResponseDto chatroom = chatroomService.updateChatroom(chatMessage);
-//        messagingTemplate.convertAndSend("/topic/list" + chatroom.getPartner().getMemberId(), chatroom);
+        ChatroomResponseDto chatroom = chatroomService.updateChatroom(chatMessage);
+        messagingTemplate.convertAndSend("/topic/list" + chatroom.getMemberId(), chatroom);
     }
 
     @SubscribeMapping("/list/{memberId}")
