@@ -51,8 +51,8 @@ const Verify = () => {
         return;
       }
 
-      localStorage.setItem("accessToken", data.token.accessToken);
-      localStorage.setItem("refreshToken", data.token.refreshToken);
+      localStorage.setItem("accessToken", token.accessToken);
+      localStorage.setItem("refreshToken", token.refreshToken);
       localStorage.setItem("memberId", data.memberId);
       
       updateUser(userData);
