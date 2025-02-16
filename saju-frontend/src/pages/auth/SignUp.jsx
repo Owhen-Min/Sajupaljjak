@@ -50,6 +50,7 @@ function SignUpPage() {
     gender: "",
     bday: "",
     btime: "",
+    age: "",
     birthTimeUnknown: false,
     religion: "",
     smoking: "",
@@ -686,6 +687,10 @@ function SignUpPage() {
   const handleSubmit = async () => {
     if (validateStep(step)) {
       try {
+        setFormData((prev) => ({
+          ...prev,
+          age: formData.bday ? (new Date().getFullYear() - new Date(formData.bday).getFullYear()) : 0
+        }));
         // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
         if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
           // Base64 이미지를 File 객체로 변환
@@ -710,7 +715,7 @@ function SignUpPage() {
             method: 'PUT',
             headers: { 'Content-Type': imageFile.type },
             body: imageFile,
-            credentials: 'omit'
+            mode: 'no-cors'
           });
 
           if (!uploadResponse.ok) {
