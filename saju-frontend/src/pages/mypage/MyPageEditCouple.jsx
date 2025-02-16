@@ -8,39 +8,32 @@ import {useGet, usePost} from "../../hooks/useApi";
 import { useNavigate } from "react-router-dom";
 
 function MyPageEditCouple() {
-  const [meetDate, setMeetDate] = useState('2024-01-01');
-  const [daysCount, setDaysCount] = useState(0);
-  // const { data, isPending, error } = useGet("/api/couple");
 
   
   const navigate = useNavigate();
   const mutation = usePost();
 
-  // const { data, isPending, error } = useGet("/api/couples");
-  // if (!data) {
-  //   navigate("/couple/code");
-  // }
-  // const [meetDate, setMeetDate] = useState(data.startDate);
-  // const [daysCount, setDaysCount] = useState(0);
-  // const [payload, setPayload] = useState({
-  //   isBroken: false,
-  //   startDate: data.startDate,
-  // });
+  const { data, isPending, error } = useGet("/api/couples");
+  if (!data) {
+    navigate("/couple/code");
+  }
+  const [meetDate, setMeetDate] = useState(data.startDate);
+  const [daysCount, setDaysCount] = useState(0);
 
-  // const submit = (uri, payload) => {
-  //   console.log("POST Request Payload:", payload);
-  //   mutation.mutate(
-  //     { uri, payload },
-  //     {
-  //       onSuccess: (data) => {
-  //         console.log(`Post 요청 ${uri} : 성공 ${data}`);
-  //       },
-  //       onError: (error) => {
-  //         console.log(`Post 요청 ${uri} : 실패패 ${error}`);
-  //       },
-  //     }
-  //   );
-  // };
+  const submit = (uri, payload) => {
+    console.log("POST Request Payload:", payload);
+    mutation.mutate(
+      { uri, payload },
+      {
+        onSuccess: (data) => {
+          console.log(`Post 요청 ${uri} : 성공 ${data}`);
+        },
+        onError: (error) => {
+          console.log(`Post 요청 ${uri} : 실패패 ${error}`);
+        },
+      }
+    );
+  };
 
   useEffect(() => {
     // 만난 일수 계산
