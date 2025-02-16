@@ -689,28 +689,38 @@ function SignUpPage() {
       try {
         // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
         if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
-          // 이미지 파일 생성
+          // Base64 이미지를 File 객체로 변환
           const imageFile = await fetch(formData.profileImg)
             .then(res => res.blob())
-            .then(blob => new File([blob], 'profile.jpg', { type: 'image/jpeg' }));
+            .then(blob => {
+              // 고유한 파일명 생성 (타임스탬프 + 랜덤값 추가)
+              const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
+              return new File([blob], uniqueFileName, { type: 'image/jpeg' });
+            });
 
-          // 이미지 업로드를 위한 FormData 생성
-          const imageFormData = new FormData();
-          imageFormData.append('image', imageFile);
-
-          // 이미지 업로드 API 호출
-          const imageResponse = await mutation.mutateAsync({
+          // 프리사인드 URL 요청
+          const presignResponse = await mutation.mutateAsync({
             uri: '/api/image',
-            payload: imageFormData,
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
+            payload: { filename: imageFile.name }
           });
 
-          // 회원가입 데이터에 이미지 objectKey 추가
+          const { presignedUrl, objectKey } = presignResponse;
+
+          // S3에 직접 이미지 업로드
+          const uploadResponse = await fetch(presignedUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': imageFile.type },
+            body: imageFile
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('S3 파일 업로드 실패');
+          }
+
+          // 회원가입 데이터에 S3 이미지 URL 추가
           const signupData = {
             ...formData,
-            profileImg: imageResponse.objectKey,
+            profileImg: `https://saju-bucket.s3.amazonaws.com/${objectKey}`
           };
 
           // 회원가입 API 호출
@@ -720,7 +730,7 @@ function SignUpPage() {
           submit('/api/auth/signup', formData);
         }
       } catch (error) {
-        window.alert('이미지 업로드 실패:', error);
+        window.alert('이미지 업로드 실패: ' + error.message);
       }
     }
   };
@@ -792,10 +802,46 @@ function SignUpPage() {
         const hasFace = await detectFace(imageUrl);
         
         if (hasFace) {
+          // WebP로 변환하는 함수
+          const convertToWebP = (imageData) => {
+            return new Promise((resolve) => {
+              const img = new Image();
+              img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxSize = 1024;
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > maxSize || height > maxSize) {
+                  if (width > height) {
+                    height = (height * maxSize) / width;
+                    width = maxSize;
+                  } else {
+                    width = (width * maxSize) / height;
+                    height = maxSize;
+                  }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // WebP 형식으로 변환하고 resolve로 결과 반환
+                resolve(canvas.toDataURL('image/webp', 0.8));
+              };
+              img.src = imageData;
+            });
+          };
+
+          // 이미지를 WebP로 변환
+          const webpDataUrl = await convertToWebP(imageUrl);
+          
           setFormData((prev) => ({
             ...prev,
-            profileImg: imageUrl,
-          }))
+            profileImg: webpDataUrl,
+          }));
           setMaxStep(Math.max(maxStep, 12));
           setStep(Math.max(maxStep, 12));
         } else {
