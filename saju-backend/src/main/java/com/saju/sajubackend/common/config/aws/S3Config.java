@@ -24,7 +24,7 @@ public class S3Config {
                 AwsBasicCredentials.create(accessKey, secretKey)
         );
         return S3Presigner.builder()
-                .region(Region.EU_NORTH_1)
+                .region(Region.US_EAST_2)
                 .credentialsProvider(credentialsProvider)
                 .build();
     }
