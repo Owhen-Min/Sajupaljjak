@@ -42,7 +42,7 @@ const Verify = () => {
     if (data) {
       logout();
       const { token, ...userData } = data;
-      console.log(`받은 데이터 :  ${data}`);
+      console.log(`받은 데이터 : ${JSON.stringify(data, null, 2)}`);
       updateEmail(data.email);
       console.log(`받은 이메일 :  ${data.email}`);
       if (!data.token) {
