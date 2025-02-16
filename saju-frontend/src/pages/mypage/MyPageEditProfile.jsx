@@ -37,7 +37,8 @@ function MyPageEditProfile() {
     location: false,
   });
 
-  const { data, isLoading, error } = useGet('/api/members');
+  // const { data, isLoading, error } = useGet('/api/members');
+  const mutation = usePut('/api/members');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -215,8 +216,8 @@ function MyPageEditProfile() {
           const imageFile = await fetch(formData.profileImage)
             .then(res => res.blob())
             .then(blob => {
-              const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
-              return new File([blob], uniqueFileName, { type: 'image/jpeg' });
+              const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.webp`;
+              return new File([blob], uniqueFileName, { type: 'image/webp' });
             });
 
           // 프리사인드 URL 요청

@@ -79,11 +79,12 @@ function SignUpPage() {
   const [isFaceDetecting, setIsFaceDetecting] = useState(false);
   const [faceDetected, setFaceDetected] = useState(false);
   const [model, setModel] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const submit = (uri, payload) => {
     console.log("회원가입 요청 데이터:", payload);
     mutation.mutate(
-      { uri,payload },
+      { uri, payload },
       {
         onSuccess: (data) => {
           console.log("회원가입 성공 응답 데이터:", data);
@@ -92,35 +93,18 @@ function SignUpPage() {
           localStorage.setItem("refreshToken", token.refreshToken);
           updateUser(userData);
           console.log(user);
+          setIsLoading(false);
           navigate("/auth/welcome");
         },
         onError: (error) => {
           console.error("회원가입 실패", error);
+          setIsLoading(false);
         },
       }
     );
   };
 
-
-  // const signupMutation = usePost({
-  //   onSuccess: (data) => {
-  //     localStorage.setItem("accessToken", data.accessToken);
-  //     localStorage.setItem("refreshToken", data.refreshToken);
-  //     navigate("/auth/welcome");
-  //   },
-  //   onError: (error) => {
-  //     alert(`회원가입 실패: ${error}`);
-  //   }
-  // });
-
   useEffect(() => { 
-    // if (!email) {
-    //   navigate("/", { replace: true });
-    //   return;
-    // }
-
-    // setFormData((prev) => ({ ...prev, email: email }));
-
     const loadModel = async () => {
       const loadedModel = await blazeface.load();
       setModel(loadedModel);
@@ -202,7 +186,6 @@ function SignUpPage() {
       location: false,
       nickname: false,
       intro: false,
-      // profileImg: false,
     };
 
     if (currentStep === 3) {
@@ -253,10 +236,6 @@ function SignUpPage() {
         newErrors.intro = true;
         isValid = false;
       }
-      // if (!formData.profileImg) {
-      //   newErrors.profileImg = true;
-      //   isValid = false;
-      // }
     }
 
     setErrors(newErrors);
@@ -685,19 +664,16 @@ function SignUpPage() {
 
   const handleSubmit = async () => {
     if (validateStep(step)) {
+      setIsLoading(true);
       try {
-        // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
         if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
-          // Base64 이미지를 File 객체로 변환
           const imageFile = await fetch(formData.profileImg)
             .then(res => res.blob())
             .then(blob => {
-              // 고유한 파일명 생성 (타임스탬프 + 랜덤값 추가)
               const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
               return new File([blob], uniqueFileName, { type: 'image/jpeg' });
             });
 
-          // 프리사인드 URL 요청
           const presignResponse = await mutation.mutateAsync({
             uri: '/api/image',
             payload: { filename: imageFile.name }
@@ -705,7 +681,6 @@ function SignUpPage() {
 
           const { presignedUrl, objectKey } = presignResponse;
 
-          // S3에 직접 이미지 업로드
           const uploadResponse = await fetch(presignedUrl, {
             method: 'PUT',
             headers: { 'Content-Type': imageFile.type },
@@ -717,20 +692,18 @@ function SignUpPage() {
             throw new Error('S3 파일 업로드 실패');
           }
 
-          // 회원가입 데이터에 S3 이미지 URL 추가
           const signupData = {
             ...formData,
-            profileImg: `https://saju-bucket.s3.amazonaws.com/${objectKey}`
+            profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`
           };
 
-          // 회원가입 API 호출
           submit('/api/auth/signup', signupData);
         } else {
-          // 이미지가 없는 경우 바로 회원가입 진행
           submit('/api/auth/signup', formData);
         }
       } catch (error) {
         window.alert('이미지 업로드 실패: ' + error.message);
+        setIsLoading(false);
       }
     }
   };
@@ -802,7 +775,6 @@ function SignUpPage() {
         const hasFace = await detectFace(imageUrl);
         
         if (hasFace) {
-          // WebP로 변환하는 함수
           const convertToWebP = (imageData) => {
             return new Promise((resolve) => {
               const img = new Image();
@@ -828,14 +800,12 @@ function SignUpPage() {
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
                 
-                // WebP 형식으로 변환하고 resolve로 결과 반환
                 resolve(canvas.toDataURL('image/webp', 0.8));
               };
               img.src = imageData;
             });
           };
 
-          // 이미지를 WebP로 변환
           const webpDataUrl = await convertToWebP(imageUrl);
           
           setFormData((prev) => ({
@@ -923,11 +893,30 @@ function SignUpPage() {
           </MainButton>
         )}
         {step === 12 && (
-          <MainButton onClick={handleSubmit} className="w-full py-3">
-            가입하기
+          <MainButton 
+            onClick={handleSubmit} 
+            className="w-full py-3"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                처리중...
+              </div>
+            ) : (
+              "가입하기"
+            )}
           </MainButton>
         )}
       </div>
+      {isLoading && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-5 rounded-lg flex flex-col items-center">
+            <div className="w-10 h-10 border-4 border-red-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+            <p className="text-gray-700">회원가입 처리중...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
