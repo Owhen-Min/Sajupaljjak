@@ -52,7 +52,7 @@ function CoupleCode() {
         });
         
         // 로컬 스토리지에 저장
-        localStorage.setItem('coupleCode', code);
+        localStorage.setItem('coupleCode', code.slice(0, 4) + ' ' + code.slice(4));
         localStorage.setItem('codeExpiresAt', expiresAt);
         
       } catch (error) {
@@ -143,6 +143,7 @@ function CoupleCode() {
       } else if (response.data.status === 202) {
         alert("상대가 아직 코드를 입력하지 않았습니다.");
       }
+      console.log(response.data);
     } catch (error) {
       alert('매칭 확인 중 오류 발생: ' + error.message);
     }

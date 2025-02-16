@@ -8,7 +8,6 @@ import { provinces } from '../../data/provinceCode';
 import '../../styles/Signup.css';
 import { useAuth } from '../../hooks/useAuth';
 import { usePost } from '../../hooks/useApi';
-import * as tf from '@tensorflow/tfjs';
 import * as blazeface from '@tensorflow-models/blazeface';
 
 function Header({ step, children }) {
@@ -114,7 +113,7 @@ function SignUpPage() {
   //   }
   // });
 
-  useEffect(() => {
+  useEffect(() => { 
     // if (!email) {
     //   navigate("/", { replace: true });
     //   return;
@@ -417,13 +416,13 @@ function SignUpPage() {
             <div className="input-group mb-6">
               <SelectionGrid
                 cols={3}
-                options={["흡연", "비흡연", "금연 중"]}
+                options={["비흡연", "흡연", "금연 중"]}
                 onSelect={(selected) =>
                   handleSelectionChange("smoking", selected)
                 }
                 selected={
                   formData.smoking
-                    ? [["흡연", "비흡연", "금연 중"].indexOf(formData.smoking)]
+                    ? [["비흡연", "흡연", "금연 중"].indexOf(formData.smoking)]
                     : []
                 }
               />
@@ -710,7 +709,8 @@ function SignUpPage() {
           const uploadResponse = await fetch(presignedUrl, {
             method: 'PUT',
             headers: { 'Content-Type': imageFile.type },
-            body: imageFile
+            body: imageFile,
+            credentials: 'omit'
           });
 
           if (!uploadResponse.ok) {
@@ -762,7 +762,7 @@ function SignUpPage() {
     setFormData((prev) => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      btime: isChecked ? "00:00" : prev.btime,
+      btime: isChecked ? "00:00" : '',
     }));
   };
 
