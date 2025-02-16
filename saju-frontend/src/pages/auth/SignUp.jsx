@@ -91,6 +91,11 @@ function SignUpPage() {
           const { token, ...userData } = data;
           localStorage.setItem("accessToken", token.accessToken);
           localStorage.setItem("refreshToken", token.refreshToken);
+
+          //
+          localStorage.setItem("realtion : ", data.relation);
+          //
+
           updateUser(userData);
           console.log(user);
           navigate("/auth/welcome");
