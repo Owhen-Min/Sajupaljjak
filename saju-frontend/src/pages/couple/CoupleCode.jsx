@@ -16,8 +16,8 @@ function CoupleCode() {
   const [inputCode, setInputCode] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
 
-  const { data, isLoading, error } = useGet('/api/inviting');
-  const { mutate: createCoupleCode } = usePost('/api/inviting');
+  const { data, isLoading, error } = useGet('/api/couple/code');
+  const { mutate: createCoupleCode } = usePost('/api/couple/code');
   const { refetch: checkConfirm } = useGet('/api/inviting/confirm');
   
 

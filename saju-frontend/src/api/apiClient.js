@@ -7,6 +7,7 @@ const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 apiClient.interceptors.request.use(
@@ -17,8 +18,7 @@ apiClient.interceptors.request.use(
     }
     const memberId = localStorage.getItem("memberId");
     if (memberId) {
-      config.params = config.params || {};
-      config.params.memberId = memberId;
+      config.headers["X-Member-Id"] = memberId;
     }
     return config;
   },

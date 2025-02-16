@@ -6,60 +6,66 @@ import {useGet} from "../../hooks/useApi";
 function FortuneMy() {
   // 천간과 지지의 원소 매핑
   const skyStemMapping = {
-    '갑': '목', '을': '목', '병': '화', '정': '화', 
-    '무': '토', '기': '토', '경': '금', '신': '금',
-    '임': '수', '계': '수'
+    갑: "목",
+    을: "목",
+    병: "화",
+    정: "화",
+    무: "토",
+    기: "토",
+    경: "금",
+    신: "금",
+    임: "수",
+    계: "수",
   };
 
   const earthBranchMapping = {
-    '인': '목', '묘': '목', '진': '토', '사': '화',
-    '오': '화', '미': '토', '신': '금', '유': '금',
-    '술': '토', '해': '수', '자': '수', '축': '토'
+    인: "목",
+    묘: "목",
+    진: "토",
+    사: "화",
+    오: "화",
+    미: "토",
+    신: "금",
+    유: "금",
+    술: "토",
+    해: "수",
+    자: "수",
+    축: "토",
   };
 
-  const { data, isLoading, error } = useGet("/api/fortune/info");
-  if(isLoading) return <div>로딩중...</div>;
-  if(error) console.log('에러가 발생했습니다');
+  // const { data, isPending, error } = useGet("/api/fortune/info");
 
-  // const data = {
-  //   saju: {
-  //     year: '을해',
-  //     month: '기묘',
-  //     day: '임자',
-  //     time: '정미',
-  //   }
-  // };
+  const data = {
+    year: "을해",
+    month: "기묘",
+    day: "임자",
+    time: "정미",
+  };
 
   // 원소 개수 계산
   const calculateElementCounts = () => {
     const counts = { 목: 0, 화: 0, 토: 0, 금: 0, 수: 0 };
-    
-    Object.values(data.saju).forEach(pillar => {
+
+    Object.values(data).forEach((pillar) => {
       const skyElement = skyStemMapping[pillar[0]];
       const earthElement = earthBranchMapping[pillar[1]];
       if (skyElement) counts[skyElement]++;
       if (earthElement) counts[earthElement]++;
     });
 
-
     return counts;
   };
 
   const elementCounts = calculateElementCounts();
-
+  // if(isPending) return <div>로딩중...</div>;
+  // if(error) return <div>`에러 : ${error}` </div>;
   return (
     <div className="fortune flex flex-col items-center relative h-screen pt-10">
-      <TopBar2
-        url='/fortune'
-        mainText="나의 사주"
-      />
+      <TopBar2 url="/fortune" mainText="나의 사주" />
       <div className="px-4">
-        <SajuGrid 
-          saju={data.saju} 
-        />
-      <ElementChart elementCounts={elementCounts} />
+        <SajuGrid saju={data} />
+        <ElementChart elementCounts={elementCounts} />
       </div>
-
     </div>
   );
 }

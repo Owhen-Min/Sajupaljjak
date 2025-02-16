@@ -1,13 +1,26 @@
 import BottomNav from "../../components/BottomNav";
 import ChatList from "../../components/ChatList";
 import TopBar from "../../components/TopBar";
-import { useGet } from "../../hooks/useApi";
+import { useEffect, useState } from "react";
+import  useWebSocket  from "../../hooks/useWebSocket";
+import { useAuth } from "../../hooks/useAuth";
 
 function Chats() {
-  // const { data, loading, error } = useGet("/api/chats");
-  // if(loading) return <div>로딩 중...</div>;
-  // if(error) return <div>에러 발생!</div>;
 
+  // const [data, setData] = useState([]);
+  // const { stompClient } = useWebSocket(true);
+  // const memberId = useAuth().memberId;
+
+  // useEffect(() => {
+  //   if (stompClient){
+  //     stompClient.subscribe(`/topic/list/${memberId}`, (message) => {
+  //       const responseData = JSON.parse(message.body);
+  //       console.log("받은 데이터 :", responseData);
+  //       setData(responseData);
+  //     });
+  //   }
+  // }, [stompClient, memberId]);
+  
   const data = [
     {
       "36": { 

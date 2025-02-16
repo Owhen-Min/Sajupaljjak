@@ -39,13 +39,14 @@ function ErrorBubble({ children }) {
 }
 
 function SignUpPage() {
+  const mutation = usePost();
   const navigate = useNavigate();
-  const { email } = useAuth();
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
+  const {email, updateUser, user }  = useAuth();
 
   const [formData, setFormData] = useState({
-    email: "",
+    email: email,
     name: "",
     gender: "",
     bday: "",
@@ -61,6 +62,7 @@ function SignUpPage() {
     nickname: "",
     intro: "",
   });
+
   const [errors, setErrors] = useState({
     name: false,
     gender: false,
@@ -79,24 +81,46 @@ function SignUpPage() {
   const [faceDetected, setFaceDetected] = useState(false);
   const [model, setModel] = useState(null);
 
-  const signupMutation = usePost({
-    onSuccess: (data) => {
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      navigate("/auth/welcome");
-    },
-    onError: (error) => {
-      alert(`회원가입 실패: ${error}`);
-    }
-  });
+  const submit = (uri, payload) => {
+    console.log("회원가입 요청 데이터:", payload);
+    mutation.mutate(
+      { uri,payload },
+      {
+        onSuccess: (data) => {
+          console.log("회원가입 성공 응답 데이터:", data);
+          const { tokens, ...userData } = data;
+          localStorage.setItem("accessToken", tokens.accessToken);
+          localStorage.setItem("refreshToken", tokens.refreshToken);
+          updateUser(userData);
+          console.log(user);
+          navigate("/auth/welcome");
+        },
+        onError: (error) => {
+          console.error("회원가입 실패", error);
+        },
+      }
+    );
+  };
+
+
+  // const signupMutation = usePost({
+  //   onSuccess: (data) => {
+  //     localStorage.setItem("accessToken", data.accessToken);
+  //     localStorage.setItem("refreshToken", data.refreshToken);
+  //     navigate("/auth/welcome");
+  //   },
+  //   onError: (error) => {
+  //     alert(`회원가입 실패: ${error}`);
+  //   }
+  // });
 
   useEffect(() => {
-    if (!email) {
-      navigate("/", { replace: true });
-      return;
-    }
+    // if (!email) {
+    //   navigate("/", { replace: true });
+    //   return;
+    // }
 
-    setFormData((prev) => ({ ...prev, email: email }));
+    // setFormData((prev) => ({ ...prev, email: email }));
 
     const loadModel = async () => {
       const loadedModel = await blazeface.load();
@@ -258,7 +282,6 @@ function SignUpPage() {
             </div>
           </>
         )}
-
         {4 > step && step >= 2 && (
           <>
             <h3 className="input-prompt mb-2">성별을 입력해주세요</h3>
@@ -279,7 +302,6 @@ function SignUpPage() {
             </div>
           </>
         )}
-
         {4 > step && step >= 3 && (
           <>
             <h3 className="input-prompt mb-2">
@@ -363,7 +385,6 @@ function SignUpPage() {
             )}
           </>
         )}
-
         {9 > step && step >= 4 && (
           <>
             <h3 className="input-prompt mb-2">종교를 선택해주세요</h3>
@@ -390,7 +411,6 @@ function SignUpPage() {
             </div>
           </>
         )}
-
         {9 > step && step >= 5 && (
           <>
             <h3 className="input-prompt mb-2">흡연 여부를 선택해주세요</h3>
@@ -413,7 +433,6 @@ function SignUpPage() {
             </div>
           </>
         )}
-
         {9 > step && step >= 6 && (
           <>
             <h3 className="input-prompt mb-2">음주 여부를 선택해주세요</h3>
@@ -444,7 +463,6 @@ function SignUpPage() {
             </div>
           </>
         )}
-
         {9 > step && step >= 7 && (
           <>
             <h3 className="input-prompt mb-2">키를 입력해주세요</h3>
@@ -486,7 +504,6 @@ function SignUpPage() {
             </div>
           </>
         )}
-
         {9 > step && step >= 8 && (
           <>
             <h3 className="input-prompt mb-2">거주지를 선택해주세요</h3>
@@ -654,9 +671,7 @@ function SignUpPage() {
               </div>
             </div>
             {isFaceDetecting && (
-              <div className="text-sm text-gray-500 mt-2">
-                얼굴 인식 중...
-              </div>
+              <div className="text-sm text-gray-500 mt-2">얼굴 인식 중...</div>
             )}
             {!isFaceDetecting && !faceDetected && formData.profileImg && (
               <div className="text-sm text-red-500 mt-2">
@@ -671,10 +686,11 @@ function SignUpPage() {
 
   const handleSubmit = () => {
     if (validateStep(step)) {
-      signupMutation.mutate({
-        uri: "/api/auth/signup",
-        payload: formData
-      });
+      submit("/api/auth/signup", formData);
+      // signupMutation.mutate({
+      //   uri: "/api/auth/signup",
+      //   payload: formData
+      // });
     }
   };
 

@@ -27,6 +27,7 @@ export const useAuth = () => {
   const updateEmail = (newEmail) => dispatch(setEmail(newEmail));
   const logout = () => dispatch(resetAuth());
 
+  
   return {
     memberId,
     isCouple,

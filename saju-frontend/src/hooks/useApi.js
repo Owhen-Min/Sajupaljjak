@@ -8,32 +8,35 @@ export const useGet = (uri, options = {}) => {
       const response = await apiClient.get(uri);
       return response.data;
     },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     ...options,
     onSuccess: (data) => {
       console.log("GET Response Data:", data);
+      options.onSuccess?.(data);
     },
     onError: (error) => {
       console.error("GET Error:", error);
+      options.onError?.(error);
     },
   });
 };
 
-export const usePost = (options = {}) => {
+export const usePost = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload, config = {} }) => {
+    mutationFn: async ({ uri, payload = {} }) => {
       console.log("POST Request Payload:", payload);
-      const response = await apiClient.post(uri, payload, config);
+      const response = await apiClient.post(uri, payload);
       return response.data;
     },
-    ...options
   });
 };
 
 export const usePut = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload, config = {} }) => {
+    mutationFn: async ({ uri, payload = {} }) => {
       console.log("PUT Request Payload:", payload);
-      const response = await apiClient.put(uri, payload, config);
+      const response = await apiClient.put(uri, payload);
       return response.data;
     },
     onSuccess: (data) => {
@@ -45,10 +48,10 @@ export const usePut = () => {
   });
 };
 
-export const useDelete = (uri) => {
+export const useDelete = () => {
   return useMutation({
-    mutationFn: async ({ uri, config = {} }) => {
-      const response = await apiClient.delete(uri, config);
+    mutationFn: async ({ uri }) => {
+      const response = await apiClient.delete(uri);
       return response.data;
     },
     onSuccess: (data) => {
@@ -63,8 +66,9 @@ export const useDelete = (uri) => {
 
 export const usePatch = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload, config = {} }) => {
-      const response = await apiClient.patch(uri, payload, config);
+    mutationFn: async ({ uri, payload = {}}) => {
+      console.log("PATCH Request Payload:", payload);
+      const response = await apiClient.patch(uri, payload);
       return response.data;
     },
   });
