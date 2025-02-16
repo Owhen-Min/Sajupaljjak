@@ -6,7 +6,9 @@ import com.saju.sajubackend.api.chat.service.ChatMessageService;
 import com.saju.sajubackend.api.chat.service.ChatroomService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,7 @@ public class ChatMessageController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/chats")
-    public void sendMessage(ChatMessage chatMessage) {
+    public void sendMessage(@Payload ChatMessage chatMessage) {
         // 채팅 메시지 전송
         ChatMessage message = chatMessageService.send(chatMessage);
         messagingTemplate.convertAndSend("/topic/" + message.getChatroomId(), message);
@@ -32,7 +34,7 @@ public class ChatMessageController {
     }
 
     @SubscribeMapping("/list/{memberId}")
-    public List<ChatroomResponseDto> sendAllChatRooms(@PathVariable Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
+    public List<ChatroomResponseDto> sendAllChatRooms(@DestinationVariable Long memberId) {
         return chatroomService.getAllChatrooms(memberId);
     }
 }
