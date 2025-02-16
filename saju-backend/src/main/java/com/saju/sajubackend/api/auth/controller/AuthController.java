@@ -5,17 +5,17 @@ import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.auth.service.AuthService;
 import com.saju.sajubackend.api.auth.service.kakao.KakaoAuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
-//@RequestMapping("/api/auth")
-//@RestController
 
+@Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"https://i12a408.p.ssafy.io", "http://localhost:5173"})
 public class AuthController {
 
     private final KakaoAuthService kakaoAuthService;
@@ -24,6 +24,7 @@ public class AuthController {
 
     @GetMapping("/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam String code) {
+        log.info("✅ [AuthController] : {}", code);
         LoginResponse loginResponse = kakaoAuthService.socialLogin(code);
         return ResponseEntity.ok(loginResponse);
     }

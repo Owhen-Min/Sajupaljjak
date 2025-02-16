@@ -86,7 +86,7 @@ public class AuthService {
                 member.getAge(),
                 member.getCelestialStem().getLabel(),
                 member.getIntro(),
-                new LoginResponse.TokenInfo(accessToken,refreshToken));
+                new LoginResponse.TokenInfo(accessToken, refreshToken));
     }
 
     @Transactional
@@ -151,7 +151,6 @@ public class AuthService {
                 .religion(Religion.fromLabel(request.getReligion()))
                 .gender(Gender.fromLabel(request.getGender()))
                 .celestialStem(CelestialStem.fromLabel(celestialStem))
-                .relation(RelationshipStatus.fromLabel(request.getRelation()))
                 .age(request.getAge())
                 .build();
         Member savedMember = memberRepository.save(member);

@@ -1,13 +1,7 @@
 package com.saju.sajubackend.api.member.domain;
 
-import com.saju.sajubackend.common.converter.DrinkingFrequencyConverter;
-import com.saju.sajubackend.common.converter.ReligionConverter;
-import com.saju.sajubackend.common.converter.SmokingStatusConverter;
-import com.saju.sajubackend.common.enums.CelestialStem;
-import com.saju.sajubackend.common.enums.DrinkingFrequency;
-import com.saju.sajubackend.common.enums.Religion;
-import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.converter.*;
+import com.saju.sajubackend.common.entity.BaseTimeEntity;
 import com.saju.sajubackend.common.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,8 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Table(name = "MEMBER")
-@Setter
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -51,7 +44,7 @@ public class Member {
     private Integer height;
 
     @Column(name = "city_code")
-    private Integer cityCode;
+    private Long cityCode;
 
     @Column(name = "age")
     private Integer age;
@@ -76,9 +69,10 @@ public class Member {
     @Column
     private CelestialStem celestialStem;
 
-    public void updateRelationship(RelationshipStatus isCouple) {
+    public void updateRelationship(RelationshipStatus relation) {
         this.relation = relation;
     }
+
     // 필터 수정을 위한 update 메서드들
     public void updateSmoking(SmokingStatus smoking) {
         this.smoking = smoking;
