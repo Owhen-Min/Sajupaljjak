@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "https://i12a408.p.ssafy.io")
+@CrossOrigin(origins = {"https://i12a408.p.ssafy.io", "http://localhost:5173"})
 public class AuthController {
 
     private final KakaoAuthService kakaoAuthService;
