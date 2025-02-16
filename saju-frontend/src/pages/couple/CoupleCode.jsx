@@ -52,7 +52,7 @@ function CoupleCode() {
         localStorage.setItem('codeExpiresAt', expiresAt);
         
         setCoupleCode({
-          code: code,
+          code: code.slice(0, 4) + ' ' + code.slice(4),
           expiresAt: expiresAt,
         });
       } catch (error) {
@@ -124,7 +124,7 @@ function CoupleCode() {
 
     try {
       createCoupleCode({
-        invitingCode: inputCode,
+        invitingCode: inputCode.replace(/\s/g, ''),
         startDate: selectedDate
       });
       navigate('/couple');
