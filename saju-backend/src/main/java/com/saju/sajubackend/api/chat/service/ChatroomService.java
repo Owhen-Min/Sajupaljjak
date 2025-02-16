@@ -14,7 +14,10 @@ import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,49 +107,57 @@ public class ChatroomService {
     }
 
     public List<ChatroomResponseDto> getAllChatrooms(Long memberId) {
-        // 1. 회원의 모든 채팅 방 + 상대방 정보 구하기
-        List<ChatPartnerDto> partners = chatroomQueryDslRepository.findChatPartnersByMemberId(memberId);
+        // 1. 채팅 상대방 정보 구하기
+        Map<Long, Member> partners = chatroomQueryDslRepository.findChatPartnersByMemberId(memberId);
 
-        // 2. memberId와 chatroomId로 LastMessage 찾기(몽고 DB LastMessage)
-        List<LastMessage> lastMessages = partners.stream()
-                .map(partner ->
-                        lastMessageRepository.findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(String.valueOf(partner.getChatroomId()), String.valueOf(memberId))
-                                .orElse(null))
-                .toList();
+        // 2. 회원별 마지막 읽은 메시지 조회 (몽고 DB LastMessage)
+        Map<Long, LastMessage> lastReadMessages = findLastReadMessages(partners, memberId);
 
+        // 3. 채팅방 응답 리스트 생성
+        return buildChatroomResponses(partners, lastReadMessages);
+    }
+
+    private Map<Long, LastMessage> findLastReadMessages(Map<Long, Member> partners, Long memberId) {
+        return partners.keySet().stream()
+                .map(chatroomId -> Map.entry(chatroomId, lastMessageRepository
+                        .findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(
+                                String.valueOf(chatroomId), String.valueOf(memberId))
+                        .orElse(null)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private long countUnreadMessages(Long chatroomId, String lastMessageTime) {
+        return chatMessageRepository.countByChatroomIdAndSendTimeAfter(String.valueOf(chatroomId), lastMessageTime);
+    }
+
+    private ChatMessage findLatestMessage(Long chatroomId) {
+        return chatMessageRepository.findLatestMessageByChatroomId(String.valueOf(chatroomId)).orElse(null);
+    }
+
+    private List<ChatroomResponseDto> buildChatroomResponses(Map<Long, Member> partners, Map<Long, LastMessage> lastReadMessages) {
         List<ChatroomResponseDto> response = new ArrayList<>();
 
-        // 3. 채팅방별로 읽지 않은 메시지 개수 확인 & 최신 메시지 조회
-        for (int i = 0; i < partners.size(); i++) {
-            ChatPartnerDto partner = partners.get(i);
-            String chatroomId = String.valueOf(partner.getChatroomId());
+        for (Long chatroomId : partners.keySet()) {
+            LastMessage lastReadMessage = lastReadMessages.get(chatroomId);
+            String lastMessageTime = (lastReadMessage != null) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
 
-            LastMessage lastMessage = lastMessages.get(i);
-            String lastMessageTime = (lastMessage != null) ? lastMessage.getLastMessageTime() : "1970-01-01T00:00:00";
+            // 읽지 않은 메시지 개수 조회
+            long unreadCount = countUnreadMessages(chatroomId, lastMessageTime);
 
-            // 4. MongoDB에서 읽지 않은 메시지 개수 조회
-            long unreadCount = chatMessageRepository.countUnreadMessages(chatroomId, lastMessageTime);
-
-            // 5. 안 읽은 메시지가 있다면 최신 메시지 가져오기
+            // 최신 메시지 가져오기 (읽지 않은 메시지가 있을 경우)
             ChatMessage latestMessage = null;
             if (unreadCount > 0) {
-                List<ChatMessage> latestMessages = chatMessageRepository.findLatestMessageByChatroomId(chatroomId, PageRequest.of(0, 1));
-                latestMessage = latestMessages.isEmpty() ? null : latestMessages.get(0);
+                latestMessage = findLatestMessage(chatroomId);
+                response.add(ChatroomResponseDto.from(chatroomId, partners.get(chatroomId), latestMessage, unreadCount));
+                continue;
             }
 
-            response.add(new ChatroomResponseDto(
-                    partner.getChatroomId(),
-                    new PartnerDto(partner.getPartnerId(), partner.getNickname(), partner.getProfileImg(), partner.getCelestialStem()),
-                    new MessageDto(
-                            latestMessage != null ? latestMessage.getContent() : "",
-                            latestMessage != null ? latestMessage.getSendTime() : "",
-                            unreadCount
-                    )
-            ));
+            response.add(ChatroomResponseDto.from(chatroomId, partners.get(chatroomId), lastReadMessage, unreadCount));
         }
 
         return response;
     }
+
 
 //    public ChatroomResponseDto updateChatroom(String chatroomId) {
 //        // 1. 채팅

@@ -4,14 +4,13 @@ import com.saju.sajubackend.api.chat.domain.ChatMessage;
 import com.saju.sajubackend.api.chat.dto.response.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.service.ChatMessageService;
 import com.saju.sajubackend.api.chat.service.ChatroomService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller

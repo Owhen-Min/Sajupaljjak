@@ -7,6 +7,9 @@ import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMembe
 import static com.saju.sajubackend.api.member.domain.QMember.member;
 
 import com.saju.sajubackend.api.chat.dto.ChatPartnerDto;
+import com.saju.sajubackend.api.member.domain.Member;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -47,32 +50,32 @@ public class ChatroomQueryDslRepository {
         return fetchOne != null;
     }
 
-    public List<ChatPartnerDto> findChatPartnersByMemberId(Long memberId) {
-
-        // 활성화된 채팅방 id 목록 가져오기
+    public Map<Long, Member> findChatPartnersByMemberId(Long memberId) {
+        // 활성화된 채팅방 ID 목록 가져오기
         List<Long> activeChatroomIds = findActiveChatrooms(memberId);
 
         if (activeChatroomIds.isEmpty()) {
-            return List.of(); // 활성화된 채팅방이 없으면 빈 리스트 반환
+            return Map.of(); // 활성화된 채팅방이 없으면 빈 맵 반환
         }
 
-        // 상대방 정보 조회
+        // 상대방 정보 조회 후 Map<chatroomId, Member>로 변환
         return queryFactory
-                .select(Projections.constructor(ChatPartnerDto.class,
-                        chatroom.chatroomId,  // 채팅방 ID
-                        member.memberId,      // 상대방 ID
-                        member.nickname,      // 상대방 닉네임
-                        member.profileImg     // 상대방 프로필 이미지
-                ))
+                .select(chatroom.chatroomId, member)
                 .from(chatroom)
                 .join(member)
                 .on(
                         chatroom.member1.memberId.eq(memberId).and(chatroom.member2.memberId.eq(member.memberId))
                                 .or(chatroom.member2.memberId.eq(memberId).and(chatroom.member1.memberId.eq(member.memberId)))
                 )
-                .where(chatroom.chatroomId.in(activeChatroomIds)) // 🔹 활성화된 채팅방만 조회
-                .fetch();
+                .where(chatroom.chatroomId.in(activeChatroomIds)) // 활성화된 채팅방만 조회
+                .fetch()
+                .stream()
+                .collect(Collectors.toMap(
+                        tuple -> tuple.get(chatroom.chatroomId),
+                        tuple -> tuple.get(member)
+                ));
     }
+
 
     private List<Long> findActiveChatrooms(Long memberId) {
         return queryFactory
