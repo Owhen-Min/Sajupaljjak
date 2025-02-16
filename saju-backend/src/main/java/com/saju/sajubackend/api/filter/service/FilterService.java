@@ -60,7 +60,7 @@ public class FilterService {
     }
 
 
-    private void saveRegionFilters(List<Integer> cityCodes, Filter filter) {
+    private void saveRegionFilters(List<Long> cityCodes, Filter filter) {
         if (cityCodes.isEmpty()) return;
 
         List<RegionFilter> regionFilters = cityCodes.stream()
