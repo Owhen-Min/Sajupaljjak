@@ -715,7 +715,6 @@ function SignUpPage() {
             method: 'PUT',
             headers: { 'Content-Type': imageFile.type },
             body: imageFile,
-            mode: 'no-cors'
           });
 
           if (!uploadResponse.ok) {
