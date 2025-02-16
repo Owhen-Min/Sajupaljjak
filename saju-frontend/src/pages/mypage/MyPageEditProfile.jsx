@@ -37,13 +37,12 @@ function MyPageEditProfile() {
     location: false,
   });
 
-  // const { data, isLoading, error } = useGet('/api/members');
+  const { data, isLoading, error } = useGet('/api/members');
   const mutation = usePut('/api/members');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        
         const userData = data;
         
         // cityCode와 dongCode가 있는지 확인하고, provinces 객체에서 유효한 값인지 검증
@@ -60,16 +59,16 @@ function MyPageEditProfile() {
           cityCode: cityExists ? cityCode : '',
           dongCode: cityExists ? dongCode : '',
         });
-        
-      } catch (error) {
-        console.error('프로필 데이터 로딩 실패:', error);
-      } finally {
-        setIsLoading(false);
+      }
+      finally {
+        if (error) {
+          window.alert('프로필 데이터 로딩 실패:', error);
+        }
       }
     };
 
     fetchUserProfile();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     const loadModel = async () => {
@@ -162,9 +161,18 @@ function MyPageEditProfile() {
     }
   };
 
-  // 로딩 상태 표시
-  if (isLoading) {
-    return <div className="flex justify-center items-center h-screen">로딩 중...</div>;
+  // 로딩 상태 표시 업데이트
+  if (isLoading || mutation.isLoading) {
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="bg-white p-5 rounded-lg flex flex-col items-center">
+          <div className="w-10 h-10 border-4 border-[#ff7070] border-t-transparent rounded-full animate-spin mb-3"></div>
+          <p className="text-gray-700">
+            {isLoading ? "프로필 불러오는 중..." : "프로필 수정 중..."}
+          </p>
+        </div>
+      </div>
+    );
   }
 
   const handleInputChange = (e) => {

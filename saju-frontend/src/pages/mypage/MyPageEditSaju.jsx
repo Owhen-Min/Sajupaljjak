@@ -3,6 +3,7 @@ import { TopBar2 } from "../../components/TopBar2";
 import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import SajuGrid from "../../components/SajuGrid";
+import { useGet, usePut } from "../../hooks/useApi";
 import { testUsers } from "../../data/user";
 
 // 천간, 지지, 60갑자 등의 상수 정의
@@ -129,21 +130,23 @@ function MyPageEditSaju() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const userData = testUsers[0];
+        const userData = data;
         
         setFormData({
-          name: userData.name,
-          birthDay: userData.birthDay,
-          birthTime: userData.birthTimeUnknown ? "00:00" : userData.birthTime,
-          birthTimeUnknown: userData.birthTimeUnknown,
+          name: userData.name || "",
+          birthDay: userData.birthDay || "",
+          birthTime: userData.birthTimeUnknown ? "00:00" : (userData.birthTime || ""),
+          birthTimeUnknown: userData.birthTimeUnknown || false,
         });
 
         // 초기 사주 계산
-        const initialSaju = calculateSaju(userData.birthDay, userData.birthTime);
-        setSajuData(initialSaju);
+        if (userData.birthDay) {
+          const initialSaju = calculateSaju(userData.birthDay, userData.birthTime);
+          setSajuData(initialSaju);
+        }
         
       } catch (error) {
-        console.error('프로필 데이터 로딩 실패:', error);
+        console.log('프로필 데이터 로딩 실패:', error);
       }
     };
 
@@ -226,6 +229,9 @@ function MyPageEditSaju() {
       console.log("제출된 데이터:", { ...formData, saju });
     }
   };
+
+  const { data, isLoading, error } = useGet('/api/members');
+  const mutation = usePut('/api/members');
 
   return (
     <div className="h-screen relative pt-14 flex flex-col px-5">
