@@ -53,11 +53,13 @@ const Verify = () => {
 
       localStorage.setItem("accessToken", token.accessToken);
       localStorage.setItem("refreshToken", token.refreshToken);
-      localStorage.setItem("memberId", data.memberId);
+      localStorage.setItem("memberId", data.member_id);
+      localStorage.setItem("relation", data.relation);
       
       updateUser(userData);
-      updateMemberId(data.memberId);
+      updateMemberId(data.member_id);
       updateIsCouple(data.relation);
+
       updateIsAuthenticated(true);
 
       if (data.isCouple === null) {
