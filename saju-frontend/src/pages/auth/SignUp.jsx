@@ -684,13 +684,44 @@ function SignUpPage() {
     );
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validateStep(step)) {
-      submit("/api/auth/signup", formData);
-      // signupMutation.mutate({
-      //   uri: "/api/auth/signup",
-      //   payload: formData
-      // });
+      try {
+        // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
+        if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
+          // 이미지 파일 생성
+          const imageFile = await fetch(formData.profileImg)
+            .then(res => res.blob())
+            .then(blob => new File([blob], 'profile.jpg', { type: 'image/jpeg' }));
+
+          // 이미지 업로드를 위한 FormData 생성
+          const imageFormData = new FormData();
+          imageFormData.append('image', imageFile);
+
+          // 이미지 업로드 API 호출
+          const imageResponse = await mutation.mutateAsync({
+            uri: '/api/image',
+            payload: imageFormData,
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+
+          // 회원가입 데이터에 이미지 objectKey 추가
+          const signupData = {
+            ...formData,
+            profileImg: imageResponse.objectKey,
+          };
+
+          // 회원가입 API 호출
+          submit('/api/auth/signup', signupData);
+        } else {
+          // 이미지가 없는 경우 바로 회원가입 진행
+          submit('/api/auth/signup', formData);
+        }
+      } catch (error) {
+        window.alert('이미지 업로드 실패:', error);
+      }
     }
   };
 
