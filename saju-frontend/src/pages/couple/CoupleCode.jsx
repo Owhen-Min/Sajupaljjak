@@ -123,6 +123,7 @@ function CoupleCode() {
     }
 
     try {
+      console.log(inputCode, selectedDate);
       createCoupleCode({
         invitingCode: inputCode,
         startDate: selectedDate.toISOString().split('T')[0]
