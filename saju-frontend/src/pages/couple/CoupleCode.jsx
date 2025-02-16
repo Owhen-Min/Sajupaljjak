@@ -143,6 +143,7 @@ function CoupleCode() {
       } else if (response.data.status === 202) {
         alert("상대가 아직 코드를 입력하지 않았습니다.");
       }
+      console.log(response.data);
     } catch (error) {
       alert('매칭 확인 중 오류 발생: ' + error.message);
     }
