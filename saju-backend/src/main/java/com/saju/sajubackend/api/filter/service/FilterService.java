@@ -89,72 +89,21 @@ public class FilterService {
     public void updateMemberProfile(Long memberId, UpdateProfileRequest request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
+        member.updateNickname(request.getNickname());
+        member.updateIntro(request.getIntro());
 
-        if (request.getNickname() != null) {
-            member.setNickname(request.getNickname());
-        }
-        if (request.getIntro() != null) {
-            member.setIntro(request.getIntro());
-        }
+        // 🔹 Enum 변환 로직 간소화
         if (request.getReligion() != null) {
-            member.setReligion(convertReligion(request.getReligion()));
+            member.updateReligion(Religion.fromLabel(request.getReligion()));
         }
         if (request.getSmoking() != null) {
-            member.setSmoking(convertSmoking(request.getSmoking()));
+            member.updateSmoking(SmokingStatus.fromLabel(request.getSmoking()));
         }
         if (request.getDrinking() != null) {
-            member.setDrinking(convertDrinking(request.getDrinking()));
-        }
-        if (request.getHeight() != null) {
-            member.setHeight(request.getHeight());
-        }
-        if (request.getCityCode() != null) {
-            member.setCityCode(request.getCityCode());
-        }
-    }
-
-    private Religion convertReligion(String religion) {
-        Map<String, Religion> religionMap = Map.of(
-                "무교", Religion.NONE,
-                "기독교", Religion.CHRISTIANITY,
-                "불교", Religion.BUDDHISM,
-                "천주교", Religion.CATHOLICISM,
-                "기타", Religion.OTHER
-        );
-
-        if (!religionMap.containsKey(religion)) {
-            throw new BadRequestException(ErrorMessage.INVALID_RELIGION_CODE);
+            member.updateDrinking(DrinkingFrequency.fromLabel(request.getDrinking()));
         }
 
-        return religionMap.get(religion);
-    }
-
-    private SmokingStatus convertSmoking(String smoking) {
-        Map<String, SmokingStatus> smokingMap = Map.of(
-                "흡연", SmokingStatus.SMOKER,
-                "비흡연", SmokingStatus.NON_SMOKER,
-                "금연 흡연", SmokingStatus.QUITTING_SMOKING
-        );
-
-        if (!smokingMap.containsKey(smoking)) {
-            throw new BadRequestException(ErrorMessage.INVALID_SMOKING_CODE);
-        }
-
-        return smokingMap.get(smoking);
-    }
-
-    private DrinkingFrequency convertDrinking(String drinking) {
-        Map<String, DrinkingFrequency> drinkingMap = Map.of(
-                "음주 안함", DrinkingFrequency.NO_DRINKING,
-                "주 1~2회", DrinkingFrequency.ONCE_TWICE_PER_WEEK,
-                "주 3~4회", DrinkingFrequency.THREE_FOUR_TIMES_PER_WEEK,
-                "주 5회 이상", DrinkingFrequency.FIVE_TIMES_PER_WEEK
-        );
-
-        if (!drinkingMap.containsKey(drinking)) {
-            throw new BadRequestException(ErrorMessage.INVALID_DRINKING_CODE);
-        }
-
-        return drinkingMap.get(drinking);
+        member.updateHeight(request.getHeight());
+        member.updateCityCode(request.getCityCode());
     }
 }

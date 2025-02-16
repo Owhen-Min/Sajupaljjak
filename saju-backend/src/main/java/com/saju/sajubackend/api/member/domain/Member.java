@@ -85,4 +85,20 @@ public class Member extends BaseTimeEntity {
     public void updateReligion(Religion religion) {
         this.religion = religion;
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public void updateHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void updateCityCode(Integer cityCode) {
+        this.cityCode = cityCode;
+    }
 }
