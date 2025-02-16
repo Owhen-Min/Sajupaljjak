@@ -138,6 +138,7 @@ function CoupleCode() {
   const handleMatchComplete = async () => {
     try {
       const response = await checkConfirm();
+      console.log(response);
       if (response.data.status === 200) {
         navigate('/couple');
       } else if (response.data.status === 202) {
