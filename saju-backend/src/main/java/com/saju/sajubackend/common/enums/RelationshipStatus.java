@@ -10,8 +10,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum RelationshipStatus {
 
-    SOLO(0, "솔로"),
-    COUPLE(1, "커플");
+    //솔로가 false, 커플 true
+    SOLO(0, "false"),
+    COUPLE(1, "true");
 
     private final int code;
     private final String label;

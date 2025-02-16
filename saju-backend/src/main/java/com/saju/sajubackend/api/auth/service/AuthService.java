@@ -44,8 +44,10 @@ public class AuthService {
         String email = kakaoUserResponse.getKakao_account().getEmail();
         log.info("🔎 [로그인 요청] 카카오 이메일: {}", email);
 
+
         // 이메일로 회원 조회
         Optional<Member> optionalMember = memberSocialRepository.findMemberByEmail(email);
+
 
         // 회원가입 안되어 있는 경우
         if (optionalMember.isEmpty()) {
@@ -55,6 +57,11 @@ public class AuthService {
 
         Member member = optionalMember.get();
         log.info("✅ [로그인 성공] 회원 정보: {}", member);
+
+        // ✅ 추가 조회: MemberSocial에서 name 가져오기
+        MemberSocial memberSocial = memberSocialRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(HttpStatus.NOT_FOUND, ErrorMessage.MEMBER_NOT_FOUND));
+
 
         // JWT 토큰 생성
         String accessToken = jwtProvider.createAccessToken(member.getMemberId());
@@ -68,11 +75,16 @@ public class AuthService {
         refreshTokenService.saveRefreshToken(member, refreshToken);
 
 //        String name = "나중에";
-        return LoginResponse.ofSuccess(member.getNickname(),
+        return LoginResponse.ofSuccess(
+                member.getMemberId(),
+                memberSocial.getName(),
+                member.getNickname(),
+                member.getRelation().getLabel(),
                 member.getProfileImg(),
                 member.getCityCode(),
-                member.getReligion(),
+                member.getReligion().getLabel(),
                 member.getAge(),
+                member.getCelestialStem().getLabel(),
                 member.getIntro(),
                 new LoginResponse.TokenInfo(accessToken,refreshToken));
     }
@@ -169,11 +181,15 @@ public class AuthService {
 
         // LoginResponse 생성 및 반환
         return LoginResponse.ofSuccess(
+                savedMember.getMemberId(),
+                memberSocial.getName(),
                 savedMember.getNickname(),
+                savedMember.getRelation().getLabel(),
                 savedMember.getProfileImg(),
                 savedMember.getCityCode(),
-                savedMember.getReligion(),
+                savedMember.getReligion().getLabel(),
                 savedMember.getAge(),
+                savedMember.getCelestialStem().getLabel(),
                 savedMember.getIntro(),
                 LoginResponse.TokenInfo.builder()
                         .accessToken(accessToken)
