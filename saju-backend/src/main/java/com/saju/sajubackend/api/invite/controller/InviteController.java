@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/inviting")
@@ -29,13 +32,24 @@ public class InviteController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/confirm")
-    public ResponseEntity<String> confirmCouple() {
-        Long inviterId = 1L;
-        boolean isConfirmed = inviteService.confirmCouple(inviterId);
+    // @GetMapping("/confirm")
+    // public ResponseEntity<String> confirmCouple() {
+    //     Long inviterId = 1L;
+    //     boolean isConfirmed = inviteService.confirmCouple(inviterId);
 
-        return isConfirmed
-                ? ResponseEntity.ok("커플이 정상적으로 등록되었습니다.")
-                : ResponseEntity.status(HttpStatus.ACCEPTED).body("상대가 아직 코드를 입력하지 않았습니다.");
-    }
+    //     return isConfirmed
+    //             ? ResponseEntity.ok("커플이 정상적으로 등록되었습니다.")
+    //             : ResponseEntity.status(HttpStatus.ACCEPTED).body("상대가 아직 코드를 입력하지 않았습니다.");
+    // }
+    @GetMapping("/confirm")
+public ResponseEntity<Object> confirmCouple() {
+    Long inviterId = 1L;
+    boolean isConfirmed = inviteService.confirmCouple(inviterId);
+
+    Map<String, Object> response = new HashMap<>();
+    response.put("message", isConfirmed ? "커플이 정상적으로 등록되었습니다." : "상대가 아직 코드를 입력하지 않았습니다.");
+    response.put("status", isConfirmed ? 200 : 202);
+
+    return ResponseEntity.status(isConfirmed ? HttpStatus.OK : HttpStatus.ACCEPTED).body(response);
+}
 }
