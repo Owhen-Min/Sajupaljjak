@@ -88,9 +88,9 @@ function SignUpPage() {
       {
         onSuccess: (data) => {
           console.log("회원가입 성공 응답 데이터:", data);
-          const { tokens, ...userData } = data;
-          localStorage.setItem("accessToken", tokens.accessToken);
-          localStorage.setItem("refreshToken", tokens.refreshToken);
+          const { token, ...userData } = data;
+          localStorage.setItem("accessToken", token.accessToken);
+          localStorage.setItem("refreshToken", token.refreshToken);
           updateUser(userData);
           console.log(user);
           navigate("/auth/welcome");
