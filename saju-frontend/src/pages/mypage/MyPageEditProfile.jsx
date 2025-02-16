@@ -37,7 +37,7 @@ function MyPageEditProfile() {
     location: false,
   });
 
-  // const { data, isLoading, error } = useGet('/api/members');
+  const { data, isLoading, error } = useGet('/api/members');
   const mutation = usePut('/api/members');
 
   useEffect(() => {
