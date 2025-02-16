@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Table(name = "MEMBER")
+@Setter
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
