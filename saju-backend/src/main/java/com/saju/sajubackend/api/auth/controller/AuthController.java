@@ -5,17 +5,15 @@ import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.auth.service.AuthService;
 import com.saju.sajubackend.api.auth.service.kakao.KakaoAuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
-//@RequestMapping("/api/auth")
-//@RestController
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "https://i12a408.p.ssafy.io")
 public class AuthController {

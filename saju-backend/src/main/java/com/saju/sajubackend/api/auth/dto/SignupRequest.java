@@ -20,8 +20,8 @@ public class SignupRequest {
     private String smoking;
     private String drinking;
     private Integer height;
-    private Integer cityCode;
-    private Integer dongCode;
+    private Long cityCode;
+    private Long dongCode;
     private String profileImg;
     private String nickname;
     private String intro;
