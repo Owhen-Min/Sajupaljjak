@@ -16,8 +16,8 @@ function CoupleCode() {
   const [inputCode, setInputCode] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
 
-  const { data, isLoading, error } = useGet('/api/inviting');
-  const { mutate: createCoupleCode } = usePost('/api/inviting');
+  const { data, isLoading, error } = useGet('/api/inviting/');
+  const { mutate: createCoupleCode } = usePost('/api/inviting/');
   const { refetch: checkConfirm } = useGet('/api/inviting/confirm');
   
 
@@ -123,10 +123,9 @@ function CoupleCode() {
     }
 
     try {
-      console.log(inputCode, selectedDate);
       createCoupleCode({
         invitingCode: inputCode,
-        startDate: selectedDate.toISOString().split('T')[0]
+        startDate: selectedDate
       });
       navigate('/couple');
     } catch (error) {
