@@ -672,20 +672,17 @@ function SignUpPage() {
     if (validateStep(step)) {
       setIsLoading(true);
       try {
-<<<<<<< HEAD
         setFormData((prev) => ({
           ...prev,
           age: formData.bday ? (new Date().getFullYear() - new Date(formData.bday).getFullYear()) : 0
         }));
         // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
-=======
->>>>>>> frontend/feat/mypageeditprofile
         if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
           const imageFile = await fetch(formData.profileImg)
             .then(res => res.blob())
             .then(blob => {
-              const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
-              return new File([blob], uniqueFileName, { type: 'image/jpeg' });
+              const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.webp`;
+              return new File([blob], uniqueFileName, { type: 'image/webp' });
             });
 
           const presignResponse = await mutation.mutateAsync({
