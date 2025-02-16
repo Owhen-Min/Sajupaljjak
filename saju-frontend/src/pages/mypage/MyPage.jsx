@@ -6,76 +6,58 @@ import { useAuth } from "../../hooks/useAuth";
 import { testUsers } from "../../data/user";
 import {useGet} from "../../hooks/useApi";
 import { useEffect } from "react";
+import { FaUser, FaHeart, FaPen, FaCommentDots } from "react-icons/fa";
+import { BsFillCalendarDateFill, BsPersonHearts } from "react-icons/bs";
 
 function MyPage() {
   const user = testUsers[0];
 
-  // const [user, setUser] = useState(null);
-  // const { data, isPending, error } = useGet("/api/user");
-  // useEffect(()=>{
-  //   if (data){
-  //     setUser(data);
-  //   }
-  // })
-  // if (isPending) return <p>Loading...</p>;
-  // if (error) return <p>Error loading data.</p>;
   return (
-    <div className="flex flex-col relative h-screen pt-10">
+    <div className="flex flex-col relative h-screen pt-[60px] pb-[70px]">
       <TopBar2 mainText={"마이페이지"} />
-      <div className="flex-1 overflow-y-auto p-6">
-        <UserCard user={user} disabled={true} className="mb-6"/>
-        <nav className="py-4">
-          <ul className="overflow-hidden rounded-lg bg-white shadow divide-y divide-gray-100">
-            <li>
-              <Link
-                to="edit-profile"
-                className="block w-full p-4 hover:bg-gray-50 transition-colors"
-              >
-                내 프로필 수정하기
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="edit-saju"
-                className="block w-full p-4 hover:bg-gray-50 transition-colors"
-              >
-                사주 정보 수정하기
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="edit-couple"
-                className="block w-full p-4 hover:bg-gray-50 transition-colors"
-              >
-                커플 정보 수정하기
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="liked"
-                className="block w-full p-4 hover:bg-gray-50 transition-colors"
-              >
-                좋아요한 글
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="posts"
-                className="block w-full p-4 hover:bg-gray-50 transition-colors"
-              >
-                내가 쓴 글
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="comments"
-                className="block w-full p-4 hover:bg-gray-50 transition-colors"
-              >
-                내가 쓴 댓글
-              </Link>
-            </li>
-          </ul>
-        </nav>
+      <div className="grid grid-cols-2 gap-6 p-10 my-auto">
+        <Link
+          to="edit-profile"
+          className="flex flex-col text-center items-center justify-center p-4 rounded-xl bg-white shadow hover:bg-gray-50 transition-colors border-2 border-gray-200 text-gray-500"
+        >
+          <FaUser className="text-4xl mb-2" />
+          내 프로필<br/>수정하기
+        </Link>
+        <Link
+          to="edit-saju"
+          className="flex flex-col text-center items-center justify-center p-4 rounded-xl bg-white shadow hover:bg-gray-50 transition-colors border-2 border-gray-200 text-gray-500"
+        >
+          <BsFillCalendarDateFill className="text-4xl mb-2 text-yellow-500" />
+          사주 정보<br/>수정하기
+        </Link>
+        <Link
+          to="edit-couple"
+          className="flex flex-col text-center items-center justify-center p-4 rounded-xl bg-white shadow hover:bg-gray-50 transition-colors border-2 border-gray-200 text-gray-500"
+        >
+          <BsPersonHearts className="text-4xl mb-2 text-red-200" />
+          커플 정보<br/>수정하기
+        </Link>
+        <Link
+          to="liked"
+          className="flex flex-col text-center items-center justify-center p-4 rounded-xl bg-white shadow hover:bg-gray-50 transition-colors border-2 border-gray-200 text-gray-500"
+        >
+          <FaHeart className="text-4xl mb-2 text-red-500" />
+          좋아요 한 <br/>글 보기
+        </Link>
+        <Link
+          to="posts"
+          className="flex flex-col text-center items-center justify-center p-4 rounded-xl bg-white shadow hover:bg-gray-50 transition-colors border-2 border-gray-200 text-gray-500"
+        >
+          <FaPen className="text-4xl mb-2 text-blue-500" />
+          내가 쓴 <br/>글 보기
+        </Link>
+        <Link
+          to="comments"
+          className="flex flex-col text-center items-center justify-center p-4 rounded-xl bg-white shadow hover:bg-gray-50 transition-colors border-2 border-gray-200 text-gray-500"
+        >
+          <FaCommentDots className="text-4xl mb-2 text-green-500" />
+          내가 쓴 <br/>댓글 보기
+        </Link>
       </div>
       <BottomNav />
     </div>
