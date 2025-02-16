@@ -102,22 +102,63 @@ function MyPageEditProfile() {
   };
 
   const handleImageUpload = async (file) => {
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const imageUrl = reader.result;
-      const hasFace = await detectFace(imageUrl);
-      
-      if (hasFace) {
-        setFormData(prev => ({
-          ...prev,
-          profileImage: imageUrl
-        }));
-        setFaceDetectionError(false);
-      } else {
-        setFaceDetectionError(true);
-      }
-    };
-    reader.readAsDataURL(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const imageUrl = e.target.result;
+        const hasFace = await detectFace(imageUrl);
+        
+        if (hasFace) {
+          // WebP로 변환하는 함수
+          const convertToWebP = (imageData) => {
+            return new Promise((resolve) => {
+              const img = new Image();
+              img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const maxSize = 1024;
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > maxSize || height > maxSize) {
+                  if (width > height) {
+                    height = (height * maxSize) / width;
+                    width = maxSize;
+                  } else {
+                    width = (width * maxSize) / height;
+                    height = maxSize;
+                  }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                resolve(canvas.toDataURL('image/webp', 0.8));
+              };
+              img.src = imageData;
+            });
+          };
+
+          // 이미지를 WebP로 변환
+          const webpDataUrl = await convertToWebP(imageUrl);
+          
+          setFormData(prev => ({
+            ...prev,
+            profileImage: webpDataUrl
+          }));
+          setFaceDetectionError(false);
+        } else {
+          setFaceDetectionError(true);
+          setFormData(prev => ({
+            ...prev,
+            profileImage: null
+          }));
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   // 로딩 상태 표시
@@ -152,8 +193,69 @@ function MyPageEditProfile() {
       location: !formData.cityCode || !formData.dongCode
     };
 
+    // 프로필 이미지가 변경되었고 Base64 형식인 경우에만 검증
+    if (formData.profileImage && formData.profileImage.startsWith('data:image')) {
+      if (faceDetectionError) {
+        return false;
+      }
+    }
+
     setErrors(newErrors);
     return !Object.values(newErrors).some(error => error);
+  };
+
+  const handleSubmit = async () => {
+    if (validateForm()) {
+      try {
+        let updatedProfileData = { ...formData };
+
+        // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
+        if (formData.profileImage && formData.profileImage.startsWith('data:image')) {
+          // Base64 이미지를 File 객체로 변환
+          const imageFile = await fetch(formData.profileImage)
+            .then(res => res.blob())
+            .then(blob => {
+              const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
+              return new File([blob], uniqueFileName, { type: 'image/jpeg' });
+            });
+
+          // 프리사인드 URL 요청
+          const presignResponse = await mutation.mutateAsync({
+            uri: '/api/image',
+            payload: { filename: imageFile.name }
+          });
+
+          const { presignedUrl, objectKey } = presignResponse;
+
+          // S3에 직접 이미지 업로드
+          const uploadResponse = await fetch(presignedUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': imageFile.type },
+            body: imageFile
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('S3 파일 업로드 실패');
+          }
+
+          // 업데이트 데이터에 S3 이미지 URL 추가
+          updatedProfileData.profileImage = `https://saju-bucket.s3.amazonaws.com/${objectKey}`;
+        }
+
+        // 프로필 업데이트 API 호출
+        await mutation.mutateAsync({
+          uri: '/api/members',
+          payload: updatedProfileData
+        });
+
+        navigate('/mypage');
+      } catch (error) {
+        console.error('프로필 업데이트 실패:', error);
+        alert('프로필 업데이트에 실패했습니다.');
+      }
+    } else {
+      alert('모든 항목을 올바르게 입력해주세요.');
+    }
   };
 
   return (
@@ -354,15 +456,7 @@ function MyPageEditProfile() {
 
         {/* 저장 버튼 */}
         <MainButton 
-          onClick={() => {
-            if (validateForm()) {
-              // TODO: 프로필 수정 API 호출
-              console.log('수정된 데이터:', formData);
-              navigate('/mypage');
-            } else {
-              alert('모든 항목을 입력해주세요.');
-            }
-          }}
+          onClick={handleSubmit}
           className="w-full py-3 mt-4"
         >
           수정하기
