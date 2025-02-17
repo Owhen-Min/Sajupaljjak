@@ -77,7 +77,31 @@ body {
 
   src: url("./assets/fonts/hanmaR.ttf") format("truetype");
 }
+@font-face {
+  font-family: "NanumL";
 
+  src: url("./assets/fonts/NanumSquareL.ttf") format("truetype");
+}
+@font-face {
+  font-family: "NanumR";
+
+  src: url("./assets/fonts/NanumSqaureR.ttf") format("truetype");
+}
+@font-face {
+  font-family: "NanumB";
+
+  src: url("./assets/fonts/NanumB.ttf") format("truetype");
+}
+
+.font-NanumL {
+  font-family: "NanumL", sans-serif;
+}
+.font-NanumR {
+  font-family: "NanumR", sans-serif;
+}
+.font-NanumB {
+  font-family: "NanumB", sans-serif;
+}
 .font-HanmaR {
   font-family: "HanmaR", sans-serif;
 }

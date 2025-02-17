@@ -1,25 +1,91 @@
-import { TopBar2 } from "../../components/TopBar2";
-import Input from "../../components/Input";
+// CommunityWrite.jsx
 import { useState } from "react";
-import SajuUserBubble from '../../components/SajuUserBubble';
+import { useNavigate } from "react-router-dom";
+import TopBar2 from "../../components/TopBar2";
+import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
-import { usePost } from "../../hooks/useApi";
 
+import { usePost } from "../../hooks/useApi";
+import SajuUserBubble from "../../components/SajuUserBubble";
+import { IoArrowBack } from "react-icons/io5";
+
+
+// ErrorBubble 컴포넌트
 function ErrorBubble({ children }) {
   return (
-    <div className="text-red-500 bg-red-50 px-3 py-2 rounded relative mt-2 text-sm before:content-[''] before:absolute before:-top-1.5 before:left-5 before:border-l-[6px] before:border-r-[6px] before:border-b-[6px] before:border-l-transparent before:border-r-transparent before:border-b-red-50">
+    <div className="mt-2 text-sm text-red-500 bg-red-50 px-3 py-2 rounded">
       {children}
     </div>
   );
 }
 
+// 천간 선택 드롭다운 컴포넌트
+function CelestialStemDropdown({ selectedStem, setSelectedStem }) {
+  const options = [
+    "갑목",
+    "을목",
+    "병화",
+    "정화",
+    "무토",
+    "기토",
+    "경금",
+    "신금",
+    "임수",
+    "계수",
+  ];
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleSelect = (option) => {
+    setSelectedStem(option);
+    setDropdownOpen(false);
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setDropdownOpen(!dropdownOpen)}
+        className="w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-md bg-white text-sm text-gray-700 focus:outline-none"
+      >
+        <span>{selectedStem || "게시판 천간 선택"}</span>
+        <svg
+          className="w-4 h-4 text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+      {dropdownOpen && (
+        <ul className="absolute left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+          {options.map((option) => (
+            <li
+              key={option}
+              className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center gap-2"
+              onClick={() => handleSelect(option)}
+            >
+              <SajuUserBubble skyElement={option} size="small" />
+              <span>{option}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
 function CommunityWrite() {
-  const [selectedElement, setSelectedElement] = useState('');
-  const [selectedPillar, setSelectedPillar] = useState('게시판 천간 선택');
+  const navigate = useNavigate();
+  const [selectedStem, setSelectedStem] = useState("");
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    celestialStem: '',
+    title: "",
+    content: "",
+    celestialStem: "",
   });
   const [errors, setErrors] = useState({
     title: false,
@@ -27,115 +93,79 @@ function CommunityWrite() {
     celestialStem: false,
   });
 
+  // 폼 검증: 천간은 하위 메뉴가 선택되어야 함
   const validateForm = () => {
     const newErrors = {
-      title: formData.title.trim() === '',
-      content: formData.content.trim() === '',
-      celestialStem: selectedPillar === '게시판 천간 선택',
+      title: formData.title.trim() === "",
+      content: formData.content.trim() === "",
+      celestialStem: selectedStem === "",
     };
-
     setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error);
+    return !Object.values(newErrors).some((error) => error);
   };
 
   const handleSubmit = () => {
-    if (!validateForm()) {
-      return;
-    }
-    console.log('게시글 작성:', formData);
-    // TODO: API 호출 로직 추가
+    if (!validateForm()) return;
+    console.log("게시글 작성:", formData);
+    // API 호출 로직 추가 가능
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  // pillar가 선택될 때 formData도 함께 업데이트하는 함수
-  const handlePillarSelect = (pillar) => {
-    setSelectedPillar(pillar);
-    setFormData(prev => ({
+  // 천간 선택 시 formData 업데이트
+  const handleStemSelect = (stem) => {
+    setSelectedStem(stem);
+    setFormData((prev) => ({
       ...prev,
-      celestialStem: pillar,
+      celestialStem: stem,
     }));
   };
 
-  const skyElementOptions = ['갑목', '을목', '병화', '정화', '무토', '기토', '경금', '신금', '임수', '계수'];
-    
-
-  const handleSkyElementChange = (e) => {
-    handlePillarSelect(e.target.value);
-  };
-
   return (
-    <div className="community community-write flex flex-col relative min-h-screen pt-[60px]">
-      <TopBar2 
-        url="/community"
-        mainText="게시글 작성"
-      />
-      
-      <div className="flex flex-col p-4 px-6 gap-4 ">
-        <li className="group w-1/2 relative dropdown px-2 py-2 cursor-pointer text-base uppercase list-none tracking-wide border rounded-lg shadow-sm bg-white">
-          {skyElementOptions.includes(selectedPillar) ? (
-            <div className="flex items-center gap-2">
-              <SajuUserBubble skyElement={selectedPillar} size="normal"/>
-              <span className="font-bold">게시판</span>
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              {selectedPillar}
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          )}
-          <div className="group-hover:block dropdown-menu absolute hidden h-auto">
-
-          <ul className="top-0 w-30 bg-white shadow px-2 py-2">
-              {skyElementOptions.map(option => (
-                <li className="py-1" key={option}>
-                  <div onClick={() => handlePillarSelect(option)}>
-                    <SajuUserBubble skyElement={option} size="normal"/>
-                  </div>
-                </li>
-              ))}
-          </ul>
-          </div>
-      </li>
+    <div className="min-h-screen flex flex-col bg-gray-50 font-NanumR">
+      <Header />
+      <div className="flex flex-col gap-4 p-4">
+        {/* 천간 선택 드롭다운 */}
+        <CelestialStemDropdown
+          selectedStem={selectedStem}
+          setSelectedStem={handleStemSelect}
+        />
         {errors.celestialStem && <ErrorBubble>천간을 선택해주세요</ErrorBubble>}
 
+        {/* 제목 입력 */}
         <div>
           <Input
             name="title"
             placeholder="제목을 입력하세요"
             value={formData.title}
             onChange={handleInputChange}
-            className="w-full"
+            className="w-full p-3 border border-gray-300 rounded-md"
           />
           {errors.title && <ErrorBubble>제목을 입력해주세요</ErrorBubble>}
         </div>
-        
+
+        {/* 내용 입력 */}
         <div>
           <textarea
             name="content"
             placeholder="내용을 입력하세요"
             value={formData.content}
             onChange={handleInputChange}
-            className="w-full h-[300px] px-4 py-[15px] text-base border border-gray-300 rounded-lg resize-none
-              focus:outline-none focus:border-[#ff6842] focus:ring-2 focus:ring-[#4CAF50]/20"
+            className="w-full h-64 bg-white p-4 text-base border border-gray-300 rounded-md 
+            "
           />
           {errors.content && <ErrorBubble>내용을 입력해주세요</ErrorBubble>}
         </div>
 
-        <MainButton 
-          className="w-full py-3"
+        <MainButton
           onClick={handleSubmit}
+          className="w-full py-3 bg-[#ff7070] text-white rounded-md text-sm shadow-lg hover:opacity-90 active:scale-95 transition"
         >
           작성하기
         </MainButton>
@@ -144,4 +174,19 @@ function CommunityWrite() {
   );
 }
 
+function Header() {
+  const navigate = useNavigate();
+
+  return (
+    <header className="relative h-12 flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">게시글 작성</h1>
+      <div
+        className="absolute left-4 text-xl cursor-pointer text-white "
+        onClick={() => navigate("/community")}
+      >
+        <IoArrowBack />
+      </div>
+    </header>
+  );
+}
 export default CommunityWrite;

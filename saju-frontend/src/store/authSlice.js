@@ -6,7 +6,7 @@ const initialState = {
   isAuthenticated: false,
   user: null,
   email: "",
-  accessToken : "",
+  accessToken: "",
 };
 
 const authSlice = createSlice({
