@@ -19,7 +19,7 @@ function ErrorBubble({ children }) {
 
 function Preference() {
   const navigate = useNavigate();
-  const { mutate: createPreference } = usePost('/api/match/filter');
+  const { mutate: createPreference } = usePost('/api/members');
   
   const religionOptions = ['무교', '개신교', '불교', '천주교', '기타'];
   
@@ -128,7 +128,7 @@ function Preference() {
 
   return (
     <div className="preference flex flex-col relative justify-center min-h-screen">
-      <TopBar2 mainText="내 선호 정보보 입력" />
+      <TopBar2 mainText="내 선호 정보 입력" />
       <div className="preference-content p-5">
         <h3 className="input-prompt mb-2">선호하는 나이 범위를 선택해주세요</h3>
         <div className="input-group mb-6">
