@@ -82,6 +82,12 @@ function SignUpPage() {
   const [model, setModel] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [nicknameStatus, setNicknameStatus] = useState({
+    isChecking: false,
+    isValid: false,
+    message: ''
+  });
+
   const submit = (uri, payload) => {
     console.log("회원가입 요청 데이터:", payload);
     mutation.mutate(
@@ -178,6 +184,47 @@ function SignUpPage() {
     });
   };
 
+  const checkNickname = async (nickname) => {
+    if (!nickname) return;
+    
+    setNicknameStatus(prev => ({ ...prev, isChecking: true }));
+    
+    try {
+      const response = await fetch(`/api/auth?nickname=${encodeURIComponent(nickname)}`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        setNicknameStatus({
+          isChecking: false,
+          isValid: true,
+          message: data.message
+        });
+      } else {
+        setNicknameStatus({
+          isChecking: false,
+          isValid: false,
+          message: data.message
+        });
+      }
+    } catch (error) {
+      setNicknameStatus({
+        isChecking: false,
+        isValid: false,
+        message: '닉네임 확인 중 오류가 발생했습니다'
+      });
+    }
+  };
+
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  };
+
+  const debouncedCheckNickname = debounce(checkNickname, 500);
+
   const validateStep = (currentStep) => {
     let isValid = true;
     const newErrors = {
@@ -234,7 +281,7 @@ function SignUpPage() {
         isValid = false;
       }
     } else if (currentStep === 12) {
-      if (!formData.nickname) {
+      if (!formData.nickname || !nicknameStatus.isValid) {
         newErrors.nickname = true;
         isValid = false;
       }
@@ -575,17 +622,37 @@ function SignUpPage() {
             <h3 className="input-prompt mb-2">닉네임을 입력해주세요</h3>
             <div className="input-group mb-6">
               <div className="flex flex-col w-full">
-                <Input
-                  type="text"
-                  name="nickname"
-                  value={formData.nickname}
-                  onChange={(e) => {
-                    handleInputChange(e);
-                    setMaxStep(Math.max(maxStep, 10));
-                    setStep(Math.max(10, maxStep));
-                  }}
-                  placeholder="닉네임"
-                />
+                <div className="relative">
+                  <Input
+                    type="text"
+                    name="nickname"
+                    value={formData.nickname}
+                    onChange={(e) => {
+                      handleInputChange(e);
+                      setMaxStep(Math.max(maxStep, 10));
+                      setStep(Math.max(10, maxStep));
+                      debouncedCheckNickname(e.target.value);
+                    }}
+                    placeholder="닉네임"
+                    className={`${
+                      nicknameStatus.message ? 
+                        nicknameStatus.isValid ? 'border-green-500' : 'border-red-500' 
+                        : ''
+                    }`}
+                  />
+                  {nicknameStatus.isChecking && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <div className="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                </div>
+                {nicknameStatus.message && (
+                  <div className={`text-sm mt-1 ${
+                    nicknameStatus.isValid ? 'text-green-500' : 'text-red-500'
+                  }`}>
+                    {nicknameStatus.message}
+                  </div>
+                )}
                 {errors.nickname && (
                   <ErrorBubble>닉네임을 입력해주세요</ErrorBubble>
                 )}
