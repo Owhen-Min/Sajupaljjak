@@ -3,15 +3,48 @@ import { TopBar2 } from "../../components/TopBar2";
 import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import SajuGrid from "../../components/SajuGrid";
-import { useGet, usePut } from "../../hooks/useApi";
-import { testUsers } from "../../data/user";
+import { usersDetail } from "../../data/usersDetail";
 
 // 천간, 지지, 60갑자 등의 상수 정의
-const HEAVENLY_STEMS = ["갑", "을", "병", "정", "무", "기", "경", "신", "임", "계"];
-const EARTHLY_BRANCHES = ["자", "축", "인", "묘", "진", "사", "오", "미", "신", "유", "술", "해"];
+const HEAVENLY_STEMS = [
+  "갑",
+  "을",
+  "병",
+  "정",
+  "무",
+  "기",
+  "경",
+  "신",
+  "임",
+  "계",
+];
+const EARTHLY_BRANCHES = [
+  "자",
+  "축",
+  "인",
+  "묘",
+  "진",
+  "사",
+  "오",
+  "미",
+  "신",
+  "유",
+  "술",
+  "해",
+];
 const SOLAR_TERMS = [
-  [1, 6, 21], [2, 4, 19], [3, 6, 21], [4, 5, 20], [5, 6, 21], [6, 6, 22],
-  [7, 7, 23], [8, 8, 23], [9, 8, 23], [10, 8, 24], [11, 7, 22], [12, 7, 22]
+  [1, 6, 21],
+  [2, 4, 19],
+  [3, 6, 21],
+  [4, 5, 20],
+  [5, 6, 21],
+  [6, 6, 22],
+  [7, 7, 23],
+  [8, 8, 23],
+  [9, 8, 23],
+  [10, 8, 24],
+  [11, 7, 22],
+  [12, 7, 22],
 ];
 
 // 기준일: 1924-02-05
@@ -22,59 +55,64 @@ const calculateYearPillar = (dateTime) => {
   let year = dateTime.getFullYear();
   const month = dateTime.getMonth() + 1;
   const day = dateTime.getDate();
-  
+
   if (month === 1 || (month === 2 && day < 4)) {
     year--;
   }
-  
+
   const stemIndex = (year - 4) % 10;
   const branchIndex = (year - 4) % 12;
-  
-  return HEAVENLY_STEMS[(stemIndex + 10) % 10] + EARTHLY_BRANCHES[(branchIndex + 12) % 12];
+
+  return (
+    HEAVENLY_STEMS[(stemIndex + 10) % 10] +
+    EARTHLY_BRANCHES[(branchIndex + 12) % 12]
+  );
 };
 
 const calculateMonthPillar = (dateTime) => {
   let year = dateTime.getFullYear();
   let month = dateTime.getMonth() + 1;
   const day = dateTime.getDate();
-  
+
   const solarTerm = SOLAR_TERMS[month - 1];
   if (day < solarTerm[1]) {
     month = month - 1 === 0 ? 12 : month - 1;
   }
-  
+
   let yearStem = (year - 4) % 10;
   yearStem = yearStem < 0 ? yearStem + 10 : yearStem;
-  
+
   let monthStem = (yearStem * 2 + month) % 10;
   monthStem = monthStem < 0 ? monthStem + 10 : monthStem;
-  
+
   let monthBranch = (month + 1) % 12;
   monthBranch = monthBranch === 0 ? 12 : monthBranch;
   monthBranch = (monthBranch - 1) % 12;
-  
+
   return HEAVENLY_STEMS[monthStem] + EARTHLY_BRANCHES[monthBranch];
 };
 
 const calculateDayPillar = (dateTime) => {
   const date = new Date(dateTime);
   const hour = date.getHours();
-  
+
   if (hour >= 23) {
     date.setDate(date.getDate() + 1);
   }
-  
-  const daysBetween = Math.floor((date - REFERENCE_DATE) / (1000 * 60 * 60 * 24));
+
+  const daysBetween = Math.floor(
+    (date - REFERENCE_DATE) / (1000 * 60 * 60 * 24)
+  );
   const dayIndex = (daysBetween + 50) % 60;
-  
+
   const stemIndex = dayIndex % 10;
   const branchIndex = dayIndex % 12;
-  
+
   return HEAVENLY_STEMS[stemIndex] + EARTHLY_BRANCHES[branchIndex];
 };
 
 const getStemIndex = (stem) => {
-  return HEAVENLY_STEMS.findIndex(s => s === stem);
+  return HEAVENLY_STEMS.findIndex((s) => s === stem);
 };
 
 const calculateHourPillar = (dailyPillar, time) => {
@@ -130,24 +168,23 @@ function MyPageEditSaju() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const userData = data;
-        console.log(userData);
-        
+        const userData = testUsers[0];
+
         setFormData({
           name: userData.name || "",
           bday: userData.bday || "",
-          btime: userData.birthTimeUnknown ? "00:00" : (userData.btime || ""),
+          btime: userData.birthTimeUnknown ? "00:00" : userData.btime || "",
           birthTimeUnknown: userData.birthTimeUnknown || false,
         });
 
         // 초기 사주 계산
-        if (userData.bday) {
-          const initialSaju = calculateSaju(userData.bday, userData.btime);
-          setSajuData(initialSaju);
-        }
-        
+        const initialSaju = calculateSaju(
+          userData.birthDay,
+          userData.birthTime
+        );
+        setSajuData(initialSaju);
       } catch (error) {
-        console.log('프로필 데이터 로딩 실패:', error);
+        console.error("프로필 데이터 로딩 실패:", error);
       }
     };
 
@@ -157,19 +194,19 @@ function MyPageEditSaju() {
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     const inputValue = type === "checkbox" ? checked : value;
-    
-    setFormData(prev => ({
+
+    setFormData((prev) => ({
       ...prev,
-      [name]: inputValue
+      [name]: inputValue,
     }));
   };
 
   const handlebirthTimeUnknown = (e) => {
     const isChecked = e.target.checked;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      btime: isChecked ? "00:00" : ""
+      birthTime: isChecked ? "00:00" : prev.birthTime,
     }));
   };
 
@@ -187,9 +224,13 @@ function MyPageEditSaju() {
       isValid = false;
     }
 
-    if (!formData.bday || formData.bday.length !== 10 || 
-        (!formData.birthTimeUnknown && (!formData.btime || formData.btime.length !== 5))) {
-      newErrors.bday = true;
+    if (
+      !formData.birthDay ||
+      formData.birthDay.length !== 10 ||
+      (!formData.birthTimeUnknown &&
+        (!formData.birthTime || formData.birthTime.length !== 5))
+    ) {
+      newErrors.birthDay = true;
       isValid = false;
     }
 
@@ -200,24 +241,26 @@ function MyPageEditSaju() {
   const calculateSaju = (bday, btime) => {
     if (!bday) return null;
 
-    const [year, month, day] = bday.split('-').map(Number);
+    const [year, month, day] = birthDay.split("-").map(Number);
     let dateTime = new Date(year, month - 1, day);
 
-    if (btime) {
-      const [hours, minutes] = btime.split(':').map(Number);
+    if (birthTime) {
+      const [hours, minutes] = birthTime.split(":").map(Number);
       dateTime.setHours(hours, minutes);
     }
 
     const yearPillar = calculateYearPillar(dateTime);
     const monthPillar = calculateMonthPillar(dateTime);
     const dayPillar = calculateDayPillar(dateTime);
-    const hourPillar = btime ? calculateHourPillar(dayPillar, dateTime) : null;
+    const hourPillar = birthTime
+      ? calculateHourPillar(dayPillar, dateTime)
+      : null;
 
     return {
       year: yearPillar,
       month: monthPillar,
       day: dayPillar,
-      time: hourPillar
+      time: hourPillar,
     };
   };
 
@@ -231,8 +274,8 @@ function MyPageEditSaju() {
     }
   };
 
-  const { data, isLoading, error } = useGet('/api/members');
-  const mutation = usePut('/api/members');
+  const { data, isLoading, error } = useGet("/api/members");
+  const mutation = usePut("/api/members");
 
   return (
     <div className="h-screen relative pt-14 flex flex-col px-5">
@@ -246,21 +289,23 @@ function MyPageEditSaju() {
             value={formData.name}
             onChange={handleInputChange}
             placeholder="이름"
-            />
+          />
           {errors.name && <ErrorBubble>이름을 입력해주세요</ErrorBubble>}
         </div>
-          {sajuData && (
-            <div className="mb-6">
-              <SajuGrid
-                saju={sajuData}
-                title={false}
-                className="border-t-2 border-gray-100"
-              />
-            </div>
-          )}
+        {sajuData && (
+          <div className="mb-6">
+            <SajuGrid
+              saju={sajuData}
+              title={false}
+              className="border-t-2 border-gray-100"
+            />
+          </div>
+        )}
 
         <div className="mb-6">
-          <h3 className="input-prompt font-semibold text-xl mb-2">생년월일을 양력으로 입력해주세요.</h3>
+          <h3 className="input-prompt font-semibold text-xl mb-2">
+            생년월일을 양력으로 입력해주세요.
+          </h3>
           <div className="flex items-center gap-2">
             <Input
               type="text"
@@ -269,7 +314,7 @@ function MyPageEditSaju() {
               onChange={(e) => {
                 let value = e.target.value.replace(/[^\d/]/g, "");
                 if (value.length > 10) return;
-                const numbers = value.replace(/\//g, "");      
+                const numbers = value.replace(/\//g, "");
                 if (numbers.length > 0) {
                   value = numbers.slice(0, 4);
                   if (numbers.length > 4) {
@@ -278,10 +323,10 @@ function MyPageEditSaju() {
                   if (numbers.length > 6) {
                     value += "-" + numbers.slice(6);
                   }
-                }     
-                setFormData(prev => ({
+                }
+                setFormData((prev) => ({
                   ...prev,
-                  bday: value
+                  birthDay: value,
                 }));
               }}
               placeholder="2025-01-28"
@@ -294,7 +339,7 @@ function MyPageEditSaju() {
               value={formData.btime}
               onChange={(e) => {
                 let value = e.target.value.replace(/[^\d:]/g, "");
-                if (value.length > 5) return;      
+                if (value.length > 5) return;
                 const numbers = value.replace(/:/g, "");
                 if (numbers.length > 0) {
                   value = numbers.slice(0, 2);
@@ -302,9 +347,9 @@ function MyPageEditSaju() {
                     value += ":" + numbers.slice(2);
                   }
                 }
-                setFormData(prev => ({
+                setFormData((prev) => ({
                   ...prev,
-                  btime: value
+                  birthTime: value,
                 }));
               }}
               placeholder="18:00"
@@ -321,7 +366,7 @@ function MyPageEditSaju() {
               onChange={handlebirthTimeUnknown}
               style={{ cursor: "pointer" }}
             />
-            <label 
+            <label
               htmlFor="birthTimeUnknown"
               style={{ cursor: "pointer", fontSize: "14px" }}
               className="text-gray-500"
@@ -329,13 +374,12 @@ function MyPageEditSaju() {
               태어난 시간을 모릅니다
             </label>
           </div>
-          {errors.bday && <ErrorBubble>태어난 시간을 입력해주세요</ErrorBubble>}
+          {errors.birthDay && (
+            <ErrorBubble>태어난 시간을 입력해주세요</ErrorBubble>
+          )}
         </div>
 
-        <MainButton 
-          onClick={handleSubmit}
-          className="w-full py-3"
-        >
+        <MainButton onClick={handleSubmit} className="w-full py-3">
           수정하기
         </MainButton>
       </div>
