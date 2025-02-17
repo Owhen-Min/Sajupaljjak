@@ -9,14 +9,13 @@ import couplebg from "../../assets/couplebg.webp";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { coupleData } from "../../data/coupleData";
-import { useAuth } from "../../hooks/useAuth";
 
 function Couple() {
   
   const [goodDates, setGoodDates] = useState(['2025-02-13', '2025-02-14']); // YYYY-MM-DD 형식
   const [badDates, setBadDates] = useState(['2025-02-12', '2025-02-23']);
   const navigate = useNavigate();
-  
+
   return (
     <div className="flex flex-col h-screen py-[58px] relative justify-center items-center bg-cover bg-center bg-no-repeat scrollbar-hidden" 
       style={{ backgroundImage: `url(${couplebg})` }}>

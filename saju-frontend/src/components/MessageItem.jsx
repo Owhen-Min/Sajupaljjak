@@ -20,7 +20,7 @@ const MessageItem = ({ message, sentAt, isMine, profileImage, nickName }) => {
       ) : (
         //  내가 보낸 메세지
         <div className="flex gap-2">
-          <span className="text-xs"> {sentAt} </span>
+          <span className="text-xs text-gray-400"> {sentAt} </span>
           {/* <span className="text-xs"> {nickName} </span> */}
           <span className="text-sm">
             {message}
