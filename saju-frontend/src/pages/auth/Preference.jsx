@@ -39,7 +39,7 @@ function Preference() {
   //   }
   // }
 
-  const mutation = usePut("/api/match/filter");
+  // const mutation = usePut("/api/match/filter");
 
   const [formData, setFormData] = useState({
     smoking: '',
