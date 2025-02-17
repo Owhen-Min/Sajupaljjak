@@ -7,7 +7,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 function Chats() {
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([{}]);
   const { stompClient } = useWebSocket();
   const memberId = useAuth().memberId;
 
@@ -39,7 +39,22 @@ function Chats() {
     }
   }, [stompClient, memberId]);
   
-  // const data = [
+ 
+
+  return (
+    <div className="flex flex-col h-screen relative py-[56.5px]">
+      <TopBar />
+      <div className="flex-grow overflow-y-auto scrollbar-hidden">
+        <ChatList chats={data} />
+      </div>
+      <BottomNav />
+    </div>
+  );
+}
+
+export default Chats;
+
+ // const data = [
   //   {
   //     "25": { 
   //       "chatRoom": {
@@ -253,16 +268,3 @@ function Chats() {
   //     },
   //   },
   // ];
-
-  return (
-    <div className="flex flex-col h-screen relative py-[56.5px]">
-      <TopBar />
-      <div className="flex-grow overflow-y-auto scrollbar-hidden">
-        <ChatList chats={data} />
-      </div>
-      <BottomNav />
-    </div>
-  );
-}
-
-export default Chats;
