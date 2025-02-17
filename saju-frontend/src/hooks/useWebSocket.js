@@ -5,6 +5,7 @@ import { useAuth } from "./useAuth";
 const useWebSocket = () => {
   const [stompClient, setStompClient] = useState(null);
   // const { accessToken } = useAuth();
+   const clientRef = useRef(null);
 
   useEffect(() => {
     console.log("웹소켓 연결 시도도");
@@ -31,6 +32,7 @@ const useWebSocket = () => {
     });
 
     client.activate();
+    clientRef.current = client;
     setStompClient(client);
 
     return () => {
