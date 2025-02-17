@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SelectionGrid from '../../components/SelectionGrid';
 import Dropdown from '../../components/Dropdown';
@@ -36,6 +36,15 @@ function ErrorBubble({ children }) {
     </div>
   );
 }
+
+// debounce 함수를 컴포넌트 외부로 이동
+const debounce = (func, wait) => {
+  let timeout;
+  return (...args) => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(null, args), wait);
+  };
+};
 
 function SignUpPage() {
   const mutation = usePost();
@@ -185,14 +194,33 @@ function SignUpPage() {
     });
   };
 
-  const checkNickname = async (nickname) => {
-    if (!nickname) return;
+  // useCallback을 사용하여 함수를 메모이제이션
+  const checkNickname = useCallback(async (nickname) => {
+    if (!nickname) {
+      setNicknameStatus({
+        isChecking: false,
+        isValid: false,
+        message: ''
+      });
+      return;
+    }
+    
+    const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,20}$/;
+    if (!nicknameRegex.test(nickname)) {
+      setNicknameStatus({
+        isChecking: false,
+        isValid: false,
+        message: '닉네임은 2-20자의 한글, 영문, 숫자만 사용 가능합니다'
+      });
+      return;
+    }
     
     setNicknameStatus(prev => ({ ...prev, isChecking: true }));
     
     try {
       const response = await fetch(`/api/auth?nickname=${encodeURIComponent(nickname)}`);
-      const data = await response.json();
+      const data = await response;
+      console.log(data);
       
       if (response.ok) {
         setNicknameStatus({
@@ -214,17 +242,36 @@ function SignUpPage() {
         message: '닉네임 확인 중 오류가 발생했습니다'
       });
     }
+  }, []);
+
+  // debouncedCheckNickname을 useMemo로 메모이제이션
+  const debouncedCheckNickname = useMemo(
+    () => debounce(checkNickname, 1000),
+    [checkNickname]
+  );
+
+  // Input 컴포넌트의 onChange 핸들러
+  const handleNicknameChange = (e) => {
+    const { value } = e.target;
+    handleInputChange(e);
+    setMaxStep(Math.max(maxStep, 10));
+    setStep(Math.max(10, maxStep));
+    setNicknameStatus({
+      isChecking: false,
+      isValid: false,
+      message: ''
+    });
+    debouncedCheckNickname(value);
   };
 
-  const debounce = (func, wait) => {
-    let timeout;
-    return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, args), wait);
+  // 컴포넌트가 언마운트될 때 진행 중인 디바운스 타이머를 정리
+  useEffect(() => {
+    return () => {
+      if (debouncedCheckNickname.cancel) {
+        debouncedCheckNickname.cancel();
+      }
     };
-  };
-
-  const debouncedCheckNickname = debounce(checkNickname, 500);
+  }, [debouncedCheckNickname]);
 
   const validateStep = (currentStep) => {
     let isValid = true;
@@ -628,12 +675,7 @@ function SignUpPage() {
                     type="text"
                     name="nickname"
                     value={formData.nickname}
-                    onChange={(e) => {
-                      handleInputChange(e);
-                      setMaxStep(Math.max(maxStep, 10));
-                      setStep(Math.max(10, maxStep));
-                      debouncedCheckNickname(e.target.value);
-                    }}
+                    onChange={handleNicknameChange}
                     placeholder="닉네임"
                     className={`${
                       nicknameStatus.message ? 
@@ -903,7 +945,7 @@ function SignUpPage() {
           setFormData((prev) => ({
             ...prev,
             profileImg: null,
-          }));
+          }));  
         }
       };
       reader.readAsDataURL(file);
