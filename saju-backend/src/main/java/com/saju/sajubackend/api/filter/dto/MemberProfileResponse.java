@@ -10,10 +10,13 @@ public class MemberProfileResponse {
     private String nickname;
     private String gender;
     private String profileImage;
-    private long cityCode;
+    private String dongCode;
+    private String cityCode;
     private String religion;
     private int age;
     private int height;
     private String celestialStem;
     private String intro;
+    private String smoking;
+    private String drinking;
 }

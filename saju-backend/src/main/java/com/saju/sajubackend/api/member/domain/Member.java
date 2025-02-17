@@ -46,6 +46,9 @@ public class Member extends BaseTimeEntity {
     @Column(name = "city_code")
     private Long cityCode;
 
+    @Column(name = "dong_code")
+    private Long dongCode;
+
     @Column(name = "age")
     private Integer age;
 
