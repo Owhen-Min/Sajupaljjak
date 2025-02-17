@@ -1,58 +1,90 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import TopBar from "../../components/TopBar";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import TopBar3 from "../../components/TopBar3";
 import BottomNav from "../../components/BottomNav";
 import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
-import CommunityFilterBubble from "../../components/CommunityFilterBubble";
 import ArticleList from "../../components/ArticleList";
-import { useInfiniteGet } from "../../hooks/useInfiniteGet";
 import articles from "../../data/articles.json";
+import { HiSearch } from "react-icons/hi";
+import { GoPencil } from "react-icons/go";
+import CommunityFilter from "../../components/CommunityFilter";
+import { IoArrowBack } from "react-icons/io5";
 
 function Community() {
-  const [selectedElement, setSelectedElement] = useState('전체');
-  const [selectedPillar, setSelectedPillar] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  // 필터 상태: 초기에는 "전체"만 선택 (하위는 빈문자열)
+  const [selectedTop, setSelectedTop] = useState("전체");
+  const [selectedSub, setSelectedSub] = useState("");
   const navigate = useNavigate();
-  // const { data, fetchNextPage, hasNextPage, isLoading, error } = useInfiniteGet("/api/community", { type: "", query: "" });
-  // if (isLoading) return <div>로딩중 ...</div>;
-  // if (error) return <div>에러 : {error.message}</div>;
-  const data = articles;
+  const data = articles; // 임시 데이터
+
+  // 필터링: 하위 메뉴가 선택되었을 때만 필터 적용; 그렇지 않으면 전체 표시
+  const filteredArticles = data.filter((article) => {
+    let pass = true;
+    if (selectedTop !== "전체" && selectedSub) {
+      pass = pass && article.subType === selectedSub;
+    }
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase();
+      pass =
+        pass &&
+        (article.title.toLowerCase().includes(query) ||
+          article.content.toLowerCase().includes(query));
+    }
+    return pass;
+  });
+
   return (
-    <div className="community community-page h-screen flex flex-col relative py-14">
-      <TopBar />
-      <div className="flex-grow overflow-y-auto relative scrollbar-hidden">
-        <CommunityFilterBubble 
-          selectedElement={selectedElement} 
-          selectedPillar={selectedPillar}
-          onElementSelect={setSelectedElement}
-          onPillarSelect={setSelectedPillar}
+    <div className="relative h-screen flex flex-col bg-gray-50 font-NanumR">
+      <Header />
+      <div className="flex-grow overflow-y-auto">
+        {/* 필터 메뉴 */}
+        <CommunityFilter
+          selectedTop={selectedTop}
+          selectedSub={selectedSub}
+          setSelectedTop={setSelectedTop}
+          setSelectedSub={setSelectedSub}
         />
-        <div className="flex items-center gap-3 px-4 pt-2">
-          <Input 
-            type="text" 
-            placeholder="게시글 검색하기" 
+
+        {/* 검색 바 */}
+        <div className="flex items-center border-2 border-gray-200 mx-2 rounded-md shadow-sm">
+          <Input
+            type="text"
+            placeholder="게시글 검색하기"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full py-[7px]"
+            className="flex-1 p-3 py-2 border-none text-gray-800 focus:outline-none"
           />
-          <MainButton 
-            children="🔍"
+          <MainButton
             onClick={() => console.log(searchQuery)}
-            className="w-[50px] h-[40px] text-2xl py-0 bg-[#f8f8f7] hover:bg-[#a9a59f] border border-gray-300"
-          />
+            className="p-2 text-2xl text-gray-600 font-extrabold bg-white rounded-r-md"
+          >
+            <HiSearch />
+          </MainButton>
         </div>
-        <ArticleList 
-          articles={data}
-        />
+
+        {/* 게시글 목록 */}
+        <ArticleList articles={filteredArticles} />
       </div>
-      <MainButton 
-        children="✏️"
-        onClick={() => navigate('/community/write')}
-        className="fixed bg-[#bcb8b1] hover:bg-[#a9a59f] bottom-[calc(17%)] right-[calc(50%-180px+1rem)] w-[60px] h-[60px] rounded-full text-4xl shadow-lg max-[400px]:right-5 max-[320px]:right-5 text-center"
-      />
+
+      {/* 글쓰기 버튼 (FAB) */}
+      <button
+        onClick={() => navigate("/community/write")}
+        className=" hover:opacity-90 absolute bottom-20 right-4 w-14 h-14 bg-gray-400/80 text-white text-2xl flex items-center justify-center font-extrabold shadow-md rounded-full"
+      >
+        <GoPencil />
+      </button>
       <BottomNav />
     </div>
+  );
+}
+
+function Header() {
+  return (
+    <header className="h-12 flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">게시판</h1>
+    </header>
   );
 }
 

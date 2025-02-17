@@ -14,7 +14,7 @@ const ChatList = ({ chats }) => {
     const diffInMinutes = Math.floor((now - date) / (1000 * 60));
     const diffInHours = Math.floor(diffInMinutes / 60);
     const diffInDays = Math.floor(diffInHours / 24);
-  
+
     if (diffInMinutes < 60) {
       return `${diffInMinutes}분 전`;
     } else if (diffInHours < 24) {
@@ -37,16 +37,18 @@ const ChatList = ({ chats }) => {
       onSwipeStart: () => {
         setIsDragging(true);
         if (openChatId && openChatId !== chatRoomId) {
-          const prevElement = document.getElementById(`chat-content-${openChatId}`);
+          const prevElement = document.getElementById(
+            `chat-content-${openChatId}`
+          );
           if (prevElement) {
-            prevElement.style.transform = 'translateX(0)';
+            prevElement.style.transform = "translateX(0)";
           }
         }
       },
       onSwipedLeft: () => {
         const element = document.getElementById(`chat-content-${chatRoomId}`);
         if (element) {
-          element.style.transform = 'translateX(-80px)';
+          element.style.transform = "translateX(-80px)";
         }
         setOpenChatId(chatRoomId);
       },
@@ -54,46 +56,55 @@ const ChatList = ({ chats }) => {
       onSwipedRight: () => {
         const element = document.getElementById(`chat-content-${chatRoomId}`);
         if (element) {
-          element.style.transform = 'translateX(0)';
+          element.style.transform = "translateX(0)";
         }
         setOpenChatId(chatRoomId);
       },
-      
+
       onTouchEndOrOnMouseUp: () => {
         setTimeout(() => {
           setIsDragging(false);
         }, 100);
       },
-      trackMouse: true
+      trackMouse: true,
     });
 
     return (
-      <div key={chatRoomId} className="relative flex flex-col">
+      <div
+        key={chatRoomId}
+        className="relative flex flex-col font-NanumR text-sm"
+      >
         <div className="relative w-full">
-          <div className="absolute right-0 top-0 h-full goout-button h-full w-20 bg-red-500 flex items-center justify-center cursor-pointer"
-          onClick={() => {
-            deleteChat.mutate({uri: `/chats/${chatRoomId}`});
-          }}
+          <div
+            className="absolute right-0 top-0 goout-button h-full w-20 bg-red-500 flex items-center justify-center cursor-pointer"
+            onClick={() => {
+              deleteChat.mutate({ uri: `/chats/${chatRoomId}` });
+            }}
           >
             <span className="text-white font-medium">나가기</span>
           </div>
           <div
             {...swipeHandlers}
             id={`chat-content-${chatRoomId}`}
-            className="w-full chat-card flex items-center bg-white pl-3 py-5 border border-gray-200 cursor-pointer opacity-100 hover:bg-gray-50 transition transform duration-200 ease-in-out gap-x-3 overflow-x-hidden select-none"
+            className=" w-full flex items-center bg-white pl-3 py-2 border-gray-200 cursor-pointer opacity-100 hover:bg-gray-50 transition transform duration-200 ease-in-out gap-x-3 overflow-x-hidden select-none"
             onClick={() => !isDragging && handleChatClick(chatRoomId)}
           >
             <div className="flex w-2/12 justify-center items-center">
               <img
                 src={chatData.chatRoom.partner.profileImage}
                 alt="profile"
-                className="w-14 h-14 rounded-full object-cover object-center"
+                className="w-12 h-12 rounded-xl object-cover object-center"
               />
             </div>
-            <div className="flex w-7/12 flex-col gap-y-1">  
+            <div className="flex w-7/12 flex-col gap-y-1 py-1">
               <div className="flex items-center gap-x-2">
-                <SajuUserBubble skyElement={chatData.chatRoom.partner.celestialStem} size="normal" />
-                <h3 className="text-xl font-semibold">{chatData.chatRoom.partner.nickname}</h3>
+                <SajuUserBubble
+                  skyElement={chatData.chatRoom.partner.celestialStem}
+                  size="small"
+                />
+                <h3 className="text-base text-black font-bold">
+                  {chatData.chatRoom.partner.nickname}
+                </h3>
               </div>
               <p className="w-full truncate text-gray-700 ml-1">
                 {chatData.message.lastMessage}
@@ -103,7 +114,11 @@ const ChatList = ({ chats }) => {
               <span className="text-sm text-gray-500">
                 {formatRelativeTime(chatData.message.lastSendTime)}
               </span>
-              <span className={`text-sm text-white bg-red-500 h-7 w-7 rounded-full py-1 text-center ${chatData.message.newMessageCount > 0 ? 'block' : 'opacity-0'}`}>
+              <span
+                className={`text-sm text-white pt-1 bg-red-500 h-5 w-5 flex items-center justify-center rounded-full text-center ${
+                  chatData.message.newMessageCount > 0 ? "block" : "opacity-0"
+                }`}
+              >
                 {chatData.message.newMessageCount}
               </span>
             </div>
@@ -116,8 +131,13 @@ const ChatList = ({ chats }) => {
   return (
     <div className="flex flex-col h-full">
       {Object.entries(chats[0])
-        .sort(([, a], [, b]) => new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime))
-        .map(([chatRoomId, chatData]) => renderSwipeableChat(chatRoomId, chatData))}
+        .sort(
+          ([, a], [, b]) =>
+            new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime)
+        )
+        .map(([chatRoomId, chatData]) =>
+          renderSwipeableChat(chatRoomId, chatData)
+        )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-export const testUsers = [
+export const users = [
   {
     id: 1,
     nickname: "대장나무",
@@ -9,24 +9,6 @@ export const testUsers = [
     region: "서울시 용산구",
     memberType: "무토",
     introduction: "찰떡궁합인분 찾습니다^^",
-    year: "을해",
-    month: "기묘",
-    day: "임자",
-    time: "정미",
-    religion: '무교',
-    smoking: '비흡연',
-    drinking: '음주 안함',
-    height: 180,
-    cityCode: "1100000000",
-    dongCode: "1117000000",
-    birthDay: "1981-09-01",
-    birthTime: "12:00",
-    birthTimeUnknown: false,
-    "harmony": "두분의 궁합은 어쩌구 저쩌구 이러쿵 저러쿵 아주 잘 맞으시고 멋지신데요 아니 왠지 노래 잘부르게 생기셨는데 혹시 가수 아니신가요",
-    "chemi": "케미가 아주 좋으시구 저쩌구",
-    "good": "ㅁㄴㅇㄼㄷ",
-    "bad": "ㅁㄴㅇㅎㄹ",
-    "advice": "ㅂㅈㄷㅈㅂㄱㅎ"
   },
   {
     id: 2,
@@ -42,6 +24,18 @@ export const testUsers = [
   },
   {
     id: 3,
+    name: "이진규",
+    nickname: "진구",
+    score: 99,
+    profileImage:
+      "http://www.newsa.co.kr/news/photo/202204/281581_204660_254.jpg",
+    region: 123124123412,
+    age: 27,
+    memberType: "갑목",
+    introduction: "찰떡궁합인분 찾습니다^^",
+  },
+  {
+    id: 4,
     name: "이진규",
     nickname: "진구",
     score: 99,

@@ -1,3 +1,4 @@
+// SquareCarousel.js
 import Carousel from "react-spring-3d-carousel";
 import { useState, useEffect } from "react";
 import { config } from "react-spring";
@@ -8,9 +9,8 @@ import profile1 from "../assets/images/profile1.jpeg";
 import profile2 from "../assets/images/profile2.jpeg";
 import profile3 from "../assets/images/profile3.jpeg";
 
-export default function SquareCarousel({ users1 }) {
+export default function CustomCarousel() {
   const [goToSlide, setGoToSlide] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   // 사용자 추천 데이터
   // 이종문 : 에러나서 user1으로 수정했습니다
@@ -48,11 +48,12 @@ export default function SquareCarousel({ users1 }) {
   ];
 
   // 사용자 데이터 기반 slides 배열 생성
+  // (카드 디자인과 배치는 UserCard에서 정의한 그대로 사용)
   const slides = users.map((user, index) => ({
     key: user.id,
     content: (
       <div
-        className="w-60 h-60 mt-14 flex items-center justify-center text-white text-2xl font-bold rounded-xl cursor-pointer"
+        className="w-72 h-auto  flex items-center justify-center cursor-pointer"
         onClick={() => setGoToSlide(index)}
       >
         <UserCard user={user} />
@@ -60,6 +61,7 @@ export default function SquareCarousel({ users1 }) {
     ),
   }));
 
+  // 5초마다 자동으로 다음 슬라이드로 전환
   useEffect(() => {
     const interval = setInterval(() => {
       setGoToSlide((prev) => (prev + 1) % slides.length);
@@ -68,11 +70,11 @@ export default function SquareCarousel({ users1 }) {
   }, [slides.length]);
 
   return (
-    <div className="w-[90%] h-60 mx-auto flex">
+    <div className="w-full mt-64  mx-auto flex justify-center">
       <Carousel
         slides={slides}
         goToSlide={goToSlide}
-        offsetRadius={3}
+        offsetRadius={2}
         showNavigation={false}
         animationConfig={config.gentle}
       />

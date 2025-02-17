@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@material-tailwind/react": "^2.1.10",
     "@reduxjs/toolkit": "^2.5.1",
     "@stomp/stompjs": "^7.0.0",
@@ -19,6 +20,8 @@
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.5.2",
+    "framer-motion": "^12.4.3",
+    "fullcalendar": "^6.1.15",
     "lottie-react": "^2.4.1",
     "prop-types": "^15.8.1",
     "rc-slider": "^11.1.8",

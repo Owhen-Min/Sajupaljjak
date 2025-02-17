@@ -1,37 +1,53 @@
-function SajuUserBubble({ skyElement, size = 'normal', onClick }) {
-  // 천간오행 스타일 매핑
-  const elementStyles = {
-    '갑목': { bg: 'bg-green-200', text: 'text-green-800', border: 'border-green-300', hanja: '甲' },
-    '을목': { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-300', hanja: '乙' },
-    '병화': { bg: 'bg-red-200', text: 'text-red-800', border: 'border-red-300', hanja: '丙' },
-    '정화': { bg: 'bg-red-100', text: 'text-red-800', border: 'border-red-300', hanja: '丁' },
-    '무토': { bg: 'bg-yellow-200', text: 'text-yellow-800', border: 'border-yellow-300', hanja: '戊' },
-    '기토': { bg: 'bg-yellow-100', text: 'text-yellow-800', border: 'border-yellow-300', hanja: '己' },
-    '경금': { bg: 'bg-gray-200', text: 'text-gray-800', border: 'border-gray-300', hanja: '庚' },
-    '신금': { bg: 'bg-gray-50', text: 'text-gray-800', border: 'border-gray-300', hanja: '辛' },
-    '임수': { bg: 'bg-gray-700', text: 'text-white', border: 'border-black', hanja: '壬' },
-    '계수': { bg: 'bg-gray-800', text: 'text-white', border: 'border-black', hanja: '癸' }
+import { useState } from "react";
+
+function SajuUserBubble({ skyElement, size = "normal", onClick }) {
+  // 천간을 상위 그룹으로 매핑 (커뮤니티 필터의 색상과 통일)
+  const groupMap = {
+    갑목: "목",
+    을목: "목",
+    병화: "화",
+    정화: "화",
+    무토: "토",
+    기토: "토",
+    경금: "금",
+    신금: "금",
+    임수: "수",
+    계수: "수",
   };
 
+  const group = groupMap[skyElement] || "목";
 
-  const style = elementStyles[skyElement] || elementStyles['갑목'];
-  
+  // 상위 그룹별 색상 설정 (커뮤니티 필터와 유사하게)
+  const groupColors = {
+    목: { bg: "bg-blue-500", text: "text-white", border: "border-blue-500" },
+    화: { bg: "bg-red-500", text: "text-white", border: "border-red-500" },
+    토: {
+      bg: "bg-yellow-600",
+      text: "text-white",
+      border: "border-yellow-600",
+    },
+    금: { bg: "bg-gray-600", text: "text-white", border: "border-gray-600" },
+    수: { bg: "bg-black", text: "text-white", border: "border-black" },
+  };
+
+  const style = groupColors[group];
+
+  // 사이즈에 따른 클래스
   const sizeStyles = {
-    small: 'text-xs px-1.5 py-0',
-    normal: 'px-2 py-0',
-    large: 'text-lg px-3 py-0'
+    small: "text-xs px-1.5 py-0",
+    normal: "px-2 py-0",
+    large: "text-lg px-3 py-0",
   };
 
   return (
-    <div className={`
-      inline-flex items-center gap-2 
-      rounded-full border ${style.bg} ${style.text} ${style.border}
-      font-dokrip ${sizeStyles[size]}
-      `}
+    <div className="flex flex-col h-full items-center justify-center">
+      <div
+        onClick={onClick}
+        className={`h-6 flex items-center justify-center rounded-full border ${style.bg} ${style.text} ${style.border} font-NanumR text-sm font-extrabold flex items-center justify-center ${sizeStyles[size]} shadow`}
       >
-      <span>{skyElement}</span>
+        <span>{skyElement}</span>
+      </div>
     </div>
-
   );
 }
 
