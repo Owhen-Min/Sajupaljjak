@@ -14,7 +14,7 @@ function MyPageEditCouple() {
   const mutation = usePost();
 
   const { data, isPending, error } = useGet("/api/couples");
-  if (!data) {
+  if (error) {
     navigate("/couple/code");
   }
   const [meetDate, setMeetDate] = useState(data.startDate);

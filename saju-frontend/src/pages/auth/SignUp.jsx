@@ -674,7 +674,7 @@ function SignUpPage() {
       try {
         setFormData((prev) => ({
           ...prev,
-          age: formData.bday ? (new Date().getFullYear() - new Date(formData.bday).getFullYear()) : 0
+          age: (new Date().getFullYear() - new Date(formData.bday).getFullYear()+1)
         }));
         // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
         if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
@@ -706,9 +706,10 @@ function SignUpPage() {
             ...formData,
             profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`
           };
-
+          console.log('signupData', signupData);
           submit('/api/auth/signup', signupData);
         } else {
+          console.log('formData', formData);
           submit('/api/auth/signup', formData);
         }
       } catch (error) {

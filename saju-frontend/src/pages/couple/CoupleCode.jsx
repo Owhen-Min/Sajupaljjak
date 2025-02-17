@@ -17,7 +17,7 @@ function CoupleCode() {
   const [selectedDate, setSelectedDate] = useState('');
 
   const { data, isLoading, error } = useGet('/api/inviting/');
-  const { mutate: createCoupleCode } = usePost('/api/inviting/');
+  const { mutate: createCoupleCode } = usePost();
   const { refetch: checkConfirm } = useGet('/api/inviting/confirm');
   
 
@@ -123,10 +123,15 @@ function CoupleCode() {
     }
 
     try {
-      createCoupleCode({
-        invitingCode: inputCode.replace(/\s/g, ''),
-        startDate: selectedDate
-      });
+      createCoupleCode(
+        {
+          uri: '/api/inviting/',
+          payload: {
+            invitingCode: inputCode.replace(/\s/g, ''),
+            startDate: selectedDate
+          }
+        }
+      );
       navigate('/couple');
     } catch (error) {
       console.error('매칭 시도 실패:', error);
