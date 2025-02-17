@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.random.service;
 
 import com.saju.sajubackend.api.chat.dto.WaitingDto;
+import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.common.exception.ErrorMessage;
@@ -120,5 +121,14 @@ public class RandomService {
 
         partners.put(waiting1.getMember().getMemberId(), waiting2.getMember());
         partners.put(waiting2.getMember().getMemberId(), waiting1.getMember());
+    }
+
+    public ChattingRequestDto send(ChattingRequestDto request) {
+        return ChattingRequestDto.builder()
+                .chatroomId(chatroomIds.get(request.getSenderId()))
+                .content(request.getContent())
+                .senderId(request.getSenderId())
+                .messageType(request.getMessageType())
+                .build();
     }
 }

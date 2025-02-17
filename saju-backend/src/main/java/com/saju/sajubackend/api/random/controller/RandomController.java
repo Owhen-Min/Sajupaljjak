@@ -1,8 +1,12 @@
 package com.saju.sajubackend.api.random.controller;
 
+import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.random.service.RandomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +19,7 @@ import java.util.Map;
 public class RandomController {
 
     private final RandomService randomService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @PostMapping("/api/random")
     @ResponseBody
@@ -30,5 +35,12 @@ public class RandomController {
         deferredResult.onTimeout(() -> randomService.delete(member)); // 타임 아웃 시
 
         return deferredResult;
+    }
+
+    @MessageMapping("/random")
+    public ChattingRequestDto sendMessage(@Payload ChattingRequestDto request) {
+        ChattingRequestDto chatting = randomService.send(request);
+        messagingTemplate.convertAndSend("/topic/random/" + chatting.getChatroomId(), chatting);
+        return chatting;
     }
 }
