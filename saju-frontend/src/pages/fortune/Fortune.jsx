@@ -6,7 +6,6 @@ import TopBar from "../../components/TopBar";
 import BottomNav from "../../components/BottomNav";
 import { FiSun, FiUser, FiCalendar, FiTrendingUp } from "react-icons/fi";
 import { useGet } from "../../hooks/useApi";
-import { use } from "react";
 
 
 // API로부터 받아온 운세 데이터 (예시)
