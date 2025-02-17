@@ -12,7 +12,8 @@ public enum MessageType {
 
     TEXT(0, "TEXT"),
     VIDEO_REQUEST(1, "VIDEO"),
-    MATCH_REQUEST(2, "MATCH");
+    MATCH_REQUEST(2, "MATCH"),
+    MEMBER_INFO(3, "MEMBER_INFO");
 
     private final int code;
     private final String label;

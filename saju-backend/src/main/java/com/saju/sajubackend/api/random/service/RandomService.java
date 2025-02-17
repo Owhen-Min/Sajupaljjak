@@ -4,28 +4,38 @@ import com.saju.sajubackend.api.chat.dto.WaitingDto;
 import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
+import com.saju.sajubackend.common.enums.MessageType;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @RequiredArgsConstructor
 @Service
 public class RandomService {
 
+    private final MemberRepository memberRepository;
+    private final SimpMessagingTemplate messagingTemplate;
+
     private Deque<WaitingDto> waiting;
     private Map<Long, String> chatroomIds;
     private Map<Long, Member> partners;
+    private Map<String, ScheduledExecutorService> schedulers;
+    private Map<String, Integer> chatRoomNoticeCount;
+
     private ReentrantReadWriteLock lock;
     private Random random;
-    private final MemberRepository memberRepository;
 
     private final String CHATROOM = "chatRoomId";
 
@@ -34,8 +44,10 @@ public class RandomService {
         this.waiting = new ArrayDeque<>(); // 순서 유지 필요
         this.chatroomIds = new ConcurrentHashMap<>(); // 멀티 스레드 환경 고려
         this.partners = new ConcurrentHashMap<>();
+        this.schedulers = new ConcurrentHashMap<>();
+        this.chatRoomNoticeCount = new ConcurrentHashMap<>();
         this.lock = new ReentrantReadWriteLock();
-        random = new Random();
+        this.random = new Random();
     }
 
     @Async("asyncThreadPool")
@@ -121,6 +133,50 @@ public class RandomService {
 
         partners.put(waiting1.getMember().getMemberId(), waiting2.getMember());
         partners.put(waiting2.getMember().getMemberId(), waiting1.getMember());
+
+        startScheduler(chatroomId, waiting1.getMember(), waiting2.getMember());
+    }
+
+    private void startScheduler(String chatroomId, Member member1, Member member2) {
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        schedulers.put(chatroomId, scheduler);
+        scheduler.scheduleAtFixedRate(() -> notice(chatroomId, member1, member2), 3, 1, TimeUnit.MINUTES);
+    }
+
+    private void notice(String chatroomId, Member member1, Member member2) {
+        List<Map<Object, Object>> memberInfoList = getInfoList(member1, member2);
+
+        int count = chatRoomNoticeCount.getOrDefault(chatroomId, 0); // 진행 상태 저장 (보낸 횟수)
+
+        if (count >= 5) { // 5번 모두 보냈다면 스케줄러 종료
+            stopScheduler(chatroomId);
+            chatRoomNoticeCount.remove(chatroomId);
+            return;
+        }
+
+        // 순서에 해당하는 정보 전송
+        messagingTemplate.convertAndSend("/topic/random/" + chatroomId, memberInfoList.get(count));
+
+        // 카운트 증가 후 저장
+        chatRoomNoticeCount.put(chatroomId, count + 1);
+    }
+
+    private List<Map<Object, Object>> getInfoList(Member member1, Member member2) {
+        return List.of(
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "nickname", member1.getMemberId(), member1.getCelestialStem().getLabel(), member2.getMemberId(), member2.getCelestialStem().getLabel()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "age", member1.getMemberId(), member1.getAge(), member2.getMemberId(), member2.getAge()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "gender", member1.getMemberId(), member1.getGender().getLabel(), member2.getMemberId(), member2.getGender().getLabel()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "name", member1.getMemberId(), member1.getNickname(), member2.getMemberId(), member2.getNickname()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "profileImage", member1.getMemberId(), member1.getProfileImg(), member2.getMemberId(), member2.getProfileImg())
+        );
+    }
+
+    private void stopScheduler(String chatroomId) {
+        ScheduledExecutorService scheduler = schedulers.remove(chatroomId);
+
+        if (scheduler != null) {
+            scheduler.shutdown();
+        }
     }
 
     public ChattingRequestDto send(ChattingRequestDto request) {
