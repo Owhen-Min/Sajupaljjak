@@ -522,7 +522,7 @@ const Chat = () => {
     chatroomId: chatRoomId,
     lastReadMessage: "",
   });
-  const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`); //이게 다시 방 접속할때 요청 다시 보내게 해야함
+  const { data, isPending, error } = useGet(`/api/chats/1`); //이게 다시 방 접속할때 요청 다시 보내게 해야함
   const { stompClient } = useWebSocket();
   const { memberId, user } = useAuth();
   const [messages, setMessages] = useState([]);
