@@ -4,13 +4,12 @@ import com.saju.sajubackend.api.couple.domain.Couple;
 import com.saju.sajubackend.api.member.domain.Member;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public record CoupleResponseDto(
         Long coupleId,
         MemberInfoDto member,
         MemberInfoDto partner,
-        LocalDateTime startDate
+        LocalDate startDate
 ) {
     public static CoupleResponseDto fromEntity(Couple couple) {
         Member male = couple.getCoupleMale();
