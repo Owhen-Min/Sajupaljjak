@@ -5,23 +5,26 @@ import MainButton from "../../components/MainButton";
 import { Calendar } from "../../components/Calendar";
 import BottomNav from "../../components/BottomNav";
 import couplebg from "../../assets/couplebg.webp";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 // import LoadingSpinner from "../../components/LoadingSpinner";
 
 function Couple() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const { data, isPending, error } = useGet(`/api/date?month=${month}`);
+  
   const {
     data: coupleData,
     isPending: isCouplePending,
     error: coupleError,
   } = useGet(`/api/couples`);
+
   const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
   const [badDates, setBadDates] = useState([]);
   const [couple, setCouple] = useState({
+
     coupleId: 1,
     member: {
       memberId: 1001,

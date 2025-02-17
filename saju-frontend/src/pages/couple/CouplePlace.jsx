@@ -8,8 +8,8 @@ import spots from "../../data/spots.json";
 import { useState } from "react";
 
 function CouplePlace() {
-  const goodDates = ['2025-02-01','2025-02-22', '2025-02-14']; // YYYY-MM-DD 형식
-  const badDates = ['2025-02-03','2025-02-17', '2025-02-23'];
+  const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
+  const [badDates, setBadDates] = useState([]);
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(null);
 
