@@ -17,7 +17,7 @@ function CoupleCode() {
   const [selectedDate, setSelectedDate] = useState('');
 
   const { data, isLoading, error } = useGet('/api/inviting');
-  const { mutate: createCoupleCode } = usePost({
+  const { mutate: createCoupleCode } = usePost('/api/inviting', {
     onSuccess: (response) => {
       console.log("응답: ", response);
       if (response.status === 200) {
@@ -151,10 +151,8 @@ function CoupleCode() {
     }
 
     createCoupleCode({
-      payload: {
-        invitingCode: inputCode.replace(/\s/g, ''),
-        startDate: selectedDate
-      }
+      invitingCode: inputCode.replace(/\s/g, ''),
+      startDate: selectedDate
     });
   };
 
