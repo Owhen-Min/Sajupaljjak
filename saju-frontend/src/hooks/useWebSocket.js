@@ -7,7 +7,7 @@ const useWebSocket = () => {
   useEffect(() => {
 		//웹소켓 연결
     const client = new Client({
-      brokerURL: "ws://i12a408.p.ssafy.io/ws",
+      brokerURL: "wss://i12a408.p.ssafy.io/ws",
       reconnectDelay: 5000,
       onConnect: () => {
         console.log("웹소켓 연결");
