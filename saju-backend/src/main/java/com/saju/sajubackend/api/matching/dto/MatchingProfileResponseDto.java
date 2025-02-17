@@ -21,7 +21,7 @@ public class MatchingProfileResponseDto {
     @JsonProperty("profileImage")
     private String profileImg;
 
-    private int cityCode;
+    private long cityCode;
 
     private int age;
 

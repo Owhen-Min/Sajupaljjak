@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum Religion {
 
     NONE(0, "무교"),
-    CHRISTIANITY(1, "기독교"),
+    CHRISTIANITY(1, "개신교"),
     BUDDHISM(2, "불교"),
     CATHOLICISM(3, "천주교"),
     OTHER(4, "기타");

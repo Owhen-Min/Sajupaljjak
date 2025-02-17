@@ -1,9 +1,5 @@
 package com.saju.sajubackend.api.filter.dto;
 
-import com.saju.sajubackend.common.enums.DrinkingFrequency;
-import com.saju.sajubackend.common.enums.Gender;
-import com.saju.sajubackend.common.enums.Religion;
-import com.saju.sajubackend.common.enums.SmokingStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,8 +10,8 @@ public class MemberProfileResponse {
     private String nickname;
     private String gender;
     private String profileImage;
-    private int cityCode;
-    private int dongCode;
+    private String dongCode;
+    private String cityCode;
     private String religion;
     private int age;
     private int height;
