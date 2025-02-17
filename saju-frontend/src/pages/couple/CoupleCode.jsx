@@ -134,9 +134,9 @@ function CoupleCode() {
       );
       console.log("응답: ", response);
       // 응답의 status가 200일 때만 페이지 이동
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         navigate('/couple');
-      } else if (response.data.status === 400) {
+      } else if (response.status === 400) {
         alert('올바르지 않은 코드입니다.');
       } else {
         alert(`매칭 시도 중 오류가 발생했습니다. ${response.data.message}`);
@@ -145,7 +145,7 @@ function CoupleCode() {
       console.error('매칭 시도 실패:', error);
       if (error.response) {
         // HTTP 에러 응답이 있는 경우
-        switch (error.response.data.status) {
+        switch (error.response.status) {
           case 400:
             alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
             break;
@@ -170,9 +170,9 @@ function CoupleCode() {
     try {
       const response = await checkConfirm();
       console.log(response);
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         navigate('/couple');
-      } else if (response.data.status === 202) {
+      } else if (response.status === 202) {
         alert("상대가 아직 코드를 입력하지 않았습니다.");
       }
       console.log(response.data);
