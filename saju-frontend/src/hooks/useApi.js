@@ -25,8 +25,15 @@ export const useGet = (uri, options = {}) => {
 export const usePost = (uri, options = {}) => {
   return useMutation({
     mutationFn: async (params) => {
-      const requestUri = params.uri || uri;
-      const payload = params.payload || params;
+      let requestUri = uri;
+      let payload;
+      
+      if (typeof params === 'object' && params.uri) {
+        requestUri = params.uri;
+        payload = params.payload;
+      } else {
+        payload = params;
+      }
 
       if (!requestUri) {
         throw new Error('URI is required');

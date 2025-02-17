@@ -816,29 +816,27 @@ function SignUpPage() {
             throw new Error('S3 파일 업로드 실패');
           }
 
-          await mutation.mutateAsync({
+          const signupResponse = await mutation.mutateAsync({
             uri: '/api/auth/signup',
             payload: {
               ...signupPayload,
               profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`
             }
           });
-        } else {
-          await mutation.mutateAsync({
-            uri: '/api/auth/signup',
-            payload: signupPayload
-          });
-        }
 
-        const { token, ...userData } = mutation.data;
-        localStorage.setItem("accessToken", token.accessToken);
-        localStorage.setItem("refreshToken", token.refreshToken);
-        localStorage.setItem("memberId", userData.member_id);
-        localStorage.setItem("relation", userData.relation);
-        updateUser(userData);
-        setIsLoading(false);
-        navigate("/auth/welcome");
+          console.log("회원가입 성공 응답 데이터:", signupResponse);
+          const { token, ...userData } = signupResponse;
+          localStorage.setItem("accessToken", token.accessToken);
+          localStorage.setItem("refreshToken", token.refreshToken);
+          localStorage.setItem("memberId", userData.member_id);
+          localStorage.setItem("relation", userData.relation);
+          
+          updateUser(userData);
+          console.log(user);
+          setIsLoading(false);
+          navigate("/auth/welcome");
 
+        } 
       } catch (error) {
         console.error("회원가입 실패:", error);
         window.alert('회원가입 실패: ' + error.message);
