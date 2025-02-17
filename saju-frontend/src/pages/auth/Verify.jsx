@@ -12,6 +12,7 @@ const Verify = () => {
     updateEmail,
     updateRelation,
     updateIsAuthenticated,
+    updateAccessToken,
     logout,
   } = useAuth();
 
@@ -61,7 +62,7 @@ const Verify = () => {
       updateMemberId(data.memberId);
       updateRelation(data.relation);
       updateIsAuthenticated(true);
-
+      updateAccessToken(data.token.accessToken);
       if (data.relation === null) {
         navigate("/auth/signup/additional");
         return;
@@ -81,6 +82,7 @@ const Verify = () => {
     logout,
     code,
     updateUser,
+    updateAccessToken,
   ]);
 
   return (

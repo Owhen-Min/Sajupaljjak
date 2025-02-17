@@ -51,7 +51,7 @@ function SignUpPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
-  const {email, updateUser, user }  = useAuth();
+  const {email, updateUser, user, accessToken, updateAccessToken }  = useAuth();
 
   const [formData, setFormData] = useState({
     email: email,
@@ -106,6 +106,7 @@ function SignUpPage() {
           console.log("회원가입 성공 응답 데이터:", data);
           const { token, ...userData } = data;
           localStorage.setItem("accessToken", token.accessToken);
+          updateAccessToken(token.accessToken);
           localStorage.setItem("refreshToken", token.refreshToken);
 
           localStorage.setItem("memberId", data.member_id);
