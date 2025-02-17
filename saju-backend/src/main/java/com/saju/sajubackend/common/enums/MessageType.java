@@ -10,10 +10,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum MessageType {
 
-    TEXT(0, "TEXT"),
-    VIDEO_REQUEST(1, "VIDEO"),
-    MATCH_REQUEST(2, "MATCH"),
-    MEMBER_INFO(3, "MEMBER_INFO");
+    TEXT(0, "일반 채팅"),
+    VIDEO_REQUEST(1, "화상 신청"),
+    MATCH_REQUEST(2, "매칭 신청");
 
     private final int code;
     private final String label;
