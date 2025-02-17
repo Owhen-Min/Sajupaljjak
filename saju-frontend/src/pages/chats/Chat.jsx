@@ -105,7 +105,7 @@ const Chat = () => {
       subscription.unsubscribe();
       console.log(" 채팅방 구독 취소");
     };
-  }, [stompClient?.connected, chatRoomId, memberId, user, data?.partner]);
+  }, [stompClient?.connected, chatRoomId, memberId, user, data?.partner, stompClient]);
 
   const sendMessage = () => {
     if (!stompClient || !stompClient.connected) {

@@ -1,51 +1,67 @@
 // Fortune.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar } from "recharts";
 import { useNavigate } from "react-router-dom";
 import TopBar from "../../components/TopBar";
 import BottomNav from "../../components/BottomNav";
 import { FiSun, FiUser, FiCalendar, FiTrendingUp } from "react-icons/fi";
+import { useGet } from "../../hooks/useApi";
+import { use } from "react";
+
 
 // API로부터 받아온 운세 데이터 (예시)
 
-const sajuToday = {
-  content:
-    "오늘은 당신의 능력과 실력 그리고 성실성을 인정 받을 수 있는 날이 될 것입니다.",
-};
-
-const fortuneData = {
-  totalScore: 70,
-  wealthScore: 100,
-  healthScore: 60,
-  loveScore: 40,
-  studyScore: 70,
-  content: {
-    total:
-      "매사에 조심 또 조심하는 것이 좋습니다. 오늘은 그저 근신하듯 생활반경 안에서 생활해야 합니다. 일상적으로 다니는 곳에서 벗어난다면 작은 사고가 일어날 수 있습니다. 여행을 하실 분은 오늘은 피하는 것이 좋겠고, 피치 못하게 꼭 가야 하는 상황이면 대중교통을 이용하시기 바랍니다. 전체적으로 볼 때 당신의 오늘 운세는 이제 막 우물 밖을 벗어난 개구리에 비교될 수 있습니다. 특히 대인관계에서 상대방을 헐뜯게 되는 실수를 함으로써 문제가 커질 수도 있습니다. 경거망동을 삼가하고 알게 된지 얼마 안 된 사람과는 어느 정도의 거리를 두세요.",
-    wealth:
-      "어둠이 거치고 햇살이 드는 형국입니다. 어려움에도 불구하고 인내한 덕분에 금전적으로 많은 이득이 생길 것입니다.",
-    love: "서두르지 말고 편안한 마음을 지녀야 합니다. 조급하게 행동한다면 상대가 다시 보게 될 것이고, 마이너스 효과만 가져올 것입니다.",
-    health:
-      "외부 자극에 민감한 때입니다. 철저한 몸 관리를 통해 사전 예방해야 합니다. 소홀하면 지병이 재발하거나 합병증이 생길 수 있습니다.",
-    study:
-      "마음이 안정되면서 좋은 성과가 예상됩니다. 이전 노력이 보상받으며 더 큰 의욕을 불러일으킬 것입니다.",
-  },
-};
-
-// RadarChart에 사용할 데이터: 재물운, 건강운, 연애운, 학업운
-const radarData = [
-  { subject: "총점", value: fortuneData.totalScore, fullMark: 100 },
-  { subject: "재물운", value: fortuneData.wealthScore, fullMark: 100 },
-  { subject: "건강운", value: fortuneData.healthScore, fullMark: 100 },
-  { subject: "연애운", value: fortuneData.loveScore, fullMark: 100 },
-  { subject: "학업운", value: fortuneData.studyScore, fullMark: 100 },
-];
 
 const Fortune = () => {
   const navigate = useNavigate();
+  const [sajuToday, setSajuToday] = useState({ content: "" });
+  const [fortuneData, setFortuneData] = useState({
+    totalScore: 0,
+    wealthScore: 0,
+    healthScore: 0,
+    loveScore: 0,
+    studyScore: 0,
+    content: {
+      total: "",
+      wealth: "",
+      love: "",
+      health: "",
+      study: "",
+  },});
+  const [radarData, setRadarData] = useState([
+    { subject: "총점", value: 0, fullMark: 100 },
+    { subject: "재물운", value: 0, fullMark: 100 },
+    { subject: "건강운", value: 0, fullMark: 100 },
+    { subject: "연애운", value: 0, fullMark: 100 },
+    { subject: "학업운", value: 0, fullMark: 100 },
+  ]);
 
-  if (isPending) return <div>로딩중 ...</div>;
-  if (error) return <div>에러 : {error.message}</div>;
+  const { data:sajuData, isPending, error } = useGet("/api/fortune");
+  const { data: today, isPending: todayIsPending, error: todayError } = useGet("/api/fortune/today");
+  useEffect(() => {
+    if (sajuData) {
+      setSajuToday(sajuData.today);
+    }
+  }, [sajuData]);
+  useEffect(() => {
+    if (today) {
+      setFortuneData(today);
+      setRadarData([
+        { subject: "총점", value: today.totalScore, fullMark: 100 },
+        { subject: "재물운", value: today.wealthScore, fullMark: 100 },
+        { subject: "건강운", value: today.healthScore, fullMark: 100 },
+        { subject: "연애운", value: today.loveScore, fullMark: 100 },
+        { subject: "학업운", value: today.studyScore, fullMark: 100 },
+      ]);
+    }
+  }, [today]);
+
+
+  if (isPending) return <div> sajuData 로딩중 ...</div>;
+  if (error) return <div> sajuData 에러 : {error.message}</div>;
+  if (todayIsPending) return <div>today 로딩중 ...</div>;
+  if (todayError) return <div> today 에러 : {todayError.message}</div>;
+  
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-NanumR">
       <Header />
