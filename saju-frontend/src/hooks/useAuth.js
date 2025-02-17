@@ -5,12 +5,14 @@ import {
   setIsAuthenticated,
   setUser,
   setEmail,
+  setAccessToken,
   resetAuth,
   selectMemberId,
   selectRelation,
   selectIsAuthenticated,
   selectUser,
   selectEmail,
+  selectAccessToken,
 } from "../store/authSlice";
 
 export const useAuth = () => {
@@ -20,11 +22,13 @@ export const useAuth = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectUser);
   const email = useSelector(selectEmail);
+  const accessToken = useSelector(selectAccessToken);
   const updateMemberId = (newMemberId) => dispatch(setMemberId(newMemberId));
   const updateRelation = (value) => dispatch(setRelation(value));
   const updateIsAuthenticated = (value) => dispatch(setIsAuthenticated(value));
   const updateUser = (userData) => dispatch(setUser(userData));
   const updateEmail = (newEmail) => dispatch(setEmail(newEmail));
+  const updateAccessToken = (newAccessToken) => dispatch(setAccessToken(newAccessToken));
   const logout = () => dispatch(resetAuth());
 
   
@@ -34,11 +38,13 @@ export const useAuth = () => {
     isAuthenticated,
     user,
     email,
+    accessToken,
     updateMemberId,
     updateRelation,
     updateIsAuthenticated,
     updateUser,
     updateEmail,
+    updateAccessToken,
     logout,
   };
 };
