@@ -6,6 +6,7 @@ const initialState = {
   isAuthenticated: false,
   user: null,
   email: "",
+  accessToken : "",
 };
 
 const authSlice = createSlice({
@@ -27,12 +28,16 @@ const authSlice = createSlice({
     setEmail: (state, action) => {
       state.email = action.payload;
     },
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload;
+    },
     resetAuth: (state) => {
       state.memberId = "";
       state.relation = 0;
       state.isAuthenticated = false;
       state.user = null;
       state.email = "";
+      state.accessToken = "";
     },
   },
 });
@@ -42,9 +47,10 @@ export const selectRelation = (state) => state.auth.relation;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectUser = (state) => state.auth.user;
 export const selectEmail = (state) => state.auth.email;
+export const selectAccessToken = (state) => state.auth.accessToken;
 
 
-export const {setMemberId, setRelation, setIsAuthenticated, setUser, setEmail, resetAuth } =
+export const {setMemberId, setRelation, setIsAuthenticated, setUser, setEmail, setAccessToken, resetAuth } =
   authSlice.actions;
 
 export default authSlice.reducer;

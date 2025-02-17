@@ -4,10 +4,10 @@ import { useAuth } from "./useAuth";
 
 const useWebSocket = () => {
   const [stompClient, setStompClient] = useState(null);
-   const { accessToken } = useAuth();
+  const { accessToken } = useAuth();
 
   useEffect(() => {
-    if (!accessToken) return;
+    // if (!accessToken) return;
     //웹소켓 연결
     const client = new Client({
       // brokerURL: "wss://i12a408.p.ssafy.io/ws",
