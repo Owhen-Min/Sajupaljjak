@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import { useAuth } from "./useAuth";
+import { useRef } from "react";
 
 const useWebSocket = () => {
   const [stompClient, setStompClient] = useState(null);
