@@ -8,6 +8,7 @@ import com.saju.sajubackend.api.board.dto.response.BoardDetailResponse;
 import com.saju.sajubackend.api.board.dto.response.BoardListResponse;
 import com.saju.sajubackend.api.board.dto.response.CommentListResponse;
 import com.saju.sajubackend.api.board.service.BoardService;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +37,14 @@ public class BoardController {
     /**
      * 특정 게시글 상세 조회 API
      * URL 예시: /api/community/{boardId}
-     *
+     * <p>
      * currentMemberId는 좋아요 여부를 판단하기 위한 값으로,
      * 별도 인증 처리가 있다면 SecurityContext에서 추출하도록 변경 가능함.
      */
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardDetailResponse> getBoardDetail(
             @PathVariable Long boardId,
-            @RequestParam(required = false) Long currentMemberId
+            @CurrentMemberId Long currentMemberId
     ) {
         BoardDetailResponse response = boardService.getBoardDetail(boardId, currentMemberId);
         return ResponseEntity.ok(response);
@@ -58,10 +59,7 @@ public class BoardController {
     public ResponseEntity<BoardCreateResponse> createBoard(
             @RequestParam("type") String type,
             @RequestBody BoardCreateRequest request,
-            @RequestHeader("Authorization") String authToken) {
-
-        // 실제 서비스에서는 authToken을 통해 currentMemberId를 추출합니다.
-        Long currentMemberId = 1L; // 테스트용 고정값
+            @CurrentMemberId Long currentMemberId) {
 
         BoardCreateResponse response = boardService.createBoard(currentMemberId, type, request);
         return ResponseEntity.ok(response);
@@ -75,9 +73,8 @@ public class BoardController {
     public ResponseEntity<Void> updateBoard(
             @PathVariable Long boardId,
             @RequestBody BoardUpdateRequest request,
-            @RequestHeader("Authorization") String authToken) {
+            @CurrentMemberId Long currentMemberId) {
 
-        Long currentMemberId = 1L; // 테스트용
         boardService.updateBoard(currentMemberId, boardId, request);
         return ResponseEntity.ok().build();
     }
@@ -89,9 +86,8 @@ public class BoardController {
     @DeleteMapping("/{boardId}")
     public ResponseEntity<Void> deleteBoard(
             @PathVariable Long boardId,
-            @RequestHeader("Authorization") String authToken) {
+            @CurrentMemberId Long currentMemberId) {
 
-        Long currentMemberId = 1L; // 테스트용
         boardService.deleteBoard(currentMemberId, boardId);
         return ResponseEntity.ok().build();
     }
@@ -104,9 +100,8 @@ public class BoardController {
     public ResponseEntity<Void> createComment(
             @PathVariable Long boardId,
             @RequestBody CommentCreateRequest request,
-            @RequestHeader("Authorization") String authToken) {
+            @CurrentMemberId Long currentMemberId) {
 
-        Long currentMemberId = 1L; // 테스트용
         boardService.createComment(currentMemberId, boardId, request.getContent());
         return ResponseEntity.ok().build();
     }
@@ -116,9 +111,8 @@ public class BoardController {
      * GET /api/community/my-post
      */
     @GetMapping("/my-post")
-    public ResponseEntity<BoardListResponse> getMyPosts(Long memberId) {
-        // 실제 프로젝트에서는 SecurityContext 또는 토큰에서 회원 정보를 가져오게 됩니다.
-        BoardListResponse response = boardService.getMyBoardList(memberId);
+    public ResponseEntity<BoardListResponse> getMyPosts(@CurrentMemberId Long currentMemberId) {
+        BoardListResponse response = boardService.getMyBoardList(currentMemberId);
         return ResponseEntity.ok(response);
     }
 
@@ -127,8 +121,8 @@ public class BoardController {
      * GET /api/community/my-comment
      */
     @GetMapping("/my-comment")
-    public ResponseEntity<CommentListResponse> getMyComments(Long memberId) {
-        CommentListResponse response = boardService.getMyCommentList(memberId);
+    public ResponseEntity<CommentListResponse> getMyComments(@CurrentMemberId Long currentMemberId) {
+        CommentListResponse response = boardService.getMyCommentList(currentMemberId);
         return ResponseEntity.ok(response);
     }
 }
