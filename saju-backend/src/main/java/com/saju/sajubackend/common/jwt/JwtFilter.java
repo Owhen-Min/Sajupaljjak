@@ -28,7 +28,6 @@ public class JwtFilter extends OncePerRequestFilter {
             "/",
             "/api/auth",
             "/api/image",
-            "/ws"
     );
 
     @Override
