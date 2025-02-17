@@ -29,10 +29,9 @@ public class RandomService {
     private final SimpMessagingTemplate messagingTemplate;
 
     private Deque<WaitingDto> waiting;
-    private Map<Long, String> chatroomIds;
-    private Map<Long, Member> partners;
-    private Map<String, ScheduledExecutorService> schedulers;
-    private Map<String, Integer> chatRoomNoticeCount;
+    private Map<Long, Member> partners; // memberId : Member(매칭 상대)
+    private Map<String, ScheduledExecutorService> schedulers; // 채팅방 uuid : 스케줄러
+    private Map<String, Integer> chatRoomNoticeCount; // 채팅방 uuid : 정보 인덱스
 
     private ReentrantReadWriteLock lock;
     private Random random;
@@ -42,8 +41,7 @@ public class RandomService {
     @PostConstruct
     private void setUp() {
         this.waiting = new ArrayDeque<>(); // 순서 유지 필요
-        this.chatroomIds = new ConcurrentHashMap<>(); // 멀티 스레드 환경 고려
-        this.partners = new ConcurrentHashMap<>();
+        this.partners = new ConcurrentHashMap<>(); // 멀티 스레드 환경 고려
         this.schedulers = new ConcurrentHashMap<>();
         this.chatRoomNoticeCount = new ConcurrentHashMap<>();
         this.lock = new ReentrantReadWriteLock();
@@ -127,10 +125,7 @@ public class RandomService {
         waiting1.getDeferredResult().setResult(Map.of(CHATROOM, chatroomId));
         waiting2.getDeferredResult().setResult(Map.of(CHATROOM, chatroomId));
 
-        // 채팅방 및 연결 정보 저장
-        chatroomIds.put(waiting1.getMember().getMemberId(), chatroomId);
-        chatroomIds.put(waiting2.getMember().getMemberId(), chatroomId);
-
+        // 랜덤 매칭 정보 저장
         partners.put(waiting1.getMember().getMemberId(), waiting2.getMember());
         partners.put(waiting2.getMember().getMemberId(), waiting1.getMember());
 
@@ -140,7 +135,7 @@ public class RandomService {
     private void startScheduler(String chatroomId, Member member1, Member member2) {
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         schedulers.put(chatroomId, scheduler);
-        scheduler.scheduleAtFixedRate(() -> notice(chatroomId, member1, member2), 3, 1, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(() -> notice(chatroomId, member1, member2), 1, 1, TimeUnit.MINUTES);
     }
 
     private void notice(String chatroomId, Member member1, Member member2) {
@@ -181,10 +176,19 @@ public class RandomService {
 
     public ChattingRequestDto send(ChattingRequestDto request) {
         return ChattingRequestDto.builder()
-                .chatroomId(chatroomIds.get(request.getSenderId()))
+                .chatroomId(request.getChatroomId())
                 .content(request.getContent())
                 .senderId(request.getSenderId())
                 .messageType(request.getMessageType())
                 .build();
+    }
+
+    public void exit(ChattingRequestDto request) {
+        if (Objects.isNull(request)) return;
+
+        schedulers.remove(request.getChatroomId()); // 정보 공개 스케줄러 삭제
+        chatRoomNoticeCount.remove(request.getChatroomId()); // 정보 인덱스 삭제
+        Member partner = partners.remove(Long.parseLong(request.getSenderId())); // 회원 정보 삭제
+        partners.remove(partner.getMemberId()); // 매칭 상대 정보 삭제
     }
 }

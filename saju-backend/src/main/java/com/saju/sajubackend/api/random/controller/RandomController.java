@@ -42,4 +42,11 @@ public class RandomController {
         ChattingRequestDto chatting = randomService.send(request);
         messagingTemplate.convertAndSend("/topic/random/" + chatting.getChatroomId(), chatting);
     }
+
+    @MessageMapping("/random/leave")
+    public void exit(@Payload ChattingRequestDto request) {
+        randomService.exit(request);
+        messagingTemplate.convertAndSend("/topic/random/" + request.getChatroomId(),
+                Map.of("message", "상대방이 채팅을 종료했습니다.", "memberId", request.getSenderId()));
+    }
 }

@@ -1,5 +1,6 @@
 package com.saju.sajubackend.api.chat.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ChattingRequestDto {
 
+    @JsonProperty("chatRoomId")
     private String chatroomId;
 
     private String content;
