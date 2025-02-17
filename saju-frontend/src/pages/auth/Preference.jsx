@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TopBar2 from '../../components/TopBar2';
 import SelectionGrid from '../../components/SelectionGrid';
 import Dropdown from '../../components/Dropdown';
 import MainButton from '../../components/MainButton';
 import { provinces } from '../../data/provinceCode';
 import RangeSlider from '../../components/RangeSlider';
-import { usePost} from '../../hooks/useApi';
+import { useGet, usePost } from '../../hooks/useApi';
+import { max, min } from '@tensorflow/tfjs';
+
 
 function ErrorBubble({ children }) {
   return (
@@ -18,6 +20,27 @@ function ErrorBubble({ children }) {
 
 function Preference() {
   const navigate = useNavigate();
+
+  // const [formData, setFormData] = useState({
+  //   smoking: "",
+  //   drinking: "",
+  //   religion: [],
+  //   minHeight: 140,
+  //   maxHeight: 220,
+  //   minAge: 20,
+  //   maxAge: 40,
+  //   cityCode: [],
+  // });
+// 선호 정보 받아서 바꿈꿈
+  // const { data, isPending, error } = useGet("/api/match/filter");
+  // useEffect(() => {
+  //   if(data && data.smoking && data.drinking) {
+  //     setFormData(data);
+  //   }
+  // }
+
+  const mutation = usePut("/api/match/filter");
+
   const [formData, setFormData] = useState({
     smoking: '',
     drinking: '',
@@ -68,7 +91,7 @@ function Preference() {
 
   return (
     <div className="preference flex flex-col relative justify-center min-h-screen">
-      <TopBar2 mainText="내 선호대상 입력" />
+      <TopBar2 mainText="내 선호 정보보 입력" />
       <div className="preference-content p-5">
         <h3 className="input-prompt mb-2">선호하는 나이 범위를 선택해주세요</h3>
         <div className="input-group mb-6">

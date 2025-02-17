@@ -10,7 +10,7 @@ const Verify = () => {
     updateUser,
     updateMemberId,
     updateEmail,
-    updateIsCouple,
+    updateRelation,
     updateIsAuthenticated,
     logout,
   } = useAuth();
@@ -57,17 +57,17 @@ const Verify = () => {
       localStorage.setItem("relation", data.relation);
       
       updateUser(userData);
-      updateMemberId(data.member_id);
-      updateIsCouple(data.relation);
 
+      updateMemberId(data.memberId);
+      updateRelation(data.relation);
       updateIsAuthenticated(true);
 
-      if (data.isCouple === null) {
-        navigate("/auth/additionalSignUp");
+      if (data.relation === null) {
+        navigate("/auth/signup/additional");
         return;
       }
 
-      navigate(data.isCouple ? "/couple" : "/solo");
+      navigate(data.relation ? "/couple" : "/solo");
     }
   }, [
     data,
@@ -77,14 +77,46 @@ const Verify = () => {
     updateMemberId,
     updateEmail,
     updateIsAuthenticated,
-    updateIsCouple,
+    updateRelation,
     logout,
     code,
     updateUser,
   ]);
 
-
-  return null;
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100vh',
+      gap: '20px'
+    }}>
+      <div style={{
+        width: '40px',
+        height: '40px',
+        border: '4px solid #f3f3f3',
+        borderTop: '4px solid #3498db',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite',
+      }}/>
+      <p style={{
+        fontSize: '1.2rem',
+        color: '#666',
+        fontWeight: '500'
+      }}>
+        로그인 중입니다...
+      </p>
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
+    </div>
+  );
 };
 
 export default Verify;

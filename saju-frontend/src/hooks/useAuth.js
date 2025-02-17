@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   setMemberId,
-  setIsCouple,
+  setRelation,
   setIsAuthenticated,
   setUser,
   setEmail,
   resetAuth,
   selectMemberId,
-  selectIsCouple,
+  selectRelation,
   selectIsAuthenticated,
   selectUser,
   selectEmail,
@@ -16,12 +16,12 @@ import {
 export const useAuth = () => {
   const dispatch = useDispatch();
   const memberId = useSelector(selectMemberId);
-  const isCouple = useSelector(selectIsCouple);
+  const relation = useSelector(selectRelation);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const user = useSelector(selectUser);
   const email = useSelector(selectEmail);
   const updateMemberId = (newMemberId) => dispatch(setMemberId(newMemberId));
-  const updateIsCouple = (value) => dispatch(setIsCouple(value));
+  const updateRelation = (value) => dispatch(setRelation(value));
   const updateIsAuthenticated = (value) => dispatch(setIsAuthenticated(value));
   const updateUser = (userData) => dispatch(setUser(userData));
   const updateEmail = (newEmail) => dispatch(setEmail(newEmail));
@@ -30,12 +30,12 @@ export const useAuth = () => {
   
   return {
     memberId,
-    isCouple,
+    relation,
     isAuthenticated,
     user,
     email,
     updateMemberId,
-    updateIsCouple,
+    updateRelation,
     updateIsAuthenticated,
     updateUser,
     updateEmail,

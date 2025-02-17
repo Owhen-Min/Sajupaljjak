@@ -93,8 +93,9 @@ function SignUpPage() {
           localStorage.setItem("accessToken", token.accessToken);
           localStorage.setItem("refreshToken", token.refreshToken);
 
+          localStorage.setItem("memberId", data.member_id);
           //
-          localStorage.setItem("realtion" , data.relation);
+          localStorage.setItem("relation" , data.relation);
           //
 
           updateUser(userData);
@@ -672,10 +673,16 @@ function SignUpPage() {
     if (validateStep(step)) {
       setIsLoading(true);
       try {
-        setFormData((prev) => ({
-          ...prev,
-          age: formData.bday ? (new Date().getFullYear() - new Date(formData.bday).getFullYear()) : 0
-        }));
+        // age 계산을 직접 payload에 포함
+        const birthYear = new Date(formData.bday).getFullYear();
+        const currentYear = new Date().getFullYear();
+        const calculatedAge = currentYear - birthYear + 1;
+
+        const signupPayload = {
+          ...formData,
+          age: calculatedAge.toString() // 문자열로 변환
+        };
+
         // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
         if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
           const imageFile = await fetch(formData.profileImg)
@@ -703,13 +710,14 @@ function SignUpPage() {
           }
 
           const signupData = {
-            ...formData,
+            ...signupPayload,
             profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`
           };
-
+          console.log('signupData', signupData);
           submit('/api/auth/signup', signupData);
         } else {
-          submit('/api/auth/signup', formData);
+          console.log('formData', signupPayload);
+          submit('/api/auth/signup', signupPayload);
         }
       } catch (error) {
         window.alert('이미지 업로드 실패: ' + error.message);
