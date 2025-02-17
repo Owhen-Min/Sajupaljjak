@@ -132,8 +132,15 @@ function CoupleCode() {
           }
         }
       );
-      console.log(response);
-      navigate('/couple');
+      
+      // 응답의 status가 200일 때만 페이지 이동
+      if (response.status === 200) {
+        navigate('/couple');
+      } else if (response.status === 400) {
+        alert('올바르지 않은 코드입니다.');
+      } else {
+        alert('매칭 시도 중 오류가 발생했습니다.');
+      }
     } catch (error) {
       console.error('매칭 시도 실패:', error);
       if (error.response) {
