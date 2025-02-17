@@ -1,13 +1,12 @@
-
-import React  from 'react';
-import MessageList  from "../../components/MessageList";
+import React from "react";
+import MessageList from "../../components/MessageList";
 // import TopBarChat from "../../components/TopBarChat";
 import { useParams } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
-import {useState, useEffect} from 'react';
-import  useWebSocket from "../../hooks/useWebSocket";
+import { useState, useEffect } from "react";
+import useWebSocket from "../../hooks/useWebSocket";
 import { useAuth } from "../../hooks/useAuth";
-import { BackButtonChat } from '../../components/BackButtonChat';
+import { BackButtonChat } from "../../components/BackButtonChat";
 
 const Chat = () => {
   const chatRoomId = useParams().chatId;
@@ -27,7 +26,7 @@ const Chat = () => {
       const transformMessages = (messages, memberId) => {
         if (!messages) return [];
         return messages.map((message) => {
-          setPayload({ lastReadMessage: message.message });
+          setPayload((prev) => ({ ...prev, lastReadMessage: message.message }));
           return {
             id: message.id,
             message: message.message,
@@ -49,7 +48,7 @@ const Chat = () => {
   }, [data, chatRoomId, setMessages, memberId, user]);
 
   useEffect(() => {
-    if (stompClient) {
+    if (!stompClient || !stompClient.connected) {
       const subscription = stompClient.subscribe(
         `/topic/chat/${chatRoomId}`,
         (message) => {
@@ -71,7 +70,10 @@ const Chat = () => {
           };
           console.log("수신 메세지 :", newMessage);
           setMessages((prev) => [...prev, newMessage]);
-          setPayload({ lastReadMessage: responseData.content });
+          setPayload((prev) => ({
+            ...prev,
+            lastReadMessage: responseData.content,
+          }));
         }
       );
       return () => {
@@ -80,10 +82,8 @@ const Chat = () => {
     }
   }, [stompClient, chatRoomId, memberId, user, data.partner]);
 
-
-  
   const sendMessage = () => {
-    if (!stompClient) {
+    if (!stompClient || !stompClient.connected) {
       console.log("웹소켓 연결 안 된 상태");
       return;
     }
@@ -101,6 +101,37 @@ const Chat = () => {
 
   if (isPending) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
+
+  return (
+    <div className="">
+      <div className="">
+        {/* <TopBarChat mainText="상대방닉네임" /> */}
+
+        {/* 채팅방에서 뒤로가기 하면 patch 요청 되게하는 버튼 */}
+        <BackButtonChat url="chats" payload={payload} />
+
+        <MessageList messages={messages} />
+        <div className="fixed bottom-0">
+          <input
+            type="text"
+            value={input}
+            placeholder="메세지를 입력해주세요"
+            onChange={(e) => {
+              setInput(e.target.value);
+            }}
+            className="w-4/5"
+          />
+          <button className="" onClick={sendMessage}>
+            전송
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Chat;
+
 // const messages = [
 //   {
 //     id: 1,
@@ -139,35 +170,3 @@ const Chat = () => {
 //     nickName: "나",
 //   },
 // ];
-  return (
-    <div className="">
-      <div className="">
-        {/* <TopBarChat mainText="상대방닉네임" /> */}
-
-        {/* 채팅방에서 뒤로가기 하면 patch 요청 되게하는 버튼 */}
-        <BackButtonChat url="chats" payload={payload} />
-
-        <MessageList messages={messages} />
-        <div className="fixed bottom-0">
-          <input
-            type="text"
-            value={input}
-            placeholder="메세지를 입력해주세요"
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-            className="w-4/5"
-          />
-          <button className="" onClick={sendMessage}>
-            전송
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default Chat;
-
-
-	
