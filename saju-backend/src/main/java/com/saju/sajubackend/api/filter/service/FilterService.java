@@ -5,18 +5,24 @@ import com.saju.sajubackend.api.filter.domain.RegionFilter;
 import com.saju.sajubackend.api.filter.domain.ReligionFilter;
 import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
 import com.saju.sajubackend.api.filter.dto.MemberProfileResponse;
+import com.saju.sajubackend.api.filter.dto.UpdateProfileRequest;
 import com.saju.sajubackend.api.filter.repository.FilterRepository;
 import com.saju.sajubackend.api.filter.repository.RegionFilterRepository;
 import com.saju.sajubackend.api.filter.repository.ReligionFilterRepository;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
+import com.saju.sajubackend.common.enums.DrinkingFrequency;
+import com.saju.sajubackend.common.enums.Religion;
+import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.exception.BadRequestException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -77,5 +83,27 @@ public class FilterService {
         if (religions.isEmpty()) return;
 
         religionFilterRepository.saveAll(religions);
+    }
+
+    @Transactional
+    public void updateMemberProfile(Long memberId, UpdateProfileRequest request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
+        member.updateNickname(request.getNickname());
+        member.updateIntro(request.getIntro());
+
+        // 🔹 Enum 변환 로직 간소화
+        if (request.getReligion() != null) {
+            member.updateReligion(Religion.fromLabel(request.getReligion()));
+        }
+        if (request.getSmoking() != null) {
+            member.updateSmoking(SmokingStatus.fromLabel(request.getSmoking()));
+        }
+        if (request.getDrinking() != null) {
+            member.updateDrinking(DrinkingFrequency.fromLabel(request.getDrinking()));
+        }
+
+        member.updateHeight(request.getHeight());
+        member.updateCityCode(request.getCityCode());
     }
 }
