@@ -1,15 +1,21 @@
 import { useEffect, useState } from "react";
 import { Client } from "@stomp/stompjs";
+import { useAuth } from "./useAuth";
 
 const useWebSocket = () => {
   const [stompClient, setStompClient] = useState(null);
+   const { accessToken } = useAuth();
 
   useEffect(() => {
+    if (!accessToken) return;
     //웹소켓 연결
     const client = new Client({
       // brokerURL: "wss://i12a408.p.ssafy.io/ws",
       webSocketFactory: () => new WebSocket("wss://i12a408.p.ssafy.io/ws"),
       reconnectDelay: 5000,
+      connectHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+      },
       onConnect: () => {
         console.log("웹소켓 연결 111");
       },
