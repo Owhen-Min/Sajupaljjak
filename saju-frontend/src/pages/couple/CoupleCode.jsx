@@ -16,7 +16,7 @@ function CoupleCode() {
   const [inputCode, setInputCode] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
 
-  const { data, isLoading, error } = useGet('/api/inviting/');
+  const { data, isLoading, error } = useGet('/api/inviting');
   const { mutate: createCoupleCode } = usePost();
   const { refetch: checkConfirm } = useGet('/api/inviting/confirm');
   
@@ -125,14 +125,14 @@ function CoupleCode() {
     try {
       const response = await createCoupleCode(
         {
-          uri: '/api/inviting/',
+          uri: '/api/inviting',
           payload: {
             invitingCode: inputCode.replace(/\s/g, ''),
             startDate: selectedDate
           }
         }
       );
-      
+      console.log("응답: ", response);
       // 응답의 status가 200일 때만 페이지 이동
       if (response.status === 200) {
         navigate('/couple');
