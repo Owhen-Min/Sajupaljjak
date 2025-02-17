@@ -48,41 +48,47 @@ const Chat = () => {
   }, [data, chatRoomId, setMessages, memberId, user]);
 
   useEffect(() => {
-    if (!stompClient || !stompClient.connected) {
-      const subscription = stompClient.subscribe(
-        `/topic/chat/${chatRoomId}`,
-        (message) => {
-          const responseData = JSON.parse(message.body);
-          console.log("수신 데이터 :", responseData);
-          const newMessage = {
-            id: responseData.id,
-            message: responseData.content,
-            sentAt: responseData.sentAt,
-            isMine: responseData.senderId === memberId,
-            profileImage:
-              responseData.senderId === memberId
-                ? user.profileImage
-                : data.partner.profileImage,
-            nickName:
-              responseData.senderId === memberId
-                ? user.nickName
-                : data.partner.nickName,
-          };
-          console.log("수신 메세지 :", newMessage);
-          setMessages((prev) => [...prev, newMessage]);
-          setPayload((prev) => ({
-            ...prev,
-            lastReadMessage: responseData.content,
-          }));
-        }
-      );
-      return () => {
-        subscription.unsubscribe();
-      };
-    }
-  }, [stompClient, chatRoomId, memberId, user, data.partner]);
+    if (!stompClient || !stompClient.connected) return;
+    console.log("채팅방 구독 시작작");
+
+    const subscription = stompClient.subscribe(
+      `/topic/chat/${chatRoomId}`,
+      (message) => {
+        const responseData = JSON.parse(message.body);
+        console.log("수신 데이터 :", responseData);
+
+        const newMessage = {
+          id: responseData.id,
+          message: responseData.content,
+          sentAt: responseData.sentAt,
+          isMine: responseData.senderId === memberId,
+          profileImage:
+            responseData.senderId === memberId
+              ? user?.profileImage
+              : data?.partner?.profileImage || "",
+          nickName:
+            responseData.senderId === memberId
+              ? user?.nickName
+              : data?.partner?.nickName || "",
+        };
+
+        console.log("수신 메세지 :", newMessage);
+        setMessages((prev) => [...prev, newMessage]);
+        setPayload((prev) => ({
+          ...prev,
+          lastReadMessage: responseData.content,
+        }));
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+      console.log(" 채팅방 구독 취소");
+    };
+  }, [stompClient?.connected, chatRoomId, memberId, user, data?.partner]);
 
   const sendMessage = () => {
+
     if (!stompClient || !stompClient.connected) {
       console.log("웹소켓 연결 안 된 상태");
       return;
