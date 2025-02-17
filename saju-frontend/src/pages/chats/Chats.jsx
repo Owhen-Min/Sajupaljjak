@@ -11,8 +11,10 @@ function Chats() {
   const memberId = useAuth().memberId;
 
   useEffect(() => {
-    if (!stompClient || !stompClient.connected) {
-      const subscription = stompClient.subscribe(
+    if (!stompClient || !stompClient.connected) return;
+
+    console.log("채팅목록 구독 시작작")
+    const subscription = stompClient.subscribe(
         `/topic/list/${memberId}`,
         (message) => {
           const responseData = JSON.parse(message.body);
@@ -33,11 +35,13 @@ function Chats() {
           setData((prev) => [...prev, newData]);
         }
       );
+
       return () => {
         subscription.unsubscribe();
+        console.log("채팅목록 구독 해제");
       };
-    }
-  }, [stompClient, memberId]);
+
+  }, [stompClient?.connected, memberId]);
 
   return (
     <div className="flex flex-col h-screen relative py-[56.5px]">
