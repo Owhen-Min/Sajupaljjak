@@ -22,9 +22,9 @@ export const useGet = (uri, options = {}) => {
   });
 };
 
-export const usePost = () => {
+export const usePost = (uri) => {
   return useMutation({
-    mutationFn: async ({ uri, payload = {} }) => {
+    mutationFn: async ({ payload = {} }) => {
       console.log("POST Request Payload:", payload);
       const response = await apiClient.post(uri, payload);
       return response.data;
