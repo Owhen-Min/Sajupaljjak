@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import TopBar2 from "../../components/TopBar2";
 import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
-<<<<<<< HEAD
+
 import { usePost } from "../../hooks/useApi";
-=======
 import SajuUserBubble from "../../components/SajuUserBubble";
 import { IoArrowBack } from "react-icons/io5";
->>>>>>> refactor/#32-front-design
+
 
 // ErrorBubble 컴포넌트
 function ErrorBubble({ children }) {

@@ -5,14 +5,13 @@ import SajuGrid from "../../components/SajuGrid";
 import { useGet } from "../../hooks/useApi";
 
 const FortuneLife = () => {
-<<<<<<< HEAD
-  const { data, isPending, error } = useGet("/api/fortune/lifetime");
-  const { data:saju, isPending : isPendingSaju, error : errorSaju } = useGet("/api/fortune/info");
+  // const { data, isPending, error } = useGet("/api/fortune/lifetime");
+  // const { data:saju, isPending : isPendingSaju, error : errorSaju } = useGet("/api/fortune/info");
 
-  if (isPending) return <div>로딩중 ...</div>;
-  if (error) return <div>에러 : {error.message}</div>;
-  if (isPendingSaju) return <div>사주 로딩중 ...</div>;
-  if (errorSaju) return <div> 사주 에러 : {errorSaju.message}</div>;
+  // if (isPending) return <div>로딩중 ...</div>;
+  // if (error) return <div>에러 : {error.message}</div>;
+  // if (isPendingSaju) return <div>사주 로딩중 ...</div>;
+  // if (errorSaju) return <div> 사주 에러 : {errorSaju.message}</div>;
   // const data = {
   //   id: 12,
   //   siju: "해",
@@ -33,15 +32,7 @@ const FortuneLife = () => {
   //   time: "정미",
   
   // };
-=======
-  // const { data, isLoading, error } = useGet("/api/fortune/lifetime");
-  // const { saju, isLoadingSaju, errorSaju } = useGet("/api/fortune/info");
 
-  // if (isLoading) return <div>로딩중 ...</div>;
-  // if (error) return <div>에러 : {error.message}</div>;
-
-  // if (isLoadingSaju) return <div>사주 로딩중 ...</div>;
-  // if (errorSaju) return <div> 사주 에러 : {errorSaju.message}</div>;
   const data = {
     id: 12,
     siju: "해",
@@ -63,7 +54,6 @@ const FortuneLife = () => {
       time: "정미",
     },
   };
->>>>>>> refactor/#32-front-design
 
   return (
     <div className="fortune flex flex-col items-center relative mx-auto max-w-3xl pt-10 pb-5">
