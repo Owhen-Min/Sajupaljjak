@@ -163,11 +163,11 @@ public class RandomService {
 
     private List<Map<Object, Object>> getInfoList(Member member1, Member member2) {
         return List.of(
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "nickname", member1.getMemberId(), member1.getCelestialStem().getLabel(), member2.getMemberId(), member2.getCelestialStem().getLabel()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "age", member1.getMemberId(), member1.getAge(), member2.getMemberId(), member2.getAge()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "gender", member1.getMemberId(), member1.getGender().getLabel(), member2.getMemberId(), member2.getGender().getLabel()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "name", member1.getMemberId(), member1.getNickname(), member2.getMemberId(), member2.getNickname()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "profileImage", member1.getMemberId(), member1.getProfileImg(), member2.getMemberId(), member2.getProfileImg())
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "nickname", "member1Id", member1.getMemberId(), "member1Value", member1.getCelestialStem().getLabel(), "member2Id", member2.getMemberId(), "member2Value", member2.getCelestialStem().getLabel()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "age", "member1Id", member1.getMemberId(), "member1Value", member1.getAge(), "member2Id", member2.getMemberId(), "member2Value", member2.getAge()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "gender", "member1Id", member1.getMemberId(), "member1Value", member1.getGender().getLabel(), "member2Id", member2.getMemberId(), "member2Value", member2.getGender().getLabel()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "name", "member1Id", member1.getMemberId(), "member1Value", member1.getNickname(), "member2Id", member2.getMemberId(), "member2Value", member2.getNickname()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "profileImage", "member1Id", member1.getMemberId(), "member1Value", member1.getProfileImg(), "member2Id", member2.getMemberId(), "member2Value", member2.getProfileImg())
         );
     }
 
