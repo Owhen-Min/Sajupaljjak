@@ -10,13 +10,13 @@ public record PlaceResponseDto(
         String image,
         String description
 ) {
-    public static PlaceResponseDto fromEntity(Place place, String img) {
+    public static PlaceResponseDto fromEntity(Place place) {
         return new PlaceResponseDto(
                 place.getPlaceId(),
                 place.getName(),
                 place.getAddress(),
                 place.getElement().getLabel(),
-                img,
+                place.getImage(),
                 place.getDescription()
         );
     }

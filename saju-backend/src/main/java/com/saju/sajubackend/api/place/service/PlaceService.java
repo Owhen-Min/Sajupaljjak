@@ -1,7 +1,5 @@
 package com.saju.sajubackend.api.place.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saju.sajubackend.api.couple.domain.Couple;
 import com.saju.sajubackend.api.couple.repository.CoupleRepository;
 import com.saju.sajubackend.api.place.domain.Place;
@@ -12,19 +10,9 @@ import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
 import com.saju.sajubackend.common.util.ElementCalculator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,15 +22,6 @@ public class PlaceService {
 
     private final PlaceRepository placeRepository;
     private final CoupleRepository coupleRepository;
-
-    @Value("${tourapi.service-key}")
-    private String serviceKey;
-
-    @Value("${tourapi.url}")
-    private String tourApiUrl;
-
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final ObjectMapper mapper = new ObjectMapper();
 
     @Transactional(readOnly = true)
     public List<PlaceResponseDto> getPlaceList(LocalDate date, Long memberId) {
@@ -87,39 +66,7 @@ public class PlaceService {
                 .orElseGet(() -> placeRepository.findPlacesByElementOnly(lack.getCode()));
 
         return places.stream()
-                .map(place -> PlaceResponseDto.fromEntity(place, getImage(place.getName())))
+                .map(PlaceResponseDto::fromEntity)
                 .toList();
-    }
-
-    private String getImage(String keyword) {
-        long start = System.currentTimeMillis();
-        try {
-            String url = buildApiUrl(keyword);
-            URI uri = new URI(url.toString());
-
-            ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, HttpEntity.EMPTY, String.class);
-            String jsonResponse = responseEntity.getBody();
-            JsonNode root = mapper.readTree(jsonResponse);
-
-            JsonNode firstItem = root.path("response")
-                    .path("body")
-                    .path("items")
-                    .path("item")
-                    .get(0);
-
-            return firstItem.path("firstimage").asText();
-        } catch (IOException e) {
-            throw new RuntimeException("Error fetching image from API for keyword: " + keyword, e);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        } finally {
-            long end = System.currentTimeMillis();
-            System.out.println("Time taken: " + (end - start));
-        }
-    }
-
-    private String buildApiUrl(String keyword) {
-        String encodedKeyword = URLEncoder.encode(keyword, StandardCharsets.UTF_8);
-        return tourApiUrl + encodedKeyword + "&ServiceKey=" + serviceKey;
     }
 }

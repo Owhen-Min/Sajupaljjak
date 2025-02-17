@@ -34,13 +34,17 @@ public class Place {
     @Column(nullable = false)
     private Element element;
 
+    @Column(nullable = false)
+    private String image;
+
     @Builder
-    private Place(Long placeId, String name, String address, Long cityCode, String description, Element element) {
+    private Place(Long placeId, String name, String address, Long cityCode, String description, Element element, String image) {
         this.placeId = placeId;
         this.name = name;
         this.address = address;
         this.cityCode = cityCode;
         this.description = description;
         this.element = element;
+        this.image = image;
     }
 }
