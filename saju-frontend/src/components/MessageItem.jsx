@@ -2,35 +2,28 @@ import React from "react";
 
 const MessageItem = ({ message, sentAt, isMine, profileImage, nickName }) => {
   return (
-    <div className="p-2">
-      {!isMine ? (
-        // 상대가 보낸 메세지
-        <div>
-          <span className="text-xs"> {nickName} </span>
-          <div className="flex gap-2 chat chat-start">
-            <img
-              src={profileImage}
-              alt="사진"
-              className="w-10 h-10 rounded-full"
-            />
-            <span className="chat-bubble text-sm"> {message} </span>
-            <span className="text-xs text-gray-400"> {sentAt} </span>
-          </div>
+    <div className="px-2 font-NanumR text-sm">
+      {isMine ? (
+        <div className="flex gap-x-2 items-center chat chat-end">
+          <span className="text-xs text-gray-400">{sentAt}</span>
+          <span className="bg-[#fe787d] text-white flex items-center chat-bubble chat-bubble-warning text-sm">
+            {message}
+          </span>
         </div>
       ) : (
-        //  내가 보낸 메세지
-        <div className="flex gap-2 chat chat-end">
-          <span className="text-xs text-gray-400"> {sentAt} </span>
-          {/* <span className="text-xs"> {nickName} </span> */}
-          <span className="chat-bubble chat-bubble-warning text-sm">
-            {" "}
-            {message}{" "}
-          </span>
-          <img
-            src={profileImage}
-            alt="사진"
-            className="w-10 h-10 rounded-full"
-          />
+        <div>
+          {/* <span className="text-xs text-gray-400">{nickName}</span> */}
+          <div className="flex gap-2 items-center chat chat-start">
+            <img
+              src={profileImage}
+              alt="프로필"
+              className="w-8 h-8 rounded-full"
+            />
+            <span className="bg-[#eaeaea] text-black flex items-center chat-bubble text-sm">
+              {message}
+            </span>
+            <span className="text-xs text-gray-400">{sentAt}</span>
+          </div>
         </div>
       )}
     </div>

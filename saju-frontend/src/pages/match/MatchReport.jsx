@@ -1,72 +1,87 @@
-import { useParams } from "react-router-dom";
+// MatchReport.jsx
+import { useParams, useNavigate } from "react-router-dom";
 import BottomNav from "../../components/BottomNav";
 import BackButton from "../../components/BackButton";
 import SajuGrid from "../../components/SajuGrid";
 import Heart from "../../components/Heart";
-import { useGet, usePost } from "../../hooks/useApi";
-import { testUsers } from "../../data/user";
+import { usersDetail } from "../../data/usersDetail";
+import SajuAuthorBubble from "../../components/SajuAuthorBubble";
+import { useState } from "react";
 
 function MatchReport() {
   const { partnerId } = useParams();
-  const { mutate: requestMatch, isLoading } = usePost(null, {
-    onSuccess: (response) => {
-      const chatRoomId = response.chatRoomId;
-      navigate(`/chat/${chatRoomId}`);
-    },
-    onError: (error) => {
-      if (error.message === 'Network Error') {
-        console.error('CORS 또는 네트워크 에러:', error);
-        alert('서버 연결에 실패했습니다. CORS 설정을 확인해주세요.');
-      } else {
-        console.error('매칭 신청 실패:', error);
-        alert('매칭 신청에 실패했습니다.');
-      }
-    }
-  });
+  const navigate = useNavigate();
 
-  // const { data: user, isLoading, error } = useGet(`/api/match/${partnerId}`);
-  // if (isLoading) return <p>Loading...</p>;
-  // if (error) return <p>Error loading data.</p>;
-  const user = testUsers[0];
-  
+  // usersDetail 배열에서 id가 일치하는 유저를 찾음 (숫자와 string 비교를 위해 == 사용)
+  const user = usersDetail.find((u) => u.id == partnerId);
+
+  if (!user) {
+    return (
+      <div className="h-screen flex items-center justify-center font-NanumR">
+        <p>유저 정보를 찾을 수 없습니다.</p>
+      </div>
+    );
+  }
+
+  const [comments, setComments] = useState(user.comments || []);
+  const [comment, setComment] = useState("");
+
   const handleMatchRequest = () => {
-    requestMatch({
-      uri: `/api/chats/${partnerId}`,
-    });
+    // 매칭 요청 API 호출 로직 (예시)
+    alert("매칭 신청 완료!");
   };
 
   return (
-    <div className="flex flex-col relative items-end pb-[60px]">
-      <BackButton className="absolute top-8 left-5 z-10"/>
+    <div className="flex flex-col relative items-end pb-[60px] bg-gray-50 font-NanumR">
+      <BackButton
+        className="absolute top-8 left-5 z-10"
+        onClick={() => navigate(-1)}
+      />
       <div className="relative">
-        <img className="flex top-0 left-0 object-cover w-[400px] h-auto mb-[-20px]" src={user.profileImage} alt={`${user.name}님의 프로필 사진`} />
-        <button 
-          className="absolute bottom-6 border-2 border-gray-100 right-10 w-[40px] h-[40px] rounded-full bg-white shadow-md hover:scale-110 transition-all duration-300 flex items-center justify-center"
+        <img
+          className="object-cover w-full max-w-md mx-auto"
+          src={user.profileImage}
+          alt={`${user.nickname}님의 프로필 사진`}
+        />
+        {/* <button
+          className="absolute bottom-6 border border-gray-100 right-10 w-10 h-10 rounded-full bg-white shadow-md hover:scale-110 transition-all duration-300 flex items-center justify-center"
           onClick={handleMatchRequest}
-          disabled={isLoading}
         >
-          <img 
-            src="https://img.icons8.com/?size=100&id=12582&format=png&color=000000" 
-            alt="매칭 신청하기" 
-            className={`w-[25px] h-[25px] ${isLoading ? 'opacity-50' : ''}`}
+          <img
+            src="https://img.icons8.com/?size=100&id=12582&format=png&color=000000"
+            alt="매칭 신청하기"
+            className="w-6 h-6"
           />
-        </button>
+        </button> */}
       </div>
-      <div className="flex flex-col justify-between bg-white rounded-t-3xl px-5 pt-5 relative z-10">
+      <div className="flex flex-col justify-between bg-white rounded-t-3xl px-5 pt-5 relative z-10 w-full max-w-md mx-auto">
         <div className="flex justify-between items-center">
           <div className="flex flex-col gap-y-1">
-            <p><span className="mb-2 text-2xl font-semibold font-a">{user.nickname}, {user.age}</span></p>
-            <p className="text-gray-400">{user.region}</p>
-            <p className="text-gray-500">{user.introduction}</p>
+            <p className="text-2xl font-semibold">
+              {user.nickname}, {user.age}
+            </p>
+            <p className="text-gray-400 text-sm">{user.region}</p>
+            <p className="text-gray-500 text-sm">{user.introduction}</p>
           </div>
-          <Heart score = {user.score} size="large" />
+          <Heart score={user.score} size="large" />
         </div>
-        <SajuGrid saju={{year:user.year, month:user.month, day:user.day, time:user.time}} title={false}/>
-        <div className="flex flex-col gap-y-2">
-          <h3 className="text-lg font-semibold text-gray-800 mt-2">궁합 엿보기</h3>
-          <p className="text-gray-500">{user.harmony}</p>
+        <SajuGrid
+          saju={{
+            year: user.year,
+            month: user.month,
+            day: user.day,
+            time: user.time,
+          }}
+          title={false}
+        />
+        <div className="flex flex-col gap-y-2 mt-4">
+          <h3 className="text-lg font-semibold text-gray-800 mt-2">
+            궁합 엿보기
+          </h3>
+          <p className="text-gray-500 text-sm">{user.harmony}</p>
         </div>
       </div>
+      <button onClick={handleMatchRequest}>채팅하기 </button>
       <BottomNav />
     </div>
   );
