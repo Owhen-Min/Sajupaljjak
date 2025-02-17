@@ -3,6 +3,8 @@ package com.saju.sajubackend.api.chat.dto.response;
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
 import com.saju.sajubackend.api.chat.domain.LastMessage;
 import java.util.Objects;
+
+import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,6 +32,18 @@ public class LastMessageResponseDto {
         return LastMessageResponseDto.builder()
                 .lastMessage(message.getContent())
                 .lastSendTime(message.getLastMessageTime())
+                .newMessageCount(newMessageCount)
+                .build();
+    }
+
+    public static LastMessageResponseDto fromEntity(ChattingRequestDto message, Long newMessageCount) {
+        if (Objects.isNull(message)) {
+            return null;
+        }
+
+        return LastMessageResponseDto.builder()
+                .lastMessage(message.getContent())
+                .lastSendTime(message.getSendTime())
                 .newMessageCount(newMessageCount)
                 .build();
     }

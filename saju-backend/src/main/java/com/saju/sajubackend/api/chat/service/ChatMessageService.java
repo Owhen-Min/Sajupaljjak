@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.chat.service;
 
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
+import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.chat.repository.ChatMemberQueryDslRepository;
 import com.saju.sajubackend.api.chat.repository.ChatMessageRepository;
 import com.saju.sajubackend.common.exception.BaseException;
@@ -18,29 +19,29 @@ public class ChatMessageService {
     private final ChatMemberQueryDslRepository chatMemberQueryDslRepository;
     private final ChatMessageRepository chatMessageRepository;
 
-    public ChatMessage send(ChatMessage chatMessage) {
-        isValid(chatMessage);
-        ChatMessage validMessage = createChatMessage(chatMessage);
+    public ChattingRequestDto send(ChattingRequestDto request) {
+        isValid(request);
+        ChatMessage validMessage = createChatMessage(request);
         chatMessageRepository.save(validMessage);
-        return validMessage;
+        return ChattingRequestDto.fromEntity(validMessage);
     }
 
-    private void isValid(ChatMessage chatMessage) {
-        chatMessage.validateMessageType();
-        Long chatroomId = Long.parseLong(chatMessage.getChatroomId());
-        Long memberId = Long.parseLong(chatMessage.getSenderId());
+    private void isValid(ChattingRequestDto message) {
+        message.validateMessageType();
+        Long chatroomId = Long.parseLong(message.getChatroomId());
+        Long memberId = Long.parseLong(message.getSenderId());
 
         if (!chatMemberQueryDslRepository.existsByChatroomAndMember(chatroomId, memberId))
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
     }
 
-    private ChatMessage createChatMessage(ChatMessage chatMessage) {
+    private ChatMessage createChatMessage(ChattingRequestDto message) {
         return ChatMessage.builder()
-                .chatroomId(chatMessage.getChatroomId())
-                .content(chatMessage.getContent())
-                .senderId(chatMessage.getSenderId())
+                .chatroomId(message.getChatroomId())
+                .content(message.getContent())
+                .senderId(message.getSenderId())
                 .sendTime(LocalDateTime.now().toString()) // 생성 시간 설정
-                .messageType(chatMessage.getMessageType())
+                .messageType(message.getMessageType())
                 .build();
     }
 }

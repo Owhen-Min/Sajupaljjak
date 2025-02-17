@@ -38,9 +38,8 @@ public class RandomController {
     }
 
     @MessageMapping("/random")
-    public ChattingRequestDto sendMessage(@Payload ChattingRequestDto request) {
+    public void sendMessage(@Payload ChattingRequestDto request) {
         ChattingRequestDto chatting = randomService.send(request);
         messagingTemplate.convertAndSend("/topic/random/" + chatting.getChatroomId(), chatting);
-        return chatting;
     }
 }

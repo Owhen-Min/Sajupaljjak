@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.chat.controller;
 
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
+import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.service.ChatMessageService;
 import com.saju.sajubackend.api.chat.service.ChatroomService;
@@ -22,13 +23,13 @@ public class ChatMessageController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/chats")
-    public void sendMessage(@Payload ChatMessage chatMessage) {
+    public void sendMessage(@Payload ChattingRequestDto request) {
         // 채팅 메시지 전송
-        ChatMessage message = chatMessageService.send(chatMessage);
+        ChattingRequestDto message = chatMessageService.send(request);
         messagingTemplate.convertAndSend("/topic/" + message.getChatroomId(), message);
 
         // 채팅방 목록 갱신
-        ChatroomResponseDto chatroom = chatroomService.updateChatroom(chatMessage);
+        ChatroomResponseDto chatroom = chatroomService.updateChatroom(request);
         messagingTemplate.convertAndSend("/topic/list" + chatroom.getMemberId(), chatroom);
     }
 

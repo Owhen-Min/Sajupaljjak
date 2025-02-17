@@ -5,6 +5,7 @@ import com.saju.sajubackend.api.chat.domain.Chatroom;
 import com.saju.sajubackend.api.chat.domain.ChatroomMember;
 import com.saju.sajubackend.api.chat.domain.LastMessage;
 import com.saju.sajubackend.api.chat.dto.request.ChatroomLeaveRequestDto;
+import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
 import com.saju.sajubackend.api.chat.repository.ChatMessageRepository;
@@ -159,7 +160,7 @@ public class ChatroomService {
         return response;
     }
 
-    public ChatroomResponseDto updateChatroom(ChatMessage chatMessage) {
+    public ChatroomResponseDto updateChatroom(ChattingRequestDto chatMessage) {
         Member sender = findMember(Long.parseLong(chatMessage.getSenderId()));
         Long receiverId = chatroomQueryDslRepository.findOpponentMemberId(Long.parseLong(chatMessage.getChatroomId()), sender.getMemberId());
 

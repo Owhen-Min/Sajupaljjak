@@ -30,10 +30,4 @@ public class ChatMessage {
     private String sendTime;
 
     private String messageType;
-
-    public void validateMessageType() {
-        if (!MessageTypeValidator.isValidType(this.messageType)) {
-            throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_MESSAGE_CODE);
-        }
-    }
 }

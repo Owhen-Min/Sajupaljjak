@@ -1,8 +1,13 @@
 package com.saju.sajubackend.api.chat.dto.request;
 
+import com.saju.sajubackend.api.chat.domain.ChatMessage;
+import com.saju.sajubackend.common.exception.BaseException;
+import com.saju.sajubackend.common.exception.ErrorMessage;
+import com.saju.sajubackend.common.validator.MessageTypeValidator;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -31,5 +36,22 @@ public class ChattingRequestDto {
 
     private void timestamp() {
         this.sendTime = String.valueOf(LocalDateTime.now());
+    }
+
+    public void validateMessageType() {
+        if (!MessageTypeValidator.isValidType(this.messageType)) {
+            throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_MESSAGE_CODE);
+        }
+    }
+
+    public static ChattingRequestDto fromEntity(ChatMessage chatMessage) {
+        return ChattingRequestDto.builder()
+                .chatroomId(chatMessage.getChatroomId())
+                .content(chatMessage.getContent())
+                .senderId(chatMessage.getSenderId())
+                .messageType(chatMessage.getMessageType())
+                .sendTime(chatMessage.getSendTime())
+                .build();
+
     }
 }
