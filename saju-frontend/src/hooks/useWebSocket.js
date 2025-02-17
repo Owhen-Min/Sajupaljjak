@@ -10,6 +10,7 @@ const useWebSocket = () => {
     // if (!accessToken) return;
     //웹소켓 연결
     const accessToken = localStorage.getItem("accessToken");
+    console.log("accessToken", accessToken);
     const client = new Client({
       // brokerURL: "wss://i12a408.p.ssafy.io/ws",
       webSocketFactory: () => new WebSocket("wss://i12a408.p.ssafy.io/ws"),
