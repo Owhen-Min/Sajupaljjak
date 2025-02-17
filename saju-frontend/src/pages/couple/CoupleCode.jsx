@@ -17,7 +17,7 @@ function CoupleCode() {
   const [selectedDate, setSelectedDate] = useState('');
 
   const { data, isLoading, error } = useGet('/api/inviting');
-  const { mutate: createCoupleCode } = usePost('/api/inviting', {
+  const { mutate: createCoupleCode } = usePost({
     onSuccess: (response) => {
       console.log("응답: ", response);
       if (response.status === 200) {

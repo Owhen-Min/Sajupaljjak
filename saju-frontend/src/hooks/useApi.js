@@ -22,18 +22,27 @@ export const useGet = (uri, options = {}) => {
   });
 };
 
-export const usePost = (uri) => {
+export const usePost = (uri, options = {}) => {
   return useMutation({
-    mutationFn: async ({ payload = {} }) => {
+    mutationFn: async (params) => {
+      const requestUri = params.uri || uri;
+      const payload = params.payload || params;
+
+      if (!requestUri) {
+        throw new Error('URI is required');
+      }
+
       console.log("POST Request Payload:", payload);
-      const response = await apiClient.post(uri, payload);
+      const response = await apiClient.post(requestUri, payload);
       return response.data;
     },
     onSuccess: (data) => {
       console.log("POST Response Data:", data);
+      options.onSuccess?.(data);
     },
     onError: (error) => {
       console.error("POST Error:", error);
+      options.onError?.(error);
     },
   });
 };
