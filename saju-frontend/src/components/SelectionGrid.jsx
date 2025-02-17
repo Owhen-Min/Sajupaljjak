@@ -50,7 +50,7 @@ const SelectionGrid = ({
           <button
             className={`flex items-center justify-center py-3 px-4 border-2 rounded-lg cursor-pointer font-medium shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
               ${selectedItems.length === options.length 
-                ? 'bg-[#FF0000] text-white border-[#FF0000] hover:bg-[#e60000] hover:border-[#e60000]'
+                ? 'bg-[#FF7070] text-white border-[#FF7070] hover:bg-opacity-90'
                 : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
             onClick={handleSelectAll}
           >
@@ -62,7 +62,7 @@ const SelectionGrid = ({
               key={index}
               className={`flex items-center justify-center py-3 px-4 border-2 rounded-lg cursor-pointer font-medium shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
                 ${selectedItems.includes(index)
-                  ? 'bg-[#FF0000] text-white border-[#FF0000] hover:bg-[#e60000] hover:border-[#e60000]'
+                  ? 'bg-[#FF7070] text-white border-[#FF7070] hover:bg-opacity-90'
                   : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-50'}`}
               onClick={() => handleClick(index)}
             >

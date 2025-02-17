@@ -17,7 +17,7 @@ function MyPageEditCouple() {
   if (error) {
     navigate("/couple/code");
   }
-  const [meetDate, setMeetDate] = useState(data.startDate);
+  const [meetDate, setMeetDate] = useState('');
   const [daysCount, setDaysCount] = useState(0);
 
   const submit = (uri, payload) => {
@@ -37,14 +37,15 @@ function MyPageEditCouple() {
 
   useEffect(() => {
     // 만난 일수 계산
-    if (meetDate) {
+    if (data) {
+      setMeetDate(data.startDate);
       const start = new Date(meetDate);
       const today = new Date();
-      const diffTime = Math.abs(today - start);
+      const diffTime = Math.abs(today - start+1);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       setDaysCount(diffDays);
     }
-  }, []);
+  }, [data]);
 
   const handleSave = async () => {
     if (!meetDate) {
@@ -59,7 +60,7 @@ function MyPageEditCouple() {
       const start = new Date(meetDate);
       const today = new Date();
       const diffTime = Math.abs(today - start);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1);
       setDaysCount(diffDays);
 
       alert("성공적으로 수정되었습니다.");
@@ -71,7 +72,8 @@ function MyPageEditCouple() {
 
   const handleBreakUp = async () => {
     submit("/api/couple/breakup", { isBroken: true, startDate: '' });
-    alert("헤어지기 처리 완료");
+    alert("회원님의 앞으로의 행복을 기원합니다.");
+    navigate("/auth/signup/additional");
   };
 
   const handleDateChange = (e) => {
