@@ -8,25 +8,22 @@ import com.saju.sajubackend.api.chat.dto.request.ChatroomLeaveRequestDto;
 import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
-import com.saju.sajubackend.api.chat.repository.ChatMessageRepository;
-import com.saju.sajubackend.api.chat.repository.ChatroomMemberRespository;
-import com.saju.sajubackend.api.chat.repository.ChatroomQueryDslRepository;
-import com.saju.sajubackend.api.chat.repository.ChatroomRepository;
-import com.saju.sajubackend.api.chat.repository.LastMessageRepository;
+import com.saju.sajubackend.api.chat.repository.*;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -170,7 +167,7 @@ public class ChatroomService {
                         String.valueOf(receiverId))
                 .orElse(null);
 
-        String lastReadTime = (lastReadMessage != null)? lastReadMessage.getLastMessageTime(): "1970-01-01T00:00:00";
+        String lastReadTime = (lastReadMessage != null) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
 
         long newMessageCount = chatMessageRepository.countByChatroomIdAndSendTimeAfter(chatMessage.getChatroomId(), lastReadTime);
 

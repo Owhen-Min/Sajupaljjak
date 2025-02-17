@@ -20,7 +20,7 @@ public class ChatroomResponseDto {
 
     @Builder
     private ChatroomResponseDto(Long chatRoomId, Long memberId, ChatMemberResponseDto partner,
-                               LastMessageResponseDto message) {
+                                LastMessageResponseDto message) {
         this.chatRoomId = chatRoomId;
         this.memberId = memberId;
         this.partner = partner;

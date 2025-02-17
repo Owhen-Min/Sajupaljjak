@@ -2,11 +2,11 @@ package com.saju.sajubackend.api.chat.dto.response;
 
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
 import com.saju.sajubackend.api.chat.domain.LastMessage;
-import java.util.Objects;
-
 import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.Objects;
 
 @Getter
 public class LastMessageResponseDto {
