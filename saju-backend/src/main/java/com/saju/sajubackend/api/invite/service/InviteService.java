@@ -74,6 +74,4 @@ public class InviteService {
     public boolean confirmCouple(Long memberId) {
         return coupleRepository.existsByMemberId(memberId);
     }
-//200일때 ok 아래는 202
-
 }
