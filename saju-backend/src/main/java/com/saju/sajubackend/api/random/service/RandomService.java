@@ -2,8 +2,12 @@ package com.saju.sajubackend.api.random.service;
 
 import com.saju.sajubackend.api.chat.dto.WaitingDto;
 import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
+import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
+import com.saju.sajubackend.api.chat.service.ChatroomService;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
+import com.saju.sajubackend.api.random.domian.RandomLiked;
+import com.saju.sajubackend.api.random.repository.RandomLikedRepository;
 import com.saju.sajubackend.common.enums.MessageType;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
@@ -25,7 +29,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Service
 public class RandomService {
 
+    private final ChatroomService chatroomService;
+
     private final MemberRepository memberRepository;
+    private final RandomLikedRepository randomLikedRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
     private Deque<WaitingDto> waiting;
@@ -190,5 +197,19 @@ public class RandomService {
         chatRoomNoticeCount.remove(request.getChatroomId()); // 정보 인덱스 삭제
         Member partner = partners.remove(Long.parseLong(request.getSenderId())); // 회원 정보 삭제
         partners.remove(partner.getMemberId()); // 매칭 상대 정보 삭제
+    }
+
+    public CreateChatroomResponseDto liked(Long memberId, Long partnerId) {
+        // 상대도 liked인지 확인
+        if (randomLikedRepository.existsByMemberIdAndPartnerId(String.valueOf(memberId), String.valueOf(partnerId))) { // 서로 좋아요
+            return chatroomService.getChatroom(memberId, partnerId);
+        }
+
+        // liked 저장하기
+        randomLikedRepository.save(RandomLiked.builder()
+                .memberId(String.valueOf(memberId))
+                .partnerId(String.valueOf(partnerId))
+                .build());
+        return null;
     }
 }

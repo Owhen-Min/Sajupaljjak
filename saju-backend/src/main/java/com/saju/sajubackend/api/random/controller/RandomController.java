@@ -1,13 +1,16 @@
 package com.saju.sajubackend.api.random.controller;
 
 import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
+import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.random.service.RandomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -37,6 +40,13 @@ public class RandomController {
         return deferredResult;
     }
 
+    @PostMapping("/api/random/{partnerId}")
+    @ResponseBody
+    public ResponseEntity<CreateChatroomResponseDto> liked(@PathVariable Long partnerId,
+                                                           Long memberId) {
+        return ResponseEntity.ok().body(randomService.liked(memberId, partnerId));
+    }
+
     @MessageMapping("/random")
     public void sendMessage(@Payload ChattingRequestDto request) {
         ChattingRequestDto chatting = randomService.send(request);
@@ -47,6 +57,6 @@ public class RandomController {
     public void exit(@Payload ChattingRequestDto request) {
         randomService.exit(request);
         messagingTemplate.convertAndSend("/topic/random/" + request.getChatroomId(),
-                Map.of("message", "상대방이 채팅을 종료했습니다.", "memberId", request.getSenderId()));
+                Map.of("message", "상대방이 채팅을 종료했습니다."));
     }
 }
