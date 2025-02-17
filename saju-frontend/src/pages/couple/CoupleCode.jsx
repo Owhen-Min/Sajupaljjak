@@ -17,7 +17,35 @@ function CoupleCode() {
   const [selectedDate, setSelectedDate] = useState('');
 
   const { data, isLoading, error } = useGet('/api/inviting');
-  const { mutate: createCoupleCode } = usePost();
+  const { mutate: createCoupleCode } = usePost('/api/inviting', {
+    onSuccess: (response) => {
+      console.log("응답: ", response);
+      if (response.status === 200) {
+        navigate('/couple');
+      } else if (response.status === 400) {
+        alert('올바르지 않은 코드입니다.');
+      }
+    },
+    onError: (error) => {
+      console.error('매칭 시도 실패:', error);
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
+            break;
+          case 404:
+            alert('올바르지 않은 코드입니다.');
+            break;
+          default:
+            alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.data.message})`);
+        }
+      } else if (error.request) {
+        alert('서버로부터 응답을 받지 못했습니다. 다시 시도해주세요.');
+      } else {
+        alert('매칭 시도 중 오류가 발생했습니다.');
+      }
+    }
+  });
   const { refetch: checkConfirm } = useGet('/api/inviting/confirm');
   
 
@@ -122,47 +150,12 @@ function CoupleCode() {
       return;
     }
 
-    try {
-      const response = await createCoupleCode(
-        {
-          uri: '/api/inviting',
-          payload: {
-            invitingCode: inputCode.replace(/\s/g, ''),
-            startDate: selectedDate
-          }
-        }
-      );
-      console.log("응답: ", response);
-      // 응답의 status가 200일 때만 페이지 이동
-      if (response.status === 200) {
-        navigate('/couple');
-      } else if (response.status === 400) {
-        alert('올바르지 않은 코드입니다.');
-      } else {
-        alert(`매칭 시도 중 오류가 발생했습니다. ${response.data.message}`);
+    createCoupleCode({
+      payload: {
+        invitingCode: inputCode.replace(/\s/g, ''),
+        startDate: selectedDate
       }
-    } catch (error) {
-      console.error('매칭 시도 실패:', error);
-      if (error.response) {
-        // HTTP 에러 응답이 있는 경우
-        switch (error.response.status) {
-          case 400:
-            alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
-            break;
-          case 404:
-            alert('올바르지 않은 코드입니다.');
-            break;
-          default:
-            alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.data.message})`);
-        }
-      } else if (error.request) {
-        // 요청은 보냈으나 응답을 받지 못한 경우
-        alert('서버로부터 응답을 받지 못했습니다. 다시 시도해주세요.');
-      } else {
-        // 요청 설정 중 에러가 발생한 경우
-        alert('매칭 시도 중 오류가 발생했습니다.');
-      }
-    }
+    });
   };
 
   // 상대방이 입력했습니다 버튼 핸들러
