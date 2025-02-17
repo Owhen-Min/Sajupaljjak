@@ -123,7 +123,7 @@ function CoupleCode() {
     }
 
     try {
-      createCoupleCode(
+      const response = await createCoupleCode(
         {
           uri: '/api/inviting/',
           payload: {
@@ -135,7 +135,11 @@ function CoupleCode() {
       navigate('/couple');
     } catch (error) {
       console.error('매칭 시도 실패:', error);
-      alert('매칭 시도 중 오류가 발생했습니다.');
+      if (error.response?.status === 404) {
+        alert('올바르지 않은 코드입니다.');
+      } else {
+        alert('매칭 시도 중 오류가 발생했습니다.');
+      }
     }
   };
 
