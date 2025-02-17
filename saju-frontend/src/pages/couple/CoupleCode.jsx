@@ -134,18 +134,18 @@ function CoupleCode() {
       );
       console.log("응답: ", response);
       // 응답의 status가 200일 때만 페이지 이동
-      if (response.status === 200) {
+      if (response.data.status === 200) {
         navigate('/couple');
-      } else if (response.status === 400) {
+      } else if (response.data.status === 400) {
         alert('올바르지 않은 코드입니다.');
       } else {
-        alert('매칭 시도 중 오류가 발생했습니다.');
+        alert(`매칭 시도 중 오류가 발생했습니다. ${response.data.message}`);
       }
     } catch (error) {
       console.error('매칭 시도 실패:', error);
       if (error.response) {
         // HTTP 에러 응답이 있는 경우
-        switch (error.response.status) {
+        switch (error.response.data.status) {
           case 400:
             alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
             break;
@@ -153,7 +153,7 @@ function CoupleCode() {
             alert('올바르지 않은 코드입니다.');
             break;
           default:
-            alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.status})`);
+            alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.data.message})`);
         }
       } else if (error.request) {
         // 요청은 보냈으나 응답을 받지 못한 경우
