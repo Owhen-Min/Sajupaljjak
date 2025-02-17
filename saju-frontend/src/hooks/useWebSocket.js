@@ -12,15 +12,15 @@ const useWebSocket = () => {
     console.log("웹소켓 연결 시도도");
     // if (!accessToken) return;
     //웹소켓 연결
-    // const accessToken = localStorage.getItem("accessToken");
-    // console.log("accessToken", accessToken);
+    const accessToken = localStorage.getItem("accessToken");
+    console.log("accessToken", accessToken);
     const client = new Client({
       brokerURL: "wss://i12a408.p.ssafy.io/ws",
       // webSocketFactory: () => new WebSocket("wss://i12a408.p.ssafy.io/ws"),
       reconnectDelay: 5000,
-      // connectHeaders: {
-      //   Authorization: `Bearer ${accessToken}`,
-      // },
+      connectHeaders: {
+        Authorization: `Bearer ${accessToken}`,
+      },
       onConnect: () => {
         console.log("웹소켓 연결 성공 111");
       },
