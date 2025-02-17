@@ -34,6 +34,10 @@ public enum CelestialStem {
     }
 
     public static CelestialStem fromLabel(String label) {
+        if (label == null || label.isBlank()) {
+            return null;
+        }
+
         for (CelestialStem stem : CelestialStem.values()) {
             if (stem.label.equals(label)) {
                 return stem;

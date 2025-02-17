@@ -18,14 +18,14 @@ public class RegionFilter {
     private Long regionFilterId;
 
     @Column(name = "city_code", nullable = false)
-    private Integer cityCode;
+    private Long cityCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "filter_id", nullable = false)
     private Filter filter;
 
     @Builder
-    private RegionFilter(Long regionFilterId, Integer cityCode, Filter filter) {
+    private RegionFilter(Long regionFilterId, Long cityCode, Filter filter) {
         this.regionFilterId = regionFilterId;
         this.cityCode = cityCode;
         this.filter = filter;

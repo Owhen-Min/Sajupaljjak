@@ -17,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +39,7 @@ public class InviteService {
     }
 
     @Transactional
-    public void createCouple(Long joinerId, String inviterCode, LocalDateTime startDate) {
+    public void createCouple(Long joinerId, String inviterCode, LocalDate startDate) {
         Long inviterId = inviteRedisUtil.findMemberIdByCode(inviterCode)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.INVITE_CODE_NOT_FOUND));
 

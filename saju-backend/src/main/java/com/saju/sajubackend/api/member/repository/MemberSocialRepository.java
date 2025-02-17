@@ -15,4 +15,11 @@ public interface MemberSocialRepository extends JpaRepository<MemberSocial, Long
     Optional<Member> findMemberByEmail(@Param("email") String email);
 
     boolean existsByEmail(@Param("email") String email);
+
+    // ✅ MemberSocial을 조회하는 메서드 추가
+    Optional<MemberSocial> findByEmail(String email);
+
+    Optional<MemberSocial> findByMember(Member member);
+
+
 }
