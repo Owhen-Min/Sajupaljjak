@@ -129,6 +129,7 @@ public class AuthService {
         // 생년월일 파싱 및 시간 파싱
         LocalDate birthDate = LocalDate.parse(request.getBday());
         LocalDateTime birthDateTime = LocalDateTime.parse(request.getBday() + "T" + request.getBtime());
+        System.out.println("대체 몇시에 태어나셨어요뭐예요"+birthDateTime);
 
         //천간 계산
         String celestialStem = CelestialStemCalculator.calculateCelestialStem(birthDate);
@@ -146,7 +147,6 @@ public class AuthService {
                 .profileImg(request.getProfileImg())
                 .height(request.getHeight())
                 .cityCode(request.getCityCode())
-                .dongCode(request.getDongCode())
                 .smoking(SmokingStatus.fromLabel(request.getSmoking()))
                 .drinking(DrinkingFrequency.fromLabel(request.getDrinking()))
                 .religion(Religion.fromLabel(request.getReligion()))

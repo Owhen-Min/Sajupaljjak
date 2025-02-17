@@ -1,28 +1,20 @@
 package com.saju.sajubackend.api.filter.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
 import com.saju.sajubackend.api.filter.dto.MemberProfileResponse;
+import com.saju.sajubackend.api.filter.dto.SajuUpdateRequest;
 import com.saju.sajubackend.api.filter.dto.UpdateProfileRequest;
 import com.saju.sajubackend.api.filter.service.FilterService;
-import com.saju.sajubackend.api.member.domain.Member;
-import com.saju.sajubackend.api.member.repository.MemberRepository;
-import com.saju.sajubackend.common.enums.DrinkingFrequency;
-import com.saju.sajubackend.common.enums.Religion;
-import com.saju.sajubackend.common.enums.SmokingStatus;
-import com.saju.sajubackend.common.exception.BadRequestException;
-import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.jwt.JwtProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -74,14 +66,32 @@ public class FilterController {
 
         return userId;
     }
+
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateMemberProfile(
             HttpServletRequest request,
-            @RequestBody UpdateProfileRequest updateProfileRequest){
+            @RequestBody UpdateProfileRequest updateProfileRequest) {
 
         Long memberId = extractMemberIdFromToken(request);
         filterService.updateMemberProfile(memberId, updateProfileRequest);
 
         return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
+    }
+
+    @PutMapping
+    public void updateSaju(HttpServletRequest request, @RequestBody SajuUpdateRequest sajuUpdateRequest) {
+        // ✅ JWT 액세스 토큰에서 memberId 추출
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (token == null || !token.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("유효한 토큰이 필요합니다.");
+        }
+
+        String accessToken = token.substring(7); // "Bearer " 제거
+        long memberId = jwtProvider.getUserIdFromToken(accessToken); // JWT에서 사용자 ID 추출
+
+        log.info("🔑 [JWT에서 추출한 memberId]: {}", memberId);
+
+        // ✅ 서비스 호출 시 memberId 전달
+        filterService.updateSaju(memberId, sajuUpdateRequest);
     }
 }

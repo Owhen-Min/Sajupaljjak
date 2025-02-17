@@ -46,5 +46,15 @@ public class Saju {
         this.yearly = yearly;
         this.timely = timely;
     }
+
+    // 기존 Saju 정보 업데이트 메서드 추가
+    public void updateSaju(String daily, String monthly, String yearly, String timely) {
+        this.daily = daily;
+        this.monthly = monthly;
+        this.yearly = yearly;
+        this.timely = timely;
+    }
+
+
 }
 

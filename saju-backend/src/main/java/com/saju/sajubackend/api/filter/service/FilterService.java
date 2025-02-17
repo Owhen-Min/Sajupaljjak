@@ -1,10 +1,13 @@
 package com.saju.sajubackend.api.filter.service;
 
+import com.saju.sajubackend.api.auth.dto.LoginResponse;
+import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.filter.domain.RegionFilter;
 import com.saju.sajubackend.api.filter.domain.ReligionFilter;
 import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
 import com.saju.sajubackend.api.filter.dto.MemberProfileResponse;
+import com.saju.sajubackend.api.filter.dto.SajuUpdateRequest;
 import com.saju.sajubackend.api.filter.dto.UpdateProfileRequest;
 import com.saju.sajubackend.api.filter.repository.FilterRepository;
 import com.saju.sajubackend.api.filter.repository.RegionFilterRepository;
@@ -14,23 +17,30 @@ import com.saju.sajubackend.api.member.domain.MemberSocial;
 import com.saju.sajubackend.api.member.domain.QMemberSocial;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.member.repository.MemberSocialRepository;
-import com.saju.sajubackend.common.enums.DrinkingFrequency;
-import com.saju.sajubackend.common.enums.Religion;
-import com.saju.sajubackend.common.enums.SmokingStatus;
+import com.saju.sajubackend.api.saju.domain.Saju;
+import com.saju.sajubackend.api.saju.repository.SajuRepository;
+import com.saju.sajubackend.common.enums.*;
 import com.saju.sajubackend.common.exception.BadRequestException;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
+import com.saju.sajubackend.common.util.CelestialStemCalculator;
+import com.saju.sajubackend.common.util.FourPillarsCalculator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -41,6 +51,7 @@ public class FilterService {
     private final RegionFilterRepository regionFilterRepository;
     private final MemberRepository memberRepository;
     private final MemberSocialRepository memberSocialRepository;
+    private final SajuRepository sajuRepository;
 
     @Transactional
     public void createFilter(FilterSaveRequestDto request, Long memberId) {
@@ -121,4 +132,59 @@ public class FilterService {
         member.updateHeight(request.getHeight());
         member.updateCityCode(request.getCityCode());
     }
+
+    @Transactional
+    public void updateSaju(Long memberId, SajuUpdateRequest request) {
+        log.info("🔍 [updateSaju 요청] memberId: {}", memberId);
+
+        // ✅ 회원 조회 (수정 전 정보 확인)
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> {
+                    log.error("❌ [updateSaju 실패] memberId: {} 회원 정보를 찾을 수 없음", memberId);
+                    return new BaseException(HttpStatus.NOT_FOUND, ErrorMessage.MEMBER_NOT_FOUND);
+                });
+
+        // ✅ 기존 Saju 정보 조회 (수정 전 정보 확인)
+        Saju memberSaju = sajuRepository.findByMember(member)
+                .orElseThrow(() -> {
+                    log.error("❌ [updateSaju 실패] memberId: {} 회원의 사주 정보를 찾을 수 없음", memberId);
+                    return new BaseException(HttpStatus.NOT_FOUND, ErrorMessage.SAJU_NOT_FOUND);
+                });
+
+        // 🔹 수정 전 Saju 정보 로그 출력
+        log.info("🛑 [수정 전 Saju 정보] memberId: {} | 연주: {} | 월주: {} | 일주: {} | 시주: {}",
+                memberId, memberSaju.getYearly(), memberSaju.getMonthly(), memberSaju.getDaily(), memberSaju.getTimely());
+
+        // 생년월일 변환
+        LocalDate birthDate = LocalDate.parse(
+                String.format("%s-%s-%s", request.getBirthYear(), request.getBirthMonth(), request.getBirthDay())
+        );
+        LocalDateTime birthDateTime = LocalDateTime.parse(
+                String.format("%s-%s-%sT%s:%s",
+                        request.getBirthYear(), request.getBirthMonth(), request.getBirthDay(),
+                        request.getBirthHour(), request.getBirthMinute())
+        );
+
+        // 천간 계산 + 업데이트
+        String celestialStem = CelestialStemCalculator.calculateCelestialStem(birthDate);
+        member.updateCelestialStem(CelestialStem.fromLabel(celestialStem));
+
+        // 사주(연주, 월주, 일주, 시주) 계산
+        FourPillarsCalculator.FourPillars saju = FourPillarsCalculator.calculate(birthDateTime);
+
+        // ✅ 기존 Saju 정보 업데이트
+        memberSaju.updateSaju(saju.dayPillar, saju.monthPillar, saju.yearPillar, saju.hourPillar);
+
+        // 🔹 수정 후 Saju 정보 로그 출력
+        log.info("✅ [수정 후 Saju 정보] memberId: {} | 연주: {} | 월주: {} | 일주: {} | 시주: {}",
+                memberId, saju.yearPillar, saju.monthPillar, saju.dayPillar, saju.hourPillar);
+
+        // ✅ 변경된 정보 저장
+        sajuRepository.save(memberSaju);
+        memberRepository.save(member);
+    }
+
+
+
+
 }
