@@ -4,136 +4,129 @@ import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
+import { useParams } from "react-router-dom";
+import { useGet } from "../../hooks/useApi";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import  useWebSocket  from "../../hooks/useWebSocket";
 
 const Chat = () => {
-  const messages = [
-    {
-      id: 1,
-      message: "안녕하세요!",
-      sentAt: "10:30 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-    {
-      id: 2,
-      message: "안녕하세요! 반가워요 😊",
-      sentAt: "10:31 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-    {
-      id: 3,
-      message: "오늘 일정이 어떻게 되세요?",
-      sentAt: "10:32 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-    {
-      id: 4,
-      message: "점심 먹고 카페 가려고요!",
-      sentAt: "10:33 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-    {
-      id: 5,
-      message: "좋네요! 같이 가도 될까요?",
-      sentAt: "10:34 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-    {
-      id: 6,
-      message: "당연하죠! 몇 시쯤 만날까요?",
-      sentAt: "10:35 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-    {
-      id: 7,
-      message: "12시에 만나는 거 어때요?",
-      sentAt: "10:36 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-    {
-      id: 8,
-      message: "좋아요! 장소는 어디로 할까요?",
-      sentAt: "10:37 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-    {
-      id: 9,
-      message: "좋아요! 장소는 어디로 할까요?",
-      sentAt: "10:37 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-    {
-      id: 10,
-      message: "좋아요! 장소는 어디로 할까요?",
-      sentAt: "10:37 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-    {
-      id: 6,
-      message: "당연하죠! 몇 시쯤 만날까요?",
-      sentAt: "10:35 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-    {
-      id: 7,
-      message: "12시에 만나는 거 어때요?",
-      sentAt: "10:36 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-    {
-      id: 6,
-      message: "당연하죠! 몇 시쯤 만날까요?",
-      sentAt: "10:35 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-    {
-      id: 7,
-      message: "12시에 만나는 거 어때요?",
-      sentAt: "10:36 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-  ];
+  const chatRoomId = useParams().chatId;
+  const [input, setInput] = useState("");
+  const [newMessage, setNewMessage] = useState({});
+  const [messages, setMessages] = useState([{
+    id: 1,
+    message: "안녕하세요!",
+    sentAt: "10:30 AM",
+    isMine: false,
+    profileImage:
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    nickName: "상대방닉네임",
+  },
+  {
+    id: 2,
+    message: "안녕하세요! 반가워요 😊",
+    sentAt: "10:31 AM",
+    isMine: true,
+    profileImage:
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+    nickName: "나",
+  },
+]);
+  const [payload, setPayload] = useState({
+    chatroomId: chatRoomId,
+    lastReadMessage: "",
+  });
+  const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
+  const { stompClient } = useWebSocket();
+  const { memberId, user } = useAuth();
+  
+  useEffect(() => {
+    if (data) {
+      const transformMessages = (messages, memberId) => {
+        if (!messages) return [];
+        return messages.map((message) => {
+          setPayload((prev) => ({ ...prev, lastReadMessage: message.message }));
+          return {
+            id: message.id,
+            message: message.message,
+            sentAt: message.sentAt,
+            isMine: message.senderId === memberId,
+            profileImage:
+              message.senderId === memberId
+                ? user.profileImage
+                : data.partner.profileImage,
+            nickName:
+              message.senderId === memberId
+                ? user.nickName
+                : data.partner.nickName,
+          };
+        });
+      };
+      setMessages(transformMessages(data.messages, memberId));
+    }
+  }, [data, chatRoomId, setMessages, memberId, user]);
+
+  useEffect(() => {
+    if (!stompClient || !stompClient.connected) return;
+    console.log("채팅방 구독 시작작");
+
+    const subscription = stompClient.subscribe(
+      `/topic/chat/${chatRoomId}`,
+      (message) => {
+        const responseData = JSON.parse(message.body);
+        console.log("수신 데이터 :", responseData);
+
+        const newMessage = {
+          id: responseData.id,
+          message: responseData.content,
+          sentAt: responseData.sentAt,
+          isMine: responseData.senderId === memberId,
+          profileImage:
+            responseData.senderId === memberId
+              ? user?.profileImage
+              : data?.partner?.profileImage || "",
+          nickName:
+            responseData.senderId === memberId
+              ? user?.nickName
+              : data?.partner?.nickName || "",
+        };
+
+        console.log("수신 메세지 :", newMessage);
+        setMessages((prev) => [...prev, newMessage]);
+        setPayload((prev) => ({
+          ...prev,
+          lastReadMessage: responseData.content,
+        }));
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+      console.log(" 채팅방 구독 취소");
+    };
+  }, [stompClient?.connected, chatRoomId, memberId, user, data?.partner, stompClient]);
+
+  const sendMessage = () => {
+    if (!stompClient || !stompClient.connected) {
+      console.log("웹소켓 연결 안 된 상태");
+      return;
+    }
+    if (!input.trim()) return;
+    const message = {
+      chatroomId: chatRoomId,
+      senderId: memberId,
+      content: input,
+      messageType: "TEXT",
+    };
+    console.log("전송 데이터 :", JSON.stringify(message, null, 2));
+    stompClient.send("/app/chats", {}, JSON.stringify(message));
+    setInput("");
+  };
+
+  if (isPending) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
 
   return (
     <div className=" h-screen bg-gray-50 font-NanumR relative flex flex-col">
@@ -142,10 +135,16 @@ const Chat = () => {
       <div className="flex-1 pt-2 pb-2 overflow-y-auto">
         <MessageList messages={messages} />
       </div>
-      <BottomInput />
+      <BottomInput
+        input={input}
+        setInput={setInput}
+        sendMessage={sendMessage}
+      />
     </div>
   );
 };
+
+
 
 function Header() {
   const navigate = useNavigate();
@@ -163,17 +162,20 @@ function Header() {
   );
 }
 
-function BottomInput() {
+function BottomInput({ input, setInput, sendMessage }) {
   return (
     <div className="border-2 border-gray-300 rounded-md relative h-12 flex-shrink-0  text-white flex items-center justify-center">
       <Input
         type="text"
         placeholder="메시지 전송하기"
-        onChange={(e) => setSearchQuery(e.target.value)}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
         className="flex-1 p-3 py-2 border-none text-gray-800 focus:outline-none"
       />
       <MainButton
-        onClick={() => console.log(searchQuery)}
+        onClick={() => {
+          sendMessage();
+        }}
         className="p-2 text-base text-gray-800 border-2 border-gray-800 font-bold bg-white rounded-r-md"
       >
         전송
