@@ -98,7 +98,7 @@ public class Member extends BaseTimeEntity {
         this.height = height;
     }
 
-    public void updateCityCode(Integer cityCode) {
+    public void updateCityCode(Long cityCode) {
         this.cityCode = cityCode;
     }
 }

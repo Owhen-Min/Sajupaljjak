@@ -12,5 +12,5 @@ public class UpdateProfileRequest {
     private String smoking;
     private String drinking;
     private Integer height;
-    private Integer cityCode;
+    private Long cityCode;
 }
