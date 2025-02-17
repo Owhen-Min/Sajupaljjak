@@ -10,7 +10,7 @@ const Verify = () => {
     updateUser,
     updateMemberId,
     updateEmail,
-    updateIsCouple,
+    updateRelation,
     updateIsAuthenticated,
     logout,
   } = useAuth();
@@ -57,15 +57,15 @@ const Verify = () => {
       
       updateUser(userData);
       updateMemberId(data.memberId);
-      updateIsCouple(data.relation);
+      updateRelation(data.relation);
       updateIsAuthenticated(true);
 
-      if (data.isCouple === null) {
+      if (data.relation === null) {
         navigate("/auth/additionalSignUp");
         return;
       }
 
-      navigate(data.isCouple ? "/couple" : "/solo");
+      navigate(data.relation ? "/couple" : "/solo");
     }
   }, [
     data,
@@ -75,7 +75,7 @@ const Verify = () => {
     updateMemberId,
     updateEmail,
     updateIsAuthenticated,
-    updateIsCouple,
+    updateRelation,
     logout,
     code,
     updateUser,

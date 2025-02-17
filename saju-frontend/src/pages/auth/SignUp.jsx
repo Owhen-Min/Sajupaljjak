@@ -94,7 +94,7 @@ function SignUpPage() {
           localStorage.setItem("refreshToken", token.refreshToken);
 
           //
-          localStorage.setItem("realtion" , data.relation);
+          localStorage.setItem("relation" , data.relation);
           //
 
           updateUser(userData);
