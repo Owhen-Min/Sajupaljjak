@@ -782,17 +782,15 @@ function SignUpPage() {
     if (validateStep(step)) {
       setIsLoading(true);
       try {
-        // age 계산을 직접 payload에 포함
         const birthYear = new Date(formData.bday).getFullYear();
         const currentYear = new Date().getFullYear();
         const calculatedAge = currentYear - birthYear + 1;
 
         const signupPayload = {
           ...formData,
-          age: calculatedAge.toString() // 문자열로 변환
+          age: calculatedAge.toString()
         };
 
-        // 이미지 URL이 data:image 형식인 경우에만 이미지 업로드 진행
         if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
           const imageFile = await fetch(formData.profileImg)
             .then(res => res.blob())
@@ -818,18 +816,32 @@ function SignUpPage() {
             throw new Error('S3 파일 업로드 실패');
           }
 
-          const signupData = {
-            ...signupPayload,
-            profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`
-          };
-          console.log('signupData', signupData);
-          submit('/api/auth/signup', signupData);
+          await mutation.mutateAsync({
+            uri: '/api/auth/signup',
+            payload: {
+              ...signupPayload,
+              profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`
+            }
+          });
         } else {
-          console.log('formData', signupPayload);
-          submit('/api/auth/signup', signupPayload);
+          await mutation.mutateAsync({
+            uri: '/api/auth/signup',
+            payload: signupPayload
+          });
         }
+
+        const { token, ...userData } = mutation.data;
+        localStorage.setItem("accessToken", token.accessToken);
+        localStorage.setItem("refreshToken", token.refreshToken);
+        localStorage.setItem("memberId", userData.member_id);
+        localStorage.setItem("relation", userData.relation);
+        updateUser(userData);
+        setIsLoading(false);
+        navigate("/auth/welcome");
+
       } catch (error) {
-        window.alert('이미지 업로드 실패: ' + error.message);
+        console.error("회원가입 실패:", error);
+        window.alert('회원가입 실패: ' + error.message);
         setIsLoading(false);
       }
     }
