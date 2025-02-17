@@ -6,8 +6,7 @@ import Dropdown from '../../components/Dropdown';
 import MainButton from '../../components/MainButton';
 import { provinces } from '../../data/provinceCode';
 import RangeSlider from '../../components/RangeSlider';
-import { useGet, usePost } from '../../hooks/useApi';
-import { max, min } from '@tensorflow/tfjs';
+import { usePost } from '../../hooks/useApi';
 
 
 function ErrorBubble({ children }) {
@@ -20,27 +19,10 @@ function ErrorBubble({ children }) {
 
 function Preference() {
   const navigate = useNavigate();
-
-  // const [formData, setFormData] = useState({
-  //   smoking: "",
-  //   drinking: "",
-  //   religion: [],
-  //   minHeight: 140,
-  //   maxHeight: 220,
-  //   minAge: 20,
-  //   maxAge: 40,
-  //   cityCode: [],
-  // });
-// 선호 정보 받아서 바꿈꿈
-  // const { data, isPending, error } = useGet("/api/match/filter");
-  // useEffect(() => {
-  //   if(data && data.smoking && data.drinking) {
-  //     setFormData(data);
-  //   }
-  // }
-
-  // const mutation = usePut("/api/match/filter");
-
+  const { mutate: createPreference } = usePost('/api/match/filter');
+  
+  const religionOptions = ['무교', '개신교', '불교', '천주교', '기타'];
+  
   const [formData, setFormData] = useState({
     smokingFilter: null,
     drinkingFilter: null,
@@ -65,19 +47,19 @@ function Preference() {
       case 'religion':
         setFormData(prev => ({
           ...prev,
-          religionFilter: selected
+          religionFilter: selected.map(idx => religionOptions[idx])
         }));
         break;
       case 'drinking':
         setFormData(prev => ({
           ...prev,
-          drinkingFilter: selected[0]
+          drinkingFilter: selected
         }));
         break;
       case 'smoking':
         setFormData(prev => ({
           ...prev,
-          smokingFilter: selected[0]
+          smokingFilter: selected
         }));
         break;
       case 'ageRange':
@@ -120,11 +102,28 @@ function Preference() {
       return;
     }
 
-    // TODO: API 호출 로직 추가
-    console.log('제출된 데이터:', formData);
-    
-    // 성공 시 다음 페이지로 이동
-    // navigate('/next-page');
+    const requestData = {
+      smokingFilter: formData.smokingFilter,
+      drinkingFilter: formData.drinkingFilter,
+      minAge: formData.minAge,
+      maxAge: formData.maxAge,
+      minHeight: formData.minHeight,
+      maxHeight: formData.maxHeight,
+      regionFilter: formData.regionFilter,
+      religionFilter: formData.religionFilter
+    };
+
+    createPreference(requestData, {
+      onSuccess: (data) => {
+        console.log('선호도 설정 성공:', data);
+        navigate('/solo'); // 성공 시 메인 페이지로 이동
+      },
+      onError: (error) => {
+        console.log('선호도 설정 실패:', error);
+        window.alert('선호도 설정 실패:', error);
+        // 에러 처리 로직 추가 가능
+      }
+    });
   };
 
   return (
@@ -154,9 +153,9 @@ function Preference() {
         <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
-            options={['무교', '개신교', '불교', '천주교', '기타']}
+            options={religionOptions}
             onSelect={(selected) => handleSelectionChange('religion', selected)}
-            selected={formData.religionFilter}
+            selected={formData.religionFilter.map(value => religionOptions.indexOf(value))}
             showSelectAll={true}
             multiSelect={true}
           />
@@ -179,7 +178,7 @@ function Preference() {
         <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
-            options={['흡연', '비흡연', '금연중']}
+            options={['비흡연', '흡연', '금연 중']}
             onSelect={(selected) => handleSelectionChange('smoking', selected)}
             selected={formData.smokingFilter ? [formData.smokingFilter] : []}
           />
