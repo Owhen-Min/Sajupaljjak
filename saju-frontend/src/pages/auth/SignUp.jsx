@@ -1,29 +1,31 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import SelectionGrid from '../../components/SelectionGrid';
-import Dropdown from '../../components/Dropdown';
-import MainButton from '../../components/MainButton';
-import Input from '../../components/Input';
-import { provinces } from '../../data/provinceCode';
-import '../../styles/Signup.css';
-import { useAuth } from '../../hooks/useAuth';
-import { usePost } from '../../hooks/useApi';
-import * as blazeface from '@tensorflow-models/blazeface';
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import SelectionGrid from "../../components/SelectionGrid";
+import Dropdown from "../../components/Dropdown";
+import MainButton from "../../components/MainButton";
+import Input from "../../components/Input";
+import { provinces } from "../../data/provinceCode";
+import "../../styles/Signup.css";
+import { useAuth } from "../../hooks/useAuth";
+import { usePost } from "../../hooks/useApi";
+import * as blazeface from "@tensorflow-models/blazeface";
 
 function Header({ step, children }) {
   const getProgressWidth = () => {
-    if (step < 4) return 'w-1/3';
-    if (step < 9) return 'w-2/3';
-    return 'w-full';
+    if (step < 4) return "w-1/3";
+    if (step < 9) return "w-2/3";
+    return "w-full";
   };
 
   return (
-    <div className="flex flex-col p-5 border-b border-gray-200 bg-white bg-opacity-80 rounded-xl">
+    <div className="text-gray-700 text-md flex flex-col p-5 border-b border-gray-200 bg-white bg-opacity-80 rounded-xl">
       <div className="flex items-center relative mb-2.5 opacity-100">
         {children}
       </div>
       <div className="w-full h-0.5 bg-gray-200 relative opacity-100">
-        <div className={`absolute h-full bg-red-500 transition-all duration-300 ${getProgressWidth()}`} />
+        <div
+          className={`absolute h-full bg-[#ff7070] transition-all duration-300 ${getProgressWidth()}`}
+        />
       </div>
     </div>
   );
@@ -51,7 +53,7 @@ function SignUpPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [maxStep, setMaxStep] = useState(1);
-  const {email, updateUser, user, accessToken, updateAccessToken }  = useAuth();
+  const { email, updateUser, user, accessToken, updateAccessToken } = useAuth();
 
   const [formData, setFormData] = useState({
     email: email,
@@ -94,7 +96,7 @@ function SignUpPage() {
   const [nicknameStatus, setNicknameStatus] = useState({
     isChecking: false,
     isValid: false,
-    message: ''
+    message: "",
   });
 
   const submit = (uri, payload) => {
@@ -111,7 +113,7 @@ function SignUpPage() {
 
           localStorage.setItem("memberId", data.member_id);
           //
-          localStorage.setItem("relation" , data.relation);
+          localStorage.setItem("relation", data.relation);
           //
 
           updateUser(userData);
@@ -127,7 +129,7 @@ function SignUpPage() {
     );
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     const loadModel = async () => {
       const loadedModel = await blazeface.load();
       setModel(loadedModel);
@@ -201,46 +203,48 @@ function SignUpPage() {
       setNicknameStatus({
         isChecking: false,
         isValid: false,
-        message: ''
+        message: "",
       });
       return;
     }
-    
+
     const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,20}$/;
     if (!nicknameRegex.test(nickname)) {
       setNicknameStatus({
         isChecking: false,
         isValid: false,
-        message: '닉네임은 2-20자의 한글, 영문, 숫자만 사용 가능합니다'
+        message: "닉네임은 2-20자의 한글, 영문, 숫자만 사용 가능합니다",
       });
       return;
     }
-    
-    setNicknameStatus(prev => ({ ...prev, isChecking: true }));
-    
+
+    setNicknameStatus((prev) => ({ ...prev, isChecking: true }));
+
     try {
-      const response = await fetch(`/api/auth?nickname=${encodeURIComponent(nickname)}`);
+      const response = await fetch(
+        `/api/auth?nickname=${encodeURIComponent(nickname)}`
+      );
       const data = await response;
       console.log(data);
-      
+
       if (response.ok) {
         setNicknameStatus({
           isChecking: false,
           isValid: true,
-          message: data.message
+          message: data.message,
         });
       } else {
         setNicknameStatus({
           isChecking: false,
           isValid: false,
-          message: data.message
+          message: data.message,
         });
       }
     } catch (error) {
       setNicknameStatus({
         isChecking: false,
         isValid: false,
-        message: '닉네임 확인 중 오류가 발생했습니다'
+        message: "닉네임 확인 중 오류가 발생했습니다",
       });
     }
   }, []);
@@ -260,7 +264,7 @@ function SignUpPage() {
     setNicknameStatus({
       isChecking: false,
       isValid: false,
-      message: ''
+      message: "",
     });
     debouncedCheckNickname(value);
   };
@@ -346,17 +350,20 @@ function SignUpPage() {
 
   const renderStep = () => {
     return (
-      <div className="signup-step">
+      <div className="signup-step font-NanumR text-sm pt-8">
         {4 > step && step >= 1 && (
           <>
-            <h3 className="input-prompt mb-2">이름을 입력해 주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              이름
+            </h3>
             <div className="input-group mb-6">
-              <Input
+              <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="이름"
+                className="bg-gray-50 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
               />
               {errors.name && <ErrorBubble>이름을 입력해주세요</ErrorBubble>}
             </div>
@@ -364,8 +371,10 @@ function SignUpPage() {
         )}
         {4 > step && step >= 2 && (
           <>
-            <h3 className="input-prompt mb-2">성별을 입력해주세요</h3>
-            <div className="input-group mb-6">
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              성별
+            </h3>
+            <div className="font-NanumR input-group mb-6">
               <SelectionGrid
                 cols={2}
                 options={["남성", "여성"]}
@@ -384,13 +393,12 @@ function SignUpPage() {
         )}
         {4 > step && step >= 3 && (
           <>
-            <h3 className="input-prompt mb-2">
-              태어난 시간을 입력해주세요.
-              <br />
-              양력으로 입력해주세요.
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              태어난 시간(양력)
             </h3>
             <div className="flex items-center gap-2 mt-2">
-              <Input
+              <input
+                className="bg-gray-50 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
                 type="text"
                 name="bday"
                 value={formData.bday}
@@ -415,9 +423,8 @@ function SignUpPage() {
                 placeholder="2025-01-28"
                 maxLength="10"
                 style={{ flex: 2 }}
-                className="w-2/3"
               />
-              <Input
+              <input
                 type="text"
                 name="btime"
                 value={formData.btime}
@@ -441,7 +448,7 @@ function SignUpPage() {
                 maxLength="5"
                 style={{ flex: 1 }}
                 disabled={formData.birthTimeUnknown}
-                className="w-1/3"
+                className="bg-gray-50 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
               />
             </div>
             <div className="flex items-center gap-2 mt-2">
@@ -457,7 +464,7 @@ function SignUpPage() {
                 style={{ cursor: "pointer", fontSize: "14px" }}
                 className="text-gray-500"
               >
-                태어난 시간을 모릅니다
+                태어난 시간 모름
               </label>
             </div>
             {errors.bday && (
@@ -467,7 +474,9 @@ function SignUpPage() {
         )}
         {9 > step && step >= 4 && (
           <>
-            <h3 className="input-prompt mb-2">종교를 선택해주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              종교
+            </h3>
             <div className="input-group mb-6">
               <SelectionGrid
                 cols={3}
@@ -493,7 +502,9 @@ function SignUpPage() {
         )}
         {9 > step && step >= 5 && (
           <>
-            <h3 className="input-prompt mb-2">흡연 여부를 선택해주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              흡연 여부
+            </h3>
             <div className="input-group mb-6">
               <SelectionGrid
                 cols={3}
@@ -515,7 +526,9 @@ function SignUpPage() {
         )}
         {9 > step && step >= 6 && (
           <>
-            <h3 className="input-prompt mb-2">음주 여부를 선택해주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              음주 여부
+            </h3>
             <div className="input-group mb-6">
               <SelectionGrid
                 cols={2}
@@ -545,7 +558,9 @@ function SignUpPage() {
         )}
         {9 > step && step >= 7 && (
           <>
-            <h3 className="input-prompt mb-2">키를 입력해주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              키
+            </h3>
             <div className="input-group mb-6" style={{ position: "relative" }}>
               <div
                 style={{
@@ -564,7 +579,7 @@ function SignUpPage() {
                     setFormData((prev) => ({ ...prev, height: selected }));
                   }}
                   className={
-                    "w-30 h-10 text-center border border-gray-300 rounded-md cursor-pointer bg-white bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
+                    "text-black w-30 h-10 text-center border border-gray-200 shadow rounded-md cursor-pointer bg-gray-50 bg-[url('data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 9L0 0h12z' fill='%23FF0000'/%3E%3C/svg%3E')] bg-no-repeat bg-right-10-center pl-4 px-6"
                   }
                   onClick={(e) => {
                     setStep(8);
@@ -586,9 +601,11 @@ function SignUpPage() {
         )}
         {9 > step && step >= 8 && (
           <>
-            <h3 className="input-prompt mb-2">거주지를 선택해주세요</h3>
-            <div className="input-group mb-6">
-              <div className="flex flex-row gap-2.5 w-full">
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              거주지
+            </h3>
+            <div className="input-group">
+              <div className="flex flex-row gap-2.5 w-full text-black">
                 <Dropdown
                   name="cityCode"
                   value={
@@ -668,20 +685,24 @@ function SignUpPage() {
         )}
         {step >= 9 && (
           <>
-            <h3 className="input-prompt mb-2">닉네임을 입력해주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              닉네임
+            </h3>
             <div className="input-group mb-6">
               <div className="flex flex-col w-full">
                 <div className="relative">
-                  <Input
+                  <input
                     type="text"
                     name="nickname"
                     value={formData.nickname}
                     onChange={handleNicknameChange}
                     placeholder="닉네임"
                     className={`${
-                      nicknameStatus.message ? 
-                        nicknameStatus.isValid ? 'border-green-500' : 'border-red-500' 
-                        : ''
+                      nicknameStatus.message
+                        ? nicknameStatus.isValid
+                          ? "border-green-500 bg-gray-50 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
+                          : "border-red-500 bg-gray-50  border-2 shadow w-full py-3 p-2 text-base text-gray-500"
+                        : "bg-gray-50 border-gray-100 rounded-md border-2 shadow w-full py-3 p-2 text-base text-gray-500"
                     }`}
                   />
                   {nicknameStatus.isChecking && (
@@ -691,9 +712,11 @@ function SignUpPage() {
                   )}
                 </div>
                 {nicknameStatus.message && (
-                  <div className={`text-sm mt-1 ${
-                    nicknameStatus.isValid ? 'text-green-500' : 'text-red-500'
-                  }`}>
+                  <div
+                    className={`text-sm mt-1 ${
+                      nicknameStatus.isValid ? "text-green-500" : "text-red-500"
+                    }`}
+                  >
                     {nicknameStatus.message}
                   </div>
                 )}
@@ -706,7 +729,9 @@ function SignUpPage() {
         )}
         {step >= 10 && (
           <>
-            <h3 className="input-prompt mb-2">자기소개를 입력해주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              자기소개
+            </h3>
             <div className="input-group mb-6">
               <div className="flex flex-col w-full">
                 <textarea
@@ -718,7 +743,7 @@ function SignUpPage() {
                     setStep(Math.max(maxStep, 11));
                   }}
                   placeholder="자기소개를 입력해주세요"
-                  className="w-full h-32 p-3 border border-gray-300 rounded-md resize-none text-base"
+                  className=" text-gray-700 w-full h-32 p-3 border bg-gray-50 border-gray-200 shadow rounded-md resize-none text-base"
                   maxLength={500}
                 />
                 {errors.intro && (
@@ -730,7 +755,9 @@ function SignUpPage() {
         )}
         {step >= 11 && (
           <>
-            <h3 className="input-prompt mb-2">프로필 사진을 등록해주세요</h3>
+            <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+              프로필 사진
+            </h3>
             <div className="input-group mb-6">
               <div className="flex flex-col w-full items-center">
                 <input
@@ -756,7 +783,7 @@ function SignUpPage() {
                       <span className="text-black">사진 추가</span>
                     )}
                   </div>
-                  <span className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                  <span className="bg-[#ff7070] text-white px-4 py-2 rounded hover:bg-red-600">
                     사진 선택하기
                   </span>
                 </label>
@@ -789,40 +816,45 @@ function SignUpPage() {
 
         const signupPayload = {
           ...formData,
-          age: calculatedAge.toString()
+          age: calculatedAge.toString(),
         };
 
-        if (formData.profileImg && formData.profileImg.startsWith('data:image')) {
+        if (
+          formData.profileImg &&
+          formData.profileImg.startsWith("data:image")
+        ) {
           const imageFile = await fetch(formData.profileImg)
-            .then(res => res.blob())
-            .then(blob => {
-              const uniqueFileName = `profile_${Date.now()}_${Math.random().toString(36).substring(7)}.jpg`;
-              return new File([blob], uniqueFileName, { type: 'image/jpeg' });
+            .then((res) => res.blob())
+            .then((blob) => {
+              const uniqueFileName = `profile_${Date.now()}_${Math.random()
+                .toString(36)
+                .substring(7)}.jpg`;
+              return new File([blob], uniqueFileName, { type: "image/jpeg" });
             });
 
           const presignResponse = await mutation.mutateAsync({
-            uri: '/api/image',
-            payload: { filename: imageFile.name }
+            uri: "/api/image",
+            payload: { filename: imageFile.name },
           });
 
           const { presignedUrl, objectKey } = presignResponse;
 
           const uploadResponse = await fetch(presignedUrl, {
-            method: 'PUT',
-            headers: { 'Content-Type': imageFile.type },
+            method: "PUT",
+            headers: { "Content-Type": imageFile.type },
             body: imageFile,
           });
 
           if (!uploadResponse.ok) {
-            throw new Error('S3 파일 업로드 실패');
+            throw new Error("S3 파일 업로드 실패");
           }
 
           const signupResponse = await mutation.mutateAsync({
-            uri: '/api/auth/signup',
+            uri: "/api/auth/signup",
             payload: {
               ...signupPayload,
-              profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`
-            }
+              profileImg: `https://saju-bucket.s3.us-east-2.amazonaws.com/${objectKey}`,
+            },
           });
 
           console.log("회원가입 성공 응답 데이터:", signupResponse);
@@ -831,16 +863,15 @@ function SignUpPage() {
           localStorage.setItem("refreshToken", token.refreshToken);
           localStorage.setItem("memberId", userData.member_id);
           localStorage.setItem("relation", userData.relation);
-          
+
           updateUser(userData);
           console.log(user);
           setIsLoading(false);
           navigate("/auth/welcome");
-
-        } 
+        }
       } catch (error) {
         console.error("회원가입 실패:", error);
-        window.alert('회원가입 실패: ' + error.message);
+        window.alert("회원가입 실패: " + error.message);
         setIsLoading(false);
       }
     }
@@ -873,31 +904,31 @@ function SignUpPage() {
     setFormData((prev) => ({
       ...prev,
       birthTimeUnknown: isChecked,
-      btime: isChecked ? "00:00" : '',
+      btime: isChecked ? "00:00" : "",
     }));
   };
 
   const detectFace = async (imageUrl) => {
     if (!model) return false;
-    
+
     setIsFaceDetecting(true);
-    
+
     try {
       const img = new Image();
       img.src = imageUrl;
       await new Promise((resolve) => (img.onload = resolve));
-      
+
       const predictions = await model.estimateFaces(img, false);
       setFaceDetected(predictions.length > 0);
-      
+
       if (predictions.length === 0) {
-        alert('얼굴이 포함된 사진을 업로드해주세요.');
+        alert("얼굴이 포함된 사진을 업로드해주세요.");
         return false;
       }
-      
+
       return true;
     } catch (error) {
-      console.error('얼굴 감지 중 오류 발생:', error);
+      console.error("얼굴 감지 중 오류 발생:", error);
       return false;
     } finally {
       setIsFaceDetecting(false);
@@ -911,17 +942,17 @@ function SignUpPage() {
       reader.onload = async (e) => {
         const imageUrl = e.target.result;
         const hasFace = await detectFace(imageUrl);
-        
+
         if (hasFace) {
           const convertToWebP = (imageData) => {
             return new Promise((resolve) => {
               const img = new Image();
               img.onload = () => {
-                const canvas = document.createElement('canvas');
+                const canvas = document.createElement("canvas");
                 const maxSize = 1024;
                 let width = img.width;
                 let height = img.height;
-                
+
                 if (width > maxSize || height > maxSize) {
                   if (width > height) {
                     height = (height * maxSize) / width;
@@ -931,21 +962,21 @@ function SignUpPage() {
                     height = maxSize;
                   }
                 }
-                
+
                 canvas.width = width;
                 canvas.height = height;
-                
-                const ctx = canvas.getContext('2d');
+
+                const ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
-                
-                resolve(canvas.toDataURL('image/webp', 0.8));
+
+                resolve(canvas.toDataURL("image/webp", 0.8));
               };
               img.src = imageData;
             });
           };
 
           const webpDataUrl = await convertToWebP(imageUrl);
-          
+
           setFormData((prev) => ({
             ...prev,
             profileImg: webpDataUrl,
@@ -956,7 +987,7 @@ function SignUpPage() {
           setFormData((prev) => ({
             ...prev,
             profileImg: null,
-          }));  
+          }));
         }
       };
       reader.readAsDataURL(file);
@@ -1022,29 +1053,29 @@ function SignUpPage() {
       {renderStep()}
       <div className="button-group">
         {(step === 3 || step === 8) && (
-          <MainButton
+          <button
             onClick={handleNextStep}
             disabled={step >= maxStep}
-            className="w-full py-3 mt-3"
+            className="w-full py-3 mt-3 bg-[#ff7070] text-white shadow rounded-md font-black font-NanumR"
           >
             다음
-          </MainButton>
+          </button>
         )}
         {step === 12 && (
-          <MainButton 
-            onClick={handleSubmit} 
-            className="w-full py-3"
+          <button
+            onClick={handleSubmit}
+            className="w-full py-3 bg-[#ff7070] text-white rounded-md shadow"
             disabled={isLoading}
           >
             {isLoading ? (
-              <div className="flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+              <div className=" flex items-center justify-center">
+                <div className="w-5 h-5 border-2  border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                 처리중...
               </div>
             ) : (
               "가입하기"
             )}
-          </MainButton>
+          </button>
         )}
       </div>
       {isLoading && (
