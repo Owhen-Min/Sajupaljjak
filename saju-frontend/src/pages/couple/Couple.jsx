@@ -21,7 +21,26 @@ function Couple() {
   } = useGet(`/api/couples`);
   const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
   const [badDates, setBadDates] = useState([]);
-  const [couple, setCouple] = useState("");
+  const [couple, setCouple] = useState({
+    coupleId: 1,
+    member: {
+      memberId: 1001,
+      nickname: "수정나무",
+      profileImage: "https://example.com/profile1.jpg",
+      region: 11010,
+      age: 29,
+      celestialStem: "기토",
+    },
+    partner: {
+      memberId: 1002,
+      nickname: "대장나무",
+      profileImage: "https://example.com/profile2.jpg",
+      region: 11020,
+      age: 29,
+      celestialStem: "계수",
+    },
+    startDate: "2023-05-15T14:30:00",
+  })
 
   const navigate = useNavigate();
   useEffect(() => {
