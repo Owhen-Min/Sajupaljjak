@@ -30,4 +30,8 @@ public class RegionFilter {
         this.cityCode = cityCode;
         this.filter = filter;
     }
+
+    public void updateCityCode(Long cityCode) {
+        this.cityCode = cityCode;
+    }
 }
