@@ -40,7 +40,7 @@ public class SajuService {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${openai.api-key}")
+//    @Value("${openai.api-key}")
     private String openAiApiKey;
     private static final String MODEL = "gpt-4o-mini";
 

@@ -4,6 +4,7 @@ import com.saju.sajubackend.api.matching.dto.*;
 import com.saju.sajubackend.api.matching.service.MatchingService;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.service.MemberService;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,35 +21,35 @@ public class MatchingController {
     private final MemberService memberService;
 
     @GetMapping("/top")
-    public ResponseEntity<List<MatchingMemberResponseDto>> getMatchingMembers(Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+    public ResponseEntity<List<MatchingMemberResponseDto>> getMatchingMembers(@CurrentMemberId Long currentMemberId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(matchingService.getMatchingMembers(memberId));
+                .body(matchingService.getMatchingMembers(currentMemberId));
     }
 
     @GetMapping
     public ResponseEntity<MemberListResponseDto> getMembers(@RequestParam(required = false) Integer cursor,
-                                                            Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+                                                            @CurrentMemberId Long currentMemberId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(matchingService.getMembers(memberId, cursor));
+                .body(matchingService.getMembers(currentMemberId, cursor));
     }
 
     @GetMapping("/{partnerId}")
     public ResponseEntity<MatchingProfileResponseDto> getMatchingProfile(
-            @PathVariable Long partnerId, Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+            @PathVariable Long partnerId, @CurrentMemberId Long currentMemberId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(matchingService.getMatchingMemberProfile(memberId, partnerId));
+                .body(matchingService.getMatchingMemberProfile(currentMemberId, partnerId));
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<MemberFilterResponse> getMemberFilter(Long memberId) {
-        Member member = memberService.getMember(memberId);
+    public ResponseEntity<MemberFilterResponse> getMemberFilter(@CurrentMemberId Long currentMemberId) {
+        Member member = memberService.getMember(currentMemberId);
         return ResponseEntity.ok(MemberFilterResponse.from(member));
     }
 
     @PutMapping("/filter")
-    public ResponseEntity<Void> updateMemberFilter(Long memberId,
+    public ResponseEntity<Void> updateMemberFilter(@CurrentMemberId Long currentMemberId,
                                                    @RequestBody MemberFilterRequest request) {
-        memberService.updateMemberFilter(memberId, request);
+        memberService.updateMemberFilter(currentMemberId, request);
         return ResponseEntity.ok().build();
     }
 }

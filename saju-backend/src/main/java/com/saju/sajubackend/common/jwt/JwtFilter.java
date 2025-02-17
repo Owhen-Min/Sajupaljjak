@@ -1,24 +1,22 @@
 package com.saju.sajubackend.common.jwt;
 
-import java.io.IOException;
-import java.util.List;
-
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class jwtFilter extends OncePerRequestFilter {
+public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
 
@@ -27,7 +25,9 @@ public class jwtFilter extends OncePerRequestFilter {
             "/api/auth/login/kakao",
             "/api/auth/signup",
             "/api/auth/access-token",
-            "/"
+            "/",
+            "/api/auth",
+            "/api/image"
     );
 
     @Override

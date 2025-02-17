@@ -5,8 +5,7 @@ import com.saju.sajubackend.api.filter.dto.MemberProfileResponse;
 import com.saju.sajubackend.api.filter.dto.SajuUpdateRequest;
 import com.saju.sajubackend.api.filter.dto.UpdateProfileRequest;
 import com.saju.sajubackend.api.filter.service.FilterService;
-import com.saju.sajubackend.common.jwt.JwtProvider;
-import jakarta.servlet.http.HttpServletRequest;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,57 +22,26 @@ import org.springframework.web.bind.annotation.*;
 public class FilterController {
 
     private final FilterService filterService;
-    private final JwtProvider jwtProvider;
-
 
     @PostMapping
     public ResponseEntity<Void> createFilter(@Valid @RequestBody FilterSaveRequestDto request,
-                                             Long memberId) { // todo : 토큰에서 memberId 꺼내기
-        filterService.createFilter(request, memberId);
+                                             @CurrentMemberId Long currentMemberId) {
+        filterService.createFilter(request, currentMemberId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping
-    public ResponseEntity<MemberProfileResponse> getMemberProfile(HttpServletRequest requestObj) {
-        Long memberId = extractMemberIdFromToken(requestObj);
-        MemberProfileResponse response = filterService.getMemberProfile(memberId);
+    public ResponseEntity<MemberProfileResponse> getMemberProfile(@CurrentMemberId Long currentMemberId) {
+        MemberProfileResponse response = filterService.getMemberProfile(currentMemberId);
         return ResponseEntity.ok(response);
-    }
-
-    private Long extractMemberIdFromToken(HttpServletRequest request) {
-        System.out.println("==== Request Headers ====");
-        request.getHeaderNames().asIterator()
-                .forEachRemaining(header -> System.out.println(header + ": " + request.getHeader(header)));
-
-        String token = request.getHeader("Authorization");
-        System.out.println("🔹 Received Token: " + token);
-
-        if (token != null && token.startsWith("Bearer ")) {
-            token = token.substring(7);
-            System.out.println("🔹 Extracted Token: " + token);
-        } else {
-            System.out.println("🚨 JWT 토큰이 요청에서 누락됨!");
-            throw new RuntimeException("JWT 토큰이 필요합니다.");
-        }
-
-        if (!jwtProvider.validateToken(token)) {
-            System.out.println("❌ 유효하지 않은 JWT 토큰: " + token);
-            throw new RuntimeException("유효하지 않은 JWT 토큰입니다.");
-        }
-
-        Long userId = jwtProvider.getUserIdFromToken(token);
-        System.out.println("✅ Extracted User ID from Token: " + userId);
-
-        return userId;
     }
 
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateMemberProfile(
-            HttpServletRequest request,
+            @CurrentMemberId Long currentMemberId,
             @RequestBody UpdateProfileRequest updateProfileRequest) {
 
-        Long memberId = extractMemberIdFromToken(request);
-        filterService.updateMemberProfile(memberId, updateProfileRequest);
+        filterService.updateMemberProfile(currentMemberId, updateProfileRequest);
 
         return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
     }

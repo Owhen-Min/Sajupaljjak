@@ -29,7 +29,6 @@ public class Member extends BaseTimeEntity {
     private LocalDateTime btime;
 
     @Convert(converter = RelationshipStatusConverter.class)
-    @Column(nullable = false)
     private RelationshipStatus relation;
 
     @Column(nullable = false, length = 30)
