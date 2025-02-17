@@ -132,12 +132,27 @@ function CoupleCode() {
           }
         }
       );
-      navigate('/couple');
+      console.log(response);
+      // navigate('/couple');
     } catch (error) {
       console.error('매칭 시도 실패:', error);
-      if (error.response?.status === 404) {
-        alert('올바르지 않은 코드입니다.');
+      if (error.response) {
+        // HTTP 에러 응답이 있는 경우
+        switch (error.response.status) {
+          case 400:
+            alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
+            break;
+          case 404:
+            alert('올바르지 않은 코드입니다.');
+            break;
+          default:
+            alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.status})`);
+        }
+      } else if (error.request) {
+        // 요청은 보냈으나 응답을 받지 못한 경우
+        alert('서버로부터 응답을 받지 못했습니다. 다시 시도해주세요.');
       } else {
+        // 요청 설정 중 에러가 발생한 경우
         alert('매칭 시도 중 오류가 발생했습니다.');
       }
     }
