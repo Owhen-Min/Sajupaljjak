@@ -31,9 +31,35 @@ function formatRelativeTime(dateString) {
 function CommunityView() {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const [article, setArticle] = useState(null);
+
+  const [article, setArticle] = useState({
+    articleId: "",
+    createdAt: "",
+    boardType: "",
+    celestialStem: "",
+    title: "",
+    content: "",
+    likeCount: 999,
+    commentCount: 999,
+    comments: [
+      {
+        commentId: 1,
+        createdAt: "2025-02-07 12:30:00",
+        celestialStem: "갑목",
+        content: "",
+      },
+      {
+        commentId: 2,
+        createdAt: "2025-02-07 13:45:00",
+        celestialStem: "임수",
+        content: "",
+      },
+    ],
+  });
+
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+
 
   // articleDetail.json에서 postId에 해당하는 게시글 데이터 찾기
   useEffect(() => {
@@ -53,6 +79,7 @@ function CommunityView() {
       </div>
     );
   }
+
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 font-NanumR">

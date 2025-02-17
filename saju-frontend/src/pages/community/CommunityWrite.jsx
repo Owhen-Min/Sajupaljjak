@@ -82,6 +82,7 @@ function CelestialStemDropdown({ selectedStem, setSelectedStem }) {
 function CommunityWrite() {
   const navigate = useNavigate();
   const [selectedStem, setSelectedStem] = useState("");
+  const mutation = usePost();
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -106,6 +107,17 @@ function CommunityWrite() {
 
   const handleSubmit = () => {
     if (!validateForm()) return;
+    mutation.mutate(
+      {
+        uri: `community`,
+        // uri: `community/${formData.celestialStem.charAt(1)}`,
+        payload: formData,
+      },
+      {
+        onSuccess: (data) => navigate(`/community/${data.boardId}`),
+        onError: (error) => console.error(error),
+      }
+    );
     console.log("게시글 작성:", formData);
     // API 호출 로직 추가 가능
   };
