@@ -133,7 +133,7 @@ function CoupleCode() {
         }
       );
       console.log(response);
-      // navigate('/couple');
+      navigate('/couple');
     } catch (error) {
       console.error('매칭 시도 실패:', error);
       if (error.response) {
