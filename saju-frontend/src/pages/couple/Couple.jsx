@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
 import { useEffect } from "react";
-import LoadingSpinner from "../../components/LoadingSpinner";
+// import LoadingSpinner from "../../components/LoadingSpinner";
 
 function Couple() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
@@ -40,7 +40,7 @@ function Couple() {
   if (isPending)
     return (
       <div>
-        <LoadingSpinner />
+        {/* <LoadingSpinner /> */}로딩중
       </div>
     );
   if (error) return <div>{error}</div>;
