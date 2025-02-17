@@ -40,7 +40,10 @@ public enum ErrorMessage {
     // couple
     COUPLE_NOT_FOUND("존재하지 않는 커플입니다."),
     INVITE_CODE_NOT_FOUND("유효하지 않은 초대 코드입니다"),
-    INVALID_GENDER_COMBINATION("유효하지 않은 성별 조합입니다");
+    INVALID_GENDER_COMBINATION("유효하지 않은 성별 조합입니다"),
+
+    // chat
+    INVALID_CHAT_ROOM("유효하지 않은 채팅방입니다.");
 
     private final String message;
 }
