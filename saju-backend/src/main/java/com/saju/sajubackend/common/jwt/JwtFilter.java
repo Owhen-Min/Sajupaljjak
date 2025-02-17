@@ -26,7 +26,8 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/auth/signup",
             "/api/auth/access-token",
             "/",
-            "/api/auth"
+            "/api/auth",
+            "/api/image"
     );
 
     @Override
