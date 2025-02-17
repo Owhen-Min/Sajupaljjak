@@ -25,7 +25,9 @@ public class JwtFilter extends OncePerRequestFilter {
             "/api/auth/login/kakao",
             "/api/auth/signup",
             "/api/auth/access-token",
-            "/"
+            "/",
+            "/api/auth",
+            "/api/image"
     );
 
     @Override

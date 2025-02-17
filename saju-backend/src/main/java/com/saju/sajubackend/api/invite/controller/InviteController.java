@@ -18,18 +18,19 @@ import java.util.Map;
 public class InviteController {
     private final InviteService inviteService;
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<InviteCreateResponseDto> createInviteCode(@CurrentMemberId Long currentMemberId) {
         return ResponseEntity.ok(inviteService.createInviteCode(currentMemberId));
     }
 
-    @PostMapping("/")
-    public ResponseEntity<Void> createCouple(
+    @PostMapping()
+    public ResponseEntity<Object> createCouple(
             @RequestBody CoupleCreateRequestDto request,
             @CurrentMemberId Long currentMemberId) {
 
         inviteService.createCouple(currentMemberId, request.invitingCode(), request.startDate());
-        return ResponseEntity.ok().build();
+        Map<String, Object> response = Map.of("message", "커플이 정상적으로 등록되었습니다.", "status", HttpStatus.CREATED.value());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // @GetMapping("/confirm")
