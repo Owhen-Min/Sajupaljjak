@@ -18,12 +18,12 @@ import java.util.Map;
 public class InviteController {
     private final InviteService inviteService;
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<InviteCreateResponseDto> createInviteCode(@CurrentMemberId Long currentMemberId) {
         return ResponseEntity.ok(inviteService.createInviteCode(currentMemberId));
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public ResponseEntity<Void> createCouple(
             @RequestBody CoupleCreateRequestDto request,
             @CurrentMemberId Long currentMemberId) {
