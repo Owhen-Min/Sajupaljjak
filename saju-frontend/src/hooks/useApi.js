@@ -29,6 +29,12 @@ export const usePost = () => {
       const response = await apiClient.post(uri, payload);
       return response.data;
     },
+    onSuccess: (data) => {
+      console.log("POST Response Data:", data);
+    },
+    onError: (error) => {
+      console.error("POST Error:", error);
+    },
   });
 };
 
@@ -63,13 +69,18 @@ export const useDelete = () => {
   });
 };
 
-
 export const usePatch = () => {
   return useMutation({
-    mutationFn: async ({ uri, payload = {}}) => {
+    mutationFn: async ({ uri, payload = {} }) => {
       console.log("PATCH Request Payload:", payload);
       const response = await apiClient.patch(uri, payload);
       return response.data;
+    },
+    onSuccess: (data) => {
+      console.log("PATCH Response Data:", data);
+    },
+    onError: (error) => {
+      console.error("PATCH Error:", error);
     },
   });
 };
