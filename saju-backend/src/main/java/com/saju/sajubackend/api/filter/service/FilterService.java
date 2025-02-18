@@ -11,6 +11,7 @@ import com.saju.sajubackend.api.filter.repository.ReligionFilterRepository;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.common.enums.DrinkingFrequency;
+import com.saju.sajubackend.common.enums.RelationshipStatus;
 import com.saju.sajubackend.common.enums.Religion;
 import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.exception.BadRequestException;
@@ -41,6 +42,8 @@ public class FilterService {
 
         saveRegionFilters(request.regionFilter(), filter);
         saveReligionFilters(request.toReligionFilters(filter));
+
+        member.updateRelationship(RelationshipStatus.SOLO);
     }
 
     public FilterResponseDto getFilter(Long memberId) {
