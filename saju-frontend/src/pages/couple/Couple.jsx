@@ -22,6 +22,8 @@ function Couple() {
     error: coupleError,
   } = useGet(`/api/couples`);
 
+  console.log(coupleData);
+
   const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
   const [badDates, setBadDates] = useState([]);
   const [couple, setCouple] = useState({
@@ -47,12 +49,12 @@ function Couple() {
   })
 
   const navigate = useNavigate();
-  useEffect(() => {
-    if (data) {
-      setGoodDates(data.goodDates);
-      setBadDates(data.badDates);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     setGoodDates(data.goodDates);
+  //     setBadDates(data.badDates);
+  //   }
+  // }, [data]);
   useEffect(() => {
     if (coupleData) {
       const { coupleId, ...filteredData } = coupleData;
