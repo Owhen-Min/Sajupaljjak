@@ -20,6 +20,7 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
 
     public ChattingRequestDto send(ChattingRequestDto request) {
+        System.out.println("[👍메시지 전송 요청 - ChatMessageService]");
         isValid(request);
         ChatMessage validMessage = createChatMessage(request);
         chatMessageRepository.save(validMessage);
