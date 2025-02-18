@@ -36,13 +36,14 @@ const Chat = () => {
   ]);
 
   const [payload, setPayload] = useState({
-    chatroomId: localStorage.getItem("memberId"),
+    chatroomId: chatRoomId,
     lastReadMessage: "",
   });
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
-  const { memberId, user } = useAuth();
+  const memberId = localStorage.getItem("memberId");
+  const { user } = useAuth();
   
   useEffect(() => {
     if (data) {
