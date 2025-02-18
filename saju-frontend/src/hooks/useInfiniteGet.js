@@ -1,18 +1,21 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import apiClient from "../api/apiClient";
 
-export const useInfiniteGet = (uri, queryParams = {}, options = {}) => {
+export const useInfiniteGet = (uri, queryParams = {}) => {
   return useInfiniteQuery({
     queryKey: [uri, queryParams],
-    queryFn: async ({ pageParam = null }) => {
+    queryFn: async ({ pageParam = 1 }) => {
+      
       const response = await apiClient.get(uri, {
         params: { ...queryParams, cursor: pageParam },
       });
       return response.data;
     },
     getNextPageParam: (lastPage) => {
-      return lastPage.nextCursor ?? null;
+      return lastPage?.nextCursor ?? null;
     },
-    ...options,
+    getPreviousPageParam: (firstPage) => {
+      return firstPage?.previousCursor ?? null;
+    },
   });
 };
