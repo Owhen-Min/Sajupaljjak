@@ -41,6 +41,7 @@ const Fortune = () => {
     error: todayError,
   } = useGet("/api/fortune/today");
 
+  // 첫 번째 API 응답 처리
   useEffect(() => {
     if (sajuData) {
       setSajuToday(sajuData.today);
