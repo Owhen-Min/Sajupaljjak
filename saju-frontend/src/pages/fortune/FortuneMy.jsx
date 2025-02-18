@@ -51,6 +51,8 @@ function FortuneMy() {
 
   // 원소 개수 계산
   const calculateElementCounts = () => {
+    if (!saju) return { 목: 0, 화: 0, 토: 0, 금: 0, 수: 0 };  // saju가 없을 경우 기본값 반환
+    
     const counts = { 목: 0, 화: 0, 토: 0, 금: 0, 수: 0 };
 
     Object.values(saju).forEach((pillar) => {
@@ -63,9 +65,10 @@ function FortuneMy() {
     return counts;
   };
 
-  const elementCounts = calculateElementCounts();
   if (isPending) return <div>로딩중...</div>;
   if (error) return <div>`에러 : ${error}` </div>;
+  
+  const elementCounts = calculateElementCounts();
   
   return (
     <div className="fortune flex flex-col items-center relative h-screen pt-10">
