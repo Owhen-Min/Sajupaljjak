@@ -44,9 +44,10 @@ function Preference() {
   const handleSelectionChange = (field, selected) => {
     switch (field) {
       case "religion":
+        console.log("Selected religions:", selected);
         setFormData((prev) => ({
           ...prev,
-          religionFilter: selected.map((idx) => religionOptions[idx]),
+          religionFilter: selected,
         }));
         break;
       case "drinking":
