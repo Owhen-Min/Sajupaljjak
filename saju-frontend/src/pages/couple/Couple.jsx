@@ -14,7 +14,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 
 function Couple() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const { data, isPending, error } = useGet(`/api/date?month=${month}`);
+  // const { data, isPending, error } = useGet(`/api/date?month=${month}`);
   
   const {
     data: coupleData,

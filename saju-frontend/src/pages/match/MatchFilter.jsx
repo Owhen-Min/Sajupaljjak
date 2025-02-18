@@ -33,6 +33,13 @@ function MatchFilter() {
     religionFilter: [],
   });
 
+  const [errors, setErrors] = useState({
+    religion: false,
+    drinking: false,
+    smoking: false,
+    location: false,
+  });
+
   // 초기 데이터 로드 시 폼 데이터 설정
   useEffect(() => {
     if (initialData) {
