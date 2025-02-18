@@ -112,22 +112,27 @@ const Chat = () => {
   }, [stompClient, chatRoomId, memberId, user, data]);
 
   const sendMessage = () => {
-    
     if (!stompClient || !stompClient.connected) {
       console.log("웹소켓 연결 안 된 상태");
       return;
     }
     if (!input.trim()) return;
+    
     const message = {
       chatroomId: chatRoomId,
       senderId: memberId,
       content: input,
       messageType: "TEXT",
     };
+    
+    // message 객체를 JSON 문자열로 변환
+    const messageString = JSON.stringify(message);
+    
     console.log("stompClient : ", stompClient);
     console.log("stompClient.connected : ", stompClient.connected);
-    console.log("전송 데이터 :", JSON.stringify(message, null, 2));
-    stompClient.send("/app/chats", {}, message);
+    console.log("전송 데이터 :", messageString);
+    
+    stompClient.send("/app/chats", {}, messageString);
     setInput("");
   };
 
