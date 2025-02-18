@@ -137,7 +137,7 @@ const Chat = () => {
     if (!input.trim()) return;
     
     const message = {
-      chatroomId: chatRoomId,
+      chatRoomId: chatRoomId,
       senderId: "1",
       content: input,
       messageType: "TEXT",
