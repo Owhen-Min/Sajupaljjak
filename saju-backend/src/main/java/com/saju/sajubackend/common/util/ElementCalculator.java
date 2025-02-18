@@ -6,10 +6,7 @@ import com.saju.sajubackend.common.enums.Element;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ElementCalculator {
     public static Map<Element, Integer> calculateElementCount(List<String> saju) {
@@ -67,9 +64,8 @@ public class ElementCalculator {
         String dayPillar = FourPillarsCalculator.calculateDayPillar(LocalDateTime.of(date, LocalTime.MIDNIGHT));
 
         Element elementByStem = CelestialStem.getElementByStem(dayPillar.charAt(0));
-        List<Element> elementsByBranch = ElementCalculator.getElementsByBranch(dayPillar.charAt(1));
-
-        elementsByBranch.add(elementByStem);
-        return elementsByBranch;
+        List<Element> mutableElementsByBranch = new ArrayList<>(ElementCalculator.getElementsByBranch(dayPillar.charAt(1)));
+        mutableElementsByBranch.add(elementByStem);
+        return mutableElementsByBranch;
     }
 }

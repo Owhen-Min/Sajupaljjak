@@ -9,4 +9,6 @@ public interface PlaceCustomRepository {
     Optional<List<Place>> findPlaces(int element, Long fCity, Long mCity);
 
     List<Place> findPlacesByElementOnly(int element);
+
+    Optional<List<Place>> findPlacesExceptElement(int element, Long fCity, Long mCity);
 }

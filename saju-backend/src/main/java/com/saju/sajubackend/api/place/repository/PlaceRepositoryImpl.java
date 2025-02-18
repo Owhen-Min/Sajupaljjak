@@ -42,4 +42,18 @@ public class PlaceRepositoryImpl implements PlaceCustomRepository {
                 .limit(3) // 랜덤 3개 가져오기
                 .fetch();
     }
+
+    @Override
+    public Optional<List<Place>> findPlacesExceptElement(int element, Long fCity, Long mCity) {
+        QPlace place = QPlace.place;
+
+        BooleanExpression condition = place.element.ne(Element.fromCode(element))
+                .and(place.cityCode.in(fCity, mCity));
+
+        return Optional.ofNullable(queryFactory.selectFrom(place)
+                .where(condition)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('RAND')").asc())
+                .limit(3)
+                .fetch());
+    }
 }

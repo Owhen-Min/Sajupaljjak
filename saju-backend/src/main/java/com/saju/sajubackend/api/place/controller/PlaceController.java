@@ -22,14 +22,14 @@ public class PlaceController {
     @GetMapping
     public ResponseEntity<List<PlaceResponseDto>> getPlaces(
             @RequestParam(required = false) Integer month,
-            @RequestParam(required = false) Integer day) {
-        Long memberId = 27L;
+            @RequestParam(required = false) Integer day
+            /*@CurrentMemberId Long currentMemberId*/) {
 
         // 날짜가 없으면 오늘 날짜 사용
         LocalDate date = (month != null && day != null) ?
                 LocalDate.of(LocalDate.now().getYear(), month, day) :
                 LocalDate.now();
 
-        return ResponseEntity.ok(placeService.getPlaceList(date, memberId));
+        return ResponseEntity.ok(placeService.getPlaceList(date, 8L));
     }
 }
