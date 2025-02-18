@@ -69,7 +69,7 @@ function Couple() {
         <p>커플 데이터 로딩중...</p>
       </div>
     );
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error}</div>;
   if (isCouplePending) return <div>커플 Loading...</div>;
   if (coupleError) return <div>커플 {coupleError}</div>;
 
