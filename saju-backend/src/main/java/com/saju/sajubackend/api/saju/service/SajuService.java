@@ -7,13 +7,10 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.saju.domain.Saju;
 import com.saju.sajubackend.api.saju.dto.SajuDetailResponse;
-import com.saju.sajubackend.api.saju.dto.SajuInfoDto;
 import com.saju.sajubackend.api.saju.dto.SajuResponse;
 import com.saju.sajubackend.api.saju.repository.SajuRepository;
 import com.saju.sajubackend.common.exception.ErrorMessage;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -40,7 +37,7 @@ public class SajuService {
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-//    @Value("${openai.api-key}")
+    @Value("${openai.api-key}")
     private String openAiApiKey;
     private static final String MODEL = "gpt-4o-mini";
 
@@ -52,7 +49,6 @@ public class SajuService {
     private String getTodayDetailKey(Long memberId) {
         return "saju:today:" + memberId;
     }
-
 
 
     // 회원의 사주 정보를 활용해 오늘의 운세(간단 버전) 조회

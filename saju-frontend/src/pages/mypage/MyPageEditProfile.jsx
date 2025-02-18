@@ -6,7 +6,7 @@ import Dropdown from "../../components/Dropdown";
 import MainButton from "../../components/MainButton";
 import Input from "../../components/Input";
 import { provinces } from "../../data/provinceCode";
-import { useGet, usePut } from "../../hooks/useApi";
+import { useGet, usePatch } from "../../hooks/useApi";
 import * as blazeface from '@tensorflow-models/blazeface';
 import '@tensorflow/tfjs';
 
@@ -38,33 +38,37 @@ function MyPageEditProfile() {
   });
 
   const { data, isLoading, error } = useGet('/api/members');
-  const mutation = usePut('/api/members');
+  const mutation = usePatch('/api/members');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
+      if (!data) return;
+
+      console.log('Received data:', data); // 받은 데이터 로깅
+      
       try {
-        const userData = data;
-        console.log(userData);
-        
         // cityCode와 dongCode가 있는지 확인하고, provinces 객체에서 유효한 값인지 검증
-        const cityCode = userData.cityCode || '';
-        const dongCode = userData.dongCode || '';
+        const cityCode = data.cityCode || '';
+        const dongCode = data.dongCode || '';
         
         // cityCode가 유효한지 확인
         const cityExists = Object.values(provinces).some(
           province => province.code === cityCode
         );
 
+        console.log('Updated formData:', {
+          ...data,
+          cityCode: cityExists ? cityCode : '',
+          dongCode: cityExists ? dongCode : '',
+        }); // 업데이트될 formData 로깅
+        
         setFormData({
-          ...userData,
+          ...data,
           cityCode: cityExists ? cityCode : '',
           dongCode: cityExists ? dongCode : '',
         });
-      }
-      finally {
-        if (error) {
-          window.alert('프로필 데이터 로딩 실패:', error);
-        }
+      } catch (error) {
+        window.alert('프로필 데이터 로딩 실패:', error);
       }
     };
 
@@ -362,7 +366,7 @@ function MyPageEditProfile() {
             cols={3}
             options={['무교', '개신교', '불교', '천주교', '기타']}
             onSelect={(selected) => handleSelectionChange('religion', selected)}
-            selected={formData.religion ? [['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)] : []}
+            selected={formData.religion ? [[['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)]] : []}
           />
         </div>
 
@@ -374,9 +378,9 @@ function MyPageEditProfile() {
           )}
           <SelectionGrid
             cols={3}
-            options={['흡연', '비흡연', '금연 중']}
+            options={['비흡연', '흡연', '금연 중']}
             onSelect={(selected) => handleSelectionChange('smoking', selected)}
-            selected={formData.smoking ? [['흡연', '비흡연', '금연 중'].indexOf(formData.smoking)] : []}
+            selected={formData.smoking ? [[['비흡연', '흡연', '금연 중'].indexOf(formData.smoking)]] : []}
           />
         </div>
 
@@ -390,7 +394,7 @@ function MyPageEditProfile() {
             cols={2}
             options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
             onSelect={(selected) => handleSelectionChange('drinking', selected)}
-            selected={formData.drinking ? [['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)] : []}
+            selected={formData.drinking ? [[['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)]] : []}
           />
         </div>
 

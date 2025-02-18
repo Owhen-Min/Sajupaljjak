@@ -4,8 +4,10 @@ import TopBar2 from '../../components/TopBar2';
 import MainButton from '../../components/MainButton';
 import Input from '../../components/Input';
 import { useGet, usePost } from '../../hooks/useApi';
+import { useAuth } from '../../hooks/useAuth';
 
 function CoupleCode() {
+  const { updateRelation } = useAuth();
   const navigate = useNavigate();
   const [coupleCode, setCoupleCode] = useState({
     code: '',
@@ -21,6 +23,8 @@ function CoupleCode() {
     onSuccess: (response) => {
       console.log("응답: ", response);
       if (response.status === 200) {
+        localStorage.setItem('relation', true);
+        updateRelation(true);
         navigate('/couple');
       } else if (response.status === 400) {
         alert('올바르지 않은 코드입니다.');
@@ -31,10 +35,10 @@ function CoupleCode() {
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
+            alert('올바르지 않은 코드입니다.');
             break;
           case 404:
-            alert('올바르지 않은 코드입니다.');
+            alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
             break;
           default:
             alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.data.message})`);
@@ -162,6 +166,8 @@ function CoupleCode() {
       const response = await checkConfirm();
       console.log(response);
       if (response.status === 200) {
+        localStorage.setItem('relation', true);
+        updateRelation(true);
         navigate('/couple');
       } else if (response.status === 202) {
         alert("상대가 아직 코드를 입력하지 않았습니다.");

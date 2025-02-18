@@ -52,9 +52,9 @@ const Verify = () => {
         return;
       }
 
-      localStorage.setItem("accessToken", token.accessToken);
-      localStorage.setItem("refreshToken", token.refreshToken);
-      localStorage.setItem("memberId", data.member_id);
+      localStorage.setItem("accessToken", data.token.accessToken);
+      localStorage.setItem("refreshToken", data.token.refreshToken);
+      localStorage.setItem("memberId", data.memberId);
       localStorage.setItem("relation", data.relation);
       
       updateUser(userData);

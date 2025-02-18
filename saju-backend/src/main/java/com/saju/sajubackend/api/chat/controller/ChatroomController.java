@@ -3,6 +3,7 @@ package com.saju.sajubackend.api.chat.controller;
 import com.saju.sajubackend.api.chat.dto.request.ChatroomLeaveRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
 import com.saju.sajubackend.api.chat.service.ChatroomService;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,14 @@ public class ChatroomController {
 
     @PostMapping("/{partnerId}")
     public ResponseEntity<CreateChatroomResponseDto> createChatroom(@PathVariable Long partnerId,
-                                                                    Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
-        return ResponseEntity.ok(chatroomService.getChatroom(memberId, partnerId));
+                                                                    @CurrentMemberId Long currentMemberId) {
+        return ResponseEntity.ok(chatroomService.getChatroom(currentMemberId, partnerId));
     }
 
     @PatchMapping
     public ResponseEntity<Void> leave(@RequestBody ChatroomLeaveRequestDto request,
-                                      Long memberId) { // todo : 토큰에서 memberId 꺼내도록 수정
-        chatroomService.leave(request, memberId);
+                                      @CurrentMemberId Long currentMemberId) {
+        chatroomService.leave(request, currentMemberId);
         return ResponseEntity.ok().build();
     }
 }
