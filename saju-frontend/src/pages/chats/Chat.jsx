@@ -42,7 +42,7 @@ const Chat = () => {
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
-  const { memberId, user } = useAuth();
+  const memberId = localStorage.getItem('memberId');
   
   useEffect(() => {
     if (data) {
@@ -55,20 +55,16 @@ const Chat = () => {
             message: message.message,
             sentAt: message.sentAt,
             isMine: message.senderId === memberId,
-            profileImage:
-              message.senderId === memberId
-                ? user.profileImage
-                : data.partner.profileImage,
-            nickName:
-              message.senderId === memberId
-                ? user.nickName
-                : data.partner.nickName,
+            profileImage: message.senderId === memberId
+              ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              : data.partner.profileImage,
+            nickName: message.senderId === memberId ? "나" : data.partner.nickName,
           };
         });
       };
       setMessages(transformMessages(data.messages, memberId));
     }
-  }, [data, chatRoomId, setMessages, memberId, user]);
+  }, [data, chatRoomId, setMessages, memberId]);
 
   useEffect(() => {
     if (!stompClient || !isConnected) return;
@@ -124,7 +120,7 @@ const Chat = () => {
       console.log(`=== 채팅방 ${chatRoomId} 구독 취소 ===`);
       subscription.unsubscribe();
     };
-  }, [stompClient, isConnected, chatRoomId, memberId, user, data]);
+  }, [stompClient, isConnected, chatRoomId, memberId]);
 
   const sendMessage = () => {
     if (!stompClient || !isConnected) {
@@ -138,7 +134,7 @@ const Chat = () => {
     
     const message = {
       chatRoomId: chatRoomId,
-      senderId: "1",
+      senderId: memberId,
       content: input,
       messageType: "TEXT",
     };
@@ -161,8 +157,8 @@ const Chat = () => {
         message: input,
         sentAt: new Date().toLocaleTimeString(),
         isMine: true,
-        profileImage: user?.profileImage,
-        nickName: user?.nickName,
+        profileImage: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+        nickName: "나",
       };
       
       console.log("UI에 추가되는 메시지:", newMessage);
