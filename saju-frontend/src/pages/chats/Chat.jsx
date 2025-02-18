@@ -76,7 +76,7 @@ const Chat = () => {
 
     console.log("채팅방 구독 시작작");
     const subscription = stompClient.subscribe(
-      `/topic/chat/${chatRoomId}`,
+      `/ws/topic/chat/${chatRoomId}`,
       (message) => {
         const responseData = JSON.parse(message.body);
         console.log("수신 데이터 :", responseData);
@@ -125,7 +125,7 @@ const Chat = () => {
       messageType: "TEXT",
     };
     console.log("전송 데이터 :", JSON.stringify(message, null, 2));
-    stompClient.send("/app/chats", {}, JSON.stringify(message));
+    stompClient.send("/ws/app/chats", {}, JSON.stringify(message));
     setInput("");
   };
 
