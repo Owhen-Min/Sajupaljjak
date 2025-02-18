@@ -73,7 +73,7 @@ const Fortune = () => {
           </h2>
         </div>
         <div className="w-full bg-white rounded-md shadow p-4 mb-4">
-          <p className=" text-sm text-gray-800">{sajuToday.content}</p>
+          <p className=" text-sm text-gray-800">{sajuToday?.content || "로딩 중..."}</p>
         </div>
         <div className="mt-2 text-left w-full max-w-sm">
           <h2 className="text-base font-semibold text-gray-800 mb-1">
