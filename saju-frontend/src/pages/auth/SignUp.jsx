@@ -99,6 +99,7 @@ function SignUpPage() {
     message: "",
   });
 
+<<<<<<< HEAD
   const submit = (uri, payload) => {
     console.log("회원가입 요청 데이터:", payload);
     mutation.mutate(
@@ -132,6 +133,8 @@ function SignUpPage() {
     );
   };
 
+=======
+>>>>>>> front
   useEffect(() => {
     const loadModel = async () => {
       const loadedModel = await blazeface.load();
@@ -161,6 +164,12 @@ function SignUpPage() {
         setStep(3);
       }
     }
+    
+    // 문서의 최대 높이로 스크롤
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
   };
 
   const handleSelectionChange = (field, selected) => {
@@ -195,6 +204,12 @@ function SignUpPage() {
           }, 100);
         }
       }
+
+      // 문서의 최대 높이로 스크롤
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: 'smooth'
+      });
 
       return newFormData;
     });
