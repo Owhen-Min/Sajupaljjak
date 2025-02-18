@@ -23,22 +23,23 @@ const Chat = () => {
     if (data) {
       console.log('[채팅] 초기 메시지 데이터 수신:', data);
       const transformMessages = (messages, memberId) => {
-        if (!messages) {
-          console.log('[채팅] 메시지 데이터 없음');
+        if (!Array.isArray(messages)) {
+          console.log('[채팅] 메시지 데이터 형식 오류');
           return [];
         }
         return messages.map((message) => ({
-          id: message.id,
-          message: message.message,
-          sentAt: message.sentAt,
+          id: message.id || Date.now(),
+          message: message.content,
+          sentAt: message.sendTime,
           isMine: message.senderId === memberId,
           profileImage: message.senderId === memberId
             ? "기본이미지URL"
-            : data.partner.profileImage,
-          nickName: message.senderId === memberId ? "나" : data.partner.nickName,
+            : data.partner?.profileImage || "기본이미지URL",
+          nickName: message.senderId === memberId ? "나" : data.partner?.nickName || "상대방",
         }));
       };
-      const transformedMessages = transformMessages(data.messages, memberId);
+      
+      const transformedMessages = transformMessages(data, memberId);
       console.log('[채팅] 변환된 메시지:', transformedMessages);
       setMessages(transformedMessages);
     }
@@ -54,15 +55,13 @@ const Chat = () => {
     console.log(`[웹소켓] 채팅방 ${chatRoomId} 구독 시도`);
 
     try {
-      subscriptionRef.current = stompClient.subscribe(
-        `/topic/chat/${chatRoomId}`,
+      const subscription = stompClient.subscribe(
+        `/sub/chat/room/${chatRoomId}`,
         (response) => {
-          console.log('[웹소켓] 메시지 수신 시도:', response);
-
+          console.log('[웹소켓] 메시지 수신:', response);
           try {
             const messageData = JSON.parse(response.body);
             
-            // 자신의 메시지는 건너뛰기
             if (messageData.senderId === memberId) {
               console.log('[웹소켓] 자신의 메시지 무시');
               return;
@@ -70,8 +69,8 @@ const Chat = () => {
 
             const newMessage = {
               id: messageData.id || Date.now(),
-              message: messageData.message || messageData.content,
-              sentAt: messageData.sentAt || new Date().toLocaleTimeString(),
+              message: messageData.content,
+              sentAt: messageData.sendTime,
               isMine: false,
               profileImage: data?.partner?.profileImage || "기본이미지URL",
               nickName: data?.partner?.nickName || "상대방",
@@ -80,22 +79,13 @@ const Chat = () => {
             console.log('[웹소켓] 새 메시지 처리:', newMessage);
             setMessages(prev => [...prev, newMessage]);
           } catch (error) {
-            console.error('[웹소켓] 메시지 파싱 오류:', {
-              error: error.message,
-              receivedData: response.body
-            });
+            console.error('[웹소켓] 메시지 파싱 오류:', error);
           }
-        },
-        {
-          id: `chat-${chatRoomId}`,
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
       );
 
-      console.log('[웹소켓] 구독 상세 정보:', {
-        destination: subscriptionRef.current.destination,
-        id: subscriptionRef.current.id
-      });
+      subscriptionRef.current = subscription;
+      console.log('[웹소켓] 구독 성공:', subscription);
 
     } catch (error) {
       console.error('[웹소켓] 구독 오류:', error);
@@ -103,7 +93,6 @@ const Chat = () => {
 
     return () => {
       if (subscriptionRef.current) {
-        console.log('[웹소켓] 구독 해제');
         subscriptionRef.current.unsubscribe();
       }
     };
