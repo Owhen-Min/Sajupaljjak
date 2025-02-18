@@ -71,45 +71,60 @@ const Chat = () => {
   }, [data, chatRoomId, setMessages, member_id, user]);
 
   useEffect(() => {
-    
-    if (!stompClient || !stompClient.connected) return;
+    if (!stompClient || !isConnected) return;
 
-    console.log("채팅방 구독 시작");
+    console.log(`=== 채팅방 ${chatRoomId} 구독 시작 ===`);
     const subscription = stompClient.subscribe(
       `/ws/topic/chat/${chatRoomId}`,
-      (message) => {
-        const responseData = JSON.parse(message.body);
-        console.log("수신 데이터 :", responseData);
+      (response) => {
+        console.log("=== 새로운 메시지 수신 ===");
+        console.log("원본 응답:", response);
+        console.log("응답 body:", response.body);
+        
+        try {
+          const responseData = JSON.parse(response.body);
+          console.log("파싱된 응답 데이터:", responseData);
+          console.log("- 메시지 ID:", responseData.id);
+          console.log("- 보낸 사람:", responseData.senderId);
+          console.log("- 내용:", responseData.content);
+          console.log("- 시간:", responseData.sentAt);
 
-        const newMessage = {
-          id: responseData.id,
-          message: responseData.content,
-          sentAt: responseData.sentAt,
-          isMine: responseData.senderId === member_id,
-          profileImage:
-            responseData.senderId === member_id
-              ? user?.profileImage
-              : data?.partner?.profileImage || "",
-          nickName:
-            responseData.senderId === member_id
-              ? user?.nickName
-              : data?.partner?.nickName || "",
-        };
+          // 자신이 보낸 메시지는 이미 UI에 추가되어 있으므로 건너뜀
+          if (responseData.senderId === member_id) {
+            console.log("자신이 보낸 메시지 수신됨 - UI 업데이트 건너뜀");
+            return;
+          }
 
-        console.log("수신 메세지 :", newMessage);
-        setMessages((prev) => [...prev, newMessage]);
-        setPayload((prev) => ({
-          ...prev,
-          lastReadMessage: responseData.content,
-        }));
+          const newMessage = {
+            id: responseData.id,
+            message: responseData.content,
+            sentAt: responseData.sentAt,
+            isMine: false,
+            profileImage: data?.partner?.profileImage || "",
+            nickName: data?.partner?.nickName || "",
+          };
+
+          console.log("UI에 추가될 새 메시지:", newMessage);
+          setMessages(prev => [...prev, newMessage]);
+          console.log("=== 메시지 처리 완료 ===");
+        } catch (error) {
+          console.error("메시지 처리 중 오류 발생:", error);
+          console.error("원본 응답:", response);
+        }
+      },
+      {
+        // 구독 옵션 추가
+        id: `chat-${chatRoomId}`,
       }
     );
 
+    console.log("구독 객체:", subscription);
+
     return () => {
+      console.log(`=== 채팅방 ${chatRoomId} 구독 취소 ===`);
       subscription.unsubscribe();
-      console.log(" 채팅방 구독 취소");
     };
-  }, [stompClient, chatRoomId, member_id, user, data]);
+  }, [stompClient, isConnected, chatRoomId, member_id, user, data]);
 
   const sendMessage = () => {
     if (!stompClient || !isConnected) {
@@ -132,11 +147,11 @@ const Chat = () => {
     console.log("=== 메시지 전송 시도 ===");
     console.log("발신 데이터(raw):", message);
     console.log("발신 데이터(string):", messageString);
-    console.log("전송 destination:", "/ws/app/chats");
+    console.log("전송 destination:", "/app/chats");
     
     try {
       stompClient.publish({
-        destination: "/ws/app/chats",
+        destination: "/app/chats",
         body: messageString,
         headers: {},
       });
