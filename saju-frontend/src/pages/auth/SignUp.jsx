@@ -99,42 +99,6 @@ function SignUpPage() {
     message: "",
   });
 
-<<<<<<< HEAD
-  const submit = (uri, payload) => {
-    console.log("회원가입 요청 데이터:", payload);
-    mutation.mutate(
-      { uri, payload },
-      {
-        onSuccess: (data) => {
-          console.log("회원가입 성공 응답 데이터:", data);
-          const { token, ...userData } = data;
-          localStorage.setItem("accessToken", token.accessToken);
-          updateAccessToken(token.accessToken);
-          localStorage.setItem("refreshToken", token.refreshToken);
-
-          localStorage.setItem("memberId", data.member_id);
-          //
-          localStorage.setItem("relation", (data.relation === 'SOLO' ? false : true));
-          //
-
-          updateUser(userData);localStorage.setItem(
-            "relation",
-            data.relation === "SOLO" ? false : true
-          );
-          console.log(user);
-          setIsLoading(false);
-          navigate("/auth/welcome");
-        },
-        onError: (error) => {
-          console.error("회원가입 실패", error);
-          setIsLoading(false);
-        },
-      }
-    );
-  };
-
-=======
->>>>>>> front
   useEffect(() => {
     const loadModel = async () => {
       const loadedModel = await blazeface.load();
