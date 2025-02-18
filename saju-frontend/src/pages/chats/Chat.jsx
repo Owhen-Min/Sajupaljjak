@@ -70,7 +70,7 @@ const Chat = () => {
 
     console.log(`=== 채팅방 ${chatRoomId} 구독 시작 ===`);
     const subscription = stompClient.subscribe(
-      `/ws/topic/chat/${chatRoomId}`,
+      `/ws/topic/${chatRoomId}`,
       (response) => {
         console.log("=== 새로운 메시지 수신 ===");
         console.log("원본 응답:", response);
