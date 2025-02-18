@@ -806,6 +806,7 @@ function SignUpPage() {
           formData.profileImg.startsWith("data:image")
         ) {
           const imageFile = await fetch(formData.profileImg)
+
             .then((res) => res.blob())
             .then((blob) => {
               const uniqueFileName = `profile_${Date.now()}_${Math.random()
@@ -844,7 +845,10 @@ function SignUpPage() {
           localStorage.setItem("accessToken", token.accessToken);
           localStorage.setItem("refreshToken", token.refreshToken);
           localStorage.setItem("memberId", userData.member_id);
-          localStorage.setItem("relation", userData.relation);
+          localStorage.setItem(
+            "relation",
+            userData.relation === "SOLO" ? false : true
+          );
 
           updateUser(userData);
           console.log(user);
