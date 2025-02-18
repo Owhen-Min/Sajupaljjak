@@ -36,7 +36,7 @@ const Chat = () => {
   ]);
 
   const [payload, setPayload] = useState({
-    chatroomId: chatRoomId,
+    chatroomId: localStorage.getItem("memberId"),
     lastReadMessage: "",
   });
 
