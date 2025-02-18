@@ -114,12 +114,13 @@ function Preference() {
 
     createPreference(requestData, {
       onSuccess: (data) => {
-        console.log("선호도 설정 성공:", data);
+        console.log("내 선호 정보 입력 성공:", data);
+        localStorage.setItem('relation', false);
         navigate("/solo"); // 성공 시 메인 페이지로 이동
       },
       onError: (error) => {
-        console.log("선호도 설정 실패:", error);
-        window.alert("선호도 설정 실패:", error);
+        console.log("내 선호 정보 입력 실패:", error);
+        window.alert("내 선호 정보 입력 실패:", error);
         // 에러 처리 로직 추가 가능
       },
     });
