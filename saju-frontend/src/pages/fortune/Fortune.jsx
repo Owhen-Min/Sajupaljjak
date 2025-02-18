@@ -52,8 +52,9 @@ const Fortune = () => {
         { subject: "연애운", value: today.loveScore, fullMark: 100 },
         { subject: "학업운", value: today.studyScore, fullMark: 100 },
       ]);
+      console.log(radarData);
     }
-  }, [today]);
+  }, [today, radarData]);
 
 
   if (isPending) return <div> sajuData 로딩중 ...</div>;
