@@ -42,11 +42,11 @@ const Chat = () => {
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
-  const { memberId, user } = useAuth();
+  const { member_id, user } = useAuth();
   
   useEffect(() => {
     if (data) {
-      const transformMessages = (messages, memberId) => {
+      const transformMessages = (messages, member_id) => {
         if (!messages) return [];
         return messages.map((message) => {
           setPayload((prev) => ({ ...prev, lastReadMessage: message.message }));
@@ -54,21 +54,21 @@ const Chat = () => {
             id: message.id,
             message: message.message,
             sentAt: message.sentAt,
-            isMine: message.senderId === memberId,
+            isMine: message.senderId === member_id,
             profileImage:
-              message.senderId === memberId
+              message.senderId === member_id
                 ? user.profileImage
                 : data.partner.profileImage,
             nickName:
-              message.senderId === memberId
+              message.senderId === member_id
                 ? user.nickName
                 : data.partner.nickName,
           };
         });
       };
-      setMessages(transformMessages(data.messages, memberId));
+      setMessages(transformMessages(data.messages, member_id));
     }
-  }, [data, chatRoomId, setMessages, memberId, user]);
+  }, [data, chatRoomId, setMessages, member_id, user]);
 
   useEffect(() => {
     
@@ -85,13 +85,13 @@ const Chat = () => {
           id: responseData.id,
           message: responseData.content,
           sentAt: responseData.sentAt,
-          isMine: responseData.senderId === memberId,
+          isMine: responseData.senderId === member_id,
           profileImage:
-            responseData.senderId === memberId
+            responseData.senderId === member_id
               ? user?.profileImage
               : data?.partner?.profileImage || "",
           nickName:
-            responseData.senderId === memberId
+            responseData.senderId === member_id
               ? user?.nickName
               : data?.partner?.nickName || "",
         };
@@ -109,7 +109,7 @@ const Chat = () => {
       subscription.unsubscribe();
       console.log(" 채팅방 구독 취소");
     };
-  }, [stompClient, chatRoomId, memberId, user, data]);
+  }, [stompClient, chatRoomId, member_id, user, data]);
 
   const sendMessage = () => {
     if (!stompClient || !isConnected) {
@@ -123,7 +123,7 @@ const Chat = () => {
     
     const message = {
       chatroomId: chatRoomId,
-      senderId: memberId,
+      senderId: member_id,
       content: input,
       messageType: "TEXT",
     };
