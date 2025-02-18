@@ -242,13 +242,13 @@ function Preference() {
           <Dropdown
             className={"mt-3"}
             options={Object.keys(provinces).map((cityName) => ({
-              value: parseInt(provinces[cityName].code),
+              value: provinces[cityName].code,
               label: cityName,
             }))}
             value=""
             placeholder="도시를 선택하세요"
             onChange={(e) => {
-              const selectedCode = parseInt(e.target.value);
+              const selectedCode = e.target.value;
               if (!formData.regionFilter.includes(selectedCode)) {
                 setFormData((prev) => ({
                   ...prev,
