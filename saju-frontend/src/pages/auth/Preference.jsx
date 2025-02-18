@@ -23,8 +23,8 @@ function Preference() {
   const religionOptions = ["무교", "개신교", "불교", "천주교", "기타"];
 
   const [formData, setFormData] = useState({
-    smokingFilter: null,
-    drinkingFilter: null,
+    smoking: null,
+    drinking: null,
     minAge: 20,
     maxAge: 40,
     minHeight: 140,
@@ -52,13 +52,13 @@ function Preference() {
       case "drinking":
         setFormData((prev) => ({
           ...prev,
-          drinkingFilter: selected,
+          drinking: selected,
         }));
         break;
       case "smoking":
         setFormData((prev) => ({
           ...prev,
-          smokingFilter: selected,
+          smoking: selected,
         }));
         break;
       case "ageRange":
@@ -87,8 +87,8 @@ function Preference() {
   const validateForm = () => {
     const newErrors = {
       religion: formData.religionFilter.length === 0,
-      smoking: formData.smokingFilter === null,
-      drinking: formData.drinkingFilter === null,
+      smoking: formData.smoking === null,
+      drinking: formData.drinking === null,
       location: formData.regionFilter.length === 0,
     };
 
@@ -102,8 +102,8 @@ function Preference() {
     }
 
     const requestData = {
-      smokingFilter: formData.smokingFilter,
-      drinkingFilter: formData.drinkingFilter,
+      smoking: formData.smoking,
+      drinking: formData.drinking,
       minAge: formData.minAge,
       maxAge: formData.maxAge,
       minHeight: formData.minHeight,
@@ -169,7 +169,7 @@ function Preference() {
             cols={2}
             options={["음주 안함", "주 1~2회", "주 3~4회", "주 5회 이상"]}
             onSelect={(selected) => handleSelectionChange("drinking", selected)}
-            selected={formData.drinkingFilter ? [formData.drinkingFilter] : []}
+            selected={formData.drinking ? [formData.drinking] : []}
           />
 
           {errors.drinking && (
@@ -183,7 +183,7 @@ function Preference() {
             cols={3}
             options={["비흡연", "흡연", "금연 중"]}
             onSelect={(selected) => handleSelectionChange("smoking", selected)}
-            selected={formData.smokingFilter ? [formData.smokingFilter] : []}
+            selected={formData.smoking ? [formData.smoking] : []}
           />
           {errors.smoking && (
             <ErrorBubble>흡연 여부를 선택해주세요</ErrorBubble>
