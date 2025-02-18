@@ -1,4 +1,3 @@
-import React from "react";
 import MessageList from "../../components/MessageList";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";

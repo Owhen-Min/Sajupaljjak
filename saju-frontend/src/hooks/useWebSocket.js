@@ -3,6 +3,7 @@ import { Client } from "@stomp/stompjs";
 
 const useWebSocket = () => {
   const [isConnected, setIsConnected] = useState(false);
+  const [stompClient, setStompClient] = useState(null);
   const clientRef = useRef(null);
 
   useEffect(() => {
@@ -19,28 +20,43 @@ const useWebSocket = () => {
       onConnect: () => {
         console.log("웹소켓 연결 성공");
         setIsConnected(true);
+        setStompClient(client);
       },
       onDisconnect: () => {
-        console.log("웹소켓 연결 실패");
+        console.log("웹소켓 연결 해제");
         setIsConnected(false);
+        setStompClient(null);
       },
       onStompError: (frame) => {
-        console.error("에러 발생:", frame);
+        console.error("Stomp 에러 발생:", frame);
+        setIsConnected(false);
+        setStompClient(null);
       },
+      debug: (str) => {
+        console.log("Stomp Debug:", str);
+      }
     });
 
-    client.activate();
-    clientRef.current = client;
+    try {
+      client.activate();
+      clientRef.current = client;
+    } catch (error) {
+      console.error("웹소켓 연결 중 에러 발생:", error);
+      setIsConnected(false);
+      setStompClient(null);
+    }
 
     return () => {
-      console.log("웹소켓 해제");
+      console.log("웹소켓 정리 중...");
       if (clientRef.current) {
         clientRef.current.deactivate();
+        setIsConnected(false);
+        setStompClient(null);
       }
     };
   }, []);
 
-  return { stompClient: clientRef.current, isConnected };
+  return { stompClient, isConnected };
 };
 
 export default useWebSocket;

@@ -78,7 +78,7 @@ const Fortune = () => {
         </div>
         <div className="w-full bg-white rounded-md shadow p-4 mb-4">
           <p className="text-sm text-gray-800">
-            {sajuIsPending ? "로딩 중..." : sajuData?.content}
+            {sajuIsPending ? "로딩 중..." : sajuToday?.content}
           </p>
         </div>
 
