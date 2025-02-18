@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import  useWebSocket  from "../../hooks/useWebSocket";
+import useWebSocket from "../../hooks/useWebSocket";
 
 const Chat = () => {
   const chatRoomId = useParams().chatId;
@@ -41,7 +41,7 @@ const Chat = () => {
   });
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
-  const { stompClient }  = useWebSocket();
+  const { stompClient, isConnected } = useWebSocket();
   const { memberId, user } = useAuth();
   
   useEffect(() => {
@@ -112,10 +112,11 @@ const Chat = () => {
   }, [stompClient, chatRoomId, memberId, user, data]);
 
   const sendMessage = () => {
-    if (!stompClient || !stompClient.connected) {
+    if (!stompClient || !isConnected) {
       console.log("웹소켓 연결 안 된 상태");
       return;
     }
+    
     if (!input.trim()) return;
     
     const message = {
@@ -125,15 +126,17 @@ const Chat = () => {
       messageType: "TEXT",
     };
     
-    // message 객체를 JSON 문자열로 변환
     const messageString = JSON.stringify(message);
     
-    console.log("stompClient : ", stompClient);
-    console.log("stompClient.connected : ", stompClient.connected);
-    console.log("전송 데이터 :", messageString);
-    
-    stompClient.send("/app/chats", {}, messageString);
-    setInput("");
+    try {
+      stompClient.publish({
+        destination: "/app/chats",
+        body: messageString
+      });
+      setInput("");
+    } catch (error) {
+      console.error("메시지 전송 실패:", error);
+    }
   };
 
   if (isPending) return <div>Loading...</div>;
