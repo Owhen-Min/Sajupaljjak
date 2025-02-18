@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import  useWebSocket  from "../../hooks/useWebSocket";
+import useWebSocket from "../../hooks/useWebSocket";
 
 const Chat = () => {
   const chatRoomId = useParams().chatId;
@@ -113,9 +113,13 @@ const Chat = () => {
 
   const sendMessage = () => {
     if (!stompClient || !isConnected) {
+<<<<<<< HEAD
       console.log("웹소켓 연결 상태 확인:");
       console.log("- stompClient:", stompClient);
       console.log("- isConnected:", isConnected);
+=======
+      console.log("웹소켓 연결 안 된 상태");
+>>>>>>> c4159f51eca2eff8a13acaeb48ee3470ff9aa702
       return;
     }
     
@@ -137,6 +141,7 @@ const Chat = () => {
     try {
       stompClient.publish({
         destination: "/app/chats",
+<<<<<<< HEAD
         body: messageString,
         headers: {},
       });
@@ -160,6 +165,13 @@ const Chat = () => {
         message: error.message,
         stack: error.stack
       });
+=======
+        body: messageString
+      });
+      setInput("");
+    } catch (error) {
+      console.error("메시지 전송 실패:", error);
+>>>>>>> c4159f51eca2eff8a13acaeb48ee3470ff9aa702
     }
   };
 
