@@ -41,7 +41,7 @@ const Chat = () => {
   });
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
-  const  stompClient  = useWebSocket();
+  const stompClient  = useWebSocket();
   const { memberId, user } = useAuth();
   
   useEffect(() => {
@@ -133,8 +133,21 @@ const Chat = () => {
   if (error) return <div>{error}</div>;
 
 
-  retur0
-  11
+  return (
+    <div className=" h-screen bg-gray-50 font-NanumR relative flex flex-col">
+      <Header />
+      {/* 메시지 리스트 컨테이너: 헤더와 하단 입력창 높이를 고려한 패딩 */}
+      <div className="flex-1 pt-2 pb-2 overflow-y-auto">
+        <MessageList messages={messages} />
+      </div>
+      <BottomInput
+        input={input}
+        setInput={setInput}
+        sendMessage={sendMessage}
+      />
+    </div>
+  );
+};
 
 
 
