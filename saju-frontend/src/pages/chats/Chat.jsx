@@ -132,11 +132,11 @@ const Chat = () => {
     console.log("=== 메시지 전송 시도 ===");
     console.log("발신 데이터(raw):", message);
     console.log("발신 데이터(string):", messageString);
-    console.log("전송 destination:", "/app/chats");
+    console.log("전송 destination:", "/ws/app/chats");
     
     try {
       stompClient.publish({
-        destination: "/app/chats",
+        destination: "/ws/app/chats",
         body: messageString,
         headers: {},
       });
