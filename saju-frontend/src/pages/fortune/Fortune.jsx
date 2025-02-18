@@ -42,6 +42,7 @@ const Fortune = () => {
   } = useGet("/api/fortune/today");
   useEffect(() => {
     if (sajuData) {
+      console.log(sajuData);
       setSajuToday(sajuData.today);
     }
   }, [sajuData]);
