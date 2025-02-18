@@ -7,9 +7,7 @@ import BottomNav from "../../components/BottomNav";
 import { FiSun, FiUser, FiCalendar, FiTrendingUp } from "react-icons/fi";
 import { useGet } from "../../hooks/useApi";
 
-
 // API로부터 받아온 운세 데이터 (예시)
-
 
 const Fortune = () => {
   const navigate = useNavigate();
@@ -26,7 +24,8 @@ const Fortune = () => {
       love: "",
       health: "",
       study: "",
-  },});
+    },
+  });
   const [radarData, setRadarData] = useState([
     { subject: "총점", value: 0, fullMark: 100 },
     { subject: "재물운", value: 0, fullMark: 100 },
@@ -35,8 +34,12 @@ const Fortune = () => {
     { subject: "학업운", value: 0, fullMark: 100 },
   ]);
 
-  const { data:sajuData, isPending, error } = useGet("/api/fortune");
-  const { data: today, isPending: todayIsPending, error: todayError } = useGet("/api/fortune/today");
+  const { data: sajuData, isPending, error } = useGet("/api/fortune");
+  const {
+    data: today,
+    isPending: todayIsPending,
+    error: todayError,
+  } = useGet("/api/fortune/today");
   useEffect(() => {
     if (sajuData) {
       setSajuToday(sajuData.today);
@@ -55,12 +58,11 @@ const Fortune = () => {
     }
   }, [today]);
 
-
   if (isPending) return <div> sajuData 로딩중 ...</div>;
   if (error) return <div> sajuData 에러 : {error.message}</div>;
   if (todayIsPending) return <div>today 로딩중 ...</div>;
   if (todayError) return <div> today 에러 : {todayError.message}</div>;
-  
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-NanumR pb-10">
       <Header />
@@ -73,7 +75,9 @@ const Fortune = () => {
           </h2>
         </div>
         <div className="w-full bg-white rounded-md shadow p-4 mb-4">
-          <p className=" text-sm text-gray-800">{sajuToday?.content || "로딩 중..."}</p>
+          <p className=" text-sm text-gray-800">
+            {sajuData?.content || "로딩 중..."}
+          </p>
         </div>
         <div className="mt-2 text-left w-full max-w-sm">
           <h2 className="text-base font-semibold text-gray-800 mb-1">
@@ -103,6 +107,7 @@ const Fortune = () => {
                 stroke="#ff7070"
                 fill="#ff7070"
                 fillOpacity={0.5}
+                domain={[0, 100]} // 이 부분 추가
               />
             </RadarChart>
           </div>

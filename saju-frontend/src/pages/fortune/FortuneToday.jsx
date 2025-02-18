@@ -133,7 +133,7 @@ export function Header() {
   const navigate = useNavigate();
 
   return (
-    <header className="relative h-12 flex-shrink-0 bg-black text-white flex items-center justify-center">
+    <header className="relative h-12 w-full flex-shrink-0 bg-black text-white flex items-center justify-center">
       <h1 className="text-lg font-bold">오늘의 운세</h1>
       <div
         className="absolute left-4 text-xl cursor-pointer text-white "
