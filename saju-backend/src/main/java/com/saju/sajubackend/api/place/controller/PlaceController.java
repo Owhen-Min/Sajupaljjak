@@ -23,13 +23,13 @@ public class PlaceController {
     public ResponseEntity<List<PlaceResponseDto>> getPlaces(
             @RequestParam(required = false) Integer month,
             @RequestParam(required = false) Integer day
-            /*@CurrentMemberId Long currentMemberId*/) {
+            @CurrentMemberId Long currentMemberId) {
 
         // 날짜가 없으면 오늘 날짜 사용
         LocalDate date = (month != null && day != null) ?
                 LocalDate.of(LocalDate.now().getYear(), month, day) :
                 LocalDate.now();
 
-        return ResponseEntity.ok(placeService.getPlaceList(date, 8L));
+        return ResponseEntity.ok(placeService.getPlaceList(date, currentMemberId));
     }
 }

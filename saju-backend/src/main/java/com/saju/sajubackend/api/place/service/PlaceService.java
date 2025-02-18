@@ -36,7 +36,6 @@ public class PlaceService {
 
         // 그 날의 원소 반환
         List<Element> dayElements = ElementCalculator.getDayElements(date);
-        System.out.println(dayElements);
 
         List<Place> places = dayElements.contains(plenty)
                 ? placeRepository.findPlacesExceptElement(plenty.getCode(), fCity, mCity)
