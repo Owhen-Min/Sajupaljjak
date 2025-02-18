@@ -41,7 +41,7 @@ const Chat = () => {
   });
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
-  const stompClient  = useWebSocket();
+  const { stompClient }  = useWebSocket();
   const { memberId, user } = useAuth();
   
   useEffect(() => {
@@ -124,8 +124,10 @@ const Chat = () => {
       content: input,
       messageType: "TEXT",
     };
+    console.log("stompClient : ", stompClient);
+    console.log("stompClient.connected : ", stompClient.connected);
     console.log("전송 데이터 :", JSON.stringify(message, null, 2));
-    stompClient.send("/ws/app/chats", {}, JSON.stringify(message));
+    stompClient.send("/app/chats", {}, message);
     setInput("");
   };
 

@@ -71,7 +71,7 @@ function Couple() {
     );
   // if (error) return <div>{error}</div>;
   if (isCouplePending) return <div>커플 Loading...</div>;
-  if (coupleError) return <div>커플 {coupleError}</div>;
+  if (coupleError) return <div>에러가 발생했습니다: {coupleError.message}</div>;
 
   return (
     <div
@@ -80,9 +80,13 @@ function Couple() {
     >
       <div className="flex flex-col w-11/12 mx-2 p-2 bg-white rounded-lg bg-opacity-70 gap-y-2 items-center justify-center">
         <TopBar />
-        {coupleData.map((couple, index) => (
-          <CoupleProfile key={index} couple={couple} />
-        ))}
+        {Array.isArray(coupleData) ? (
+          coupleData.map((couple, index) => (
+            <CoupleProfile key={index} couple={couple} />
+          ))
+        ) : (
+          <CoupleProfile couple={coupleData} />
+        )}
 
         <div className="fortune-section flex flex-wrap w-full items-center justify-center gap-2 px-1 pb-2">
           <FortuneButton content="커플 신년" url="/couple/year" size="small" />

@@ -68,7 +68,7 @@ const Verify = () => {
         return;
       }
 
-      navigate(data.relation ? "/couple" : "/solo");
+      navigate(data.relation==='COUPLE' ? "/couple" : "/solo");
     }
   }, [
     data,
