@@ -113,10 +113,13 @@ function SignUpPage() {
 
           localStorage.setItem("memberId", data.member_id);
           //
-          localStorage.setItem("relation", data.relation);
+          localStorage.setItem("relation", (data.relation === 'SOLO' ? false : true));
           //
 
-          updateUser(userData);
+          updateUser(userData);localStorage.setItem(
+            "relation",
+            data.relation === "SOLO" ? false : true
+          );
           console.log(user);
           setIsLoading(false);
           navigate("/auth/welcome");
@@ -863,7 +866,10 @@ function SignUpPage() {
           localStorage.setItem("accessToken", token.accessToken);
           localStorage.setItem("refreshToken", token.refreshToken);
           localStorage.setItem("memberId", userData.member_id);
-          localStorage.setItem("relation", userData.relation);
+          localStorage.setItem(
+            "relation",
+            userData.relation === "SOLO" ? false : true
+          );
 
           updateUser(userData);
           console.log(user);
