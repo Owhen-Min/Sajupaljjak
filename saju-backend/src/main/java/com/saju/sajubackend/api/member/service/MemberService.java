@@ -46,6 +46,8 @@ public class MemberService {
                 .intro(member.getIntro())
                 .smoking(member.getSmoking().getLabel())
                 .drinking(member.getDrinking().getLabel())
+                .bday(member.getBday() != null ? String.valueOf(member.getBday()) : null) // 🔹 String 변환
+                .btime(member.getBtime() != null ? String.valueOf(member.getBtime()) : null) // 🔹 String 변환
                 .build();
     }
 
