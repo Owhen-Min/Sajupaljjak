@@ -1,9 +1,26 @@
 import SajuUserBubble from "./SajuUserBubble";
 import Heart from "./Heart";
 import dayjs from "dayjs";
+import provinceCode from "../data/provinceCode.json";
 
 function CoupleProfile({ couple }) {
   const diffDays = dayjs().diff(dayjs(couple.startDate), 'day');
+
+  const getRegionName = (code) => {
+    const codeStr = code.toString();
+    for (const [province, provinceData] of Object.entries(provinceCode.provinces)) {
+      for (const [sigungu, sigunguCode] of Object.entries(provinceData.sigungu)) {
+        if (sigunguCode === codeStr) {
+          const [sido, gugun] = sigungu.split(" ");
+          return { sido, gugun };
+        }
+      }
+    }
+    return { sido: "알 수 없음", gugun: "" };
+  };
+
+  const memberRegion = getRegionName(couple.member.region);
+  const partnerRegion = getRegionName(couple.partner.region);
 
   return (
     <div className="w-11/12 my-3 bg-white rounded-md shadow-md py-5 flex justify-between items-center border-t border-gray-100">
@@ -11,8 +28,8 @@ function CoupleProfile({ couple }) {
         <div className="flex flex-col items-center text-center">
           <SajuUserBubble skyElement={couple.member.memberType} size="small" />
           <p className="text-gray-600 text-sm mb-1">{couple.member.age}세</p>
-          <p className="text-gray-500 text-xs mb-1">{couple.member.region.split(" ")[0]}</p>
-          <p className="text-gray-500 text-xs">{couple.member.region.split(" ")[1]}</p>
+          <p className="text-gray-500 text-xs mb-1">{memberRegion.sido}</p>
+          <p className="text-gray-500 text-xs">{memberRegion.gugun}</p>
         </div>
       </div>
 
@@ -50,8 +67,8 @@ function CoupleProfile({ couple }) {
         <div className="flex flex-col text-center items-center justify-center">
           <SajuUserBubble skyElement={couple.partner.memberType} size="small" />
           <p className="text-gray-600 text-sm mb-1">{couple.partner.age}세</p>
-          <p className="text-gray-500 text-xs mb-1">{couple.partner.region.split(" ")[0]}</p>
-          <p className="text-gray-500 text-xs">{couple.partner.region.split(" ")[1]}</p>
+          <p className="text-gray-500 text-xs mb-1">{partnerRegion.sido}</p>
+          <p className="text-gray-500 text-xs">{partnerRegion.gugun}</p>
         </div>
       </div>
     </div>
