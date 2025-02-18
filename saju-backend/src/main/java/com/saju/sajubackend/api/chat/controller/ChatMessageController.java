@@ -24,6 +24,7 @@ public class ChatMessageController {
 
     @MessageMapping("/chats")
     public void sendMessage(@Payload ChattingRequestDto request) {
+        System.out.println("[👍메시지 전송 요청 - ChatMessageController]");
         // 채팅 메시지 전송
         ChattingRequestDto message = chatMessageService.send(request);
         messagingTemplate.convertAndSend("/topic/" + message.getChatroomId(), message);
