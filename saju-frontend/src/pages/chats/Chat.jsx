@@ -42,7 +42,7 @@ const Chat = () => {
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
-  const { memberId, user } = useAuth();
+  const memberId = localStorage.getItem("memberId");
   
   useEffect(() => {
     if (data) {
