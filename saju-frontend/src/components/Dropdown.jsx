@@ -19,7 +19,6 @@ export const Dropdown = ({
         transition-all duration-300 ease-in-out
         hover:bg-gray-50
         focus:outline-none 
-
         pr-1
         ${className}
       `}

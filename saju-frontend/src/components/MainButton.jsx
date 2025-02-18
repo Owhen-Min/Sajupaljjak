@@ -8,8 +8,9 @@ export const MainButton = ({
   <button
     className={`
         flex items-center justify-center
-
-        bg-[#666666]
+        text-white
+        shadow
+        bg-[#ff7070]
         rounded-lg
         cursor-pointer
         transition-all duration-200 ease-in-out
