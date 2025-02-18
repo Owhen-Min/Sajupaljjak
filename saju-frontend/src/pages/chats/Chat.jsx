@@ -54,6 +54,40 @@ const Chat = () => {
 
     console.log(`[웹소켓] 채팅방 ${chatRoomId} 구독 시도`);
 
+    // 웹소켓 연결 시 채팅 데이터 새로 불러오기
+    const fetchLatestMessages = async () => {
+      try {
+        const response = await fetch(`/api/chats/${chatRoomId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          }
+        });
+        const newData = await response.json();
+        if (newData) {
+          const transformMessages = (messages, memberId) => {
+            if (!Array.isArray(messages)) return [];
+            return messages.map((message) => ({
+              id: message.id || Date.now(),
+              message: message.content,
+              sentAt: message.sendTime,
+              isMine: message.senderId === memberId,
+              profileImage: message.senderId === memberId
+                ? "기본이미지URL"
+                : newData.partner?.profileImage || "기본이미지URL",
+              nickName: message.senderId === memberId ? "나" : newData.partner?.nickName || "상대방",
+            }));
+          };
+          
+          const transformedMessages = transformMessages(newData, memberId);
+          setMessages(transformedMessages);
+        }
+      } catch (error) {
+        console.error('[채팅] 최신 메시지 로드 실패:', error);
+      }
+    };
+
+    fetchLatestMessages();
+
     try {
       const subscription = stompClient.subscribe(
         `/sub/chat/room/${chatRoomId}`,
