@@ -1,15 +1,13 @@
 package com.saju.sajubackend.api.filter.controller;
 
+import com.saju.sajubackend.api.filter.dto.FilterResponseDto;
 import com.saju.sajubackend.api.filter.dto.FilterSaveRequestDto;
-import com.saju.sajubackend.api.filter.dto.MemberProfileResponse;
-import com.saju.sajubackend.api.filter.dto.UpdateProfileRequest;
 import com.saju.sajubackend.api.filter.service.FilterService;
 import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,19 +26,15 @@ public class FilterController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping
-    public ResponseEntity<MemberProfileResponse> getMemberProfile(@CurrentMemberId Long currentMemberId) {
-        MemberProfileResponse response = filterService.getMemberProfile(currentMemberId);
-        return ResponseEntity.ok(response);
+    @GetMapping("/filter")
+    public ResponseEntity<FilterResponseDto> getFilter(@CurrentMemberId Long currentMemberId) {
+        return ResponseEntity.ok(filterService.getFilter(currentMemberId));
     }
 
-    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateMemberProfile(
-            @CurrentMemberId Long currentMemberId,
-            @RequestBody UpdateProfileRequest updateProfileRequest) {
-
-        filterService.updateMemberProfile(currentMemberId, updateProfileRequest);
-
-        return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
+    @PutMapping("/filter")
+    public ResponseEntity<Void> updateFilter(@Valid @RequestBody FilterSaveRequestDto request,
+                                             @CurrentMemberId Long currentMemberId) {
+        filterService.updateFilter(request, currentMemberId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

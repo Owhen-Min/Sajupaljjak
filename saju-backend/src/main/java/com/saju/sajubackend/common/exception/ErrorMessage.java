@@ -13,6 +13,7 @@ public enum ErrorMessage {
     DUPLICATE_NICKNAME("이미 존재하는 닉네임입니다."),
     INVALID_REFRESH_TOKEN("유효하지 않은 토큰입니다."),
 
+    FILTER_NOT_FOUND("존재하지 않는 필더입니다."),
 
     // ENUM 관련 오류
     INVALID_GENDER_CODE("유효하지 않은 성별 코드입니다."),

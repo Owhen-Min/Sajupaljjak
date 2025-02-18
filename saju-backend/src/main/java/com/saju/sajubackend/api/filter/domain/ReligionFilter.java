@@ -33,4 +33,8 @@ public class ReligionFilter {
         this.religion = religion;
         this.filter = filter;
     }
+
+    public void updateReligion(Religion religion) {
+        this.religion = religion;
+    }
 }
