@@ -8,24 +8,18 @@ import { useAuth } from "../../hooks/useAuth";
 function Chats() {
   const [data, setData] = useState([
     {
-      25: {
-        chatRoom: {
-          id: 25,
-          partner: {
-            id: 5,
-            nickname: "hong",
-            profileImage:
-              "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
-            celestialStem: "신금",
-          },
-        },
-        message: {
-          lastMessage:
-            "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
-          lastSendTime: "2025-02-13T12:12:32",
-          newMessageCount: 12,
-        },
+      "chatRoomId": 1,
+      "partner" : {
+        "memberId": 5,
+        "nickname": "hong",
+        "profileImage": "https://img.segye.com/content/image/2019/06/28/20190628507687.jpg",
+        "celestialStem": "신금",
       },
+      "message" : {
+        "lastMessage": "가만히 앉아서 놀거 다 노는데 통장에 돈 따박따박 박히면 좋겠다",
+        "lastSendTime": "2025-02-13T12:12:32",
+        "newMessageCount": 15,
+      }
     },
   ]);
 

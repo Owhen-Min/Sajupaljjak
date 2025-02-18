@@ -91,7 +91,7 @@ const ChatList = ({ chats }) => {
           >
             <div className="flex w-2/12 justify-center items-center">
               <img
-                src={chatData.chatRoom.partner.profileImage}
+                src={chatData.partner.profileImage}
                 alt="profile"
                 className="w-12 h-12 rounded-xl object-cover object-center"
               />
@@ -99,11 +99,11 @@ const ChatList = ({ chats }) => {
             <div className="flex w-7/12 flex-col gap-y-1 py-1">
               <div className="flex items-center gap-x-2">
                 <SajuUserBubble
-                  skyElement={chatData.chatRoom.partner.celestialStem}
+                  skyElement={chatData.partner.celestialStem}
                   size="small"
                 />
                 <h3 className="text-base text-black font-bold">
-                  {chatData.chatRoom.partner.nickname}
+                  {chatData.partner.nickname}
                 </h3>
               </div>
               <p className="w-full truncate text-gray-700 ml-1">
@@ -115,11 +115,13 @@ const ChatList = ({ chats }) => {
                 {formatRelativeTime(chatData.message.lastSendTime)}
               </span>
               <span
-                className={`text-sm text-white pt-1 bg-red-500 h-5 w-5 flex items-center justify-center rounded-full text-center ${
+                className={`text-xs text-white bg-red-500 h-6 w-6 flex items-center justify-center rounded-full text-center ${
                   chatData.message.newMessageCount > 0 ? "block" : "opacity-0"
                 }`}
               >
-                {chatData.message.newMessageCount}
+                {chatData.message.newMessageCount >= 100
+                  ? "99+"
+                  : chatData.message.newMessageCount}
               </span>
             </div>
           </div>
@@ -130,13 +132,13 @@ const ChatList = ({ chats }) => {
 
   return (
     <div className="flex flex-col h-full">
-      {Object.entries(chats[0])
+      {chats
         .sort(
-          ([, a], [, b]) =>
+          (a, b) =>
             new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime)
         )
-        .map(([chatRoomId, chatData]) =>
-          renderSwipeableChat(chatRoomId, chatData)
+        .map((chatData) =>
+          renderSwipeableChat(chatData.chatRoomId, chatData)
         )}
     </div>
   );
