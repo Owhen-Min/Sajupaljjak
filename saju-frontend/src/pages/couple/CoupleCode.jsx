@@ -22,7 +22,7 @@ function CoupleCode() {
   const { mutate: createCoupleCode } = usePost('/api/inviting', {
     onSuccess: (response) => {
       console.log("응답: ", response);
-      if (response.status === 200) {
+      if (response.status === 201) {
         localStorage.setItem('relation', true);
         updateRelation(true);
         navigate('/couple');
@@ -41,7 +41,7 @@ function CoupleCode() {
             alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
             break;
           default:
-            alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.data.message})`);
+            alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.message})`);
         }
       } else if (error.request) {
         alert('서버로부터 응답을 받지 못했습니다. 다시 시도해주세요.');
@@ -165,11 +165,11 @@ function CoupleCode() {
     try {
       const response = await checkConfirm();
       console.log(response);
-      if (response.status === 200) {
+      if (response.data.status === 200) {
         localStorage.setItem('relation', true);
         updateRelation(true);
         navigate('/couple');
-      } else if (response.status === 202) {
+      } else if (response.data.status === 202) {
         alert("상대가 아직 코드를 입력하지 않았습니다.");
       }
       console.log(response.data);
