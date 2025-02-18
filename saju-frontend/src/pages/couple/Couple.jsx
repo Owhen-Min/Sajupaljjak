@@ -71,7 +71,7 @@ function Couple() {
     );
   // if (error) return <div>{error}</div>;
   if (isCouplePending) return <div>커플 Loading...</div>;
-  if (coupleError) return <div>커플 {coupleError}</div>;
+  if (coupleError) return <div>에러가 발생했습니다: {coupleError.message}</div>;
 
   return (
     <div
