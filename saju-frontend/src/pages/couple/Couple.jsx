@@ -15,7 +15,7 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 function Couple() {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   // const { data, isPending, error } = useGet(`/api/date?month=${month}`);
-  const {couple, setCouple} = useState(null);
+  const [couple, setCouple] = useState(null);
   const {
     data: coupleData,
     isPending: isCouplePending,
@@ -37,8 +37,7 @@ function Couple() {
   
   useEffect(() => {
     if (coupleData) {
-      const { coupleId, ...filteredData } = coupleData;
-      setCouple(filteredData);
+      setCouple(coupleData);
     }
   }, [coupleData]);
 
@@ -62,10 +61,35 @@ function Couple() {
         <TopBar />
         {Array.isArray(coupleData) ? (
           coupleData.map((couple, index) => (
-            <CoupleProfile key={index} couple={couple} />
+            <CoupleProfile 
+              key={index} 
+              couple={{
+                ...couple,
+                member: {
+                  ...couple.member,
+                  memberType: couple.member.celestialStem
+                },
+                partner: {
+                  ...couple.partner,
+                  memberType: couple.partner.celestialStem
+                }
+              }} 
+            />
           ))
         ) : (
-          <CoupleProfile couple={coupleData} />
+          <CoupleProfile 
+            couple={{
+              ...coupleData,
+              member: {
+                ...coupleData.member,
+                memberType: coupleData.member.celestialStem
+              },
+              partner: {
+                ...coupleData.partner,
+                memberType: coupleData.partner.celestialStem
+              }
+            }} 
+          />
         )}
 
         <div className="fortune-section flex flex-wrap w-full items-center justify-center gap-2 px-1 pb-2">
