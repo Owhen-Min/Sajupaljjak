@@ -79,11 +79,7 @@ const Chat = () => {
         try {
           const responseData = JSON.parse(response.body);
           console.log("파싱된 응답 데이터:", responseData);
-          console.log("- 메시지 ID:", responseData.id);
-          console.log("- 보낸 사람:", responseData.senderId);
-          console.log("- 내용:", responseData.content);
-          console.log("- 시간:", responseData.sentAt);
-
+          
           // 자신이 보낸 메시지는 이미 UI에 추가되어 있으므로 건너뜀
           if (responseData.senderId === memberId) {
             console.log("자신이 보낸 메시지 수신됨 - UI 업데이트 건너뜀");
@@ -92,24 +88,24 @@ const Chat = () => {
 
           const newMessage = {
             id: responseData.id,
-            message: responseData.content,
+            message: responseData.message,
             sentAt: responseData.sentAt,
             isMine: false,
-            profileImage: data?.partner?.profileImage || "",
-            nickName: data?.partner?.nickName || "",
+            profileImage: data?.partner?.profileImage || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+            nickName: data?.partner?.nickName || "상대방",
           };
 
-          console.log("UI에 추가될 새 메시지:", newMessage);
-          setMessages(prev => [...prev, newMessage]);
-          console.log("=== 메시지 처리 완료 ===");
+          console.log("상대방 메시지 수신:", newMessage);
+          setMessages(prev => {
+            console.log("이전 메시지 목록:", prev);
+            const updated = [...prev, newMessage];
+            console.log("업데이트된 메시지 목록:", updated);
+            return updated;
+          });
         } catch (error) {
           console.error("메시지 처리 중 오류 발생:", error);
           console.error("원본 응답:", response);
         }
-      },
-      {
-        // 구독 옵션 추가
-        id: `chat-${chatRoomId}`,
       }
     );
 
