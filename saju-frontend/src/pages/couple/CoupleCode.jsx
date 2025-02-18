@@ -24,6 +24,7 @@ function CoupleCode() {
       console.log("응답: ", response);
       if (response.status === 200) {
         localStorage.setItem('relation', true);
+        updateRelation(true);
         navigate('/couple');
       } else if (response.status === 400) {
         alert('올바르지 않은 코드입니다.');
@@ -34,10 +35,10 @@ function CoupleCode() {
       if (error.response) {
         switch (error.response.status) {
           case 400:
-            alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
+            alert('올바르지 않은 코드입니다.');
             break;
           case 404:
-            alert('올바르지 않은 코드입니다.');
+            alert('잘못된 요청입니다. 입력하신 정보를 다시 확인해주세요.');
             break;
           default:
             alert(`매칭 시도 중 오류가 발생했습니다. (${error.response.data.message})`);
@@ -157,10 +158,6 @@ function CoupleCode() {
       invitingCode: inputCode.replace(/\s/g, ''),
       startDate: selectedDate
     });
-    
-    localStorage.setItem('relation', true);
-    updateRelation(true);
-    navigate('/couple');
   };
 
   // 상대방이 입력했습니다 버튼 핸들러
