@@ -21,6 +21,7 @@ function CoupleCode() {
     onSuccess: (response) => {
       console.log("응답: ", response);
       if (response.status === 200) {
+        localStorage.setItem('relation', true);
         navigate('/couple');
       } else if (response.status === 400) {
         alert('올바르지 않은 코드입니다.');
