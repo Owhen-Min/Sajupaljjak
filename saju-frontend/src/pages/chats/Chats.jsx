@@ -62,7 +62,7 @@ function Chats() {
       subscription.unsubscribe();
       console.log("채팅목록 구독 해제");
     };
-  }, [stompClient?.connected, memberId]);
+  }, [stompClient, memberId, setData, data]);
 
   return (
     <div className="flex flex-col h-screen relative ">

@@ -14,29 +14,32 @@ const Chat = () => {
   const chatRoomId = useParams().chatId;
   const [input, setInput] = useState("");
   const [newMessage, setNewMessage] = useState({});
-  const [messages, setMessages] = useState([{
-    id: 1,
-    message: "안녕하세요!",
-    sentAt: "10:30 AM",
-    isMine: false,
-    profileImage:
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    nickName: "상대방닉네임",
-  },
-  {
-    id: 2,
-    message: "안녕하세요! 반가워요 😊",
-    sentAt: "10:31 AM",
-    isMine: true,
-    profileImage:
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    nickName: "나",
-  },
-]);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      message: "안녕하세요!",
+      sentAt: "10:30 AM",
+      isMine: false,
+      profileImage:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+      nickName: "상대방닉네임",
+    },
+    {
+      id: 2,
+      message: "안녕하세요! 반가워요 😊",
+      sentAt: "10:31 AM",
+      isMine: true,
+      profileImage:
+        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+      nickName: "나",
+    },
+  ]);
+
   const [payload, setPayload] = useState({
     chatroomId: chatRoomId,
     lastReadMessage: "",
   });
+
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient } = useWebSocket();
   const { memberId, user } = useAuth();
@@ -68,9 +71,10 @@ const Chat = () => {
   }, [data, chatRoomId, setMessages, memberId, user]);
 
   useEffect(() => {
+    
     if (!stompClient || !stompClient.connected) return;
-    console.log("채팅방 구독 시작작");
 
+    console.log("채팅방 구독 시작작");
     const subscription = stompClient.subscribe(
       `/topic/chat/${chatRoomId}`,
       (message) => {
@@ -105,9 +109,10 @@ const Chat = () => {
       subscription.unsubscribe();
       console.log(" 채팅방 구독 취소");
     };
-  }, [stompClient?.connected, chatRoomId, memberId, user, data?.partner, stompClient]);
+  }, [stompClient, chatRoomId, memberId, user, data]);
 
   const sendMessage = () => {
+    
     if (!stompClient || !stompClient.connected) {
       console.log("웹소켓 연결 안 된 상태");
       return;
@@ -120,10 +125,7 @@ const Chat = () => {
       messageType: "TEXT",
     };
     console.log("전송 데이터 :", JSON.stringify(message, null, 2));
-    stompClient.publish({
-      destination: "/app/chats",
-      body: JSON.stringify(message),
-    })
+    stompClient.send("/app/chats", {}, JSON.stringify(message));
     setInput("");
   };
 
