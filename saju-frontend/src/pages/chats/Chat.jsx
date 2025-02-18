@@ -42,11 +42,11 @@ const Chat = () => {
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
-  const { member_id, user } = useAuth();
+  const { memberId, user } = useAuth();
   
   useEffect(() => {
     if (data) {
-      const transformMessages = (messages, member_id) => {
+      const transformMessages = (messages, memberId) => {
         if (!messages) return [];
         return messages.map((message) => {
           setPayload((prev) => ({ ...prev, lastReadMessage: message.message }));
@@ -54,21 +54,21 @@ const Chat = () => {
             id: message.id,
             message: message.message,
             sentAt: message.sentAt,
-            isMine: message.senderId === member_id,
+            isMine: message.senderId === memberId,
             profileImage:
-              message.senderId === member_id
+              message.senderId === memberId
                 ? user.profileImage
                 : data.partner.profileImage,
             nickName:
-              message.senderId === member_id
+              message.senderId === memberId
                 ? user.nickName
                 : data.partner.nickName,
           };
         });
       };
-      setMessages(transformMessages(data.messages, member_id));
+      setMessages(transformMessages(data.messages, memberId));
     }
-  }, [data, chatRoomId, setMessages, member_id, user]);
+  }, [data, chatRoomId, setMessages, memberId, user]);
 
   useEffect(() => {
     if (!stompClient || !isConnected) return;
@@ -90,7 +90,7 @@ const Chat = () => {
           console.log("- 시간:", responseData.sentAt);
 
           // 자신이 보낸 메시지는 이미 UI에 추가되어 있으므로 건너뜀
-          if (responseData.senderId === member_id) {
+          if (responseData.senderId === memberId) {
             console.log("자신이 보낸 메시지 수신됨 - UI 업데이트 건너뜀");
             return;
           }
@@ -124,7 +124,7 @@ const Chat = () => {
       console.log(`=== 채팅방 ${chatRoomId} 구독 취소 ===`);
       subscription.unsubscribe();
     };
-  }, [stompClient, isConnected, chatRoomId, member_id, user, data]);
+  }, [stompClient, isConnected, chatRoomId, memberId, user, data]);
 
   const sendMessage = () => {
     if (!stompClient || !isConnected) {
@@ -138,7 +138,7 @@ const Chat = () => {
     
     const message = {
       chatroomId: chatRoomId,
-      senderId: member_id,
+      senderId: memberId,
       content: input,
       messageType: "TEXT",
     };
