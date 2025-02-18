@@ -4,7 +4,6 @@ import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import SajuGrid from "../../components/SajuGrid";
 import { useGet, usePut } from "../../hooks/useApi";
-import { usersDetail } from "../../data/usersDetail";
 
 // 천간, 지지, 60갑자 등의 상수 정의
 const HEAVENLY_STEMS = [
