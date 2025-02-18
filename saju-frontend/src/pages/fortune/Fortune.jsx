@@ -62,7 +62,7 @@ const Fortune = () => {
   if (todayError) return <div> today 에러 : {todayError.message}</div>;
   
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 font-NanumR">
+    <div className="min-h-screen flex flex-col bg-gray-50 font-NanumR pb-10">
       <Header />
 
       <div className="flex-grow overflow-y-auto pt-5 px-4 flex flex-col items-center">
