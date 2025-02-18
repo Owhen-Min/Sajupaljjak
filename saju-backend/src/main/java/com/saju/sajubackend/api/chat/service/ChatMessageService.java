@@ -21,6 +21,8 @@ public class ChatMessageService {
 
     public ChattingRequestDto send(ChattingRequestDto request) {
         System.out.println("[👍메시지 전송 요청 - ChatMessageService]");
+        System.out.println("[👍chatroomId] : " + request.getChatroomId());
+        System.out.println("[👍senderId] : " + request.getSenderId());
         isValid(request);
         ChatMessage validMessage = createChatMessage(request);
         chatMessageRepository.save(validMessage);
