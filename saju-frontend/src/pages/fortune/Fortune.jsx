@@ -34,11 +34,7 @@ const Fortune = () => {
     { subject: "학업운", value: 0, fullMark: 100 },
   ]);
 
-  const {
-    data: sajuData,
-    isPending: sajuIsPending,
-    error: sajuError,
-  } = useGet("/api/fortune");
+  const { data: sajuData, isPending: sajuIsPending, error: sajuError } = useGet("/api/fortune");
   const {
     data: today,
     isPending: todayIsPending,
@@ -48,7 +44,6 @@ const Fortune = () => {
   // 첫 번째 API 응답 처리
   useEffect(() => {
     if (sajuData) {
-      console.log(sajuData);
       setSajuToday(sajuData.today);
     }
   }, [sajuData]);
@@ -66,11 +61,6 @@ const Fortune = () => {
       ]);
     }
   }, [today]);
-
-  if (isPending) return <div> sajuData 로딩중 ...</div>;
-  if (error) return <div> sajuData 에러 : {error.message}</div>;
-  if (todayIsPending) return <div>today 로딩중 ...</div>;
-  if (todayError) return <div> today 에러 : {todayError.message}</div>;
 
   // 첫 번째 API가 실패하면 전체 에러 표시
   if (sajuError) return <div>sajuData 에러: {sajuError.message}</div>;
@@ -100,16 +90,12 @@ const Fortune = () => {
         </div>
         <div className="bg-white shadow-md rounded-md p-2 mb-4">
           {todayError ? (
-            <div className="text-red-500 text-center p-4">
-              데이터를 불러오는데 실패했습니다.
-            </div>
+            <div className="text-red-500 text-center p-4">데이터를 불러오는데 실패했습니다.</div>
           ) : (
             <>
               <div className="w-full p-2 mb-2">
                 <h1 className="text-center text-xl font-semibold text-gray-700">
-                  {todayIsPending
-                    ? "로딩 중..."
-                    : `오늘의 운세 총점 : ${fortuneData.totalScore}점`}
+                  {todayIsPending ? "로딩 중..." : `오늘의 운세 총점 : ${fortuneData.totalScore}점`}
                 </h1>
               </div>
 
@@ -119,11 +105,7 @@ const Fortune = () => {
                     <PolarGrid radialLines={false} />
                     <PolarAngleAxis
                       dataKey="subject"
-                      tick={{
-                        fill: "#666666",
-                        fontSize: 14,
-                        fontFamily: "NanumR",
-                      }}
+                      tick={{ fill: "#666666", fontSize: 14, fontFamily: "NanumR" }}
                     />
                     <Radar
                       name="운세"
