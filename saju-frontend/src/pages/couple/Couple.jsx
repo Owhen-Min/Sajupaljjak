@@ -62,10 +62,11 @@ function Couple() {
     }
   }, [coupleData]);
 
-  if (isPending)
+  if (isCouplePending)
     return (
       <div>
         <LoadingSpinner />
+        <p>커플 데이터 로딩중...</p>
       </div>
     );
   if (error) return <div>{error}</div>;
