@@ -47,23 +47,17 @@ const Chat = () => {
   // 웹소켓 구독 설정
   useEffect(() => {
     if (!stompClient || !isConnected) {
-      console.log('[웹소켓] 연결 상태 확인:', {
-        stompClient: !!stompClient,
-        isConnected: isConnected
-      });
+      console.log('[웹소켓] 연결 대기 중');
       return;
     }
 
-    console.log(`[웹소켓] 채팅방 ${chatRoomId} 구독 시작`);
+    console.log(`[웹소켓] 채팅방 ${chatRoomId} 구독 시도`);
 
     try {
       subscriptionRef.current = stompClient.subscribe(
-        `/ws/topic/chat/${chatRoomId}`,
+        `/topic/chat/${chatRoomId}`,
         (response) => {
-          console.log('[웹소켓] 메시지 수신:', {
-            headers: response.headers,
-            body: response.body
-          });
+          console.log('[웹소켓] 메시지 수신 시도:', response);
 
           try {
             const messageData = JSON.parse(response.body);
@@ -98,9 +92,13 @@ const Chat = () => {
         }
       );
 
-      console.log('[웹소켓] 구독 성공:', subscriptionRef.current);
+      console.log('[웹소켓] 구독 상세 정보:', {
+        destination: subscriptionRef.current.destination,
+        id: subscriptionRef.current.id
+      });
+
     } catch (error) {
-      console.error('[웹소켓] 구독 실패:', error);
+      console.error('[웹소켓] 구독 오류:', error);
     }
 
     return () => {
