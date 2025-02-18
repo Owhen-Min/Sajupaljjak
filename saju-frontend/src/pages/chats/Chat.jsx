@@ -120,7 +120,10 @@ const Chat = () => {
       messageType: "TEXT",
     };
     console.log("전송 데이터 :", JSON.stringify(message, null, 2));
-    stompClient.send("/app/chats", {}, JSON.stringify(message));
+    stompClient.publish({
+      destination: "/app/chats",
+      body: JSON.stringify(message),
+    })
     setInput("");
   };
 
