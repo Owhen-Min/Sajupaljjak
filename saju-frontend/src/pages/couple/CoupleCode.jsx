@@ -4,8 +4,10 @@ import TopBar2 from '../../components/TopBar2';
 import MainButton from '../../components/MainButton';
 import Input from '../../components/Input';
 import { useGet, usePost } from '../../hooks/useApi';
+import { useAuth } from '../../hooks/useAuth';
 
 function CoupleCode() {
+  const { updateRelation } = useAuth();
   const navigate = useNavigate();
   const [coupleCode, setCoupleCode] = useState({
     code: '',
@@ -155,6 +157,10 @@ function CoupleCode() {
       invitingCode: inputCode.replace(/\s/g, ''),
       startDate: selectedDate
     });
+    
+    localStorage.setItem('relation', true);
+    updateRelation(true);
+    navigate('/couple');
   };
 
   // 상대방이 입력했습니다 버튼 핸들러
@@ -163,6 +169,8 @@ function CoupleCode() {
       const response = await checkConfirm();
       console.log(response);
       if (response.status === 200) {
+        localStorage.setItem('relation', true);
+        updateRelation(true);
         navigate('/couple');
       } else if (response.status === 202) {
         alert("상대가 아직 코드를 입력하지 않았습니다.");

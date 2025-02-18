@@ -8,6 +8,7 @@ import couplebg from "../../assets/couplebg.webp";
 import { useNavigate } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
 import { useEffect, useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 // import LoadingSpinner from "../../components/LoadingSpinner";
 
