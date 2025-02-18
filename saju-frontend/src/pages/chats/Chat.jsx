@@ -41,7 +41,7 @@ const Chat = () => {
   });
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
-  const { stompClient }  = useWebSocket();
+  const { stompClient, isConnected } = useWebSocket();
   const { memberId, user } = useAuth();
   
   useEffect(() => {
@@ -74,7 +74,7 @@ const Chat = () => {
     
     if (!stompClient || !stompClient.connected) return;
 
-    console.log("채팅방 구독 시작작");
+    console.log("채팅방 구독 시작");
     const subscription = stompClient.subscribe(
       `/ws/topic/chat/${chatRoomId}`,
       (message) => {
@@ -112,10 +112,13 @@ const Chat = () => {
   }, [stompClient, chatRoomId, memberId, user, data]);
 
   const sendMessage = () => {
-    if (!stompClient || !stompClient.connected) {
-      console.log("웹소켓 연결 안 된 상태");
+    if (!stompClient || !isConnected) {
+      console.log("웹소켓 연결 상태 확인:");
+      console.log("- stompClient:", stompClient);
+      console.log("- isConnected:", isConnected);
       return;
     }
+    
     if (!input.trim()) return;
     
     const message = {
@@ -125,15 +128,39 @@ const Chat = () => {
       messageType: "TEXT",
     };
     
-    // message 객체를 JSON 문자열로 변환
     const messageString = JSON.stringify(message);
+    console.log("=== 메시지 전송 시도 ===");
+    console.log("발신 데이터(raw):", message);
+    console.log("발신 데이터(string):", messageString);
+    console.log("전송 destination:", "/app/chats");
     
-    console.log("stompClient : ", stompClient);
-    console.log("stompClient.connected : ", stompClient.connected);
-    console.log("전송 데이터 :", messageString);
-    
-    stompClient.send("/app/chats", {}, messageString);
-    setInput("");
+    try {
+      stompClient.publish({
+        destination: "/app/chats",
+        body: messageString,
+        headers: {},
+      });
+
+      const newMessage = {
+        id: Date.now(),
+        message: input,
+        sentAt: new Date().toLocaleTimeString(),
+        isMine: true,
+        profileImage: user?.profileImage,
+        nickName: user?.nickName,
+      };
+      
+      console.log("UI에 추가되는 메시지:", newMessage);
+      setMessages(prev => [...prev, newMessage]);
+      setInput("");
+      console.log("=== 메시지 전송 완료 ===");
+    } catch (error) {
+      console.error("메시지 전송 실패:", error);
+      console.error("에러 상세:", {
+        message: error.message,
+        stack: error.stack
+      });
+    }
   };
 
   if (isPending) return <div>Loading...</div>;
