@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import TopBar2 from '../../components/TopBar2';
-import SelectionGrid from '../../components/SelectionGrid';
-import Dropdown from '../../components/Dropdown';
-import MainButton from '../../components/MainButton';
-import { provinces } from '../../data/provinceCode';
-import RangeSlider from '../../components/RangeSlider';
-import { usePost } from '../../hooks/useApi';
-
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import TopBar2 from "../../components/TopBar2";
+import SelectionGrid from "../../components/SelectionGrid";
+import Dropdown from "../../components/Dropdown";
+import MainButton from "../../components/MainButton";
+import { provinces } from "../../data/provinceCode";
+import RangeSlider from "../../components/RangeSlider";
+import { usePost } from "../../hooks/useApi";
 
 function ErrorBubble({ children }) {
   return (
@@ -19,10 +18,10 @@ function ErrorBubble({ children }) {
 
 function Preference() {
   const navigate = useNavigate();
-  const { mutate: createPreference } = usePost('/api/members');
-  
-  const religionOptions = ['무교', '개신교', '불교', '천주교', '기타'];
-  
+  const { mutate: createPreference } = usePost("/api/members");
+
+  const religionOptions = ["무교", "개신교", "불교", "천주교", "기타"];
+
   const [formData, setFormData] = useState({
     smokingFilter: null,
     drinkingFilter: null,
@@ -44,42 +43,42 @@ function Preference() {
 
   const handleSelectionChange = (field, selected) => {
     switch (field) {
-      case 'religion':
-        setFormData(prev => ({
+      case "religion":
+        setFormData((prev) => ({
           ...prev,
-          religionFilter: selected.map(idx => religionOptions[idx])
+          religionFilter: selected.map((idx) => religionOptions[idx]),
         }));
         break;
-      case 'drinking':
-        setFormData(prev => ({
+      case "drinking":
+        setFormData((prev) => ({
           ...prev,
-          drinkingFilter: selected
+          drinkingFilter: selected,
         }));
         break;
-      case 'smoking':
-        setFormData(prev => ({
+      case "smoking":
+        setFormData((prev) => ({
           ...prev,
-          smokingFilter: selected
+          smokingFilter: selected,
         }));
         break;
-      case 'ageRange':
-        setFormData(prev => ({
+      case "ageRange":
+        setFormData((prev) => ({
           ...prev,
           minAge: selected[0],
-          maxAge: selected[1]
+          maxAge: selected[1],
         }));
         break;
-      case 'heightRange':
-        setFormData(prev => ({
+      case "heightRange":
+        setFormData((prev) => ({
           ...prev,
           minHeight: selected[0],
-          maxHeight: selected[1]
+          maxHeight: selected[1],
         }));
         break;
-      case 'cityCode':
-        setFormData(prev => ({
+      case "cityCode":
+        setFormData((prev) => ({
           ...prev,
-          regionFilter: selected
+          regionFilter: selected,
         }));
         break;
     }
@@ -94,7 +93,7 @@ function Preference() {
     };
 
     setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error);
+    return !Object.values(newErrors).some((error) => error);
   };
 
   const handleSubmit = () => {
@@ -110,19 +109,19 @@ function Preference() {
       minHeight: formData.minHeight,
       maxHeight: formData.maxHeight,
       regionFilter: formData.regionFilter,
-      religionFilter: formData.religionFilter
+      religionFilter: formData.religionFilter,
     };
 
     createPreference(requestData, {
       onSuccess: (data) => {
-        console.log('선호도 설정 성공:', data);
-        navigate('/solo'); // 성공 시 메인 페이지로 이동
+        console.log("선호도 설정 성공:", data);
+        navigate("/solo"); // 성공 시 메인 페이지로 이동
       },
       onError: (error) => {
-        console.log('선호도 설정 실패:', error);
-        window.alert('선호도 설정 실패:', error);
+        console.log("선호도 설정 실패:", error);
+        window.alert("선호도 설정 실패:", error);
         // 에러 처리 로직 추가 가능
-      }
+      },
     });
   };
 
@@ -137,25 +136,27 @@ function Preference() {
             <span>{formData.maxAge}세</span>
           </div>
           <div className="relative">
-            <RangeSlider 
-              min={20} 
+            <RangeSlider
+              min={20}
               max={40}
               value={[formData.minAge, formData.maxAge]}
               keyboard={true}
               onChange={(values) => {
-                handleSelectionChange('ageRange', values);
+                handleSelectionChange("ageRange", values);
               }}
             />
           </div>
         </div>
-        
+
         <h3 className="input-prompt mb-2">선호하는 종교를 선택해주세요</h3>
         <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
             options={religionOptions}
-            onSelect={(selected) => handleSelectionChange('religion', selected)}
-            selected={formData.religionFilter.map(value => religionOptions.indexOf(value))}
+            onSelect={(selected) => handleSelectionChange("religion", selected)}
+            selected={formData.religionFilter.map((value) =>
+              religionOptions.indexOf(value)
+            )}
             showSelectAll={true}
             multiSelect={true}
           />
@@ -166,34 +167,40 @@ function Preference() {
         <div className="input-group mb-6">
           <SelectionGrid
             cols={2}
-            options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
-            onSelect={(selected) => handleSelectionChange('drinking', selected)}
+            options={["음주 안함", "주 1~2회", "주 3~4회", "주 5회 이상"]}
+            onSelect={(selected) => handleSelectionChange("drinking", selected)}
             selected={formData.drinkingFilter ? [formData.drinkingFilter] : []}
           />
 
-          {errors.drinking && <ErrorBubble>음주 여부를 선택해주세요</ErrorBubble>}
+          {errors.drinking && (
+            <ErrorBubble>음주 여부를 선택해주세요</ErrorBubble>
+          )}
         </div>
 
         <h3 className="input-prompt mb-2">선호하는 흡연 여부를 선택해주세요</h3>
         <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
-            options={['비흡연', '흡연', '금연 중']}
-            onSelect={(selected) => handleSelectionChange('smoking', selected)}
+            options={["비흡연", "흡연", "금연 중"]}
+            onSelect={(selected) => handleSelectionChange("smoking", selected)}
             selected={formData.smokingFilter ? [formData.smokingFilter] : []}
           />
-          {errors.smoking && <ErrorBubble>흡연 여부를 선택해주세요</ErrorBubble>}
+          {errors.smoking && (
+            <ErrorBubble>흡연 여부를 선택해주세요</ErrorBubble>
+          )}
         </div>
 
         <h3 className="input-prompt mb-2">선호하는 키 범위를 선택해주세요</h3>
         <div className="input-group mb-6">
           <div className="relative">
-            <RangeSlider 
-              min={140} 
+            <RangeSlider
+              min={140}
               max={220}
               value={[formData.minHeight, formData.maxHeight]}
               keyboard={true}
-              onChange={(values) => handleSelectionChange('heightRange', values)}
+              onChange={(values) =>
+                handleSelectionChange("heightRange", values)
+              }
             />
             <div className="flex justify-between mt-2 text-md text-gray-600">
               <span>{formData.minHeight}cm</span>
@@ -205,22 +212,24 @@ function Preference() {
         <h3 className="input-prompt mb-2">선호하는 지역을 선택해주세요</h3>
         <div className="input-group mb-6 text-sm">
           <div className="flex flex-wrap gap-2 mt-2">
-            {formData.regionFilter.map(code => {
-              const cityName = Object.keys(provinces).find(key => 
-                provinces[key].code === code
+            {formData.regionFilter.map((code) => {
+              const cityName = Object.keys(provinces).find(
+                (key) => provinces[key].code === code
               );
               return (
                 <button
-                key={code}
-                className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm"
+                  key={code}
+                  className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-sm"
                 >
                   {cityName}
                   <span
                     className="ml-2 text-gray-500 hover:text-gray-700"
                     onClick={() => {
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
-                        regionFilter: prev.regionFilter.filter(c => c !== code)
+                        regionFilter: prev.regionFilter.filter(
+                          (c) => c !== code
+                        ),
                       }));
                     }}
                   >
@@ -228,33 +237,32 @@ function Preference() {
                   </span>
                 </button>
               );
-              
             })}
           </div>
-            <Dropdown
-              className={"mt-3"}
-              options={Object.keys(provinces).map(cityName => ({
-                value: provinces[cityName].code,
-                label: cityName
-              }))}
-              value=""
-              placeholder="도시를 선택하세요"
-              onChange={(e) => {
-                const selectedCode = e.target.value;
-                if (!formData.regionFilter.includes(selectedCode)) {
-                  setFormData(prev => ({
-                    ...prev,
-                    regionFilter: [...prev.regionFilter, selectedCode]
-                  }));
-                }
-              }}
-            />
+          <Dropdown
+            className={"mt-3"}
+            options={Object.keys(provinces).map((cityName) => ({
+              value: provinces[cityName].code,
+              label: cityName,
+            }))}
+            value=""
+            placeholder="도시를 선택하세요"
+            onChange={(e) => {
+              const selectedCode = e.target.value;
+              if (!formData.regionFilter.includes(selectedCode)) {
+                setFormData((prev) => ({
+                  ...prev,
+                  regionFilter: [...prev.regionFilter, selectedCode],
+                }));
+              }
+            }}
+          />
           {errors.location && <ErrorBubble>지역을 선택해주세요</ErrorBubble>}
         </div>
         <MainButton
-        children={'제출'}
-        onClick={handleSubmit}
-        className={"w-full py-3"}
+          children={"제출"}
+          onClick={handleSubmit}
+          className={"w-full py-3 bg-[#ff7070] text-white"}
         />
       </div>
     </div>
