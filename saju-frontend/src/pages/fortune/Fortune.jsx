@@ -34,26 +34,13 @@ const Fortune = () => {
     { subject: "학업운", value: 0, fullMark: 100 },
   ]);
 
-<<<<<<< HEAD
-  const { data: sajuData, isPending, error } = useGet("/api/fortune");
-=======
-<<<<<<< Updated upstream
-  const { data:sajuData, isPending, error } = useGet("/api/fortune");
-  const { data: today, isPending: todayIsPending, error: todayError } = useGet("/api/fortune/today");
-=======
   const { data: sajuData, isPending: sajuIsPending, error: sajuError } = useGet("/api/fortune");
->>>>>>> front
   const {
     data: today,
     isPending: todayIsPending,
     error: todayError,
   } = useGet("/api/fortune/today");
-<<<<<<< HEAD
-=======
 
-  // 첫 번째 API 응답 처리
->>>>>>> Stashed changes
->>>>>>> front
   useEffect(() => {
     if (sajuData) {
       setSajuToday(sajuData.today);
@@ -74,25 +61,9 @@ const Fortune = () => {
     }
   }, [today]);
 
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-
->>>>>>> front
-  if (isPending) return <div> sajuData 로딩중 ...</div>;
-  if (error) return <div> sajuData 에러 : {error.message}</div>;
-  if (todayIsPending) return <div>today 로딩중 ...</div>;
-  if (todayError) return <div> today 에러 : {todayError.message}</div>;
-<<<<<<< HEAD
-
-=======
-  
-=======
   // 첫 번째 API가 실패하면 전체 에러 표시
   if (sajuError) return <div>sajuData 에러: {sajuError.message}</div>;
 
->>>>>>> Stashed changes
->>>>>>> front
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 font-NanumR pb-10">
       <Header />
@@ -105,19 +76,9 @@ const Fortune = () => {
           </h2>
         </div>
         <div className="w-full bg-white rounded-md shadow p-4 mb-4">
-<<<<<<< HEAD
-          <p className=" text-sm text-gray-800">
-            {sajuData?.content || "로딩 중..."}
-          </p>
-=======
-<<<<<<< Updated upstream
-          <p className=" text-sm text-gray-800">{sajuToday?.content || "로딩 중..."}</p>
-=======
           <p className="text-sm text-gray-800">
             {sajuIsPending ? "로딩 중..." : sajuData?.content}
           </p>
->>>>>>> Stashed changes
->>>>>>> front
         </div>
 
         {/* 운세 점수 섹션 */}
@@ -137,27 +98,6 @@ const Fortune = () => {
                 </h1>
               </div>
 
-<<<<<<< Updated upstream
-          {/* RadarChart */}
-
-          <div className="w-full flex justify-center">
-            <RadarChart width={350} height={250} data={radarData}>
-              <PolarGrid radialLines={false} />
-              <PolarAngleAxis
-                dataKey="subject"
-                tick={{ fill: "#666666", fontSize: 14, fontFamily: "NanumR" }}
-              />
-              <Radar
-                name="운세"
-                dataKey="value"
-                stroke="#ff7070"
-                fill="#ff7070"
-                fillOpacity={0.5}
-                domain={[0, 100]} // 이 부분 추가
-              />
-            </RadarChart>
-          </div>
-=======
               {!todayIsPending && (
                 <div className="w-full flex justify-center">
                   <RadarChart width={350} height={250} data={radarData}>
@@ -179,7 +119,6 @@ const Fortune = () => {
               )}
             </>
           )}
->>>>>>> Stashed changes
         </div>
 
         {/* 하단 메뉴: 각 버튼 개별 구성 */}
