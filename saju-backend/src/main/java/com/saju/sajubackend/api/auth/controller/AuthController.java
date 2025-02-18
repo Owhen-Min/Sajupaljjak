@@ -5,7 +5,10 @@ import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.auth.service.AuthService;
 import com.saju.sajubackend.api.auth.service.RefreshTokenService;
 import com.saju.sajubackend.api.auth.service.kakao.KakaoAuthService;
+import com.saju.sajubackend.api.member.domain.Member;
+import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.token.RefreshToken;
+import com.saju.sajubackend.common.enums.RelationshipStatus;
 import com.saju.sajubackend.common.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final MemberRepository memberRepository;
 
 
     @GetMapping("/login/kakao")
@@ -78,6 +82,7 @@ public class AuthController {
 
         //토큰에서 사용자 ID 추출
         long memberId = jwtProvider.getUserIdFromToken(refreshToken);
+
         //DB에서 해당 사용자의 리프레시 토큰 가져오기
         RefreshToken storedToken = refreshTokenService.getRefreshToken(memberId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token not found"));
@@ -90,9 +95,24 @@ public class AuthController {
         //새로운 액세스 토큰 생성
         String newAccessToken = jwtProvider.createAccessToken(memberId);
 
-        return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
+        //사용자의 관계 상태(relation) 가져오기
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found"));
+
+        RelationshipStatus relation = member.getRelation(); // 관계 상태 가져오기
+
+        //응답 DTO 생성
+        LoginResponse.TokenInfo tokenInfo = LoginResponse.TokenInfo.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(refreshToken) // 필요하면 포함
+                .build();
+
+        LoginResponse loginResponse = LoginResponse.builder()
+                .member_id(memberId)
+                .relation(relation) // 🔹 관계 상태 포함
+                .token(tokenInfo)
+                .build();
+
+        return ResponseEntity.ok(loginResponse);
     }
-
-
-
 }
