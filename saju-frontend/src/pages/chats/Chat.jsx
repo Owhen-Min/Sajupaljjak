@@ -138,7 +138,7 @@ const Chat = () => {
     
     const message = {
       chatroomId: chatRoomId,
-      senderId: 1,
+      senderId: "1",
       content: input,
       messageType: "TEXT",
     };
