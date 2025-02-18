@@ -7,9 +7,7 @@ import BottomNav from "../../components/BottomNav";
 import { FiSun, FiUser, FiCalendar, FiTrendingUp } from "react-icons/fi";
 import { useGet } from "../../hooks/useApi";
 
-
 // API로부터 받아온 운세 데이터 (예시)
-
 
 const Fortune = () => {
   const navigate = useNavigate();
@@ -26,7 +24,8 @@ const Fortune = () => {
       love: "",
       health: "",
       study: "",
-  },});
+    },
+  });
   const [radarData, setRadarData] = useState([
     { subject: "총점", value: 0, fullMark: 100 },
     { subject: "재물운", value: 0, fullMark: 100 },
