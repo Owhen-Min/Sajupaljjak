@@ -124,6 +124,8 @@ const Chat = () => {
       content: input,
       messageType: "TEXT",
     };
+    console.log("stompClient : ", stompClient);
+    console.log("stompClient.connected : ", stompClient.connected);
     console.log("전송 데이터 :", JSON.stringify(message, null, 2));
     stompClient.send("/ws/app/chats", {}, JSON.stringify(message));
     setInput("");
