@@ -37,10 +37,10 @@ const SelectionGrid = ({
       setSelectedItems([]);
       onSelect([]);
     } else {
-      // 전체 선택
+      // 전체 선택 - 인덱스 대신 옵션 텍스트 전달
       const allIndices = Array.from({ length: options.length }, (_, i) => i);
       setSelectedItems(allIndices);
-      onSelect(allIndices);
+      onSelect(options); // 여기를 수정 - 인덱스 배열 대신 options 배열 전체를 전달
     }
   };
 
