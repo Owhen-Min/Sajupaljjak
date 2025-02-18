@@ -6,7 +6,7 @@ import Dropdown from "../../components/Dropdown";
 import MainButton from "../../components/MainButton";
 import Input from "../../components/Input";
 import { provinces } from "../../data/provinceCode";
-import { useGet, usePut } from "../../hooks/useApi";
+import { useGet, usePatch } from "../../hooks/useApi";
 import * as blazeface from '@tensorflow-models/blazeface';
 import '@tensorflow/tfjs';
 
@@ -38,7 +38,7 @@ function MyPageEditProfile() {
   });
 
   const { data, isLoading, error } = useGet('/api/members');
-  const mutation = usePut('/api/members');
+  const mutation = usePatch('/api/members');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -366,7 +366,7 @@ function MyPageEditProfile() {
             cols={3}
             options={['무교', '개신교', '불교', '천주교', '기타']}
             onSelect={(selected) => handleSelectionChange('religion', selected)}
-            selected={formData.religion ? [['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)] : []}
+            selected={formData.religion ? [[['무교', '개신교', '불교', '천주교', '기타'].indexOf(formData.religion)]] : []}
           />
         </div>
 
@@ -380,7 +380,7 @@ function MyPageEditProfile() {
             cols={3}
             options={['비흡연', '흡연', '금연 중']}
             onSelect={(selected) => handleSelectionChange('smoking', selected)}
-            selected={formData.smoking ? [['비흡연', '흡연', '금연 중'].indexOf(formData.smoking)] : []}
+            selected={formData.smoking ? [[['비흡연', '흡연', '금연 중'].indexOf(formData.smoking)]] : []}
           />
         </div>
 
@@ -394,7 +394,7 @@ function MyPageEditProfile() {
             cols={2}
             options={['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상']}
             onSelect={(selected) => handleSelectionChange('drinking', selected)}
-            selected={formData.drinking ? [['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)] : []}
+            selected={formData.drinking ? [[['음주 안함', '주 1~2회', '주 3~4회', '주 5회 이상'].indexOf(formData.drinking)]] : []}
           />
         </div>
 
