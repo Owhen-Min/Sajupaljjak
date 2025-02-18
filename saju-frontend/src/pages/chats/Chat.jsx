@@ -41,7 +41,7 @@ const Chat = () => {
   });
 
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
-  const stompClient  = useWebSocket();
+  const { stompClient }  = useWebSocket();
   const { memberId, user } = useAuth();
   
   useEffect(() => {
