@@ -5,166 +5,162 @@ import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import { useParams } from "react-router-dom";
 import { useGet } from "../../hooks/useApi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import useWebSocket from "../../hooks/useWebSocket";
 
 const Chat = () => {
   const chatRoomId = useParams().chatId;
   const [input, setInput] = useState("");
-  const [newMessage, setNewMessage] = useState({});
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      message: "안녕하세요!",
-      sentAt: "10:30 AM",
-      isMine: false,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "상대방닉네임",
-    },
-    {
-      id: 2,
-      message: "안녕하세요! 반가워요 😊",
-      sentAt: "10:31 AM",
-      isMine: true,
-      profileImage:
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-      nickName: "나",
-    },
-  ]);
-
-  const [payload, setPayload] = useState({
-    chatroomId: chatRoomId,
-    lastReadMessage: "",
-  });
-
+  const [messages, setMessages] = useState([]);
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
   const memberId = localStorage.getItem('memberId');
-  
+  const subscriptionRef = useRef(null);
+
+  // 초기 메시지 로드
   useEffect(() => {
     if (data) {
+      console.log('[채팅] 초기 메시지 데이터 수신:', data);
       const transformMessages = (messages, memberId) => {
-        if (!messages) return [];
-        return messages.map((message) => {
-          setPayload((prev) => ({ ...prev, lastReadMessage: message.message }));
-          return {
-            id: message.id,
-            message: message.message,
-            sentAt: message.sentAt,
-            isMine: message.senderId === memberId,
-            profileImage: message.senderId === memberId
-              ? "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-              : data.partner.profileImage,
-            nickName: message.senderId === memberId ? "나" : data.partner.nickName,
-          };
-        });
-      };
-      setMessages(transformMessages(data.messages, memberId));
-    }
-  }, [data, chatRoomId, setMessages, memberId]);
-
-  useEffect(() => {
-    if (!stompClient || !isConnected) return;
-
-    console.log(`=== 채팅방 ${chatRoomId} 구독 시작 ===`);
-    const subscription = stompClient.subscribe(
-      `/ws/topic/${chatRoomId}`,
-      (response) => {
-        console.log("=== 새로운 메시지 수신 ===");
-        console.log("원본 응답:", response);
-        console.log("응답 body:", response.body);
-        
-        try {
-          const responseData = JSON.parse(response.body);
-          console.log("파싱된 응답 데이터:", responseData);
-          
-          // 자신이 보낸 메시지는 이미 UI에 추가되어 있으므로 건너뜀
-          if (responseData.senderId === memberId) {
-            console.log("자신이 보낸 메시지 수신됨 - UI 업데이트 건너뜀");
-            return;
-          }
-
-          const newMessage = {
-            id: responseData.id,
-            message: responseData.message,
-            sentAt: responseData.sentAt,
-            isMine: false,
-            profileImage: data?.partner?.profileImage || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-            nickName: data?.partner?.nickName || "상대방",
-          };
-
-          console.log("상대방 메시지 수신:", newMessage);
-          setMessages(prev => {
-            console.log("이전 메시지 목록:", prev);
-            const updated = [...prev, newMessage];
-            console.log("업데이트된 메시지 목록:", updated);
-            return updated;
-          });
-        } catch (error) {
-          console.error("메시지 처리 중 오류 발생:", error);
-          console.error("원본 응답:", response);
+        if (!messages) {
+          console.log('[채팅] 메시지 데이터 없음');
+          return [];
         }
-      }
-    );
+        return messages.map((message) => ({
+          id: message.id,
+          message: message.message,
+          sentAt: message.sentAt,
+          isMine: message.senderId === memberId,
+          profileImage: message.senderId === memberId
+            ? "기본이미지URL"
+            : data.partner.profileImage,
+          nickName: message.senderId === memberId ? "나" : data.partner.nickName,
+        }));
+      };
+      const transformedMessages = transformMessages(data.messages, memberId);
+      console.log('[채팅] 변환된 메시지:', transformedMessages);
+      setMessages(transformedMessages);
+    }
+  }, [data, memberId]);
 
-    console.log("구독 객체:", subscription);
-
-    return () => {
-      console.log(`=== 채팅방 ${chatRoomId} 구독 취소 ===`);
-      subscription.unsubscribe();
-    };
-  }, [stompClient, isConnected, chatRoomId, memberId]);
-
-  const sendMessage = () => {
+  // 웹소켓 구독 설정
+  useEffect(() => {
     if (!stompClient || !isConnected) {
-      console.log("웹소켓 연결 상태 확인:");
-      console.log("- stompClient:", stompClient);
-      console.log("- isConnected:", isConnected);
+      console.log('[웹소켓] 연결 상태 확인:', {
+        stompClient: !!stompClient,
+        isConnected: isConnected
+      });
       return;
     }
-    
-    if (!input.trim()) return;
-    
-    const message = {
+
+    console.log(`[웹소켓] 채팅방 ${chatRoomId} 구독 시작`);
+
+    try {
+      subscriptionRef.current = stompClient.subscribe(
+        `/ws/topic/chat/${chatRoomId}`,
+        (response) => {
+          console.log('[웹소켓] 메시지 수신:', {
+            headers: response.headers,
+            body: response.body
+          });
+
+          try {
+            const messageData = JSON.parse(response.body);
+            
+            // 자신의 메시지는 건너뛰기
+            if (messageData.senderId === memberId) {
+              console.log('[웹소켓] 자신의 메시지 무시');
+              return;
+            }
+
+            const newMessage = {
+              id: messageData.id || Date.now(),
+              message: messageData.message || messageData.content,
+              sentAt: messageData.sentAt || new Date().toLocaleTimeString(),
+              isMine: false,
+              profileImage: data?.partner?.profileImage || "기본이미지URL",
+              nickName: data?.partner?.nickName || "상대방",
+            };
+
+            console.log('[웹소켓] 새 메시지 처리:', newMessage);
+            setMessages(prev => [...prev, newMessage]);
+          } catch (error) {
+            console.error('[웹소켓] 메시지 파싱 오류:', {
+              error: error.message,
+              receivedData: response.body
+            });
+          }
+        },
+        {
+          id: `chat-${chatRoomId}`,
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
+      );
+
+      console.log('[웹소켓] 구독 성공:', subscriptionRef.current);
+    } catch (error) {
+      console.error('[웹소켓] 구독 실패:', error);
+    }
+
+    return () => {
+      if (subscriptionRef.current) {
+        console.log('[웹소켓] 구독 해제');
+        subscriptionRef.current.unsubscribe();
+      }
+    };
+  }, [stompClient, isConnected, chatRoomId, memberId, data]);
+
+  const sendMessage = () => {
+    if (!input.trim()) {
+      console.log('[메시지] 빈 메시지 전송 시도 - 무시');
+      return;
+    }
+
+    if (!stompClient || !isConnected) {
+      console.error('[메시지] 웹소켓 연결 없음:', {
+        stompClient: !!stompClient,
+        isConnected: isConnected
+      });
+      return;
+    }
+
+    const messageData = {
       chatRoomId: chatRoomId,
       senderId: memberId,
-      content: input,
+      content: input.trim(),
       messageType: "TEXT",
+      timestamp: new Date().toISOString()
     };
-    
-    const messageString = JSON.stringify(message);
-    console.log("=== 메시지 전송 시도 ===");
-    console.log("발신 데이터(raw):", message);
-    console.log("발신 데이터(string):", messageString);
-    console.log("전송 destination:", "/app/chats");
-    
+
+    console.log('[메시지] 전송 시도:', messageData);
+
     try {
       stompClient.publish({
         destination: "/app/chats",
-        body: messageString,
-        headers: {},
+        body: JSON.stringify(messageData),
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        }
       });
 
-      const newMessage = {
+      // UI에 즉시 반영
+      const uiMessage = {
         id: Date.now(),
-        message: input,
+        message: input.trim(),
         sentAt: new Date().toLocaleTimeString(),
         isMine: true,
-        profileImage: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+        profileImage: "기본이미지URL",
         nickName: "나",
       };
-      
-      console.log("UI에 추가되는 메시지:", newMessage);
-      setMessages(prev => [...prev, newMessage]);
+
+      setMessages(prev => [...prev, uiMessage]);
       setInput("");
-      console.log("=== 메시지 전송 완료 ===");
+      console.log('[메시지] 전송 성공');
     } catch (error) {
-      console.error("메시지 전송 실패:", error);
-      console.error("에러 상세:", {
-        message: error.message,
-        stack: error.stack
+      console.error('[메시지] 전송 실패:', {
+        error: error.message,
+        messageData: messageData
       });
     }
   };
