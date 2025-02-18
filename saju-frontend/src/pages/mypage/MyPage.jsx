@@ -6,13 +6,11 @@ import { useAuth } from "../../hooks/useAuth";
 import { usersDetail } from "../../data/usersDetail";
 
 function MyPage() {
-  const user = testUsers[0];
 
   return (
     <div className="flex flex-col relative h-screen pt-[60px] pb-[70px]">
       <TopBar2 mainText={"마이페이지"} />
       <div className="flex-1 overflow-y-auto p-6">
-        <UserCard user={user} disabled={true} className="mb-6" />
         <nav className="py-4">
           <ul className="overflow-hidden rounded-lg bg-white shadow divide-y divide-gray-100">
             <li>
