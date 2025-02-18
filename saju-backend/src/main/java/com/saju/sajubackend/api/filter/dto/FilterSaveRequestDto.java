@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public record FilterSaveRequestDto(
         @NotNull(message = "선호하는 흡연 상태 값은 반드시 들어와야합니다.") String smoking,
         @NotNull(message = "선호하는 음주 상태 값은 반드시 들어와야합니다.") String drinking,
-        @Size(min = 1, message = "선호하는 지역 값은 반드시 들어와야합니다.") List<Long> regionFilter,
+        @Size(min = 1, message = "선호하는 지역 값은 반드시 들어와야합니다.") List<String> regionFilter,
         @Size(min = 1, message = "선호하는 종교 값은 반드시 들어와야합니다.") List<String> religionFilter,
         @Min(value = 140, message = "키의 최소 값은 140입니다.") @Max(value = 220, message = "키의 최댓 값은 220입니다.") int minHeight,
         @Min(value = 140, message = "키의 최소 값은 140입니다.") @Max(value = 220, message = "키의 최댓 값은 220입니다.") int maxHeight,

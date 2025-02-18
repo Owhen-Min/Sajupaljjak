@@ -1,4 +1,4 @@
-package com.saju.sajubackend.api.filter.dto;
+package com.saju.sajubackend.api.member.dto;
 
 import lombok.Builder;
 import lombok.Getter;
