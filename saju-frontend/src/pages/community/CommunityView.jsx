@@ -69,6 +69,16 @@ function CommunityView() {
     }
   }, [data]);
 
+
+
+
+
+
+
+
+
+
+
   if (!article) {
     return (
       <div className="h-screen flex items-center justify-center font-NanumR">
@@ -90,6 +100,12 @@ function CommunityView() {
       </div>
     );
   }
+
+
+
+
+
+
   return (
     <div className="h-screen flex flex-col bg-gray-50 font-NanumR">
       <Header article={article} />

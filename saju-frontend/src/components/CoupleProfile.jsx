@@ -12,10 +12,12 @@ function CoupleProfile({ couple }) {
       for (const [sigungu, sigunguCode] of Object.entries(provinceData.sigungu)) {
         if (sigunguCode === codeStr) {
           const [sido, gugun] = sigungu.split(" ");
+          console.log("시도 : ", sido, ", 구군 : ", gugun);
           return { sido, gugun };
         }
       }
     }
+    console.log(code);
     return { sido: "알 수 없음", gugun: "" };
   };
 
