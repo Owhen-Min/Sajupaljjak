@@ -5,7 +5,7 @@ import SajuColumn from "../../components/SajuColumn";
 import { useGet } from "../../hooks/useApi";
 
 function CoupleCompatibility() {
-  const { data: coupleData, isPending, error } = useGet(`/api/fortune/couple-new-year`);
+  const { data: coupleData, isPending, error } = useGet(`/api/fortune/couple-lifetime`);
   useEffect(() => {
     if (coupleData) {
       setData(coupleData);
