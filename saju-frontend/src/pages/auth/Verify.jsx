@@ -57,7 +57,7 @@ const Verify = () => {
       localStorage.setItem("memberId", data.member_id);
       localStorage.setItem("relation", data.relation);
       
-      // updateUser(userData);
+      updateUser(userData);
 
       updateMemberId(data.member_id);
       updateRelation(data.relation);
@@ -77,6 +77,7 @@ const Verify = () => {
     navigate,
     updateMemberId,
     updateEmail,
+    updateUser,
     updateIsAuthenticated,
     updateRelation,
     logout,
