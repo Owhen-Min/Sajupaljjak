@@ -12,7 +12,7 @@ function MatchReport() {
   const { partnerId } = useParams();
   const navigate = useNavigate();
   const mutation = usePost();
-  const {data, isPending, error} = useGet({uri: `api/match/${partnerId}`});
+  const {data, isPending, error} = useGet(`api/match/${partnerId}`);
   const [user, setUser] = useState({});
 
   useEffect(() => {
