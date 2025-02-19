@@ -5,37 +5,38 @@ import BottomNav from "../../components/BottomNav";
 import TopBar from "../../components/TopBar";
 import UserList2 from "../../components/UserList2";
 import { users } from "../../data/users"; // 테스트용 유저 데이터 배열
+import  useInfiniteGet  from "../../hooks/useInfiniteGet";
+
+
+
 
 function Match() {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
   const [displayedUsers, setDisplayedUsers] = useState([]);
+  // 새로 값 받으면 data.page를 displayUser에 추가
   const observerRef = useRef(null);
 
-  // 3개씩 로딩 (반복해서 로딩)
-  const loadUsers = (pageNumber) => {
-    const count = pageNumber * 4;
-    const newUsers = Array.from(
-      { length: count },
-      (_, i) => users[i % users.length]
-    );
-    setDisplayedUsers(newUsers);
-  };
-
+  const { data, fetchNextPage, hasNextPage} = useInfiniteGet("/api/match", { initialCursor: 0 });
+  
   useEffect(() => {
-    loadUsers(page);
-  }, [page]);
+    if (data) {
+      setDisplayedUsers((prev) => [...prev, ...data.pages.map((page) => page.data)]);
+    }
+  }, [data]);
 
   // Intersection Observer로 무한 스크롤 구현
-  const sentinelRef = useCallback((node) => {
-    if (observerRef.current) observerRef.current.disconnect();
-    observerRef.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        setPage((prev) => prev + 1);
-      }
-    });
-    if (node) observerRef.current.observe(node);
-  }, []);
+  const sentinelRef = useCallback(
+    (node) => {
+      if (observerRef.current) observerRef.current.disconnect();
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+      if (node) observerRef.current.observe(node);
+    }, [fetchNextPage, hasNextPage]
+  );
+
 
   return (
     <div className="h-screen flex flex-col relative">

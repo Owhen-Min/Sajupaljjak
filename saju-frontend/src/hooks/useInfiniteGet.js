@@ -1,21 +1,37 @@
+// src/hooks/useInfiniteGet.js
 import { useInfiniteQuery } from "@tanstack/react-query";
 import apiClient from "../api/apiClient";
 
-export const useInfiniteGet = (uri, queryParams = {}) => {
-  return useInfiniteQuery({
-    queryKey: [uri, queryParams],
-    queryFn: async ({ pageParam = 1 }) => {
-      
-      const response = await apiClient.get(uri, {
-        params: { ...queryParams, cursor: pageParam },
-      });
-      return response.data;
-    },
-    getNextPageParam: (lastPage) => {
-      return lastPage?.nextCursor ?? null;
-    },
-    getPreviousPageParam: (firstPage) => {
-      return firstPage?.previousCursor ?? null;
-    },
-  });
+const fetchData = async ({ pageParam = 0, queryKey }) => {
+  const [uri, type, query] = queryKey;
+
+  const params = { cursor: pageParam };
+  if (type) params.type = type;
+  if (query) params.query = query;
+
+  const { data } = await apiClient.get(uri, { params });
+  console.log("data", data);
+  console.log("cursor : ",pageParam);
+
+  return data;
 };
+
+const useInfiniteGet = (
+  uri,
+  { type, query, initialCursor} = {}
+) => {
+  return useInfiniteQuery(
+    [uri, type, query],
+    ({ pageParam = initialCursor }) =>
+      fetchData({
+        pageParam,
+        queryKey: [uri, type, query],
+      }),
+    {
+      getNextPageParam: (lastPage) =>
+        lastPage.hasNext ? lastPage.nextCursor : undefined,
+    }
+  );
+};
+
+export default useInfiniteGet;
