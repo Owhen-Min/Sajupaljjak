@@ -107,6 +107,7 @@ function CommunityWrite() {
 
   const handleSubmit = () => {
     if (!validateForm()) return;
+    const encodedType = encodeURIComponent(`${formData.celestialStem.charAt(1)}`)
     mutation.mutate(
       {
         uri: `community`,
