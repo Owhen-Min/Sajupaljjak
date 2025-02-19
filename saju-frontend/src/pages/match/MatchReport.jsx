@@ -209,7 +209,7 @@ function MatchReport() {
 
   const handleMatchRequest = () => {
     mutation.mutate(
-      { uri: `api/chats/${partnerId}`, payload: {} },
+      { uri: `api/chats/${partnerId}`},
       {
         onSuccess: () => {
           navigate(`/chats/${partnerId}`);
