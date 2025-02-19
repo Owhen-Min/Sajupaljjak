@@ -1,17 +1,17 @@
-import { Routes, Route } from 'react-router-dom';
-import LogInPage from '../pages/auth/Login';
-import Welcome from '../pages/auth/Welcome';
-import SignUpAdditional from '../pages/auth/SignUpAdditional';
-import Preference from '../pages/auth/Preference';
-import SignUpPage from '../pages/auth/SignUp';
-import Verify from '../pages/auth/Verify';
+import { Routes, Route } from "react-router-dom";
+import LogInPage from "../pages/auth/Login";
+import Welcome from "../pages/auth/Welcome";
+import SignUpAdditional from "../pages/auth/SignUpAdditional";
+import Preference from "../pages/auth/Preference";
+import SignUpPage from "../pages/auth/SignUp";
+import Verify from "../pages/auth/Verify";
+import PageLoader from "../components/pageLoader";
 
 function AuthRoutes() {
   return (
     <Routes>
-
       {/* 로그인으로 이동하는 경우 */}
-      <Route path="/" element={<LogInPage />} />
+      <Route path="/" element={<PageLoader />} />
       {/* 로그인 검증으로 이동하는 경우 */}
       <Route path="/verify" element={<Verify />} />
       {/* 회원가입으로 이동하는 경우 */}
@@ -22,7 +22,6 @@ function AuthRoutes() {
       <Route path="/signup/additional" element={<SignUpAdditional />} />
       {/* 솔로 취향 입력 페이지로 이동하는 경우 */}
       <Route path="/preference" element={<Preference />} />
-      
     </Routes>
   );
 }
