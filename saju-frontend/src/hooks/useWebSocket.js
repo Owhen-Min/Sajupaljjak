@@ -15,6 +15,8 @@ const useWebSocket = () => {
       const client = new Client({
         brokerURL: "wss://i12a408.p.ssafy.io/ws",
         reconnectDelay: 5000,
+        heartbeatIncoming: 0,
+        heartbeatOutgoing: 0,
         connectHeaders: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -22,6 +24,10 @@ const useWebSocket = () => {
           console.log("웹소켓 연결 성공");
           setIsConnected(true);
           setStompClient(client);
+        },
+        onWebSocketClose: () => {
+          console.log("WebSocket 연결이 닫힘");
+          setIsConnected(false);
         },
         onDisconnect: () => {
           console.log("웹소켓 연결 해제");
