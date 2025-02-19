@@ -1,5 +1,7 @@
 package com.saju.sajubackend.api.filter.service;
 
+import com.saju.sajubackend.api.auth.dto.LoginResponse;
+import com.saju.sajubackend.api.auth.dto.SignupRequest;
 import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.filter.domain.RegionFilter;
 import com.saju.sajubackend.api.filter.domain.ReligionFilter;
@@ -15,13 +17,19 @@ import com.saju.sajubackend.common.enums.Religion;
 import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.exception.BadRequestException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
+import com.saju.sajubackend.common.util.CelestialStemCalculator;
+import com.saju.sajubackend.common.util.FourPillarsCalculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
