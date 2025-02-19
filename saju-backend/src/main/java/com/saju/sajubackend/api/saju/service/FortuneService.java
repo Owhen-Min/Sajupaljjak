@@ -127,12 +127,12 @@ public class FortuneService {
         Saju partnerSaju = sajuRepository.findByMember(partnerMember)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
-        // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
+        // 6. 본인의 'daily' 값과 상대방의 'daily' 값을 이용하여 운세 조회
         CoupleYearFortune coupleYearFortune = coupleYearRepository.findByMaleAndFemale(
-                        mySaju.getTimely(),
+                        mySaju.getDaily(),
                         partnerSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No fortune found for siju: " + mySaju.getTimely()
+                        "No fortune found for ilju: " + mySaju.getDaily()
                                 + " and ilju: " + partnerSaju.getDaily()));
 
         // 7. DTO 변환 후 반환
@@ -170,12 +170,12 @@ public class FortuneService {
         Saju partnerSaju = sajuRepository.findByMember(partnerMember)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
-        // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
+        // 6. 본인의 'daily' 값과 상대방의 'daily' 값을 이용하여 운세 조회
         CoupleLifeFortune coupleLifeFortune = coupleLifeRepository.findByMaleAndFemale(
-                        mySaju.getTimely(),
+                        mySaju.getDaily(),
                         partnerSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No fortune found for siju: " + mySaju.getTimely()
+                        "No fortune found for siju: " + mySaju.getDaily()
                                 + " and ilju: " + partnerSaju.getDaily()));
 
         // 7. DTO 변환 후 반환
@@ -191,3 +191,4 @@ public class FortuneService {
         );
     }
 }
+

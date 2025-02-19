@@ -11,6 +11,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -20,11 +21,23 @@ public class MatchingRedisUtil {
 
     public List<MatchingMemberResponseDto> getCache(Long memberId) {
         Object cachedData = redisTemplate.opsForValue().get(getRedisKey(memberId));
+
+        if (cachedData == null) return Collections.emptyList();
+
         if (cachedData instanceof List<?>) {
-            return (List<MatchingMemberResponseDto>) cachedData;
+            try {
+                return ((List<?>) cachedData).stream()
+                        .filter(obj -> obj instanceof MatchingMemberResponseDto)
+                        .map(obj -> (MatchingMemberResponseDto) obj)
+                        .collect(Collectors.toList());
+            } catch (ClassCastException e) {
+                return Collections.emptyList();
+            }
         }
+
         return Collections.emptyList();
     }
+
 
     public void createCache(Long memberId, List<MatchingMemberResponseDto> matchingMembers) {
         LocalDateTime midnight = LocalDate.now().plusDays(1).atStartOfDay();
