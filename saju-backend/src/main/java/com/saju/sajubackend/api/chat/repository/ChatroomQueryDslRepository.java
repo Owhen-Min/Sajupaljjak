@@ -32,7 +32,7 @@ public class ChatroomQueryDslRepository {
                                                 .and(chatroom.member2.memberId.eq(memberId))
                                 )
                 )
-                .fetchOne();
+                .fetchFirst();
     }
 
     public Boolean existChatMember(Long chatroomId, Long memberId) {

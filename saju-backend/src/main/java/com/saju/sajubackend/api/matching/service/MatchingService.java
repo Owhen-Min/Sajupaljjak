@@ -50,6 +50,8 @@ public class MatchingService {
     }
 
     public MatchingProfileResponseDto getMatchingMemberProfile(Long memberId, Long partnerId) {
+        System.out.println("[🙌 memberId : " + memberId + "partnerId : " + partnerId + " - MatchingService.getMatchingMemberProfile()]");
+
         return matchingQueryDslRepository.findMatchingMember(memberId, partnerId);
     }
 }
