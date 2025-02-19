@@ -90,7 +90,7 @@ function MatchReport() {
           saju={{
             year: user.year,
             month: user.month,
-            date: user.date,
+            date: user.day,
             time: user.time,
           }}
           title={false}
