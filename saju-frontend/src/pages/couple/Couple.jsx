@@ -13,32 +13,29 @@ import { useAuth } from "../../hooks/useAuth";
 import LoadingSpinner from "../../components/LoadingSpinner";
 
 function Couple() {
+
+  const navigate = useNavigate();
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  // const { data, isPending, error } = useGet(`/api/date?month=${month}`);
-  
+  const [couple, setCouple] = useState(null);
+  const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
+  const [badDates, setBadDates] = useState([]);
   const {
     data: coupleData,
     isPending: isCouplePending,
     error: coupleError,
   } = useGet(`/api/couples`);
+  const { data, isPending, error } = useGet(`/api/couples/date?month=${month}`);
 
-  console.log(coupleData);
+  useEffect(() => {
+    if (data) {
+      setGoodDates(data.goodDates);
+      setBadDates(data.badDates);
+    }
+  }, [data]);
 
-  const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
-  const [badDates, setBadDates] = useState([]);
-
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (data) {
-  //     setGoodDates(data.goodDates);
-  //     setBadDates(data.badDates);
-  //   }
-  // }, [data]);
-  
   useEffect(() => {
     if (coupleData) {
-      const { coupleId, ...filteredData } = coupleData;
-      setCouple(filteredData);
+      setCouple(coupleData);
     }
   }, [coupleData]);
 
@@ -49,7 +46,7 @@ function Couple() {
         <p>커플 데이터 로딩중...</p>
       </div>
     );
-  // if (error) return <div>{error}</div>;
+  if (error) return <div>{error}</div>;
   if (isCouplePending) return <div>커플 Loading...</div>;
   if (coupleError) return <div>에러가 발생했습니다: {coupleError.message}</div>;
 
@@ -62,10 +59,35 @@ function Couple() {
         <TopBar />
         {Array.isArray(coupleData) ? (
           coupleData.map((couple, index) => (
-            <CoupleProfile key={index} couple={couple} />
+            <CoupleProfile
+              key={index}
+              couple={{
+                ...couple,
+                member: {
+                  ...couple.member,
+                  memberType: couple.member.celestialStem,
+                },
+                partner: {
+                  ...couple.partner,
+                  memberType: couple.partner.celestialStem,
+                },
+              }}
+            />
           ))
         ) : (
-          <CoupleProfile couple={coupleData} />
+          <CoupleProfile
+            couple={{
+              ...coupleData,
+              member: {
+                ...coupleData.member,
+                memberType: coupleData.member.celestialStem,
+              },
+              partner: {
+                ...coupleData.partner,
+                memberType: coupleData.partner.celestialStem,
+              },
+            }}
+          />
         )}
 
         <div className="fortune-section flex flex-wrap w-full items-center justify-center gap-2 px-1 pb-2">
