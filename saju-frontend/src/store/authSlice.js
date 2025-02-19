@@ -4,7 +4,7 @@ const initialState = {
   memberId: "",
   relation: null,
   isAuthenticated: false,
-  user: null,
+  user: {},
   email: "",
   accessToken: "",
 };
@@ -35,7 +35,7 @@ const authSlice = createSlice({
       state.memberId = "";
       state.relation = 0;
       state.isAuthenticated = false;
-      state.user = null;
+      state.user = {};
       state.email = "";
       state.accessToken = "";
     },
