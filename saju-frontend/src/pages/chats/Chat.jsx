@@ -215,7 +215,7 @@ const Chat = () => {
 
   return (
     <div className=" h-screen bg-gray-50 font-NanumR relative flex flex-col">
-      <Header />
+      <Header data={data} />
       {/* 메시지 리스트 컨테이너: 헤더와 하단 입력창 높이를 고려한 패딩 */}
       <div className="flex-1 pt-2 pb-2 overflow-y-auto scrollbar-hide">
         <MessageList messages={messages} />
@@ -268,7 +268,7 @@ const Chat = () => {
   );
 };
 
-function Header() {
+function Header({ data }) {
   const navigate = useNavigate();
 
   return (
