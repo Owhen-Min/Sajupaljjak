@@ -8,7 +8,7 @@ function SignUpAdditional() {
   const [selected, setSelected] = useState([]);
 
   return (
-    <div className="signup-additional flex flex-col items-center justify-center min-h-screen">
+    <div className="font-NamumR signup-additional flex flex-col items-center justify-center min-h-screen">
       <h2 className="text-gray-700 text-2xl font-bold mb-8">현재 상태는?</h2>
       <div className="w-1/2 max-w-md">
         <SelectionGrid

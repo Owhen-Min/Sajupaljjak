@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import TopBar2 from "../../components/TopBar2";
+import TopBar2 from "../../components/TopBar6";
 import SelectionGrid from "../../components/SelectionGrid";
 import Dropdown from "../../components/Dropdown";
 import MainButton from "../../components/MainButton";
@@ -116,7 +116,7 @@ function Preference() {
     createPreference(requestData, {
       onSuccess: (data) => {
         console.log("내 선호 정보 입력 성공:", data);
-        localStorage.setItem('relation', false);
+        localStorage.setItem("relation", false);
         navigate("/solo"); // 성공 시 메인 페이지로 이동
       },
       onError: (error) => {
@@ -128,10 +128,12 @@ function Preference() {
   };
 
   return (
-    <div className="preference flex flex-col relative justify-center min-h-screen">
+    <div className="font-NanumR text-sm preference flex flex-col relative justify-center min-h-screen">
       <TopBar2 mainText="내 선호 정보 입력" />
-      <div className="preference-content p-5">
-        <h3 className="input-prompt mb-2">선호하는 나이 범위를 선택해주세요</h3>
+      <div className="preference-content p-5 pt-20">
+        <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+          선호하는 나이 범위를 선택해주세요
+        </h3>
         <div className="input-group mb-6">
           <div className="flex justify-between mt-2 text-md text-gray-600">
             <span>{formData.minAge}세</span>
@@ -150,7 +152,9 @@ function Preference() {
           </div>
         </div>
 
-        <h3 className="input-prompt mb-2">선호하는 종교를 선택해주세요</h3>
+        <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+          선호하는 종교
+        </h3>
         <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
@@ -165,7 +169,9 @@ function Preference() {
           {errors.religion && <ErrorBubble>종교를 선택해주세요</ErrorBubble>}
         </div>
 
-        <h3 className="input-prompt mb-2">선호하는 음주 여부를 선택해주세요</h3>
+        <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+          선호하는 음주 여부
+        </h3>
         <div className="input-group mb-6">
           <SelectionGrid
             cols={2}
@@ -179,7 +185,9 @@ function Preference() {
           )}
         </div>
 
-        <h3 className="input-prompt mb-2">선호하는 흡연 여부를 선택해주세요</h3>
+        <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+          선호하는 흡연 여부
+        </h3>
         <div className="input-group mb-6">
           <SelectionGrid
             cols={3}
@@ -192,7 +200,9 @@ function Preference() {
           )}
         </div>
 
-        <h3 className="input-prompt mb-2">선호하는 키 범위를 선택해주세요</h3>
+        <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+          선호하는 키
+        </h3>
         <div className="input-group mb-6">
           <div className="relative">
             <RangeSlider
@@ -211,7 +221,9 @@ function Preference() {
           </div>
         </div>
 
-        <h3 className="input-prompt mb-2">선호하는 지역을 선택해주세요</h3>
+        <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
+          선호하는 지역
+        </h3>
         <div className="input-group mb-6 text-sm">
           <div className="flex flex-wrap gap-2 mt-2">
             {formData.regionFilter.map((code) => {
