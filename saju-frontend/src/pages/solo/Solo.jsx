@@ -12,38 +12,38 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
 // 캐러셀로 돌릴 유저 데이터
-const users = [
-  {
-    id: 1,
-    nickname: "이종문",
-    score: 99,
-    profileImage: profile1,
-    region: 1123123123,
-    age: 28,
-    celestialStem: "무토",
-    introduction: "찰떡궁합인분 찾습니다^^",
-  },
-  {
-    id: 2,
-    nickname: "오수영",
-    score: 99,
-    profileImage: profile2,
-    region: 1234123,
-    age: 26,
-    celestialStem: "갑목",
-    introduction: "찰떡궁합인분 찾습니다^^",
-  },
-  {
-    id: 3,
-    nickname: "윤크리스탈",
-    score: 99,
-    profileImage: profile3,
-    region: 123124123412,
-    age: 31,
-    celestialStem: "갑목",
-    introduction: "찰떡궁합인분 찾습니다^^",
-  },
-];
+// const users = [
+//   {
+//     id: 1,
+//     nickname: "이종문",
+//     score: 99,
+//     profileImage: profile1,
+//     region: 1123123123,
+//     age: 28,
+//     celestialStem: "무토",
+//     introduction: "찰떡궁합인분 찾습니다^^",
+//   },
+//   {
+//     id: 2,
+//     nickname: "오수영",
+//     score: 99,
+//     profileImage: profile2,
+//     region: 1234123,
+//     age: 26,
+//     celestialStem: "갑목",
+//     introduction: "찰떡궁합인분 찾습니다^^",
+//   },
+//   {
+//     id: 3,
+//     nickname: "윤크리스탈",
+//     score: 99,
+//     profileImage: profile3,
+//     region: 123124123412,
+//     age: 31,
+//     celestialStem: "갑목",
+//     introduction: "찰떡궁합인분 찾습니다^^",
+//   },
+// ];
 
 export default function Solo() {
 
@@ -53,15 +53,15 @@ export default function Solo() {
   const [matchingTab, setMatchingTab] = useState("compatibility");
 
   const navigate = useNavigate();
-  // const [users, setUsers] = useState([]);
-  // const { data, isPending, error } = useGet("api/match/top");
-  // useState(() => {
-  //   if (data) {
-  //     setUsers(data);
-  //   }
-  // }, [data]);
-  // if (isPending) return <div><LoadingSpinner/></div>;
-  // if (error) return <div>Error: {error.message}</div>;
+  const [users, setUsers] = useState([]);
+  const { data, isPending, error } = useGet("api/match/top");
+  useState(() => {
+    if (data) {
+      setUsers(data);
+    }
+  }, [data]);
+  if (isPending) return <div><LoadingSpinner/></div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="w-full h-screen flex flex-col">
