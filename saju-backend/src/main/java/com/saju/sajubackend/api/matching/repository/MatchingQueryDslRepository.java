@@ -77,7 +77,7 @@ public class MatchingQueryDslRepository extends MatchingBaseRepository {
                         partner.nickname,
                         score1.score,
                         partner.profileImg,
-                        partner.cityCode,
+                        partner.cityCode.stringValue(),
                         partner.age,
                         partner.celestialStem,
                         partner.intro,
@@ -103,7 +103,7 @@ public class MatchingQueryDslRepository extends MatchingBaseRepository {
                                 .and(coupleYear.male.eq(partnerSaju.daily)).and(coupleYear.female.eq(saju.daily)))
                 )
                 .where(member.memberId.eq(memberId))
-                .fetchOne();
+                .fetchFirst();
     }
 
 

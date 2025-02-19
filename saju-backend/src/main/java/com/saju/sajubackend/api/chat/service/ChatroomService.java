@@ -44,8 +44,10 @@ public class ChatroomService {
         Member loginMember = findMember(memberId);
         Member matchingMember = findMember(partnerId);
 
+        System.out.println("[🙌 ChatroomId : " + chatroomId + " - ChatroomService.getChatroom()]");
+        
         // 2. 채팅방 생성
-        if (Objects.isNull(chatroomId)) {
+        if (chatroomId == null) {
             Chatroom chatroom = saveChatroom(loginMember, matchingMember); // 채팅방 생성
             chatroomId = chatroom.getChatroomId();
 

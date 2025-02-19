@@ -1,21 +1,18 @@
 package com.saju.sajubackend.api.chat.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import static com.saju.sajubackend.api.chat.domain.QChatroom.chatroom;
-import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMember;
-import static com.saju.sajubackend.api.member.domain.QMember.member;
-
-import com.saju.sajubackend.api.chat.domain.QChatroom;
-import com.saju.sajubackend.api.chat.dto.ChatPartnerDto;
+import com.saju.sajubackend.api.chat.domain.Chatroom;
 import com.saju.sajubackend.api.member.domain.Member;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.saju.sajubackend.api.chat.domain.QChatroom.chatroom;
+import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMember;
+import static com.saju.sajubackend.api.member.domain.QMember.member;
 
 @RequiredArgsConstructor
 @Repository
@@ -35,7 +32,7 @@ public class ChatroomQueryDslRepository {
                                                 .and(chatroom.member2.memberId.eq(memberId))
                                 )
                 )
-                .fetchOne();
+                .fetchFirst();
     }
 
     public Boolean existChatMember(Long chatroomId, Long memberId) {
@@ -79,14 +76,17 @@ public class ChatroomQueryDslRepository {
     }
 
     public Member findPartner(Long memberId, Long chatroomId) {
+
+        Chatroom foundChatroom = queryFactory
+                .selectFrom(chatroom)
+                .where(chatroom.chatroomId.eq(chatroomId))
+                .fetchOne();
+
+        Long partnerId = (foundChatroom.getMember1().getMemberId().equals(memberId)) ? foundChatroom.getMember2().getMemberId() : foundChatroom.getMember1().getMemberId();
+
         return queryFactory
                 .selectFrom(member)
-                .from(chatroom)
-                .join(member).on(
-                        (chatroom.member1.memberId.eq(memberId).and(chatroom.member2.eq(member)))
-                                .or(chatroom.member2.memberId.eq(memberId).and(chatroom.member1.eq(member)))
-                )
-                .where(chatroom.chatroomId.eq(chatroomId))
+                .where(member.memberId.eq(partnerId))
                 .fetchOne();
     }
 

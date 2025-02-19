@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorMessage {
     // auth
-    ERR_UNAUTORIZED("[ERR] Unauthorized"),
+    ERR_UNAUTHORIZED("[ERR] Unauthorized"),
     MEMBER_NOT_FOUND("존재하지 않는 사용자입니다."),
     REFRESH_TOKEN_EXPIRED("만료된 토큰입니다."),
     DUPLICATE_NICKNAME("이미 존재하는 닉네임입니다."),

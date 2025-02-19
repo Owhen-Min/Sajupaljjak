@@ -1,7 +1,9 @@
 package com.saju.sajubackend.api.couple.domain;
 
 import com.saju.sajubackend.api.member.domain.Member;
+import com.saju.sajubackend.common.converter.ElementConverter;
 import com.saju.sajubackend.common.entity.BaseTimeEntity;
+import com.saju.sajubackend.common.enums.Element;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,11 +34,21 @@ public class Couple extends BaseTimeEntity {
     @Column(name = "start_date")
     private LocalDate startDate;
 
+    @Convert(converter = ElementConverter.class)
+    @Column(name = "lack_element")
+    private Element lackElement;
+
+    @Convert(converter = ElementConverter.class)
+    @Column(name = "plenty_element")
+    private Element plentyElement;
+
     @Builder
-    private Couple(Long coupleId, Member coupleMale, Member coupleFemale, LocalDate startDate) {
+    private Couple(Long coupleId, Member coupleMale, Member coupleFemale, LocalDate startDate, Element lackElement, Element plentyElement) {
         this.coupleId = coupleId;
         this.coupleMale = coupleMale;
         this.coupleFemale = coupleFemale;
         this.startDate = startDate;
+        this.lackElement = lackElement;
+        this.plentyElement = plentyElement;
     }
 }

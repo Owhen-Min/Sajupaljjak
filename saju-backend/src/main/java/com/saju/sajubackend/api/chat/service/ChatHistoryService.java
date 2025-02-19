@@ -46,7 +46,7 @@ public class ChatHistoryService {
         Chatroom chatroom = chatroomRepository.findById(chatroomId)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.INVALID_CHAT_ROOM));
 
-        if (isChatMember(chatroom, memberId)) throw new UnAuthorizedException(ErrorMessage.ERR_UNAUTORIZED);
+        if (isChatMember(chatroom, memberId)) throw new UnAuthorizedException(ErrorMessage.ERR_UNAUTHORIZED);
     }
 
     private boolean isChatMember(Chatroom chatroom, Long memberId) {

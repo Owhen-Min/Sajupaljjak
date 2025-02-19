@@ -14,7 +14,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
-  const memberId = sessionStorage.getItem('memberId');
+  const memberId = localStorage.getItem('memberId');
   const subscriptionRef = useRef(null);
   const [partner, setPartner] = useState({
     id: null,
@@ -110,6 +110,40 @@ const Chat = () => {
 
     console.log(`[웹소켓] 채팅방 ${chatRoomId} 구독 시도`);
 
+    // 웹소켓 연결 시 채팅 데이터 새로 불러오기
+    const fetchLatestMessages = async () => {
+      try {
+        const response = await fetch(`/api/chats/${chatRoomId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          }
+        });
+        const newData = await response.json();
+        if (newData) {
+          const transformMessages = (messages, memberId) => {
+            if (!Array.isArray(messages)) return [];
+            return messages.map((message) => ({
+              id: message.id || Date.now(),
+              message: message.content,
+              sentAt: message.sendTime,
+              isMine: message.senderId === memberId,
+              profileImage: message.senderId === memberId
+                ? "기본이미지URL"
+                : newData.partner?.profileImage || "기본이미지URL",
+              nickName: message.senderId === memberId ? "나" : newData.partner?.nickName || "상대방",
+            }));
+          };
+          
+          const transformedMessages = transformMessages(newData, memberId);
+          setMessages(transformedMessages);
+        }
+      } catch (error) {
+        console.error('[채팅] 최신 메시지 로드 실패:', error);
+      }
+    };
+
+    fetchLatestMessages();
+
     try {
       const subscription = stompClient.subscribe(
         `/topic/${chatRoomId}`,
@@ -162,7 +196,7 @@ const Chat = () => {
         destination: "/app/chats",
         body: JSON.stringify(messageData),
         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
       });
 
@@ -214,11 +248,12 @@ const Chat = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className=" h-screen bg-gray-50 font-NanumR relative flex flex-col">
+    <div className="h-screen bg-gray-50 font-NanumR flex flex-col fixed inset-0">
       <Header data={data} />
-      {/* 메시지 리스트 컨테이너: 헤더와 하단 입력창 높이를 고려한 패딩 */}
-      <div className="flex-1 pt-2 pb-2 overflow-y-auto scrollbar-hide">
-        <MessageList messages={messages} />
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto">
+          <MessageList messages={messages} />
+        </div>
       </div>
       <BottomInput
         input={input}
