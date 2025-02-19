@@ -44,7 +44,7 @@ const MessageList = ({ messages }) => {
             <div
               className={`rounded-lg p-3 break-words ${
                 message.isMine
-                  ? 'bg-blue-500 text-white ml-auto max-w-[80%]'
+                  ? 'bg-blue-500 text-white max-w-[80%]'
                   : 'bg-gray-200 text-black max-w-[70%]'
               }`}
               style={{ wordBreak: 'break-word' }}
