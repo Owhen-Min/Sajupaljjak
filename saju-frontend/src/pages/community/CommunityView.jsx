@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import articleDetails from "../../data/articlesDetail.json";
 import { IoArrowBack } from "react-icons/io5";
 import { FaCommentDots } from "react-icons/fa";
+import { useGet } from "../../hooks/useApi";
 
 // 상대적 시간 표시 함수
 function formatRelativeTime(dateString) {
@@ -31,6 +32,7 @@ function formatRelativeTime(dateString) {
 function CommunityView() {
   const { postId } = useParams();
   const navigate = useNavigate();
+  const { data, isPending, error } = useGet(`/community/${postId}`);
 
   const [article, setArticle] = useState({
     articleId: "",
@@ -60,17 +62,12 @@ function CommunityView() {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
-
-  // articleDetail.json에서 postId에 해당하는 게시글 데이터 찾기
   useEffect(() => {
-    const foundArticle = articleDetails.find(
-      (a) => a.articleId.toString() === postId
-    );
-    if (foundArticle) {
-      setArticle(foundArticle);
-      setComments(foundArticle.comments || []);
+    if (data) {
+      setArticle(data);
+      setComments(data.comments || []);
     }
-  }, [postId]);
+  }, [data]);
 
   if (!article) {
     return (
@@ -79,8 +76,20 @@ function CommunityView() {
       </div>
     );
   }
-
-
+  if (isPending) {
+    return (
+      <div className="h-screen flex items-center justify-center font-NanumR">
+        <p>댓글을 불러오는 중...</p>
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="h-screen flex items-center justify-center font-NanumR">
+        <p>댓글을 불러오는 중 오류가 발생했습니다.</p>
+      </div>
+    );
+  }
   return (
     <div className="h-screen flex flex-col bg-gray-50 font-NanumR">
       <Header article={article} />

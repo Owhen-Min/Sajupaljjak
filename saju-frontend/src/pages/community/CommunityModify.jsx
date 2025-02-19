@@ -1,29 +1,51 @@
 import {TopBar2} from "../../components/TopBar2";
 import Input from "../../components/Input";
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SajuUserBubble from '../../components/SajuUserBubble';
 import MainButton from "../../components/MainButton";
+import { useGet, usePut } from "../../hooks/useApi";
 
 function CommunityModify() {
+  //게시글 번호
   const { postId } = useParams();
+  //
+  const { data, error, isPending } = useGet(`/api/community/${postId}`);
+  const navigate = useNavigate();
+  const [article , setArticle] = useState({});
 
-  const article = {
-    "articleId": postId,
-    "createdAt": "2025-02-07 00:00:00",
-    "boardType": "신금",
-    "celestialStem": "무토",
-    "title": "어쩌지?",
-    "content": "신금 친구랑 싸웠는데, 이 성격 대체 어떻게 이해해야 할까요?\n\n정말 이해가 안 되는데 어떻게 해결해야 할까요? 고민이 많습니다...\n\n도와주세요 ㅠㅠ",
-    "likeCount": 7,
-    "commentCount": 4
-  };
+  const mutation = usePut(`/api/community/${postId}`);
 
   const [formData, setFormData] = useState({
     title: article.title,
+    boardId : postId,
     content: article.content,
     celestialStem: article.boardType,
   });
+
+  useEffect(() => {
+    if (data) {
+      setArticle(data);
+      setFormData({
+        title: data.title,
+        boardId : postId,
+        content: data.content,
+        celestialStem: data.boardType,
+      });
+    }
+  }, [data, postId]);
+
+  // const article = {
+  //   "articleId": postId,
+  //   "createdAt": "2025-02-07 00:00:00",
+  //   "boardType": "신금",
+  //   "celestialStem": "무토",
+  //   "title": "어쩌지?",
+  //   "content": "신금 친구랑 싸웠는데, 이 성격 대체 어떻게 이해해야 할까요?\n\n정말 이해가 안 되는데 어떻게 해결해야 할까요? 고민이 많습니다...\n\n도와주세요 ㅠㅠ",
+  //   "likeCount": 7,
+  //   "commentCount": 4
+  // };
+
 
   const [errors, setErrors] = useState({
     title: false,
@@ -46,7 +68,11 @@ function CommunityModify() {
       return;
     }
     console.log('게시글 작성:', formData);
-    // TODO: API 호출 로직 추가
+    mutation.mutate(formData, {
+      onSuccess: () => {
+        navigate(`/community/${postId}`);
+      },
+    });
   };
 
   const handleInputChange = (e) => {
@@ -56,7 +82,12 @@ function CommunityModify() {
       [name]: value,
     }));
   };
-
+   if (isPending) {
+    return <div>Loading...</div>;
+   }
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
   return (
     <div className="community community-write flex flex-col relative h-screen">
       <TopBar2 

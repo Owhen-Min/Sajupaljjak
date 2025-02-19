@@ -8,6 +8,7 @@ import CustomCarousel from "../../components/CustomCarousel";
 import Random from "../../assets/animations/random.json";
 import Lottie from "lottie-react";
 import { useGet } from "../../hooks/useApi";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 // 캐러셀로 돌릴 유저 데이터
 const users = [
@@ -44,10 +45,21 @@ const users = [
 ];
 
 export default function Solo() {
+
   // 하단 탭 (메인, 커뮤니티, 운세, 매칭, 채팅)
   const [currentTab, setCurrentTab] = useState("main");
   // 매칭 화면 내부 탭 (궁합매칭, 랜덤매칭)
   const [matchingTab, setMatchingTab] = useState("compatibility");
+
+  // const [users, setUsers] = useState([]);
+  // const { data, isPending, error } = useGet("api/match/top");
+  // useState(() => {
+  //   if (data) {
+  //     setUsers(data);
+  //   }
+  // }, [data]);
+  // if (isPending) return <div><LoadingSpinner/></div>;
+  // if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -199,7 +211,7 @@ function CompatibilityMatching() {
         </p>
       </div>
       {/* 캐러셀 뷰포트 */}
-      <CustomCarousel />
+      <CustomCarousel users={users} />
     </div>
   );
 }
@@ -232,7 +244,7 @@ function RandomMatching() {
             <Lottie lottieRef={lottieRef} animationData={Random} loop={true} />
           </div>
         </div>
-        <button className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition">
+        <button onClick={()=>{console.log("랜덤 채팅 연결")}} className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition">
           랜덤채팅 시작하기
         </button>
       </div>
