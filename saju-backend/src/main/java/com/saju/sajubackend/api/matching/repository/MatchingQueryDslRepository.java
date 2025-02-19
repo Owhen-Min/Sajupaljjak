@@ -46,7 +46,7 @@ public class MatchingQueryDslRepository extends MatchingBaseRepository {
                 .selectFrom(member)
                 .where(
                         isOppositeGender(foundMember.getGender()) // 성별 반대
-                                .and(isSolo())                  // 싱글 여부
+     //                           .and(isSolo())                  // 싱글 여부
                                 .and(matchReligion(foundFilter))  // 종교
                                 .and(matchCelestialStem(compatibleStemsMap.keySet())) // 천간
                                 .and(matchRegion(foundFilter))    // 지역
