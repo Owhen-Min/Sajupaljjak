@@ -842,10 +842,10 @@ function SignUpPage() {
 
           console.log("회원가입 성공 응답 데이터:", signupResponse);
           const { token, ...userData } = signupResponse;
-          localStorage.setItem("accessToken", token.accessToken);
-          localStorage.setItem("refreshToken", token.refreshToken);
-          localStorage.setItem("memberId", userData.member_id);
-          localStorage.setItem(
+          sessionStorage.setItem("accessToken", token.accessToken);
+          sessionStorage.setItem("refreshToken", token.refreshToken);
+          sessionStorage.setItem("memberId", userData.member_id);
+          sessionStorage.setItem(
             "relation",
             userData.relation === "SOLO" ? false : true
           );
