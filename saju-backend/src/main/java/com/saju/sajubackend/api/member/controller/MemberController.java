@@ -1,10 +1,13 @@
 package com.saju.sajubackend.api.member.controller;
 
 import com.saju.sajubackend.api.member.dto.MemberProfileResponse;
+import com.saju.sajubackend.api.member.dto.SajuUpdateRequest;
 import com.saju.sajubackend.api.member.dto.UpdateProfileRequest;
 import com.saju.sajubackend.api.member.service.MemberService;
 import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +33,10 @@ public class MemberController {
         memberService.updateMemberProfile(currentMemberId, updateProfileRequest);
 
         return ResponseEntity.ok("프로필이 성공적으로 수정되었습니다.");
+    }
+
+    @PutMapping
+    public void updateSaju(@CurrentMemberId Long currentMemberId, @RequestBody SajuUpdateRequest sajuUpdateRequest) {
+//        filterService.updateSaju(currentMemberId, sajuUpdateRequest);
     }
 }
