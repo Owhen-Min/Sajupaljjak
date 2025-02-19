@@ -11,18 +11,32 @@ import useWebSocket from "../../hooks/useWebSocket";
 
 const Chat = () => {
   const chatRoomId = useParams().chatId;
-  const [input, setInput] = useState("");
+  //메세지 목록
+  const [messages, setMessages] = useState([]);
+  //새로 수신한 메세지
   const [newMessage, setNewMessage] = useState({});
-  const [messages, setMessages] = useState([{}]);
-
-  const stompClient = useWebSocket();
-  const { memberId, user } = useAuth();
+  // 마지막 보낸 메세지
+  const [lastMessage, setLastMessage] = useState({});
+  
+  const [input, setInput] = useState("");
+  const { stompClient, isConnected } = useWebSocket();
+  const memberId = localStorage.getItem("memberId");
+  const subscriptionRef = useRef(null);
+  const [partner, setPartner] = useState({
+    id: null,
+    nickName: null,
+    profileImage: null,
+    celestialStem: null,
+    age: null
+  });
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
+  
 
 
   useEffect(() => {
     if (!stompClient || !stompClient.connected) return;
 
-    console.log("채팅방 구독 시작작");
+    console.log("채팅방 구독 시작");
     const subscription = stompClient.subscribe(
       `/ws/topic/chat/${chatRoomId}`,
       (message) => {

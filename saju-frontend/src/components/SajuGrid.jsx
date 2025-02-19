@@ -31,8 +31,8 @@ function SajuGrid({ saju, className, title=true, ...props }) {
           />
           <SajuColumn 
             label="일주"
-            top={saju?.day?.[0] || ''}
-            bottom={saju?.day?.[1] || ''}
+            top={saju?.date?.[0] || ''}
+            bottom={saju?.date?.[1] || ''}
           />
           <SajuColumn 
             label="월주"
