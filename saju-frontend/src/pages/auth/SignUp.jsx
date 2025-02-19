@@ -128,12 +128,12 @@ function SignUpPage() {
         setStep(3);
       }
     }
-    
-    // 문서의 최대 높이로 스크롤
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
-    });
+
+    //   // 문서의 최대 높이로 스크롤
+    //   window.scrollTo({
+    //     top: document.documentElement.scrollHeight,
+    //     behavior: 'smooth'
+    //   });
   };
 
   const handleSelectionChange = (field, selected) => {
@@ -169,11 +169,11 @@ function SignUpPage() {
         }
       }
 
-      // 문서의 최대 높이로 스크롤
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      });
+      // // 문서의 최대 높이로 스크롤
+      // window.scrollTo({
+      //   top: document.documentElement.scrollHeight,
+      //   behavior: "smooth",
+      // });
 
       return newFormData;
     });
@@ -338,14 +338,14 @@ function SignUpPage() {
             <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
               이름
             </h3>
-            <div className="input-group mb-6">
+            <div className="mb-6 ">
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="이름"
-                className="bg-gray-50 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
+                className="bg-gray-50 selection:bg-gray-200 border-gray-100 rounded-md border-2 shadow w-full py-3 p-2 text-base text-gray-500"
               />
               {errors.name && <ErrorBubble>이름을 입력해주세요</ErrorBubble>}
             </div>
@@ -356,7 +356,7 @@ function SignUpPage() {
             <h3 className="input-prompt mb-2 text-gray-600 text-base font-semibold">
               성별
             </h3>
-            <div className="font-NanumR input-group mb-6">
+            <div className="font-NanumR input-group mb-6 ">
               <SelectionGrid
                 cols={2}
                 options={["남성", "여성"]}
@@ -380,7 +380,7 @@ function SignUpPage() {
             </h3>
             <div className="flex items-center gap-2 mt-2">
               <input
-                className="bg-gray-50 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
+                className="bg-gray-50 selection:bg-gray-200 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
                 type="text"
                 name="bday"
                 value={formData.bday}
@@ -430,16 +430,17 @@ function SignUpPage() {
                 maxLength="5"
                 style={{ flex: 1 }}
                 disabled={formData.birthTimeUnknown}
-                className="bg-gray-50 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
+                className="bg-gray-50 selection:bg-gray-200 border-gray-100 border-2 shadow w-full py-3 p-2 text-base text-gray-500"
               />
             </div>
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-2 mt-2 ">
               <input
                 type="checkbox"
                 id="birthTimeUnknown"
                 checked={formData.birthTimeUnknown}
                 onChange={handleBirthTimeUnknown}
                 style={{ cursor: "pointer" }}
+                className=""
               />
               <label
                 htmlFor="birthTimeUnknown"
@@ -725,7 +726,7 @@ function SignUpPage() {
                     setStep(Math.max(maxStep, 11));
                   }}
                   placeholder="자기소개를 입력해주세요"
-                  className=" text-gray-700 w-full h-32 p-3 border bg-gray-50 border-gray-200 shadow rounded-md resize-none text-base"
+                  className=" text-gray-700 w-full h-32 p-3 border-2 bg-gray-50 border-gray-100 shadow rounded-md resize-none text-base"
                   maxLength={500}
                 />
                 {errors.intro && (
@@ -806,7 +807,6 @@ function SignUpPage() {
           formData.profileImg.startsWith("data:image")
         ) {
           const imageFile = await fetch(formData.profileImg)
-
             .then((res) => res.blob())
             .then((blob) => {
               const uniqueFileName = `profile_${Date.now()}_${Math.random()

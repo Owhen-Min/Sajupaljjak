@@ -52,11 +52,11 @@ const SelectionGrid = ({
       >
         {showSelectAll && multiSelect && (
           <button
-            className={`flex items-center justify-center py-3 px-4 border-2 rounded-lg cursor-pointer font-medium shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
+            className={`flex items-center justify-center py-3 px-4 border-2 rounded-md cursor-pointer font-medium shadow-sm active:shadow-inner active:translate-y-[1px] transition-all duration-200
               ${
                 selectedItems.length === options.length
                   ? "bg-[#FF7070] text-white border-[#FF7070] hover:bg-opacity-90"
-                  : "bg-white text-gray-800 border-gray-100 hover:bg-gray-50"
+                  : "bg-gray-50 text-gray-800 border-gray-100 hover:bg-gray-50"
               }`}
             onClick={handleSelectAll}
           >
