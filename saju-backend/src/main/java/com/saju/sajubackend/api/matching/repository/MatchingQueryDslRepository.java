@@ -77,7 +77,7 @@ public class MatchingQueryDslRepository extends MatchingBaseRepository {
                         partner.nickname,
                         score1.score,
                         partner.profileImg,
-                        partner.cityCode.stringValue()
+                        partner.cityCode.stringValue(),
                         partner.age,
                         partner.celestialStem,
                         partner.intro,
