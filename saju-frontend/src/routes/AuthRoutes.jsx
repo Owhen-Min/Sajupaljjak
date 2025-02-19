@@ -11,7 +11,7 @@ function AuthRoutes() {
   return (
     <Routes>
       {/* 로그인으로 이동하는 경우 */}
-      <Route path="/" element={<PageLoader />} />
+      <Route path="/" element={<Login />} />
       {/* 로그인 검증으로 이동하는 경우 */}
       <Route path="/verify" element={<Verify />} />
       {/* 회원가입으로 이동하는 경우 */}
