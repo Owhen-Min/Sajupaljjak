@@ -27,7 +27,7 @@ function Community() {
 
   useEffect(() => {
     if (data) {
-      setArticles((prev) => [...prev, ...data.pages.map((page) => page.data)]);
+      setArticles((prev) => [...prev, ...data.pages.map((page) => page.data.content)]);
     }
   }, [data]);
 
