@@ -5,7 +5,6 @@ import SignUpAdditional from "../pages/auth/SignUpAdditional";
 import Preference from "../pages/auth/Preference";
 import SignUpPage from "../pages/auth/SignUp";
 import Verify from "../pages/auth/Verify";
-import PageLoader from "../components/pageLoader";
 
 function AuthRoutes() {
   return (
