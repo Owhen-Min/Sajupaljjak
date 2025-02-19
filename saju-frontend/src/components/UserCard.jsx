@@ -13,7 +13,7 @@ export default function UserCard({ user }) {
       { uri: `api/chats/${user.id}` },
       {
         onSuccess: (response) => {
-          navigate(`/chats/${response.chatrommId}`);
+          navigate(`/chats/${response.chatroomId}`);
           console.log("매칭 성공");
         },
         onError: (error) => {
