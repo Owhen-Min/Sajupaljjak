@@ -27,11 +27,11 @@ const Fortune = () => {
     },
   });
   const [radarData, setRadarData] = useState([
-    { subject: "총점", value: 0, fullMark: 100 },
-    { subject: "재물운", value: 0, fullMark: 100 },
-    { subject: "건강운", value: 0, fullMark: 100 },
-    { subject: "연애운", value: 0, fullMark: 100 },
-    { subject: "학업운", value: 0, fullMark: 100 },
+    { subject: "총점", value: 0, fullMark: 200 },
+    { subject: "재물운", value: 0, fullMark: 200 },
+    { subject: "건강운", value: 0, fullMark: 200 },
+    { subject: "연애운", value: 0, fullMark: 200 },
+    { subject: "학업운", value: 0, fullMark: 200 },
   ]);
 
   const {
