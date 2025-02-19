@@ -12,11 +12,11 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    const accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
-    const memberId = sessionStorage.getItem("memberId");
+    const memberId = localStorage.getItem("memberId");
     if (memberId) {
       config.headers["X-Member-Id"] = memberId;
     }
