@@ -24,7 +24,7 @@ function Chats() {
   ]);
 
   const { stompClient } = useWebSocket();
-  const memberId = useAuth().memberId;
+  const memberId = localStorage.getItem("memberId");
 
   useEffect(() => {
     if (!stompClient || !stompClient.connected) return;
