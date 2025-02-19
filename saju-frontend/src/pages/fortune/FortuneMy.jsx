@@ -34,20 +34,21 @@ function FortuneMy() {
     축: "토",
   };
 
-  const { data, isPending, error } = useGet("/api/fortune/my");
+  const { data, isPending, error } = useGet("/api/fortune/info");
 
   const [saju, setSaju] = useState({
     year: "을해",
     month: "기묘",
-    day: "임자",
+    date: "임자",
     time: "정미",
   });
 
   useEffect(() => {
     if (data) {
-      setSaju(data.saju);
+      setSaju(data);
     }
   }, [data]);
+
 
   // 원소 개수 계산
   const calculateElementCounts = () => {
