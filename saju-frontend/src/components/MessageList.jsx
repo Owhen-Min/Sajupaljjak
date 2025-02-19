@@ -2,6 +2,25 @@ import React from "react";
 import MessageItem from "./MessageItem";
 
 const MessageList = ({ messages }) => {
+  const formatMessageTime = (isoString) => {
+    const messageDate = new Date(isoString);
+    const now = new Date();
+    const isToday = messageDate.toDateString() === now.toDateString();
+    
+    const hours = messageDate.getHours();
+    const minutes = messageDate.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? '오후' : '오전';
+    const displayHours = hours % 12 || 12;
+    
+    if (isToday) {
+      return `${ampm} ${displayHours}:${minutes}`;
+    } else {
+      const month = (messageDate.getMonth() + 1).toString().padStart(2, '0');
+      const day = messageDate.getDate().toString().padStart(2, '0');
+      return `${month}/${day} ${displayHours}:${minutes}`;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 p-4">
       {messages.map((message) => (
@@ -33,7 +52,7 @@ const MessageList = ({ messages }) => {
               {message.message}
             </div>
             <span className="text-xs text-gray-500 mt-1">
-              {message.sentAt}
+              {formatMessageTime(message.sentAt)}
             </span>
           </div>
         </div>
