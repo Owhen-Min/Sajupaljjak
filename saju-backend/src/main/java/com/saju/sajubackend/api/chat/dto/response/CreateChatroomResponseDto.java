@@ -2,7 +2,10 @@ package com.saju.sajubackend.api.chat.dto.response;
 
 import com.saju.sajubackend.api.member.domain.Member;
 import lombok.Builder;
+import lombok.Getter;
 
+
+@Getter
 public class CreateChatroomResponseDto {
 
     private Long chatroomId;
