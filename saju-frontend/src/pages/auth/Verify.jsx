@@ -56,6 +56,7 @@ const Verify = () => {
       sessionStorage.setItem("refreshToken", data.token.refreshToken);
       sessionStorage.setItem("memberId", data.member_id);
       sessionStorage.setItem("relation", data.relation);
+      sessionStorage.setItem("user", JSON.stringify(userData));
       
       updateUser(userData);
 

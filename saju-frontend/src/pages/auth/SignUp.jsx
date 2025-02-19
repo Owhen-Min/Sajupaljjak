@@ -849,7 +849,7 @@ function SignUpPage() {
             "relation",
             userData.relation === "SOLO" ? false : true
           );
-
+          sessionStorage.setItem("user", JSON.stringify(userData));
           updateUser(userData);
           console.log(user);
           setIsLoading(false);
