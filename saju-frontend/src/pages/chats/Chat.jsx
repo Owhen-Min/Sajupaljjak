@@ -90,7 +90,7 @@ const Chat = () => {
 
     try {
       const subscription = stompClient.subscribe(
-        `/sub/chat/room/${chatRoomId}`,
+        `/topic/${chatRoomId}`,
         (response) => {
           console.log('[웹소켓] 메시지 수신:', response);
           try {
