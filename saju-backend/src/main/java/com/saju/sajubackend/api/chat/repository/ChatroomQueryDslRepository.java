@@ -1,21 +1,18 @@
 package com.saju.sajubackend.api.chat.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import static com.saju.sajubackend.api.chat.domain.QChatroom.chatroom;
-import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMember;
-import static com.saju.sajubackend.api.member.domain.QMember.member;
-
-import com.saju.sajubackend.api.chat.domain.QChatroom;
-import com.saju.sajubackend.api.chat.dto.ChatPartnerDto;
+import com.saju.sajubackend.api.chat.domain.Chatroom;
 import com.saju.sajubackend.api.member.domain.Member;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.saju.sajubackend.api.chat.domain.QChatroom.chatroom;
+import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMember;
+import static com.saju.sajubackend.api.member.domain.QMember.member;
 
 @RequiredArgsConstructor
 @Repository
