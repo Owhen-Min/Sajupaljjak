@@ -35,6 +35,9 @@ const Chat = () => {
         setPartner(data.partner);
       }
 
+      if (data.messages) {
+        setMessages(data.messages);
+      }
       // 메시지 변환 및 설정
       const transformMessages = (messages, memberId, partnerInfo) => {
         if (!Array.isArray(messages)) {
@@ -53,10 +56,10 @@ const Chat = () => {
             message: message.content,
             sentAt: message.sendTime, // sendTime으로 수정
             isMine: message.senderId === memberId,
-            profileImage: message.senderId === memberId
+            profileImage: message.senderId == memberId
               ? null
               : partnerInfo?.profileImage || "기본이미지URL",
-            nickName: message.senderId === memberId ? "나" : partnerInfo?.nickname || "상대방", // nickname으로 수정
+            nickName: message.senderId == memberId ? "나" : partnerInfo?.nickname || "상대방", // nickname으로 수정
           };
         }).filter(message => message !== null); // 지원하지 않는 메시지 타입 필터링
       };
@@ -248,11 +251,17 @@ const Chat = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="h-screen bg-gray-50 font-NanumR flex flex-col fixed inset-0">
+    <div className="h-screen bg-gray-50 font-NanumR flex flex-col w-full relative">
       <Header data={data} />
       <div className="flex-1 overflow-hidden">
         <div className="h-full overflow-y-auto">
-          <MessageList messages={messages} />
+          {/* 디버깅용 출력 */}
+          <div>메시지 개수: {messages?.length}</div>
+          {messages?.length > 0 ? (
+            <MessageList messages={messages} />
+          ) : (
+            <div>메시지가 없습니다.</div>
+          )}
         </div>
       </div>
       <BottomInput
