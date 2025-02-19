@@ -31,7 +31,7 @@ public class MatchingService {
 
         // 1. redis에 이미 존재하는지 확인
         List<MatchingMemberResponseDto> response = matchingRedisUtil.getCache(memberId);
-        if (!response.isEmpty()) return response;
+        if (response != null && !response.isEmpty()) return response;
 
         // 2. 랜덤으로 3명 가져오기
         Map<Member, Integer> matchingMembers = matchingQueryDslRepository.findMatchingMembers(memberId, MAGINOT_SCORE, MEMBER_COUNT);
