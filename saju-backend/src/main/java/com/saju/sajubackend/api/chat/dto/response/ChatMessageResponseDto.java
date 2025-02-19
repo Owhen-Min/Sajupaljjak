@@ -9,15 +9,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatMessageResponseDto {
 
-    private String chatroomId;
+    private String id;
     private String content;
     private String senderId;
     private String sendTime;
     private String messageType;
 
     @Builder
-    private ChatMessageResponseDto(String chatroomId, String content, String senderId, String sendTime, String messageType) {
-        this.chatroomId = chatroomId;
+    private ChatMessageResponseDto(String id, String content, String senderId, String sendTime, String messageType) {
+        this.id = id;
         this.content = content;
         this.senderId = senderId;
         this.sendTime = sendTime;
@@ -26,6 +26,7 @@ public class ChatMessageResponseDto {
 
     public static ChatMessageResponseDto fromDocument(ChatMessage chatMessage) {
         return ChatMessageResponseDto.builder()
+                .id(chatMessage.getId())
                 .content(chatMessage.getContent())
                 .senderId(chatMessage.getSenderId())
                 .sendTime(chatMessage.getSendTime())
