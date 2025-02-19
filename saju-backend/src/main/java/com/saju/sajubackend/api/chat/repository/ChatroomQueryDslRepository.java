@@ -78,10 +78,10 @@ public class ChatroomQueryDslRepository {
     public Member findPartner(Long memberId, Long chatroomId) {
 
         Chatroom foundChatroom = queryFactory
-                .selectFrom(QChatroom.chatroom)
-                .where(QChatroom.chatroom.chatroomId.eq(chatroomId))
+                .selectFrom(chatroom)
+                .where(chatroom.chatroomId.eq(chatroomId))
                 .fetchOne();
-        
+
         Long partnerId = (foundChatroom.getMember1().getMemberId().equals(memberId)) ? foundChatroom.getMember2().getMemberId() : foundChatroom.getMember1().getMemberId();
 
         return queryFactory
