@@ -56,8 +56,9 @@ const Verify = () => {
       localStorage.setItem("refreshToken", data.token.refreshToken);
       localStorage.setItem("memberId", data.member_id);
       localStorage.setItem("relation", data.relation);
+      localStorage.setItem("user", JSON.stringify(userData));
       
-      // updateUser(userData);
+      updateUser(userData);
 
       updateMemberId(data.member_id);
       updateRelation(data.relation);
@@ -77,6 +78,7 @@ const Verify = () => {
     navigate,
     updateMemberId,
     updateEmail,
+    updateUser,
     updateIsAuthenticated,
     updateRelation,
     logout,

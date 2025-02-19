@@ -46,7 +46,8 @@ public enum ErrorMessage {
     INVALID_GENDER_COMBINATION("유효하지 않은 성별 조합입니다"),
 
     // chat
-    INVALID_CHAT_ROOM("유효하지 않은 채팅방입니다.");
+    INVALID_CHAT_ROOM("유효하지 않은 채팅방입니다."),
 
+    SAJU_NOT_FOUND("사주없음");
     private final String message;
 }

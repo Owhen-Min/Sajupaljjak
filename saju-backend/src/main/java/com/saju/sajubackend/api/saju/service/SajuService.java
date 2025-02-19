@@ -80,7 +80,7 @@ public class SajuService {
         promptBuilder.append(saju.getYearly());
         promptBuilder.append("인, 시주가 ");
         promptBuilder.append(saju.getTimely());
-        promptBuilder.append("인 사람의 오늘의 운세(사주)를 한줄로 알려줘. 응답은 아래 JSON 형식으로 보내줘.\n");
+        promptBuilder.append("인 사람의 오늘의 운세(사주)를 한 줄로 짧게 알려줘. 응답은 아래 JSON 형식으로 보내줘.\n");
         promptBuilder.append("형식: { \"content\": \"운세 내용\" }");
         String prompt = promptBuilder.toString();
 

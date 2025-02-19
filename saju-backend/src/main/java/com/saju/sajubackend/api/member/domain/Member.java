@@ -103,4 +103,10 @@ public class Member extends BaseTimeEntity {
     public void updateCityCode(Long cityCode) {
         this.cityCode = cityCode;
     }
+
+    //update
+    public void updateCelestialStem(CelestialStem celestialStem) {
+        this.celestialStem = celestialStem;
+    }
+
 }
