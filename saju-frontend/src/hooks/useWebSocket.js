@@ -10,7 +10,7 @@ const useWebSocket = () => {
   useEffect(() => {
     const connectWebSocket = () => {
       console.log("웹소켓 연결 시도");
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = sessionStorage.getItem("accessToken");
       
       const client = new Client({
         brokerURL: "wss://i12a408.p.ssafy.io/ws",
@@ -90,7 +90,7 @@ export default useWebSocket;
 //   useEffect(() => {
 //     console.log("웹소켓 연결 시도");
 //     //auth로 받아오게 수정 필요
-//     const accessToken = localStorage.getItem("accessToken");
+//     const accessToken = sessionStorage.getItem("accessToken");
 //     console.log("accessToken", accessToken);
 //     const client = new Client({
 //       brokerURL: "wss://i12a408.p.ssafy.io/ws",

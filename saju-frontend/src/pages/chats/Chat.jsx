@@ -15,7 +15,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
-  const memberId = localStorage.getItem('memberId');
+  const memberId = sessionStorage.getItem('memberId');
   const subscriptionRef = useRef(null);
 
   // 초기 메시지 로드
@@ -59,7 +59,7 @@ const Chat = () => {
       try {
         const response = await fetch(`/api/chats/${chatRoomId}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
           }
         });
         const newData = await response.json();
@@ -161,7 +161,7 @@ const Chat = () => {
         destination: "/app/chats",
         body: JSON.stringify(messageData),
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
         }
       });
 

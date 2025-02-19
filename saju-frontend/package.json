@@ -38,6 +38,7 @@
     "react-type-animation": "^3.2.0",
     "react-typed": "^2.0.12",
     "recharts": "^2.15.1",
+    "redux-persist": "^6.0.0",
     "swiper": "^11.2.2",
     "tailwind-scrollbar-hide": "^2.0.0"
   },
