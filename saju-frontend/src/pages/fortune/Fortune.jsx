@@ -44,7 +44,7 @@ const Fortune = () => {
   // 첫 번째 API 응답 처리
   useEffect(() => {
     if (sajuData) {
-      setSajuToday(sajuData.today);
+      setSajuToday(sajuData.content);
     }
   }, [sajuData]);
 
@@ -78,7 +78,7 @@ const Fortune = () => {
         </div>
         <div className="w-full bg-white rounded-md shadow p-4 mb-4">
           <p className="text-sm text-gray-800">
-            {sajuIsPending ? "로딩 중..." : sajuData.today}
+            {sajuIsPending ? "로딩 중..." : sajuData.content}
           </p>
         </div>
 
