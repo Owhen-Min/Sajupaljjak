@@ -2,6 +2,7 @@ package com.saju.sajubackend.api.place.controller;
 
 import com.saju.sajubackend.api.place.dto.PlaceResponseDto;
 import com.saju.sajubackend.api.place.service.PlaceService;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class PlaceController {
     @GetMapping
     public ResponseEntity<List<PlaceResponseDto>> getPlaces(
             @RequestParam(required = false) Integer month,
-            @RequestParam(required = false) Integer day
+            @RequestParam(required = false) Integer day,
             @CurrentMemberId Long currentMemberId) {
 
         // 날짜가 없으면 오늘 날짜 사용

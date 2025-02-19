@@ -43,7 +43,7 @@ public class Couple extends BaseTimeEntity {
     private Element plentyElement;
 
     @Builder
-    private Couple(Long coupleId, Member coupleMale, Member coupleFemale, LocalDateTime startDate, Element lackElement, Element plentyElement) {
+    private Couple(Long coupleId, Member coupleMale, Member coupleFemale, LocalDate startDate, Element lackElement, Element plentyElement) {
         this.coupleId = coupleId;
         this.coupleMale = coupleMale;
         this.coupleFemale = coupleFemale;
