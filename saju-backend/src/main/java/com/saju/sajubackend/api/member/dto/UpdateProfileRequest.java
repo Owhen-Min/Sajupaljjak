@@ -1,4 +1,4 @@
-package com.saju.sajubackend.api.filter.dto;
+package com.saju.sajubackend.api.member.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,5 +12,5 @@ public class UpdateProfileRequest {
     private String smoking;
     private String drinking;
     private Integer height;
-    private Long cityCode;
+    private String cityCode;
 }

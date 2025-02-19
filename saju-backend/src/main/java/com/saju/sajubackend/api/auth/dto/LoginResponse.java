@@ -1,12 +1,13 @@
 package com.saju.sajubackend.api.auth.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.saju.sajubackend.common.enums.RelationshipStatus;
 import lombok.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//@JsonInclude(value = JsonInclude.Include.NON_NULL)
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 @Builder
 public class LoginResponse {
     private Long member_id;

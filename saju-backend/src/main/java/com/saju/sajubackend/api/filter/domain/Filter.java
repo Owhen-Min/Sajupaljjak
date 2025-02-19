@@ -56,5 +56,21 @@ public class Filter {
         this.minAge = minAge;
         this.maxAge = maxAge;
     }
+
+    public void update(
+            SmokingStatus smoking,
+            DrinkingFrequency drinking,
+            Integer minHeight,
+            Integer maxHeight,
+            Integer minAge,
+            Integer maxAge
+    ) {
+        this.smoking = smoking;
+        this.drinking = drinking;
+        this.minHeight = minHeight;
+        this.maxHeight = maxHeight;
+        this.minAge = minAge;
+        this.maxAge = maxAge;
+    }
 }
 

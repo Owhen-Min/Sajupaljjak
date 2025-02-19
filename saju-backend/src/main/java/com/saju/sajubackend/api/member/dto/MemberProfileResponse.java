@@ -1,4 +1,4 @@
-package com.saju.sajubackend.api.filter.dto;
+package com.saju.sajubackend.api.member.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,4 +19,6 @@ public class MemberProfileResponse {
     private String intro;
     private String smoking;
     private String drinking;
+    private String bday;
+    private String btime;
 }
