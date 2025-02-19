@@ -71,7 +71,7 @@ const Chat = () => {
   return (
     <div className="">
       <div className="">
-        {/* <TopBarChat mainText="???" /> */}
+        <TopBarChat mainText="???" />
 
         <MessageList messages={messages} />
         <div className="fixed bottom-0">
