@@ -86,7 +86,7 @@ function CommunityWrite() {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
-    celestialStem: "",
+    celestialStem: JSON.parse(localStorage.getItem("user")).celestial_stem_id, //확인인
   });
   const [errors, setErrors] = useState({
     title: false,
@@ -107,7 +107,6 @@ function CommunityWrite() {
 
   const handleSubmit = () => {
     if (!validateForm()) return;
-    const encodedType = encodeURIComponent(`${formData.celestialStem.charAt(1)}`)
     mutation.mutate(
       {
         uri: `community`,
@@ -136,7 +135,8 @@ function CommunityWrite() {
     setSelectedStem(stem);
     setFormData((prev) => ({
       ...prev,
-      celestialStem: stem,
+      subType: stem,
+      mainType: stem.charAt(1),
     }));
   };
 

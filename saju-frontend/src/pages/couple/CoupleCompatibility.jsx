@@ -13,7 +13,7 @@ function CoupleCompatibility() {
   }, [coupleData]);
 
   const [data, setData] = useState({
-    "id": 12,
+    "id": 0,
     "siju": "해",
     "ilju": "갑자",
     "harmony": "",
@@ -22,6 +22,7 @@ function CoupleCompatibility() {
     "bad": "",
     "advice": ""
   });
+
   if (isPending) return <div>로딩중</div>;
   if (error) return <div>{error}</div>;
   
