@@ -1,37 +1,47 @@
 package com.saju.sajubackend.api.matching.dto;
 
 import com.saju.sajubackend.api.member.domain.Member;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-public record MemberListResponseDto(
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public  class MatchingMemberResponseDto implements Serializable {
 
-        List<MatchingMemberResponseDto> members,
-        boolean hasNext,
-        long nextCursor
+    private Long id;
+    private String nickname;
+    private int score;
+    private String profileImage;
+    private String region;
+    private int age;
+    private String celestialStem;
+    private String introduction;
 
-) {
-
-    public static MemberListResponseDto fromEntity(Map<Member, Integer> members) {
-        // 1. MatchingMemberResponseDto 리스트 변환
-        List<MatchingMemberResponseDto> memberList = members.entrySet().stream()
-                .map(entry -> MatchingMemberResponseDto.fromEntity(entry.getKey(), entry.getValue()))
-                .toList();
-
-        // 2. hasNext 계산
-        boolean hasNext = hasNext(members);
-
-        // 3. nextCursor 계산 (가장 마지막 멤버 ID)
-        long nextCursor = hasNext ? members.keySet().stream()
-                .mapToLong(Member::getMemberId)
-                .max()
-                .orElse(0L) : 0L;
-
-        return new MemberListResponseDto(memberList, hasNext, nextCursor);
+    public static MatchingMemberResponseDto fromEntity(Member member, int score) {
+        return new MatchingMemberResponseDto(
+                member.getMemberId(),
+                member.getNickname(),
+                score,
+                member.getProfileImg(),
+                member.getCityCode().toString(),
+                calculateAge(member.getBday()),
+                member.getCelestialStem().getLabel(),
+                member.getIntro()
+        );
     }
 
-    private static boolean hasNext(Map<Member, Integer> members) {
-        return members.size() > 20;
+    private static int calculateAge(LocalDate birthDate) {
+        LocalDate today = LocalDate.now();
+        int age = today.getYear() - birthDate.getYear();
+
+        if (birthDate.plusYears(age).isAfter(today)) { // 생일이 아직 지나지 않았다면 나이에서 1 빼기
+            age--;
+        }
+        return age;
     }
 }
