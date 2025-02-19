@@ -1,20 +1,26 @@
 package com.saju.sajubackend.api.matching.dto;
 
 import com.saju.sajubackend.api.member.domain.Member;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public record MatchingMemberResponseDto(
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public  class MatchingMemberResponseDto implements Serializable {
 
-        Long id,
-        String nickname,
-        int score,
-        String profileImage,
-        String region,
-        int age,
-        String celestialStem,
-        String introduction
-) {
+    private Long id;
+    private String nickname;
+    private int score;
+    private String profileImage;
+    private String region;
+    private int age;
+    private String celestialStem;
+    private String introduction;
 
     public static MatchingMemberResponseDto fromEntity(Member member, int score) {
         return new MatchingMemberResponseDto(
