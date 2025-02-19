@@ -4,10 +4,27 @@ import ReactMarkdown from "react-markdown";
 import SajuGrid from "../../components/SajuGrid";
 import { useGet } from "../../hooks/useApi";
 
-const FortuneLife = () => {
-  const { data, isLoading, error } = useGet("/api/fortune/lifetime");
-  const { saju, isLoadingSaju, errorSaju } = useGet("/api/fortune/info");
 
+const FortuneLife = () => {
+  const [data, setData] = useState();
+  const [saju, setSaju] = useState();
+
+  const { data:data1, isLoading, error } = useGet("/api/fortune/lifetime");
+  const { data:saju1, isLoadingSaju, errorSaju } = useGet("/api/fortune/info");
+
+  
+  useEffect(() => {
+    if (data1) {
+     setData(data1);
+    }
+  }, [data1]);
+  
+  useEffect(() => {
+    if (saju1) {
+      setSaju(saju1);
+    }
+  }, [saju1]);
+  
   if (isLoading) return <div>로딩중 ...</div>;
   if (error) return <div>에러 : {error.message}</div>;
 
