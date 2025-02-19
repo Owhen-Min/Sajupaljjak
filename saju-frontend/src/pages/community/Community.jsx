@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import TopBar3 from "../../components/TopBar3";
 import BottomNav from "../../components/BottomNav";
@@ -22,7 +22,7 @@ function Community() {
 
   const observerRef = useRef(null);
   const { data, fetchNextPage, hasNextPage } = useInfiniteGet("/api/community", {
-    initialCursor: 1,
+    initialCursor: 0,
   });
 
   useEffect(() => {
