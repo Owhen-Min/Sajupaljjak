@@ -9,6 +9,7 @@ import Random from "../../assets/animations/random.json";
 import Lottie from "lottie-react";
 import { useGet } from "../../hooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 // 캐러셀로 돌릴 유저 데이터
 const users = [
@@ -51,6 +52,7 @@ export default function Solo() {
   // 매칭 화면 내부 탭 (궁합매칭, 랜덤매칭)
   const [matchingTab, setMatchingTab] = useState("compatibility");
 
+  const navigate = useNavigate();
   // const [users, setUsers] = useState([]);
   // const { data, isPending, error } = useGet("api/match/top");
   // useState(() => {
@@ -244,7 +246,9 @@ function RandomMatching() {
             <Lottie lottieRef={lottieRef} animationData={Random} loop={true} />
           </div>
         </div>
-        <button onClick={()=>{console.log("랜덤 채팅 연결")}} className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition">
+        <button onClick={()=>{
+          navigate("/chat/random")
+        }} className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition">
           랜덤채팅 시작하기
         </button>
       </div>

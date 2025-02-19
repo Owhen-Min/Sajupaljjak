@@ -34,7 +34,7 @@ function FortuneMy() {
     축: "토",
   };
 
-  const { data, isPending, error } = useGet("/api/fortune/info");
+  const { data, isPending, error } = useGet("/api/fortune/my");
 
   const [saju, setSaju] = useState({
     year: "을해",

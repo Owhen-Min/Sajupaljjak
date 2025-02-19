@@ -53,11 +53,11 @@ const Fortune = () => {
     if (today) {
       setFortuneData(today);
       setRadarData([
-        { subject: "총점", value: today.totalScore, fullMark: 100 },
-        { subject: "재물운", value: today.wealthScore, fullMark: 100 },
-        { subject: "건강운", value: today.healthScore, fullMark: 100 },
-        { subject: "연애운", value: today.loveScore, fullMark: 100 },
-        { subject: "학업운", value: today.studyScore, fullMark: 100 },
+        { subject: "총점", value: today.totalScore, fullMark: 200 },
+        { subject: "재물운", value: today.wealthScore, fullMark: 200 },
+        { subject: "건강운", value: today.healthScore, fullMark: 200 },
+        { subject: "연애운", value: today.loveScore, fullMark: 200 },
+        { subject: "학업운", value: today.studyScore, fullMark: 200 },
       ]);
     }
   }, [today]);
