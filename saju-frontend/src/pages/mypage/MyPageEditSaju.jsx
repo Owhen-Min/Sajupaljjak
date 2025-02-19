@@ -165,31 +165,26 @@ function MyPageEditSaju() {
     btime: false,
   });
 
+  const { data, isLoading, error } = useGet("/api/members");
+  const mutation = usePut("/api/members");
+
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const userData = testUsers[0];
+    if (data) {
+      setFormData({
+        name: data.name || "",
+        bday: data.birthDay || "",
+        btime: data.birthTimeUnknown ? "00:00" : data.birthTime || "",
+        birthTimeUnknown: data.birthTimeUnknown || false,
+      });
 
-        setFormData({
-          name: userData.name || "",
-          bday: userData.bday || "",
-          btime: userData.birthTimeUnknown ? "00:00" : userData.btime || "",
-          birthTimeUnknown: userData.birthTimeUnknown || false,
-        });
-
-        // 초기 사주 계산
-        const initialSaju = calculateSaju(
-          userData.birthDay,
-          userData.birthTime
-        );
-        setSajuData(initialSaju);
-      } catch (error) {
-        console.error("프로필 데이터 로딩 실패:", error);
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
+      // 초기 사주 계산
+      const initialSaju = calculateSaju(
+        data.birthDay,
+        data.birthTime
+      );
+      setSajuData(initialSaju);
+    }
+  }, [data]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -273,9 +268,6 @@ function MyPageEditSaju() {
       console.log("제출된 데이터:", { ...formData, saju });
     }
   };
-
-  const { data, isLoading, error } = useGet("/api/members");
-  const mutation = usePut("/api/members");
 
   return (
     <div className="h-screen relative pt-14 flex flex-col px-5">
