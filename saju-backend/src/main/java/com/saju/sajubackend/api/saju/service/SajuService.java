@@ -18,6 +18,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -31,6 +34,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class SajuService {
+
+    private static final Logger logger = LogManager.getLogger(SajuService.class);
+
 
     private final RedisTemplate<String, Object> redisTemplate;
     private final SajuRepository sajuRepository;
@@ -83,6 +89,9 @@ public class SajuService {
         promptBuilder.append("인 사람의 오늘의 운세(사주)를 한 줄로 짧게 알려줘. 응답은 아래 JSON 형식으로 보내줘.\n");
         promptBuilder.append("형식: { \"content\": \"운세 내용\" }");
         String prompt = promptBuilder.toString();
+        logger.info("오늘의 운세 (요약) : {}", promptBuilder);
+
+
 
         SajuResponse response = callGptForDailySaju(prompt);
         long secondsUntilMidnight = calculateSecondsUntilMidnight();
@@ -139,6 +148,8 @@ public class SajuService {
         promptBuilder.append("}\n");
         promptBuilder.append("반드시 위 형식의 JSON으로만 응답해줘.");
         String prompt = promptBuilder.toString();
+        logger.info("오늘의 운세 (상세) : {}", prompt);
+
 
         SajuDetailResponse response = callGptForTodaySajuDetail(prompt);
         long secondsUntilMidnight = calculateSecondsUntilMidnight();
@@ -160,7 +171,7 @@ public class SajuService {
 
         Map<String, Object> payload = new HashMap<>();
         payload.put("model", MODEL);
-        payload.put("temperature", 0.7);
+        payload.put("temperature", 1.2);
         List<Map<String, String>> messages = new ArrayList<>();
         Map<String, String> message = new HashMap<>();
         message.put("role", "user");
