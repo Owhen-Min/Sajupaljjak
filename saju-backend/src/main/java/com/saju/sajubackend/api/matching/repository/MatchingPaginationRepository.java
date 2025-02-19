@@ -34,7 +34,7 @@ public class MatchingPaginationRepository extends MatchingBaseRepository {
                 .selectFrom(member)
                 .where(
                         isOppositeGender(foundMember.getGender()) // 성별 반대
-                                .and(isSolo())                  // 싱글 여부
+                         //       .and(isSolo())                  // 싱글 여부
                                 .and(matchReligion(foundFilter))  // 종교
                                 .and(matchRegion(foundFilter))    // 지역
                                 .and(matchFilter(foundFilter))    // 그 외(키, 나이, 흡연, 음주)
