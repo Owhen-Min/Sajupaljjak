@@ -34,7 +34,11 @@ const Fortune = () => {
     { subject: "학업운", value: 0, fullMark: 100 },
   ]);
 
-  const { data: sajuData, isPending: sajuIsPending, error: sajuError } = useGet("/api/fortune");
+  const {
+    data: sajuData,
+    isPending: sajuIsPending,
+    error: sajuError,
+  } = useGet("/api/fortune");
   const {
     data: today,
     isPending: todayIsPending,
@@ -59,6 +63,10 @@ const Fortune = () => {
         { subject: "연애운", value: today.loveScore, fullMark: 100 },
         { subject: "학업운", value: today.studyScore, fullMark: 100 },
       ]);
+      console.log("+++++++운세 데이터 잘 들어오나?+++++++");
+      console.log(fortuneData);
+      console.log(radarData);
+      console.log("++++++++++++++++++++++++++++++++");
     }
   }, [today]);
 
@@ -90,12 +98,16 @@ const Fortune = () => {
         </div>
         <div className="bg-white shadow-md rounded-md p-2 mb-4">
           {todayError ? (
-            <div className="text-red-500 text-center p-4">데이터를 불러오는데 실패했습니다.</div>
+            <div className="text-red-500 text-center p-4">
+              데이터를 불러오는데 실패했습니다.
+            </div>
           ) : (
             <>
               <div className="w-full p-2 mb-2">
                 <h1 className="text-center text-xl font-semibold text-gray-700">
-                  {todayIsPending ? "로딩 중..." : `오늘의 운세 총점 : ${fortuneData.totalScore}점`}
+                  {todayIsPending
+                    ? "로딩 중..."
+                    : `오늘의 운세 총점 : ${fortuneData.totalScore}점`}
                 </h1>
               </div>
 
@@ -105,7 +117,11 @@ const Fortune = () => {
                     <PolarGrid radialLines={false} />
                     <PolarAngleAxis
                       dataKey="subject"
-                      tick={{ fill: "#666666", fontSize: 14, fontFamily: "NanumR" }}
+                      tick={{
+                        fill: "#666666",
+                        fontSize: 14,
+                        fontFamily: "NanumR",
+                      }}
                     />
                     <Radar
                       name="운세"
