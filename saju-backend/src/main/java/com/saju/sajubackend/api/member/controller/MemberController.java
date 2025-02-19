@@ -5,9 +5,7 @@ import com.saju.sajubackend.api.member.dto.SajuUpdateRequest;
 import com.saju.sajubackend.api.member.dto.UpdateProfileRequest;
 import com.saju.sajubackend.api.member.service.MemberService;
 import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +34,12 @@ public class MemberController {
     }
 
     @PutMapping
-    public void updateSaju(@CurrentMemberId Long currentMemberId, @RequestBody SajuUpdateRequest sajuUpdateRequest) {
-//        filterService.updateSaju(currentMemberId, sajuUpdateRequest);
+    public ResponseEntity<String> updateSaju(
+            @CurrentMemberId Long currentMemberId,
+            @RequestBody SajuUpdateRequest sajuUpdateRequest) {
+
+        memberService.updateSaju(currentMemberId, sajuUpdateRequest);
+
+        return ResponseEntity.ok("사주가 성공적으로 수정되었습니다.");
     }
 }
