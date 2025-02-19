@@ -1,8 +1,7 @@
 package com.saju.sajubackend.common.util;
 
-import java.util.*;
-import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
@@ -16,6 +15,7 @@ public class FourPillarsCalculator {
 
     // 60갑자 배열
     private static final String[] SIXTY_GANZHI = new String[60];
+
     static {
         for (int i = 0; i < 60; i++) {
             SIXTY_GANZHI[i] = HEAVENLY_STEMS[i % 10] + EARTHLY_BRANCHES[i % 12];
@@ -89,7 +89,7 @@ public class FourPillarsCalculator {
         return HEAVENLY_STEMS[monthStem] + EARTHLY_BRANCHES[monthBranch];
     }
 
-    private static String calculateDayPillar(LocalDateTime dateTime) {
+    public static String calculateDayPillar(LocalDateTime dateTime) {
         LocalDate date = dateTime.toLocalDate();
         int hour = dateTime.getHour();
 
