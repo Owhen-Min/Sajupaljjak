@@ -38,4 +38,9 @@ public class RefreshToken {
         this.member = member;
         this.refreshToken = refreshToken;
     }
+
+    // ✅ 🔥 추가할 메서드 (refreshToken 업데이트)
+    public void updateRefreshToken(String newToken) {
+        this.refreshToken = newToken;
+    }
 }

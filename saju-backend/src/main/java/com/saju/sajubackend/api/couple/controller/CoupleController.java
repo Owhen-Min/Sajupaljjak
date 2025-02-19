@@ -2,6 +2,7 @@ package com.saju.sajubackend.api.couple.controller;
 
 import com.saju.sajubackend.api.couple.dto.CoupleResponseDto;
 import com.saju.sajubackend.api.couple.service.CoupleService;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +17,7 @@ public class CoupleController {
     private final CoupleService coupleService;
 
     @GetMapping()
-    public ResponseEntity<CoupleResponseDto> getCouple() {
-        // TODO : 토큰에서 가져오기
-        Long memberId = 1L;
-        return ResponseEntity.ok(coupleService.getCouple(memberId));
+    public ResponseEntity<CoupleResponseDto> getCouple(@CurrentMemberId Long currentMemberId) {
+        return ResponseEntity.ok(coupleService.getCouple(currentMemberId));
     }
 }

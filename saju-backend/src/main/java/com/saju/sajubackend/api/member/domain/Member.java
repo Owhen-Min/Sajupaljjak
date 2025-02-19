@@ -1,6 +1,7 @@
 package com.saju.sajubackend.api.member.domain;
 
 import com.saju.sajubackend.common.converter.*;
+import com.saju.sajubackend.common.entity.BaseTimeEntity;
 import com.saju.sajubackend.common.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Table(name = "MEMBER")
-public class Member {
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
@@ -28,7 +29,6 @@ public class Member {
     private LocalDateTime btime;
 
     @Convert(converter = RelationshipStatusConverter.class)
-    @Column(nullable = false)
     private RelationshipStatus relation;
 
     @Column(nullable = false, length = 30)
@@ -44,6 +44,9 @@ public class Member {
 
     @Column(name = "city_code")
     private Long cityCode;
+
+    @Column(name = "dong_code")
+    private Long dongCode;
 
     @Column(name = "age")
     private Integer age;
@@ -68,7 +71,42 @@ public class Member {
     @Column
     private CelestialStem celestialStem;
 
-    public void updateRelationship(RelationshipStatus isCouple) {
-        this.relation = isCouple;
+    public void updateRelationship(RelationshipStatus relation) {
+        this.relation = relation;
     }
+
+    // 필터 수정을 위한 update 메서드들
+    public void updateSmoking(SmokingStatus smoking) {
+        this.smoking = smoking;
+    }
+
+    public void updateDrinking(DrinkingFrequency drinking) {
+        this.drinking = drinking;
+    }
+
+    public void updateReligion(Religion religion) {
+        this.religion = religion;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public void updateHeight(Integer height) {
+        this.height = height;
+    }
+
+    public void updateCityCode(Long cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    //update
+    public void updateCelestialStem(CelestialStem celestialStem) {
+        this.celestialStem = celestialStem;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.saju.sajubackend.api.matching.dto.MatchingMemberResponseDto;
 import com.saju.sajubackend.api.matching.dto.MatchingProfileResponseDto;
 import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.service.MatchingService;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,22 +20,22 @@ public class MatchingController {
     private final MatchingService matchingService;
 
     @GetMapping("/top")
-    public ResponseEntity<List<MatchingMemberResponseDto>> getMatchingMembers(Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+    public ResponseEntity<List<MatchingMemberResponseDto>> getMatchingMembers(@CurrentMemberId Long currentMemberId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(matchingService.getMatchingMembers(memberId));
+                .body(matchingService.getMatchingMembers(currentMemberId));
     }
 
     @GetMapping
     public ResponseEntity<MemberListResponseDto> getMembers(@RequestParam(required = false) Integer cursor,
-                                                            Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+                                                            @CurrentMemberId Long currentMemberId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(matchingService.getMembers(memberId, cursor));
+                .body(matchingService.getMembers(currentMemberId, cursor));
     }
 
     @GetMapping("/{partnerId}")
     public ResponseEntity<MatchingProfileResponseDto> getMatchingProfile(
-            @PathVariable Long partnerId, Long memberId) { // todo : 나중에 토큰에서 꺼내도록 수정
+            @PathVariable Long partnerId, @CurrentMemberId Long currentMemberId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .body(matchingService.getMatchingMemberProfile(memberId, partnerId));
+                .body(matchingService.getMatchingMemberProfile(currentMemberId, partnerId));
     }
 }

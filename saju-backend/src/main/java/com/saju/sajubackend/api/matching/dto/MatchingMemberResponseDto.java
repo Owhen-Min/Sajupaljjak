@@ -10,7 +10,7 @@ public record MatchingMemberResponseDto(
         String nickname,
         int score,
         String profileImage,
-        Long region,
+        String region,
         int age,
         String celestialStem,
         String introduction
@@ -22,7 +22,7 @@ public record MatchingMemberResponseDto(
                 member.getNickname(),
                 score,
                 member.getProfileImg(),
-                member.getCityCode(),
+                member.getCityCode().toString(),
                 calculateAge(member.getBday()),
                 member.getCelestialStem().getLabel(),
                 member.getIntro()

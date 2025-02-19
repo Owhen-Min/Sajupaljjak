@@ -145,6 +145,4 @@ public class FourPillarsCalculator {
 
         return new FourPillars(yearPillar, monthPillar, dayPillar, hourPillar);
     }
-
-
 }
