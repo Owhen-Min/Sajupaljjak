@@ -23,7 +23,7 @@ function CoupleCode() {
     onSuccess: (response) => {
       console.log("응답: ", response);
       if (response.status === 201) {
-        sessionStorage.setItem('relation', true);
+        localStorage.setItem('relation', true);
         updateRelation(true);
         navigate('/couple');
       } else if (response.status === 400) {
@@ -56,8 +56,8 @@ function CoupleCode() {
   useEffect(() => {
     const loadCoupleCode = async () => {
       // 로컬 스토리지에서 커플 코드 정보 확인
-      const savedCode = sessionStorage.getItem('coupleCode');
-      const savedExpiresAt = sessionStorage.getItem('codeExpiresAt');
+      const savedCode = localStorage.getItem('coupleCode');
+      const savedExpiresAt = localStorage.getItem('codeExpiresAt');
 
       if (savedCode && savedExpiresAt) {
         // 만료 시간이 지나지 않았다면 저장된 코드 사용
@@ -69,8 +69,8 @@ function CoupleCode() {
           return;
         } else {
           // 만료된 코드는 삭제
-          sessionStorage.removeItem('coupleCode');
-          sessionStorage.removeItem('codeExpiresAt');
+          localStorage.removeItem('coupleCode');
+          localStorage.removeItem('codeExpiresAt');
         }
       }
 
@@ -84,8 +84,8 @@ function CoupleCode() {
         });
         
         // 로컬 스토리지에 저장
-        sessionStorage.setItem('coupleCode', code.slice(0, 4) + ' ' + code.slice(4));
-        sessionStorage.setItem('codeExpiresAt', expiresAt);
+        localStorage.setItem('coupleCode', code.slice(0, 4) + ' ' + code.slice(4));
+        localStorage.setItem('codeExpiresAt', expiresAt);
         
       } catch (error) {
         console.error('커플 코드 발급 실패:', error);
@@ -166,7 +166,7 @@ function CoupleCode() {
       const response = await checkConfirm();
       console.log(response);
       if (response.data.status === 200) {
-        sessionStorage.setItem('relation', true);
+        localStorage.setItem('relation', true);
         updateRelation(true);
         navigate('/couple');
       } else if (response.data.status === 202) {
