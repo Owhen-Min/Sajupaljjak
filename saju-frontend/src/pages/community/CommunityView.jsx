@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import articleDetails from "../../data/articlesDetail.json";
 import { IoArrowBack } from "react-icons/io5";
 import { FaCommentDots } from "react-icons/fa";
-import { useGet } from "../../hooks/useApi";
+import { useGet, usePost, usePut, useDelete } from "../../hooks/useApi";
 
 // 상대적 시간 표시 함수
 function formatRelativeTime(dateString) {
@@ -32,7 +32,9 @@ function formatRelativeTime(dateString) {
 function CommunityView() {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const { data, isPending, error } = useGet(`/community/${postId}`);
+  const mutation = usePost();
+
+  // const { data, isPending, error } = useGet(`/community/${postId}`);
 
   const [article, setArticle] = useState({
     articleId: "",
@@ -42,6 +44,7 @@ function CommunityView() {
     title: "",
     content: "",
     likeCount: 999,
+    isLiked: false,
     commentCount: 999,
     comments: [
       {
@@ -59,52 +62,75 @@ function CommunityView() {
     ],
   });
 
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState([
+    {
+      commentId: 1,
+      createdAt: "2025-02-07 12:30:00",
+      celestialStem: "갑목",
+      content: "gdgd",
+    },
+    {
+      commentId: 2,
+      createdAt: "2025-02-07 13:45:00",
+      celestialStem: "임수",
+      content: "sdds",
+    },
+  ]);
+
   const [comment, setComment] = useState("");
 
-  useEffect(() => {
-    if (data) {
-      setArticle(data);
-      setComments(data.comments || []);
-    }
-  }, [data]);
+  const [liked, setLiked] = useState(false);
 
-
-
-
-
-
-
-
-
-
-
-  if (!article) {
-    return (
-      <div className="h-screen flex items-center justify-center font-NanumR">
-        <p>게시글을 불러오는 중...</p>
-      </div>
+  const handleLike = () => {
+    setLiked((prev) => !prev);
+    mutation.mutate({ uri: `community/${postId}/like`, payload: { liked: liked } },
+      {
+        onSuccess: () => {
+          console.log("좋아요 요청 성공");
+        },
+        onError: (error) => {
+          console.error("좋아요 요청 실패:", error);
+        },
+      }
     );
-  }
-  if (isPending) {
-    return (
-      <div className="h-screen flex items-center justify-center font-NanumR">
-        <p>댓글을 불러오는 중...</p>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div className="h-screen flex items-center justify-center font-NanumR">
-        <p>댓글을 불러오는 중 오류가 발생했습니다.</p>
-      </div>
-    );
+    console.log(liked);
   }
 
+  // const handleComment = () => {
+  //   mutation.mutate(
+  //     { uri: `community/${postId}/like`, payload: { liked: liked } },
+  //     {
+  //       onSuccess: () => {
+  //         console.log("좋아요 요청 성공");
+  //       },
+  //       onError: (error) => {
+  //         console.error("좋아요 요청 실패:", error);
+  //       },
+  //     }
+  //   );
+  // }
 
+  // useEffect(() => {
+  //   if (data) {
+  //     setArticle(data);
+  //     setComments(data.comments || []);
+  //   }
+  // }, [data]);
 
-
-
+  // if (isPending) {
+  //   return (
+  //     <div className="h-screen flex items-center justify-center font-NanumR">
+  //       <p>댓글을 불러오는 중...</p>
+  //     </div>
+  //   );
+  // }
+  // if (error) {
+  //   return (
+  //     <div className="h-screen flex items-center justify-center font-NanumR">
+  //       <p>댓글을 불러오는 중 오류가 발생했습니다.</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 font-NanumR">
@@ -130,7 +156,7 @@ function CommunityView() {
             {article.content}
           </p>
           <div className="flex justify-between items-center mt-4">
-            <span className="text-xs text-gray-700">
+            <span onClick={()=>{handleLike()}} className="text-xs text-gray-700" style={{cursor: "pointer"}}>
               좋아요 {article.likeCount}
             </span>
             <span className="text-xs text-gray-700">
