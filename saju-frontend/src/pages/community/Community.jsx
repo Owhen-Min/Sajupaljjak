@@ -1,11 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TopBar3 from "../../components/TopBar3";
 import BottomNav from "../../components/BottomNav";
 import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import ArticleList from "../../components/ArticleList";
-import articles from "../../data/articles.json";
 import { HiSearch } from "react-icons/hi";
 import { GoPencil } from "react-icons/go";
 import CommunityFilter from "../../components/CommunityFilter";
@@ -18,10 +17,22 @@ function Community() {
   const [selectedTop, setSelectedTop] = useState("전체");
   const [selectedSub, setSelectedSub] = useState("");
   const navigate = useNavigate();
-  const data = articles; // 임시 데이터
+  // const data = articles; // 임시 데이터
+  const [articles, setArticles] = useState([]);
+
+  const observerRef = useRef(null);
+  const { data, fetchNextPage, hasNextPage } = useInfiniteGet("/api/community", {
+    initialCursor: 1,
+  });
+
+  useEffect(() => {
+    if (data) {
+      setArticles((prev) => [...prev, ...data.pages.map((page) => page.data)]);
+    }
+  }, [data]);
 
   // 필터링: 하위 메뉴가 선택되었을 때만 필터 적용; 그렇지 않으면 전체 표시
-  const filteredArticles = data.filter((article) => {
+  const filteredArticles = articles.filter((article) => {
     let pass = true;
     if (selectedTop !== "전체" && selectedSub) {
       pass = pass && article.subType === selectedSub;
@@ -35,6 +46,18 @@ function Community() {
     }
     return pass;
   });
+
+  const sentinelRef = useCallback(
+      (node) => {
+        if (observerRef.current) observerRef.current.disconnect();
+        observerRef.current = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            fetchNextPage();
+          }
+        });
+        if (node) observerRef.current.observe(node);
+      }, [fetchNextPage, hasNextPage]
+    );
 
   return (
     <div className="relative h-screen flex flex-col bg-gray-50 font-NanumR">
@@ -67,6 +90,7 @@ function Community() {
 
         {/* 게시글 목록 */}
         <ArticleList articles={filteredArticles} />
+        <div ref={sentinelRef} className="h-4"></div>
       </div>
 
       {/* 글쓰기 버튼 (FAB) */}

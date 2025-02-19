@@ -13,13 +13,29 @@ function CouplePlace() {
   const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
   const [badDates, setBadDates] = useState([]);
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(
+    `${new Date().getFullYear()}-${String(
+    new Date().getMonth() + 1
+  ).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`
+  );
+
+
   const [selectedPlaces, setSelectedPlaces] = useState([]);
 
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const { data:dateData, isPending:datePending, error:dateError } = useGet(`api/couples/date?month=${month}`);
-  const { data:placeData, isPending:placePending, error:placeError } = useGet(`api/places?${selectedDate}`); //body에 담아서 하려면 POST??
+  //오늘 날짜 받는 부분분
 
+  const {
+    data: dateData,
+    isPending: datePending,
+    error: dateError,
+  } = useGet(`api/couples/date?month=${month}`);
+
+  const {
+    data: placeData,
+    isPending: placePending,
+    error: placeError,
+  } = useGet(`api/places?${selectedDate}`); //body에 담아서 하려면 POST??
 
   useEffect(() => {
     if (dateData) {
@@ -41,10 +57,10 @@ function CouplePlace() {
   };
 
   if (datePending || placePending) {
-    return <div> 로딩 중 </div>
+    return <div> 로딩 중 </div>;
   }
   if (dateError || placeError) {
-    return <div> 에러 발생 </div>
+    return <div> 에러 발생 </div>;
   }
 
   return (
