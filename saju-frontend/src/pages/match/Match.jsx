@@ -16,7 +16,7 @@ function Match() {
   // 새로 값 받으면 data.page를 displayUser에 추가
   const observerRef = useRef(null);
 
-  const { data, fetchNextPage, hasNextPage} = useInfiniteGet("/api/match", { initialCursor: 0 });
+  const { data, fetchNextPage, hasNextPage} = useInfiniteGet("/api/match", { initialCursor: 1 });
   
   useEffect(() => {
     if (data) {
