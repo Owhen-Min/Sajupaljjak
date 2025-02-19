@@ -248,11 +248,12 @@ const Chat = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className=" h-screen bg-gray-50 font-NanumR relative flex flex-col">
+    <div className="h-screen bg-gray-50 font-NanumR flex flex-col fixed inset-0">
       <Header data={data} />
-      {/* 메시지 리스트 컨테이너: 헤더와 하단 입력창 높이를 고려한 패딩 */}
-      <div className="flex-1 pt-2 pb-2 overflow-y-auto scrollbar-hide">
-        <MessageList messages={messages} />
+      <div className="flex-1 overflow-hidden">
+        <div className="h-full overflow-y-auto">
+          <MessageList messages={messages} />
+        </div>
       </div>
       <BottomInput
         input={input}

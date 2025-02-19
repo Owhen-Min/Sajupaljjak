@@ -10,7 +10,7 @@ import { HiSearch } from "react-icons/hi";
 import { GoPencil } from "react-icons/go";
 import CommunityFilter from "../../components/CommunityFilter";
 import { IoArrowBack } from "react-icons/io5";
-import { useInfiniteGet } from "../../hooks/useInfiniteGet";
+import  useInfiniteGet  from "../../hooks/useInfiniteGet";
 
 function Community() {
   const [searchQuery, setSearchQuery] = useState("");
