@@ -41,8 +41,8 @@ function MatchReport() {
     mutation.mutate(
       { uri: `api/chats/${partnerId}`},
       {
-        onSuccess: () => {
-          navigate(`/chats/${partnerId}`);
+        onSuccess: (response) => {
+          navigate(`/chats/${response.chatroomId}`);
           console.log("매칭 성공");
         },
         onError: (error) => {

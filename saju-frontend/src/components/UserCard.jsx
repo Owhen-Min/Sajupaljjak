@@ -1,7 +1,28 @@
 // UserCard.js
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { usePost } from "../hooks/useApi";
 
 export default function UserCard({ user }) {
+
+  const navigate = useNavigate();
+  const mutation = usePost();
+
+  const handleMatchRequest = () => {
+    mutation.mutate(
+      { uri: `api/chats/${user.id}` },
+      {
+        onSuccess: (response) => {
+          navigate(`/chats/${response.chatrommId}`);
+          console.log("매칭 성공");
+        },
+        onError: (error) => {
+          console.log("매칭 실패.", error);
+        },
+      }
+    );
+  };
+
   return (
     <div className="rounded-xl overflow-hidden shadow-lg bg-white">
       <div className="relative w-full aspect-square">
@@ -24,7 +45,10 @@ export default function UserCard({ user }) {
         <p className="text-sm text-gray-600 mb-2">천간: {user.celestialStem}</p>
         <p className="text-sm text-gray-600 italic mb-4">{user.introduction}</p>
         <div className="flex space-x-3">
-          <button className="flex-1 bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white px-4 py-2 rounded-full text-sm shadow-md hover:opacity-90 active:scale-95 transition">
+          <button
+            onClick={handleMatchRequest}
+            className="flex-1 bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white px-4 py-2 rounded-full text-sm shadow-md hover:opacity-90 active:scale-95 transition"
+          >
             채팅하기
           </button>
           <button className="flex-1 bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white px-4 py-2 rounded-full text-sm shadow-md hover:opacity-90 active:scale-95 transition">
