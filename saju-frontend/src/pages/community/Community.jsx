@@ -36,7 +36,7 @@ function Community() {
 
   const observerRef = useRef(null);
   const { data, fetchNextPage, hasNextPage } = useInfiniteGet("/api/community", {
-    initialCursor: 1,
+    initialCursor: 0,
   });
 
   useEffect(() => {
