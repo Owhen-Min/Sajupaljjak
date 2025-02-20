@@ -143,11 +143,11 @@ public class FortuneService {
         Saju femaleSaju = sajuRepository.findByMember(couple.getCoupleFemale())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
+        System.out.println("[COUPLE NEW YEAR FORTUNE] male saju: " + maleSaju.getDaily() + " female: " + femaleSaju.getDaily());
         CoupleYearFortune coupleYearFortune = coupleYearRepository.findByMaleAndFemale(
                         maleSaju.getDaily(), femaleSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "No fortune found for male: " + maleSaju.getDaily() + " and female: " + femaleSaju.getDaily()));
-
         // 7. DTO 변환 후 반환
         return CoupleYearDto.fromEntity(coupleYearFortune);
     }
@@ -199,6 +199,7 @@ public class FortuneService {
         Saju femaleSaju = sajuRepository.findByMember(couple.getCoupleFemale())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
+        System.out.println("[COUPLE LIFE FORTUNE] male saju: " + maleSaju.getDaily() + " female: " + femaleSaju.getDaily());
         CoupleLifeFortune coupleLifeFortune = coupleLifeRepository.findByMaleAndFemale(
                         maleSaju.getDaily(), femaleSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
