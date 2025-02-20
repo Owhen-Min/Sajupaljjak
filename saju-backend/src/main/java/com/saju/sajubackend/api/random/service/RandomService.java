@@ -12,19 +12,24 @@ import com.saju.sajubackend.common.enums.MessageType;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
 import jakarta.annotation.PostConstruct;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.async.DeferredResult;
-
-import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.async.DeferredResult;
 
 @RequiredArgsConstructor
 @Service
@@ -62,6 +67,11 @@ public class RandomService {
             Member member = findMember(memberId);
 
             try {
+
+                if (waiting.stream().anyMatch(dto -> dto.getMember().getMemberId().equals(member.getMemberId()))) {
+                    return member;
+                }
+
                 lock.writeLock().lock();
                 waiting.offer(WaitingDto.builder() // 채팅 대기열에 등록
                         .member(member)
@@ -77,7 +87,9 @@ public class RandomService {
     }
 
     public void delete(Member member) { // 대기열에서 삭제 (타임 아웃, 에러 발생 시)
-        if (member == null) return;
+        if (member == null) {
+            return;
+        }
         try {
             lock.writeLock().lock();
             waiting.removeIf(dto -> dto.getMember().getMemberId().equals(member.getMemberId()));
@@ -97,11 +109,13 @@ public class RandomService {
             lock.writeLock().lock(); // 락 걸기
 
             if (waiting.size() < 2) {
-                return;
+                return;  // 두 명 이상이 대기열에 있어야만 매칭 진행
             }
 
             WaitingDto waiting1 = waiting.pollFirst();
-            if (waiting1 == null) return;
+            if (waiting1 == null) {
+                return;
+            }
 
             int idx = Math.min(random.nextInt(5), waiting.size()); // 랜덤 숫자 고르기
 
@@ -121,7 +135,10 @@ public class RandomService {
                 waiting.offerFirst(waiting.pollLast());
             }
 
-            createChatRoom(waiting1, waiting2);
+            // 매칭된 두 명이 존재할 때만 채팅방 생성
+            if (waiting1 != null && waiting2 != null) {
+                createChatRoom(waiting1, waiting2);
+            }
 
         } finally {
             lock.writeLock().unlock();
@@ -129,6 +146,10 @@ public class RandomService {
     }
 
     private void createChatRoom(WaitingDto waiting1, WaitingDto waiting2) {
+        if (waiting1 == null || waiting2 == null) {
+            return; // 방이 생성되기 전, 유효한 두 명인지 다시 확인
+        }
+
         String chatroomId = UUID.randomUUID().toString();
 
         // 응답 반환
@@ -168,11 +189,21 @@ public class RandomService {
 
     private List<Map<Object, Object>> getInfoList(Member member1, Member member2) {
         return List.of(
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "nickname", "member1Id", member1.getMemberId(), "member1Value", member1.getCelestialStem().getLabel(), "member2Id", member2.getMemberId(), "member2Value", member2.getCelestialStem().getLabel()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "age", "member1Id", member1.getMemberId(), "member1Value", member1.getAge(), "member2Id", member2.getMemberId(), "member2Value", member2.getAge()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "gender", "member1Id", member1.getMemberId(), "member1Value", member1.getGender().getLabel(), "member2Id", member2.getMemberId(), "member2Value", member2.getGender().getLabel()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "name", "member1Id", member1.getMemberId(), "member1Value", member1.getNickname(), "member2Id", member2.getMemberId(), "member2Value", member2.getNickname()),
-                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "profileImage", "member1Id", member1.getMemberId(), "member1Value", member1.getProfileImg(), "member2Id", member2.getMemberId(), "member2Value", member2.getProfileImg())
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "nickname", "member1Id",
+                        member1.getMemberId(), "member1Value", member1.getCelestialStem().getLabel(), "member2Id",
+                        member2.getMemberId(), "member2Value", member2.getCelestialStem().getLabel()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "age", "member1Id",
+                        member1.getMemberId(), "member1Value", member1.getAge(), "member2Id", member2.getMemberId(),
+                        "member2Value", member2.getAge()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "gender", "member1Id",
+                        member1.getMemberId(), "member1Value", member1.getGender().getLabel(), "member2Id",
+                        member2.getMemberId(), "member2Value", member2.getGender().getLabel()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "name", "member1Id",
+                        member1.getMemberId(), "member1Value", member1.getNickname(), "member2Id",
+                        member2.getMemberId(), "member2Value", member2.getNickname()),
+                Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "profileImage", "member1Id",
+                        member1.getMemberId(), "member1Value", member1.getProfileImg(), "member2Id",
+                        member2.getMemberId(), "member2Value", member2.getProfileImg())
         );
     }
 
@@ -194,7 +225,9 @@ public class RandomService {
     }
 
     public void exit(ChattingRequestDto request) {
-        if (Objects.isNull(request)) return;
+        if (Objects.isNull(request)) {
+            return;
+        }
 
         schedulers.remove(request.getChatroomId()); // 정보 공개 스케줄러 삭제
         chatRoomNoticeCount.remove(request.getChatroomId()); // 정보 인덱스 삭제
@@ -206,7 +239,8 @@ public class RandomService {
 
     public CreateChatroomResponseDto liked(Long memberId, Long partnerId) {
         // 상대도 liked인지 확인
-        if (randomLikedRepository.existsByMemberIdAndPartnerId(String.valueOf(memberId), String.valueOf(partnerId))) { // 서로 좋아요
+        if (randomLikedRepository.existsByMemberIdAndPartnerId(String.valueOf(memberId),
+                String.valueOf(partnerId))) { // 서로 좋아요
             return chatroomService.getChatroom(memberId, partnerId);
         }
 
