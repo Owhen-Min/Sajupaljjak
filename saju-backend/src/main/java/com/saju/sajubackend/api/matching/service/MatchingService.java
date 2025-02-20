@@ -6,15 +6,7 @@ import com.saju.sajubackend.api.matching.dto.MemberListResponseDto;
 import com.saju.sajubackend.api.matching.repository.MatchingPaginationRepository;
 import com.saju.sajubackend.api.matching.repository.MatchingQueryDslRepository;
 import com.saju.sajubackend.api.member.domain.Member;
-import com.saju.sajubackend.common.enums.CelestialStem;
-import com.saju.sajubackend.common.enums.DrinkingFrequency;
-import com.saju.sajubackend.common.enums.Gender;
-import com.saju.sajubackend.common.enums.RelationshipStatus;
-import com.saju.sajubackend.common.enums.Religion;
-import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.util.MatchingRedisUtil;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -57,25 +49,9 @@ public class MatchingService {
     }
 
     public MemberListResponseDto getMembers(Long memberId, Integer cursor) {
-//        Map<Member, Integer> members = matchingPaginationRepository.findMembers(memberId, cursor, PAGE_SIZE + 1); // hasNext인지 확인하기 위해 pageSize보다 1개 더 가져옴
-//        return MemberListResponseDto.fromEntity(members);
-        return MemberListResponseDto.fromEntity(Map.of(Member.builder()
-                .nickname("쫑문")
-                .bday(LocalDate.of(1997, 8, 15))
-                .btime(LocalDateTime.of(1997, 8, 15, 10, 0))
-                .intro("Hello, I'm User2")
-                .profileImg("user2.jpg")
-                .height(165)
-                .cityCode(1L)
-                .dongCode(102L)
-                .age(26)
-                .smoking(SmokingStatus.NON_SMOKER)
-                .drinking(DrinkingFrequency.NO_DRINKING)
-                .religion(Religion.CHRISTIANITY)
-                .gender(Gender.FEMALE)
-                .celestialStem(CelestialStem.EUL_MOK)
-                .relation(RelationshipStatus.SOLO)
-                .build(), 90));
+        Map<Member, Integer> members = matchingPaginationRepository.findMembers(memberId, cursor,
+                PAGE_SIZE + 1); // hasNext인지 확인하기 위해 pageSize보다 1개 더 가져옴
+        return MemberListResponseDto.fromEntity(members);
     }
 
     public MatchingProfileResponseDto getMatchingMemberProfile(Long memberId, Long partnerId) {
