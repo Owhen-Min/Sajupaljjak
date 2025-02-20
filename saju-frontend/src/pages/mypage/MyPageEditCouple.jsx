@@ -4,13 +4,17 @@ import MainButton from "../../components/MainButton";
 import Input from "../../components/Input";
 import CoupleProfile from "../../components/CoupleProfile";
 import { coupleData } from "../../data/coupleData";
-import {useGet, usePost} from "../../hooks/useApi";
+import {useGet, usePost usePut} from "../../hooks/useApi";
 import { useNavigate } from "react-router-dom";
 
 function MyPageEditCouple() {
-
+  const relation = localStorage.getItem("relation");
   const navigate = useNavigate();
-  const mutation = usePost();
+  if (relation == 'SOLO')
+  {
+    navigate("/couple/code");
+  }
+  const mutation = usePut();
   const [couple, setCouple] = useState([]);
   const { data, isPending, error } = useGet("/api/couples");
   useEffect(() => {
@@ -53,24 +57,25 @@ function MyPageEditCouple() {
       alert("만난 날짜를 선택해주세요.");
       return;
     }
-    
-    try {
-      // TODO: API로 수정된 만난 날짜 저장
-      
-      // 저장 후 날짜 다시 계산
-      const start = new Date(meetDate);
-      const today = new Date();
-      const diffTime = Math.abs(today - start);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1);
-      setDaysCount(diffDays);
-      
-      alert("성공적으로 수정되었습니다.");
-    } catch (error) {
-      console.error("저장 실패:", error);
-      alert("저장 중 오류가 발생했습니다.");
-    }
+    const start = new Date(meetDate);
+    const today = new Date();
+    const diffTime = Math.abs(today - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1);
+    setDaysCount(diffDays);
+
+    mutation.mutate(
+      { uri : `api/couples`, payload:{ isBroken : false, startDate : meetDate }},
+      {
+        onSuccess: () => {
+          console.log("수정 성공");
+        },
+        onError: (error) => {
+          console.log("수정정 실패.", error);
+        },
+      }
+    );
   };
-  
+
   const handleBreakUp = async () => {
     submit("/api/couple/breakup", { isBroken: true, startDate: '' });
     alert("회원님의 앞으로의 행복을 기원합니다.");
@@ -102,7 +107,7 @@ function MyPageEditCouple() {
       <TopBar2 mainText={"커플 정보 수정하기"} />
 
       <div className="flex flex-col items-center px-6 mt-8 space-y-6">
-        <CoupleProfile couple={coupleData[0]} />
+        <CoupleProfile couple={couple} />
 
         <div className="w-full max-w-md space-y-2 mt-4">
           <h3 className="text-lg font-bold text-center text-gray-700">
