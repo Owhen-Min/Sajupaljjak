@@ -23,13 +23,14 @@ public class ChatMessageService {
         System.out.println("[👍메시지 전송 요청 - ChatMessageService]");
         System.out.println("[👍chatroomId] : " + request.getChatroomId());
         System.out.println("[👍senderId] : " + request.getSenderId());
+        System.out.println("[👍디비 저장 content] : " + request.getContent());
         isValid(request);
         ChatMessage validMessage = createChatMessage(request);
         ChatMessage message = chatMessageRepository.save(validMessage);
         if (message != null) {
-            System.out.println("[👍content] : " + message.getContent());
+            System.out.println("[👍디비 저장 content] : " + message.getContent());
         } else {
-            System.out.println("[👍content] : 저장 안됨!");
+            System.out.println("[👍디비 저장 content] : 저장 안됨!");
         }
         return ChattingRequestDto.fromEntity(validMessage);
     }
