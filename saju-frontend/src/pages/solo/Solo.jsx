@@ -12,7 +12,6 @@ import LoadingSpinner from "../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import PageLoader from "../../components/PageLoader";
 export default function Solo() {
-
   // 하단 탭 (메인, 커뮤니티, 운세, 매칭, 채팅)
   const [currentTab, setCurrentTab] = useState("main");
   // 매칭 화면 내부 탭 (궁합매칭, 랜덤매칭)
@@ -24,20 +23,21 @@ export default function Solo() {
   const mutation = usePost();
   const createRandom = () => {
     mutation.mutate(
-      { uri: `/api/random`},
+      { uri: `/api/random` },
       {
-       onSuccess:(response) => {
-       if (response.message){
-         console.log("랜덤채팅 실패")
-        } //매칭 실패가 백엔드에서 처리하는 건지지
-       console.log('랜덤채팅 매칭 성공')
-       navigate(`/chats/random/${response.chatRoomId}`)
-     },
-     onError: (error) => {
-       console.log("error", error);
-     }}
+        onSuccess: (response) => {
+          if (response.message) {
+            console.log("랜덤채팅 실패");
+          } //매칭 실패가 백엔드에서 처리하는 건지지
+          console.log("랜덤채팅 매칭 성공");
+          navigate(`/chats/random/${response.chatRoomId}`);
+        },
 
-    )
+        onError: (error) => {
+          console.log("error", error);
+        },
+      }
+    );
   };
 
   useState(() => {
@@ -45,11 +45,12 @@ export default function Solo() {
       setUsers(data);
     }
   }, [data]);
-  if (isPending) return (
-    <div>
-      <PageLoader />
-    </div>
-  );
+  if (isPending)
+    return (
+      <div>
+        <PageLoader />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -67,7 +68,7 @@ export default function Solo() {
             )}
 
             {matchingTab === "random" && (
-              <RandomMatching createRandom={createRandom} />
+              <RandomMatching createRandom={createRandom} mutation={mutation} />
             )}
           </div>
         )}
@@ -118,7 +119,7 @@ function MatchingNav({ matchingTab, setMatchingTab }) {
  * - 모든 카드에 이미지, 인포, 버튼 항상 표시
  * - 터치(스와이프) 및 카드 클릭으로 슬라이드 이동
  */
-function CompatibilityMatching({users}) {
+function CompatibilityMatching({ users }) {
   if (!Array.isArray(users) || users.length === 0) {
     return <div>매칭된 유저가 없습니다다.</div>;
   }
@@ -216,7 +217,7 @@ function CompatibilityMatching({users}) {
   );
 }
 
-function RandomMatching({ createRandom }) {
+function RandomMatching({ createRandom, mutation }) {
   const lottieRef = useRef(null);
 
   useEffect(() => {
@@ -244,19 +245,27 @@ function RandomMatching({ createRandom }) {
             <Lottie lottieRef={lottieRef} animationData={Random} loop={true} />
           </div>
         </div>
+
         <button
           onClick={() => {
             createRandom();
           }}
+          disabled={mutation.isPending}
           className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition"
         >
-          랜덤채팅 시작하기
+          {mutation.isPending ? (
+            <>
+              <PageLoader />
+              <span>매칭 중...</span>
+            </>
+          ) : (
+            "랜덤 채팅 시작하기"
+          )}
         </button>
       </div>
     </div>
   );
 }
-
 
 // 캐러셀로 돌릴 유저 데이터
 // const users = [
