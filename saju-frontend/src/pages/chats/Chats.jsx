@@ -33,7 +33,7 @@ function Chats() {
             },
           },
         };
-        setData((prev) => [...prev, newData]);
+        // setData((prev) => [...prev, newData]);
       }
     );
 
@@ -41,7 +41,7 @@ function Chats() {
       subscription.unsubscribe();
       console.log("채팅목록 구독 해제");
     };
-  }, [stompClient, memberId, setData, data]);
+  }, [stompClient, isConnected, memberId]);
 
   return (
     <div className="flex flex-col h-screen relative ">
