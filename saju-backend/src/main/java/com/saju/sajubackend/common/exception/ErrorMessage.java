@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorMessage {
     // auth
+    INVALID_VARIABLE("잘못된 요청입니다."),
     ERR_UNAUTHORIZED("[ERR] Unauthorized"),
     MEMBER_NOT_FOUND("존재하지 않는 사용자입니다."),
     REFRESH_TOKEN_EXPIRED("만료된 토큰입니다."),

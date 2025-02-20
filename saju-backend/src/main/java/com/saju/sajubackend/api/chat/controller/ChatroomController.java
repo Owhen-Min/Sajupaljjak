@@ -29,10 +29,6 @@ public class ChatroomController {
     @PatchMapping
     public ResponseEntity<Void> leave(@RequestBody ChatroomLeaveRequestDto request,
                                       @CurrentMemberId Long currentMemberId) {
-        System.out.println("[👍ChatroomController leave 들어옴");
-        System.out.println("[👍chatroomId 타입 : " + request.getChatRoomId());
-        System.out.println("[👍chatroomId 타입 : " + request.getChatRoomId().getClass());
-        System.out.println("------------------------------------------------------------");
 
         chatroomService.leave(request, currentMemberId);
         return ResponseEntity.ok().build();

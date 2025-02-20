@@ -95,14 +95,11 @@ public class ChatroomService {
     }
 
     private void validChatroom(String chatroomId, Long memberId) {
-        System.out.println("[👍chatroomId : " + chatroomId + " - ChatroomService.validChatroom]");
-        System.out.println("[👍chatroomId 타입 : " + chatroomId.getClass() + " - ChatroomService.validChatroom]");
-
         if (chatroomId == null || chatroomId.isEmpty()) {
-            throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
+            throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_VARIABLE);
         }
 
-        if (chatroomQueryDslRepository.existChatMember(Long.parseLong(chatroomId), memberId)) {
+        if (!chatroomQueryDslRepository.existChatMember(Long.parseLong(chatroomId), memberId)) {
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
         }
     }
