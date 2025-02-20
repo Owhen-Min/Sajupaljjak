@@ -30,8 +30,8 @@ function CoupleProfile({ couple }) {
         <div className="flex flex-col items-center text-center">
           <SajuUserBubble skyElement={couple.member.memberType} size="small" />
           <p className="text-gray-600 text-sm mb-1">{couple.member.age}세</p>
-          <p className="text-gray-500 text-xs mb-1">{memberRegion.sido}</p>
-          <p className="text-gray-500 text-xs">{memberRegion.gugun}</p>
+          {/* <p className="text-gray-500 text-xs mb-1">{memberRegion.sido}</p> */}
+          {/* <p className="text-gray-500 text-xs">{memberRegion.gugun}</p> */}
         </div>
       </div>
 
@@ -69,8 +69,8 @@ function CoupleProfile({ couple }) {
         <div className="flex flex-col text-center items-center justify-center">
           <SajuUserBubble skyElement={couple.partner.memberType} size="small" />
           <p className="text-gray-600 text-sm mb-1">{couple.partner.age}세</p>
-          <p className="text-gray-500 text-xs mb-1">{partnerRegion.sido}</p>
-          <p className="text-gray-500 text-xs">{partnerRegion.gugun}</p>
+          {/* <p className="text-gray-500 text-xs mb-1">{partnerRegion.sido}</p> */}
+          {/* <p className="text-gray-500 text-xs">{partnerRegion.gugun}</p> */}
         </div>
       </div>
     </div>
