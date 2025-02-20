@@ -7,9 +7,7 @@ export const MainButton = ({
 }) => (
   <button
     className={`
-        flex items-center justify-center
-        text-white
-        shadow
+        flex items-center justify-center shadow
         bg-[#ff7070]
         rounded-lg
         cursor-pointer
@@ -17,6 +15,7 @@ export const MainButton = ({
         active:transform active:scale-[0.98]
         disabled:opacity-50 disabled:cursor-not-allowed
         ${className}
+        text-white
       `}
     {...props}
   >
