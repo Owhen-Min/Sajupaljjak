@@ -1,51 +1,113 @@
-import {TopBar2} from "../../components/TopBar2";
+
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import TopBar2 from "../../components/TopBar2";
 import Input from "../../components/Input";
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from "react";
-import SajuUserBubble from '../../components/SajuUserBubble';
 import MainButton from "../../components/MainButton";
+
 import { useGet, usePut } from "../../hooks/useApi";
+import SajuUserBubble from "../../components/SajuUserBubble";
+import { IoArrowBack } from "react-icons/io5";
+import { sub } from "@tensorflow/tfjs";
+import { useEffect } from "react";
+
+// ErrorBubble 컴포넌트
+function ErrorBubble({ children }) {
+  return (
+    <div className="mt-2 text-sm text-red-500 bg-red-50 px-3 py-2 rounded">
+      {children}
+    </div>
+  );
+}
+
+// 천간 선택 드롭다운 컴포넌트
+function CelestialStemDropdown({ selectedStem, setSelectedStem }) {
+  const options = [
+    "갑목",
+    "을목",
+    "병화",
+    "정화",
+    "무토",
+    "기토",
+    "경금",
+    "신금",
+    "임수",
+    "계수",
+  ];
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleSelect = (option) => {
+    setSelectedStem(option);
+    setDropdownOpen(false);
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setDropdownOpen(!dropdownOpen)}
+        className="w-full flex items-center justify-between px-3 py-2 border border-gray-300 rounded-md bg-white text-sm text-gray-700 focus:outline-none"
+      >
+        <span>{selectedStem || "게시판 천간 선택"}</span>
+        <svg
+          className="w-4 h-4 text-gray-500"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+      {dropdownOpen && (
+        <ul className="absolute left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10">
+          {options.map((option) => (
+            <li
+              key={option}
+              className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer flex items-center gap-2"
+              onClick={() => handleSelect(option)}
+            >
+              <SajuUserBubble skyElement={option} size="small" />
+              <span>{option}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 function CommunityModify() {
-  //게시글 번호
-  const { postId } = useParams();
-  //
-  const { data, error, isPending } = useGet(`/api/community/${postId}`);
   const navigate = useNavigate();
-  const [article , setArticle] = useState({});
-
-  const mutation = usePut(`/api/community/${postId}`);
+  const [selectedStem, setSelectedStem] = useState("");
+  const mutation = usePut();
+  const postId = useParams().postId;
+  // const {data, isPending, error} = useGet(`community/${postId}`)
 
   const [formData, setFormData] = useState({
-    title: article.title,
-    boardId : postId,
-    content: article.content,
-    celestialStem: article.boardType,
+    title: "",
+    content: "",
+    celestialStem: JSON.parse(localStorage.getItem("user")).celestial_stem_id,
+    subType: "",
+    mainType: "",
   });
 
-  useEffect(() => {
-    if (data) {
-      setArticle(data);
-      setFormData({
-        title: data.title,
-        boardId : postId,
-        content: data.content,
-        celestialStem: data.boardType,
-      });
-    }
-  }, [data, postId]);
-
-  // const article = {
-  //   "articleId": postId,
-  //   "createdAt": "2025-02-07 00:00:00",
-  //   "boardType": "신금",
-  //   "celestialStem": "무토",
-  //   "title": "어쩌지?",
-  //   "content": "신금 친구랑 싸웠는데, 이 성격 대체 어떻게 이해해야 할까요?\n\n정말 이해가 안 되는데 어떻게 해결해야 할까요? 고민이 많습니다...\n\n도와주세요 ㅠㅠ",
-  //   "likeCount": 7,
-  //   "commentCount": 4
-  // };
-
+  // useEffect(() => {
+  //   if (data) {
+  //     setFormData(
+  //       {
+  //         title: data.title,
+  //         content: data.content,
+  //         celestialStem: data.celestialStem,
+  //         subType: data.subType,
+  //         mainType: data.mainType,
+  //       }
+  //     )
+  //   }
+  // }, [data]);
 
   const [errors, setErrors] = useState({
     title: false,
@@ -53,81 +115,90 @@ function CommunityModify() {
     celestialStem: false,
   });
 
+  // 폼 검증: 천간은 하위 메뉴가 선택되어야 함
   const validateForm = () => {
     const newErrors = {
-      title: formData.title.trim() === '',
-      content: formData.content.trim() === '',
+      title: formData.title.trim() === "",
+      content: formData.content.trim() === "",
+      celestialStem: selectedStem === "",
     };
-
     setErrors(newErrors);
-    return !Object.values(newErrors).some(error => error);
+    return !Object.values(newErrors).some((error) => error);
   };
 
   const handleSubmit = () => {
-    if (!validateForm()) {
-      return;
-    }
-    console.log('게시글 작성:', formData);
-    mutation.mutate(formData, {
-      onSuccess: () => {
-        navigate(`/community/${postId}`);
+    if (!validateForm()) return;
+    mutation.mutate(
+      {
+        uri: `community/${postId}`,
+        payload: formData,
       },
-    });
+      {
+        onSuccess: () => navigate(`/community/${postId}`),
+        onError: (error) => console.error(error),
+      }
+    );
+    console.log("게시글 수정:", formData);
+    // API 호출 로직 추가 가능
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
-   if (isPending) {
-    return <div>Loading...</div>;
-   }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-  return (
-    <div className="community community-write flex flex-col relative h-screen">
-      <TopBar2 
-        url="/community"
-        mainText="게시글 작성"
-      />
-      
 
-      <div className="flex flex-col p-4 gap-4">
-        <div className="flex items-center py-1">
-          <span className="font-dokrip">
-            <SajuUserBubble skyElement={article.boardType} size={"large"}/> 게시판
-          </span>
-        </div>
+  // 천간 선택 시 formData 업데이트
+  const handleStemSelect = (stem) => {
+    setSelectedStem(stem);
+    setFormData((prev) => ({
+      ...prev,
+      subType: stem,
+      mainType: stem.charAt(1),
+    }));
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-50 font-NanumR">
+      <Header />
+      <div className="flex flex-col gap-4 p-4">
+        {/* 천간 선택 드롭다운 */}
+        <CelestialStemDropdown
+          selectedStem={selectedStem}
+          setSelectedStem={handleStemSelect}
+        />
+        {errors.celestialStem && <ErrorBubble>천간을 선택해주세요</ErrorBubble>}
+
+        {/* 제목 입력 */}
         <div>
           <Input
             name="title"
             placeholder="제목을 입력하세요"
             value={formData.title}
             onChange={handleInputChange}
-            className="w-full"
+            className="w-full p-3 border border-gray-300 rounded-md"
           />
           {errors.title && <ErrorBubble>제목을 입력해주세요</ErrorBubble>}
         </div>
-        
+
+        {/* 내용 입력 */}
         <div>
           <textarea
             name="content"
             placeholder="내용을 입력하세요"
             value={formData.content}
             onChange={handleInputChange}
-            className="w-full h-[300px] px-4 py-[15px] text-base border border-gray-300 rounded-lg resize-none
-              focus:outline-none focus:border-[#ff6842] focus:ring-2 focus:ring-[#4CAF50]/20"
+            className="w-full h-64 bg-white p-4 text-base border border-gray-300 rounded-md 
+            "
           />
           {errors.content && <ErrorBubble>내용을 입력해주세요</ErrorBubble>}
         </div>
 
-        <MainButton 
-          className="w-full py-3"
+        <MainButton
           onClick={handleSubmit}
+          className="w-full py-3 bg-[#ff7070] text-white rounded-md text-sm shadow-lg hover:opacity-90 active:scale-95 transition"
         >
           수정하기
         </MainButton>
@@ -136,4 +207,21 @@ function CommunityModify() {
   );
 }
 
-export default CommunityModify;
+function Header() {
+  const navigate = useNavigate();
+
+  return (
+    <header className="relative h-12 flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">게시글 수정</h1>
+      <div
+        className="absolute left-4 text-xl cursor-pointer text-white "
+        onClick={() => navigate("/community")}
+      >
+        <IoArrowBack />
+      </div>
+    </header>
+  );
+}
+export default CommunityModify
+
+;
