@@ -41,7 +41,11 @@ function Community() {
 
   useEffect(() => {
     if (data) {
-      setArticles((prev) => [...prev, ...data.pages.map((page) => page.data.content)]);
+      setArticles((prev) => [
+        ...prev,
+        ...data.pages.flatMap((page) => page?.data?.content || []),
+      ]);
+
     }
   }, [data]);
 
