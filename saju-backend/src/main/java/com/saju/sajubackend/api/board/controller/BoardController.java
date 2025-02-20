@@ -21,14 +21,15 @@ public class BoardController {
     private final BoardService boardService;
 
     /**
-     * 게시글 목록 조회 API (무한 스크롤)
-     * URL 예시: /api/community?type=화&cursor=17&query=검색내용
+     * GET /api/boards?type={type}&cursor={cursor}&query={query}
+     * Cursor 기반 무한스크롤 방식의 게시글 목록 조회
      */
     @GetMapping
     public ResponseEntity<BoardListResponse> getBoardList(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) Long cursor,
-            @RequestParam(required = false) String query
+            @RequestParam(required = false) String query,
+            @CurrentMemberId Long currentMemberId // 필요 시 현재 사용자 정보 활용
     ) {
         BoardListResponse response = boardService.getBoardList(type, cursor, query);
         return ResponseEntity.ok(response);

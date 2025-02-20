@@ -40,48 +40,42 @@ public class BoardService {
     }
 
     /**
-     * 게시글 목록 조회 (무한 스크롤)
-     * - 최초 요청(cursor null) 시 10개, 이후 5개씩 로드
+     * 게시글 목록 조회 (cursor 기반 무한 스크롤)
+     * 첫 페이지(cursor null 또는 0)는 10개, 이후는 5개씩 조회합니다.
+     * pageSize + 1건을 조회해 다음 페이지 존재 여부를 판단합니다.
      */
-    @Transactional(readOnly = true)
     public BoardListResponse getBoardList(String type, Long cursor, String query) {
-        int pageSize = (cursor == null) ? 10 : 5;
-        // 다음 페이지 여부를 판단하기 위해 pageSize+1개를 조회
+        int pageSize = (cursor == null || cursor == 0) ? 10 : 5;
+        // 다음 페이지 여부를 위해 pageSize+1 건 조회
         List<Board> boards = boardRepository.searchBoards(type, query, cursor, pageSize + 1);
 
         boolean hasNext = boards.size() > pageSize;
         Long nextCursor = null;
         if (hasNext) {
-            // extra 데이터 제거 후 마지막 board의 boardId를 nextCursor로 지정
+            // extra 데이터 제거 후 마지막 board의 boardId를 nextCursor로 설정
             Board extraBoard = boards.remove(boards.size() - 1);
             nextCursor = extraBoard.getBoardId();
         }
 
-        // DTO 매핑
+        // Board 엔티티를 BoardListResponse.BoardSummary DTO로 매핑
         List<BoardListResponse.BoardSummary> content = boards.stream().map(board -> {
-            // Saju 정보 조회: daily 필드의 label을 가져옴
-            Optional<Saju> sajuOpt = sajuRepository.findByMember(board.getMember());
-            String celestialStemLabel = sajuOpt.map(saju -> saju.getDaily()).orElse("");
-
-            int commentCount = commentRepository.countByBoard(board);
-            int likeCount = 0; // 좋아요 기능이 있다면 별도 조회
-
+            // 여기서는 celestialStem은 subType의 문자열 표현을 사용 (필요시 별도 처리)
+            String celestialStem = board.getSubType().toString();
             return new BoardListResponse.BoardSummary(
                     board.getBoardId(),
-                    board.getMainType().getLabel(),    // Element enum의 label (예: "금")
-                    board.getSubType().getLabel(),     // CelestialStem enum의 label (예: "경금")
-                    celestialStemLabel,                // Saju.daily의 label (예: "기토")
+                    board.getMainType().toString(), // 필요한 경우 getLabel() 등으로 변환
+                    board.getSubType().toString(),
+                    celestialStem,
                     board.getTitle(),
                     board.getContent(),
-                    likeCount,
-                    commentCount,
+                    0, // likeCount (아직 구현되지 않은 경우 0 처리)
+                    commentRepository.countByBoard(board),
                     board.getCreatedAt()
             );
         }).collect(Collectors.toList());
 
         return new BoardListResponse(content, hasNext, nextCursor);
     }
-
     /**
      * 특정 게시글 조회
      *
