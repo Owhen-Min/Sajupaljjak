@@ -6,7 +6,12 @@ import com.saju.sajubackend.api.chat.service.ChatroomService;
 import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/chats")
@@ -24,6 +29,11 @@ public class ChatroomController {
     @PatchMapping
     public ResponseEntity<Void> leave(@RequestBody ChatroomLeaveRequestDto request,
                                       @CurrentMemberId Long currentMemberId) {
+        System.out.println("[👍ChatroomController leave 들어옴");
+        System.out.println("[👍chatroomId 타입 : " + request.getChatRoomId());
+        System.out.println("[👍chatroomId 타입 : " + request.getChatRoomId().getClass());
+        System.out.println("------------------------------------------------------------");
+
         chatroomService.leave(request, currentMemberId);
         return ResponseEntity.ok().build();
     }
