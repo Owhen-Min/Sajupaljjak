@@ -51,6 +51,7 @@ function Community() {
 
   // 필터링: 하위 메뉴가 선택되었을 때만 필터 적용; 그렇지 않으면 전체 표시
   const filteredArticles = articles.filter((article) => {
+    console.log(article);
     let pass = true;
     if (selectedTop !== "전체" && selectedSub) {
       pass = pass && article.subType === selectedSub;
