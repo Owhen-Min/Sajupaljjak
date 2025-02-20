@@ -78,7 +78,7 @@ const Chat = () => {
         sentAt: messageData.sendTime,
         isMine: false,
         profileImage: partner.profileImage || "기본이미지URL",
-        nickName: partner.nickName || "상대방",
+        nickName: partner.nickname || "상대방",
       };
 
       console.log('[웹소켓] 새 메시지 처리:', newMessage);

@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Onboarding from '../pages/utils/Onboarding';
 
-import Login from '../pages/auth/Login';
 // import ProtectedRoutes from './ProtectedRoutes';
 import Auth from './AuthRoutes';
 import Solo from '../pages/solo/Solo';
@@ -19,7 +18,7 @@ function AppRoutes() {
     <Routes>
 
       {/* 메인 페이지 (온보딩) */}
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Onboarding />} />
       
       {/* <Routes element={<ProtectedRoutes />}> */}
       <Route path="/auth/*" element={<Auth />} />
