@@ -43,7 +43,7 @@ function Community() {
     if (data) {
       setArticles((prev) => [
         ...prev,
-        ...data.pages.flatMap((page) => page?.data?.content || []),
+        ...data.pages.flatMap((page) => page?.content || []),
       ]);
 
     }

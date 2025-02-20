@@ -78,7 +78,7 @@ useEffect(() => {
   const handleLike = () => {
     setLiked((prev) => !prev);
     mutation.mutate(
-      { uri: `/api/community/${postId}/like`, payload: { liked: liked } },
+      { uri: `/api/community/${postId}`, payload: { liked: liked } },
       {
         onSuccess: () => {
           console.log("좋아요 요청 성공");
@@ -155,7 +155,7 @@ useEffect(() => {
             <span
               className="cursor-pointer"
               onClick={() => {
-                deleteMutation({ uri: `/community/${postId}` });
+                deleteMutation.mutate({ uri: `/community/${postId}` });
                 navigate("/community");
               }}
             >
@@ -313,7 +313,7 @@ function Header({ article }) {
   return (
     <header className="relative h-12 flex-shrink-0 bg-black text-white flex items-center justify-center">
       <div className="flex gap-x-1 items-center justify-center">
-        <SajuUserBubble skyElement={article.boardType} size="large" />
+        <SajuUserBubble skyElement={article.subType} size="large" />
         <div className="text-lg font-bold">게시판</div>
       </div>
       <div
