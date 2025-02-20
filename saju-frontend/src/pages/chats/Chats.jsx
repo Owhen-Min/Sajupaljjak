@@ -12,7 +12,6 @@ function Chats() {
   const { stompClient, isConnected } = useWebSocket();
   const memberId = localStorage.getItem("memberId");
 
-
   useEffect(() => {
     if (!stompClient || !isConnected) return;
     console.log("채팅목록 구독 시작");
@@ -27,10 +26,11 @@ function Chats() {
 
         // responseData가 배열이라고 가정하고, reduce로 변환
         const newMessages = responseData.reduce((acc, item) => {
-          acc[item.chatRoomId] = [
-            {chatRoom: {
+          acc[item.chatRoomId] = {
+            chatRoom: {
               id: item.chatRoomId,
               partner: {
+                id: item.partner.memberId, // 파트너 ID 추가
                 nickname: item.partner.nickname,
                 profileImage: item.partner.profileImage,
                 celestialStem: item.partner.celestialStem,
@@ -42,14 +42,13 @@ function Chats() {
               lastSendTime: item.message.lastSendTime,
               newMessageCount: item.message.newMessageCount,
             },
-          }
-          ];
+          };
           return acc;
         }, {});
 
         // 기존 데이터와 새 데이터를 병합하여 업데이트
-        setData((prev) => ([ ...prev, ...newMessages ]));
-        console.log("추가된 이후 데이터", data);
+        setData((prev) => ({ ...prev, ...newMessages }));
+        console.log("병합된 데이터:", { ...data, ...newMessages });
       }
     );
 
