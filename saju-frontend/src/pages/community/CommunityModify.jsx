@@ -215,7 +215,7 @@ function Header() {
       <h1 className="text-lg font-bold">게시글 수정</h1>
       <div
         className="absolute left-4 text-xl cursor-pointer text-white "
-        onClick={() => navigate("/community")}
+        onClick={(() => navigate("/community"), { replace: true })}
       >
         <IoArrowBack />
       </div>
