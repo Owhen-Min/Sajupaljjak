@@ -4,6 +4,7 @@ import { useSwipeable } from "react-swipeable";
 import { useState } from "react";
 import { useDelete } from "../hooks/useApi";
 const ChatList = ({ chats }) => {
+  console.log("Chatlist에서 : ", chats);
   const navigate = useNavigate();
   const [openChatId, setOpenChatId] = useState(null);
   const deleteChat = useDelete();
