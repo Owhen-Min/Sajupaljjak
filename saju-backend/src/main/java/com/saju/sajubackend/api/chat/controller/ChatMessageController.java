@@ -4,6 +4,7 @@ import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.service.ChatMessageService;
 import com.saju.sajubackend.api.chat.service.ChatroomService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -11,8 +12,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -36,6 +35,7 @@ public class ChatMessageController {
 
     @SubscribeMapping("/list/{memberId}")
     public List<ChatroomResponseDto> sendAllChatRooms(@DestinationVariable Long memberId) {
+        System.out.println("[👍채팅방 목록 웹소켓 구독 - ChatMessageController]");
         return chatroomService.getAllChatrooms(memberId);
     }
 }

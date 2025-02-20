@@ -1,18 +1,19 @@
 package com.saju.sajubackend.api.chat.repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.saju.sajubackend.api.chat.domain.Chatroom;
-import com.saju.sajubackend.api.member.domain.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import static com.saju.sajubackend.api.chat.domain.QChatroom.chatroom;
 import static com.saju.sajubackend.api.chat.domain.QChatroomMember.chatroomMember;
 import static com.saju.sajubackend.api.member.domain.QMember.member;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.saju.sajubackend.api.chat.domain.Chatroom;
+import com.saju.sajubackend.api.member.domain.Member;
+import com.saju.sajubackend.common.exception.BadRequestException;
+import com.saju.sajubackend.common.exception.ErrorMessage;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
@@ -64,7 +65,8 @@ public class ChatroomQueryDslRepository {
                 .join(member)
                 .on(
                         chatroom.member1.memberId.eq(memberId).and(chatroom.member2.memberId.eq(member.memberId))
-                                .or(chatroom.member2.memberId.eq(memberId).and(chatroom.member1.memberId.eq(member.memberId)))
+                                .or(chatroom.member2.memberId.eq(memberId)
+                                        .and(chatroom.member1.memberId.eq(member.memberId)))
                 )
                 .where(chatroom.chatroomId.in(activeChatroomIds)) // 활성화된 채팅방만 조회
                 .fetch()
@@ -82,7 +84,13 @@ public class ChatroomQueryDslRepository {
                 .where(chatroom.chatroomId.eq(chatroomId))
                 .fetchOne();
 
-        Long partnerId = (foundChatroom.getMember1().getMemberId().equals(memberId)) ? foundChatroom.getMember2().getMemberId() : foundChatroom.getMember1().getMemberId();
+        if (foundChatroom == null) {
+            throw new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND);
+        }
+
+        Long partnerId =
+                (foundChatroom.getMember1().getMemberId().equals(memberId)) ? foundChatroom.getMember2().getMemberId()
+                        : foundChatroom.getMember1().getMemberId();
 
         return queryFactory
                 .selectFrom(member)
