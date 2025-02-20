@@ -8,22 +8,24 @@ import com.saju.sajubackend.api.chat.dto.request.ChatroomLeaveRequestDto;
 import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.ChatroomResponseDto;
 import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
-import com.saju.sajubackend.api.chat.repository.*;
+import com.saju.sajubackend.api.chat.repository.ChatMessageRepository;
+import com.saju.sajubackend.api.chat.repository.ChatroomMemberRespository;
+import com.saju.sajubackend.api.chat.repository.ChatroomQueryDslRepository;
+import com.saju.sajubackend.api.chat.repository.ChatroomRepository;
+import com.saju.sajubackend.api.chat.repository.LastMessageRepository;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -45,7 +47,7 @@ public class ChatroomService {
         Member matchingMember = findMember(partnerId);
 
         System.out.println("[🙌 ChatroomId : " + chatroomId + " - ChatroomService.getChatroom()]");
-        
+
         // 2. 채팅방 생성
         if (chatroomId == null) {
             Chatroom chatroom = saveChatroom(loginMember, matchingMember); // 채팅방 생성
@@ -93,8 +95,9 @@ public class ChatroomService {
     }
 
     private void validChatroom(Long chatroomId, Long memberId) {
-        if (chatroomQueryDslRepository.existChatMember(chatroomId, memberId))
+        if (chatroomQueryDslRepository.existChatMember(chatroomId, memberId)) {
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
+        }
     }
 
     private LastMessage createLastMessage(ChatMessage chatMessage, Long memberId) {
@@ -108,6 +111,8 @@ public class ChatroomService {
     }
 
     public List<ChatroomResponseDto> getAllChatrooms(Long memberId) {
+
+        System.out.println("[👍채팅방 목록 서비스 - ChatroomService.getAllChatrooms]");
         // 1. 채팅 상대방 정보 구하기
         Map<Long, Member> partners = chatroomQueryDslRepository.findChatPartnersByMemberId(memberId);
 
@@ -135,12 +140,14 @@ public class ChatroomService {
         return chatMessageRepository.findLatestMessageByChatroomId(String.valueOf(chatroomId)).orElse(null);
     }
 
-    private List<ChatroomResponseDto> buildChatroomResponses(Map<Long, Member> partners, Map<Long, LastMessage> lastReadMessages) {
+    private List<ChatroomResponseDto> buildChatroomResponses(Map<Long, Member> partners,
+                                                             Map<Long, LastMessage> lastReadMessages) {
         List<ChatroomResponseDto> response = new ArrayList<>();
 
         for (Long chatroomId : partners.keySet()) {
             LastMessage lastReadMessage = lastReadMessages.get(chatroomId);
-            String lastMessageTime = (lastReadMessage != null) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
+            String lastMessageTime =
+                    (lastReadMessage != null) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
 
             // 읽지 않은 메시지 개수 조회
             long unreadCount = countUnreadMessages(chatroomId, lastMessageTime);
@@ -149,7 +156,8 @@ public class ChatroomService {
             ChatMessage latestMessage = null;
             if (unreadCount > 0) {
                 latestMessage = findLatestMessage(chatroomId);
-                response.add(ChatroomResponseDto.from(chatroomId, partners.get(chatroomId), latestMessage, unreadCount));
+                response.add(
+                        ChatroomResponseDto.from(chatroomId, partners.get(chatroomId), latestMessage, unreadCount));
                 continue;
             }
 
@@ -161,7 +169,12 @@ public class ChatroomService {
 
     public ChatroomResponseDto updateChatroom(ChattingRequestDto chatMessage) {
         Member sender = findMember(Long.parseLong(chatMessage.getSenderId()));
-        Long receiverId = chatroomQueryDslRepository.findOpponentMemberId(Long.parseLong(chatMessage.getChatroomId()), sender.getMemberId());
+        Long receiverId = chatroomQueryDslRepository.findOpponentMemberId(Long.parseLong(chatMessage.getChatroomId()),
+                sender.getMemberId());
+
+        if (receiverId == null) {
+            throw new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND);
+        }
 
         LastMessage lastReadMessage = lastMessageRepository
                 .findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(
@@ -171,8 +184,10 @@ public class ChatroomService {
 
         String lastReadTime = (lastReadMessage != null) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
 
-        long newMessageCount = chatMessageRepository.countByChatroomIdAndSendTimeAfter(chatMessage.getChatroomId(), lastReadTime);
+        long newMessageCount = chatMessageRepository.countByChatroomIdAndSendTimeAfter(chatMessage.getChatroomId(),
+                lastReadTime);
 
-        return ChatroomResponseDto.from(Long.parseLong(chatMessage.getChatroomId()), sender, chatMessage, newMessageCount);
+        return ChatroomResponseDto.from(Long.parseLong(chatMessage.getChatroomId()), sender, chatMessage,
+                newMessageCount);
     }
 }

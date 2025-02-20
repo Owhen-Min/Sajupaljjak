@@ -16,7 +16,11 @@ function OnboardingPage() {
     logout,
   } = useAuth();
 
-  const { mutateAsync: refreshTokenMutation } = usePost('/api/auth/access-token');
+  const { mutateAsync: refreshTokenMutation } = usePost('/api/auth/access-token', {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`
+    }
+  });
 
   useEffect(() => {
     const refreshToken = localStorage.getItem('refreshToken');
@@ -28,7 +32,7 @@ function OnboardingPage() {
 
     const refreshAccessToken = async () => {
       try {
-        const data = await refreshTokenMutation({ refreshToken });
+        const data = await refreshTokenMutation();
         
         // 기존 데이터 초기화
         logout();

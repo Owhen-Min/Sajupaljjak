@@ -52,16 +52,15 @@ public class BoardController {
 
     /**
      * 게시글 작성
-     * URL 예시: POST /api/community?type=화
+     * URL 예시: POST /api/community
      * 여기서 type은 mainType(Element)의 label을 의미 (예: "화")
      */
     @PostMapping
     public ResponseEntity<BoardCreateResponse> createBoard(
-            @RequestParam("type") String type,
             @RequestBody BoardCreateRequest request,
             @CurrentMemberId Long currentMemberId) {
 
-        BoardCreateResponse response = boardService.createBoard(currentMemberId, type, request);
+        BoardCreateResponse response = boardService.createBoard(currentMemberId, request);
         return ResponseEntity.ok(response);
     }
 

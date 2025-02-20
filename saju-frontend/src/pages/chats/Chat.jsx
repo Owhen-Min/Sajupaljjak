@@ -4,7 +4,7 @@ import { IoArrowBack } from "react-icons/io5";
 import Input from "../../components/Input";
 import MainButton from "../../components/MainButton";
 import { useParams } from "react-router-dom";
-import { useGet } from "../../hooks/useApi";
+import { useGet, usePatch } from "../../hooks/useApi";
 import { useState, useEffect, useRef } from "react";
 import useWebSocket from "../../hooks/useWebSocket";
 
@@ -23,6 +23,7 @@ const Chat = () => {
     celestialStem: null,
     age: null
   });
+  const updateLastReadMessage = usePatch();
 
   // 초기 메시지 로드
   useEffect(() => {
@@ -118,8 +119,20 @@ const Chat = () => {
       if (subscriptionRef.current) {
         subscriptionRef.current.unsubscribe();
       }
+      
+      // 채팅방을 나갈 때 마지막 메시지 ID 업데이트
+      if (messages.length > 0) {
+        const lastMessageId = messages[messages.length - 1].id;
+        updateLastReadMessage.mutate({
+          uri: `/api/chats`,
+          payload: {
+            chatRoomId: chatRoomId,
+            lastReadMessage: lastMessageId
+          }
+        });
+      }
     };
-  }, [stompClient, isConnected, chatRoomId, memberId]);
+  }, [stompClient, isConnected, chatRoomId, memberId, messages]);
 
   const sendMessage = () => {
     if (!input.trim()) {
@@ -178,10 +191,9 @@ const Chat = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="h-screen bg-gray-50 font-NanumR flex flex-col w-full relative">
+    <div className="h-[100dvh] bg-gray-50 font-NanumR flex flex-col w-full relative">
       <Header data={data} />
       <div className="flex-1 overflow-hidden">
-        {/* 디버깅용 출력 */}
         {messages?.length > 0 ? (
           <MessageList messages={messages} />
         ) : (
