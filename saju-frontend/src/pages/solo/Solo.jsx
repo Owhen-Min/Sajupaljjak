@@ -46,7 +46,6 @@ import { useNavigate } from "react-router-dom";
 // ];
 
 export default function Solo() {
-
   // 하단 탭 (메인, 커뮤니티, 운세, 매칭, 채팅)
   const [currentTab, setCurrentTab] = useState("main");
   // 매칭 화면 내부 탭 (궁합매칭, 랜덤매칭)
@@ -60,7 +59,12 @@ export default function Solo() {
       setUsers(data);
     }
   }, [data]);
-  if (isPending) return <div><LoadingSpinner/></div>;
+  if (isPending)
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   if (error) return <div>Error: {error.message}</div>;
 
   return (
@@ -73,7 +77,9 @@ export default function Solo() {
               matchingTab={matchingTab}
               setMatchingTab={setMatchingTab}
             />
-            {matchingTab === "compatibility" && <CompatibilityMatching  users={users}/>}
+            {matchingTab === "compatibility" && (
+              <CompatibilityMatching users={users} />
+            )}
             {matchingTab === "random" && <RandomMatching />}
           </div>
         )}
@@ -246,9 +252,12 @@ function RandomMatching() {
             <Lottie lottieRef={lottieRef} animationData={Random} loop={true} />
           </div>
         </div>
-        <button onClick={()=>{
-          navigate("/chat/random")
-        }} className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition">
+        <button
+          onClick={() => {
+            navigate("/chat/random");
+          }}
+          className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition"
+        >
           랜덤채팅 시작하기
         </button>
       </div>
