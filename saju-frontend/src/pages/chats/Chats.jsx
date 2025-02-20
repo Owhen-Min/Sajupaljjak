@@ -31,9 +31,14 @@ function Chats() {
                 celestialStem: responseData.partner.celestialStem,
               },
             },
-          },
+            message: {
+              lastMessage: responseData.message.lastMessage,
+              lastSendTime: responseData.message.lastSendTime,
+              newMessageCount: responseData.message.newMessageCount
+            }
+          }
         };
-        // setData((prev) => [...prev, newData]);
+        setData((prev) => ({ ...prev, ...newData }));
       }
     );
 
