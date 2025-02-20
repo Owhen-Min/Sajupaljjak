@@ -62,34 +62,56 @@ public class RandomService {
     }
 
     @Async("asyncThreadPool")
-    public CompletableFuture<Member> join(Long memberId, DeferredResult<Map<String, String>> deferredResult) {
-        return CompletableFuture.supplyAsync(() -> {
-            Member member = findMember(memberId);
+    public CompletableFuture<Map<String, Object>> join(Long memberId, DeferredResult<Map<String, Object>> deferredResult) {
+        CompletableFuture<Map<String, Object>> future = new CompletableFuture<>();
+        Member member = findMember(memberId);
 
-            try {
+        if (waiting.stream().anyMatch(dto -> dto.getMember().getMemberId().equals(member.getMemberId()))) {
+            future.complete(null);
+            return future;
+        }
 
-                if (waiting.stream().anyMatch(dto -> dto.getMember().getMemberId().equals(member.getMemberId()))) {
-                    return member;
+        try {
+            lock.writeLock().lock();
+            waiting.offer(WaitingDto.builder()
+                    .member(member)
+                    .deferredResult(deferredResult)
+                    .build());
+        } finally {
+            lock.writeLock().unlock();
+        }
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        long startTime = System.currentTimeMillis();
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                Map<String, Object> matchResult = matching();
+                if (matchResult != null) {
+                    future.complete(matchResult);
+                    scheduler.shutdown();
+                } else if (System.currentTimeMillis() - startTime >= 10 * 1000) {
+                    future.complete(null); // 10초 후 매칭 실패
+                    scheduler.shutdown();
+                } else {
+                    scheduler.schedule(this, 1, TimeUnit.SECONDS); // 1초 후 다시 실행
                 }
-
-                lock.writeLock().lock();
-                waiting.offer(WaitingDto.builder() // 채팅 대기열에 등록
-                        .member(member)
-                        .deferredResult(deferredResult)
-                        .build());
-            } finally {
-                lock.writeLock().unlock();
-                matching();
             }
+        };
 
-            return member;
-        });
+        scheduler.schedule(task, 0, TimeUnit.SECONDS); // 즉시 실행
+
+        return future;
     }
 
-    public void delete(Member member) { // 대기열에서 삭제 (타임 아웃, 에러 발생 시)
-        if (member == null) {
+    public void delete(Long memberId) { // 대기열에서 삭제 (타임 아웃, 에러 발생 시)
+        if (memberId == null) {
             return;
         }
+
+        Member member = findMember(memberId);
+
         try {
             lock.writeLock().lock();
             waiting.removeIf(dto -> dto.getMember().getMemberId().equals(member.getMemberId()));
@@ -103,18 +125,18 @@ public class RandomService {
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
     }
 
-    private void matching() { // 랜덤 매칭
+    private Map<String, Object> matching() { // 랜덤 매칭
 
         try {
             lock.writeLock().lock(); // 락 걸기
 
             if (waiting.size() < 2) {
-                return;  // 두 명 이상이 대기열에 있어야만 매칭 진행
+                return null;  // 두 명 이상이 대기열에 있어야만 매칭 진행
             }
 
             WaitingDto waiting1 = waiting.pollFirst();
             if (waiting1 == null) {
-                return;
+                return null;
             }
 
             int idx = Math.min(random.nextInt(5), waiting.size()); // 랜덤 숫자 고르기
@@ -127,7 +149,7 @@ public class RandomService {
             WaitingDto waiting2 = waiting.pollFirst(); // 랜덤 상대 뽑기
             if (waiting2 == null) {
                 waiting.offerFirst(waiting1);
-                return;
+                return null;
             }
 
             // 2. 원래 순서로 만들기 (idx-1만큼 pollLast -> offerFirst)
@@ -138,7 +160,10 @@ public class RandomService {
             // 매칭된 두 명이 존재할 때만 채팅방 생성
             if (waiting1 != null && waiting2 != null) {
                 createChatRoom(waiting1, waiting2);
+                return getInfo(waiting1.getMember(), waiting2.getMember());
             }
+
+            return null;
 
         } finally {
             lock.writeLock().unlock();
@@ -170,7 +195,7 @@ public class RandomService {
     }
 
     private void notice(String chatroomId, Member member1, Member member2) {
-        List<Map<Object, Object>> memberInfoList = getInfoList(member1, member2);
+        List<Map<String, Object>> memberInfoList = getInfoList(member1, member2);
 
         int count = chatRoomNoticeCount.getOrDefault(chatroomId, 0); // 진행 상태 저장 (보낸 횟수)
 
@@ -187,7 +212,7 @@ public class RandomService {
         chatRoomNoticeCount.put(chatroomId, count + 1);
     }
 
-    private List<Map<Object, Object>> getInfoList(Member member1, Member member2) {
+    private List<Map<String, Object>> getInfoList(Member member1, Member member2) {
         return List.of(
                 Map.of("messageType", MessageType.MEMBER_INFO.getLabel(), "field", "nickname", "member1Id",
                         member1.getMemberId(), "member1Value", member1.getCelestialStem().getLabel(), "member2Id",
@@ -205,6 +230,10 @@ public class RandomService {
                         member1.getMemberId(), "member1Value", member1.getProfileImg(), "member2Id",
                         member2.getMemberId(), "member2Value", member2.getProfileImg())
         );
+    }
+
+    private Map<String, Object> getInfo(Member member1, Member member2) {
+        return Map.of("member1", member1, "member2", member2);
     }
 
     private void stopScheduler(String chatroomId) {

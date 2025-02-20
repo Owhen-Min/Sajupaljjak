@@ -13,10 +13,10 @@ import java.util.Map;
 public class WaitingDto {
 
     private Member member;
-    private DeferredResult<Map<String, String>> deferredResult;
+    private DeferredResult<Map<String, Object>> deferredResult;
 
     @Builder
-    private WaitingDto(Member member, DeferredResult<Map<String, String>> deferredResult) {
+    private WaitingDto(Member member, DeferredResult<Map<String, Object>> deferredResult) {
         this.member = member;
         this.deferredResult = deferredResult;
     }
