@@ -130,9 +130,29 @@ const ChatList = ({ chats }) => {
     );
   };
 
+  const processChats = () => {
+    if (!chats || Object.keys(chats).length === 0) return [];
+    
+    // 객체 형태로 들어오는 경우 처리
+    if (!Array.isArray(chats)) {
+      return Object.entries(chats).map(([_, chatData]) => ({
+        chatRoomId: chatData.chatRoom.id,
+        partner: chatData.chatRoom.partner,
+        message: chatData.message
+      }));
+    }
+    
+    // 배열 형태로 들어오는 경우 처리
+    return chats.map(chat => ({
+      chatRoomId: chat.chatRoomId,
+      partner: chat.partner,
+      message: chat.message
+    }));
+  };
+
   return (
     <div className="flex flex-col h-full">
-      {chats
+      {processChats()
         .sort(
           (a, b) =>
             new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime)
