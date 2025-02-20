@@ -26,9 +26,9 @@ const ArticleList = ({ articles, className }) => {
     <div className={`article-list font-NanumR p-2 ${className}`}>
       {articles.map((article) => (
         <div
-          key={article.articleId}
+          key={article.boardId}
           className="text-sm article-card bg-white p-4 mb-2 rounded-lg shadow cursor-pointer opacity-90"
-          onClick={() => navigate(`/community/${article.articleId}`)}
+          onClick={() => navigate(`/community/${article.boardId}`)}
         >
           <div className="flex items-center gap-x-2 mb-2">
             <SajuUserBubble skyElement={article.subType} />
