@@ -124,7 +124,7 @@ const Chat = () => {
       if (messages.length > 0) {
         const lastMessageId = messages[messages.length - 1].id;
         updateLastReadMessage.mutate({
-          uri: `/api/chats/`,
+          uri: `/api/chats`,
           payload: {
             chatRoomId: chatRoomId,
             lastMessageId: lastMessageId
