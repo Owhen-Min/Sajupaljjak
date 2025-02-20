@@ -3,7 +3,6 @@ import TopBar2 from "../../components/TopBar2";
 import ElementChart from "../../components/ElementChart";
 import { useGet } from "../../hooks/useApi";
 import { useEffect, useState } from "react";
-import Header from "../../components/Header";
 
 function FortuneMy() {
   // 천간과 지지의 원소 매핑
@@ -90,6 +89,22 @@ function FortuneMy() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function Header() {
+  const navigate = useNavigate();
+
+  return (
+    <header className="relative h-12 w-full flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">나의 사주</h1>
+      <div
+        className="absolute left-4 text-xl cursor-pointer text-white "
+        onClick={() => navigate("/fortune")}
+      >
+        <IoArrowBack />
+      </div>
+    </header>
   );
 }
 
