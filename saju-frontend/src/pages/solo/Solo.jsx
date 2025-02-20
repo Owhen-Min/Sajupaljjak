@@ -39,7 +39,8 @@ export default function Solo() {
               matchingTab={matchingTab}
               setMatchingTab={setMatchingTab}
             />
-            {matchingTab === "compatibility" && <CompatibilityMatching  users={users}/>}
+            {matchingTab === "compatibility" && <CompatibilityMatching users={users} />}
+
             {matchingTab === "random" && <RandomMatching />}
           </div>
         )}
@@ -91,6 +92,9 @@ function MatchingNav({ matchingTab, setMatchingTab }) {
  * - 터치(스와이프) 및 카드 클릭으로 슬라이드 이동
  */
 function CompatibilityMatching({users}) {
+  if (!Array.isArray(users) || users.length === 0) {
+    return <div>매칭된 유저가 없습니다다.</div>;
+  }
   // 컨테이너 및 카드 설정
   const containerWidth = 380; // 뷰포트 폭
   const cardWidth = 300; // 각 카드 폭
@@ -99,7 +103,8 @@ function CompatibilityMatching({users}) {
   const leftover = (containerWidth - cardWidth) / 2; // 중앙 정렬 offset
 
   // 무한 루프용 슬라이드 배열: [마지막, ...users, 첫번째]
-  const slides = [users[users.length - 1], ...users, users[0]];
+  const slides =
+    users.length > 1 ? [users[users.length - 1], ...users, users[0]] : users;
   const [index, setIndex] = useState(1);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [touchStartX, setTouchStartX] = useState(null);
