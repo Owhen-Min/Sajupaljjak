@@ -27,8 +27,8 @@ function Chats() {
 
         // responseData가 배열이라고 가정하고, reduce로 변환
         const newMessages = responseData.reduce((acc, item) => {
-          acc[item.chatRoomId] = {
-            chatRoom: {
+          acc[item.chatRoomId] = [
+            {chatRoom: {
               id: item.chatRoomId,
               partner: {
                 nickname: item.partner.nickname,
@@ -41,12 +41,13 @@ function Chats() {
               lastSendTime: item.message.lastSendTime,
               newMessageCount: item.message.newMessageCount,
             },
-          };
+          }
+          ];
           return acc;
         }, {});
 
         // 기존 데이터와 새 데이터를 병합하여 업데이트
-        setData((prev) => ({ ...prev, ...newMessages }));
+        setData((prev) => ([ ...prev, ...newMessages ]));
         console.log("추가된 이후 데이터", data);
       }
     );
