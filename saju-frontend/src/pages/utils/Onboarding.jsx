@@ -18,7 +18,7 @@ function OnboardingPage() {
 
   const { mutateAsync: refreshTokenMutation } = usePost('/api/auth/access-token', {
     headers: {
-      'Refresh-Token': `Bearer ${localStorage.getItem('refreshToken')}`
+      'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`
     }
   });
 
