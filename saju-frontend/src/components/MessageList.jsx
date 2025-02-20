@@ -96,7 +96,7 @@ const MessageList = ({ messages }) => {
                 <img
                   src={message.profileImage}
                   alt="프로필"
-                  className="w-10 h-10 rounded-full"
+                  className="w-10 h-10 rounded-full object-cover"
                 />
               </div>
             )}
