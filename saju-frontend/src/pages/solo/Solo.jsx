@@ -7,7 +7,7 @@ import BottomNav from "../../components/BottomNav";
 import CustomCarousel from "../../components/CustomCarousel";
 import Random from "../../assets/animations/random.json";
 import Lottie from "lottie-react";
-import { useGet } from "../../hooks/useApi";
+import { useGet, usePost } from "../../hooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
@@ -20,14 +20,26 @@ export default function Solo() {
 
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const { data, isPending, error } = useGet("api/match/top");
-  useState(() => {
-    if (data) {
-      setUsers(data);
+  // const { data, isPending, error } = useGet("api/match/top");
+  const { mutate: createRandom } = usePost("/api/random", {
+    onSuccess:(response) => {
+      // if (response.message){
+      //   console.log("랜덤채팅 실패")
+      // } 매칭 실패가 백엔드에서 처리하는 건지지
+      console.log('랜덤채팅 매칭 성공')
+      navigate(`/chats/random/${response.chatRoomId}`)
+    },
+    onError: (error) => {
+      console.log("error", error);
     }
-  }, [data]);
-  if (isPending) return <div><LoadingSpinner/></div>;
-  if (error) return <div>Error: {error.message}</div>;
+  });
+  // useState(() => {
+  //   if (data) {
+  //     setUsers(data);
+  //   }
+  // }, [data]);
+  // if (isPending) return <div><LoadingSpinner/></div>;
+  // if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -39,9 +51,13 @@ export default function Solo() {
               matchingTab={matchingTab}
               setMatchingTab={setMatchingTab}
             />
-            {matchingTab === "compatibility" && <CompatibilityMatching users={users} />}
+            {matchingTab === "compatibility" && (
+              <CompatibilityMatching users={users} />
+            )}
 
-            {matchingTab === "random" && <RandomMatching />}
+            {matchingTab === "random" && (
+              <RandomMatching createRandom={createRandom} />
+            )}
           </div>
         )}
       </div>
@@ -189,7 +205,7 @@ function CompatibilityMatching({users}) {
   );
 }
 
-function RandomMatching() {
+function RandomMatching({ createRandom }) {
   const lottieRef = useRef(null);
 
   useEffect(() => {
@@ -217,9 +233,12 @@ function RandomMatching() {
             <Lottie lottieRef={lottieRef} animationData={Random} loop={true} />
           </div>
         </div>
-        <button onClick={()=>{
-          navigate("/chat/random")
-        }} className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition">
+        <button
+          onClick={() => {
+            createRandom();
+          }}
+          className="w-full bg-gradient-to-r from-[#d32f2f] to-[#e53935] text-white py-3 rounded-full text-sm shadow-lg hover:opacity-90 active:scale-95 transition"
+        >
           랜덤채팅 시작하기
         </button>
       </div>
