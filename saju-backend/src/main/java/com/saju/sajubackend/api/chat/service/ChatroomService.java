@@ -144,7 +144,6 @@ public class ChatroomService {
                         .orElse(LastMessage.builder()
                                 .chatroomId(NONE_MESSAGE_CHATROOM)
                                 .build())))
-                .filter(entry -> !entry.getValue().getChatroomId().equals(NONE_MESSAGE_CHATROOM))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -153,7 +152,7 @@ public class ChatroomService {
     }
 
     private ChatMessage findLatestMessage(Long chatroomId) {
-        return chatMessageRepository.findLatestMessageByChatroomId(String.valueOf(chatroomId)).orElse(null);
+        return chatMessageRepository.findFirstByChatroomIdOrderBySendTimeDesc(String.valueOf(chatroomId)).orElse(null);
     }
 
     private List<ChatroomResponseDto> buildChatroomResponses(Map<Long, Member> partners,
@@ -163,7 +162,7 @@ public class ChatroomService {
         for (Long chatroomId : partners.keySet()) {
             LastMessage lastReadMessage = lastReadMessages.get(chatroomId);
             String lastMessageTime =
-                    (lastReadMessage != null) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
+                    (!lastReadMessage.getChatroomId().equals(NONE_MESSAGE_CHATROOM)) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
 
             // 읽지 않은 메시지 개수 조회
             long unreadCount = countUnreadMessages(chatroomId, lastMessageTime);
