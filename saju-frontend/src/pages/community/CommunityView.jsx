@@ -58,12 +58,6 @@ function CommunityView() {
         celestialStem: "갑목",
         content: "",
       },
-      {
-        commentId: 2,
-        createdAt: "2025-02-07 13:45:00",
-        celestialStem: "임수",
-        content: "",
-      },
     ],
   });
 
@@ -74,16 +68,9 @@ function CommunityView() {
       celestialStem: "갑목",
       content: "gdgd",
     },
-    {
-      commentId: 2,
-      createdAt: "2025-02-07 13:45:00",
-      celestialStem: "임수",
-      content: "sdds",
-    },
   ]);
 
   const [comment, setComment] = useState("");
-
   const [liked, setLiked] = useState(false);
 
   const handleLike = () => {
@@ -151,11 +138,23 @@ function CommunityView() {
             />
           </span>
           <span className="text-xs ">
-            <span onClick={() => {navigate(`/community/${postId}/modify`)}}>수정</span>
-            <span onClick={() => {
-              deleteMutation({ uri: `/chats/${chatRoomId}` });
-              navigate("/community");
-          }}>삭제</span>
+            <span
+              className="cursor-pointer"
+              onClick={() => {
+                navigate(`/community/${postId}/modify`);
+              }}
+            >
+              수정
+            </span>
+            <span
+              className="cursor-pointer"
+              onClick={() => {
+                deleteMutation({ uri: `/community/${postId}` });
+                navigate("/community");
+              }}
+            >
+              삭제
+            </span>
           </span>
 
           <div className="flex justify-between items-center mt-2">
@@ -237,15 +236,31 @@ function CommunityView() {
                 // () => {handleComment();}
                 () => {
                   if (!comment.trim()) return;
-                  setComments([
-                    ...comments,
-                    {
-                      commentId: comments.length + 1,
-                      createdAt: new Date().toISOString(),
-                      celestialStem: "임수",
-                      content: comment,
-                    },
-                  ]);
+                  // setComments([
+                  //   ...comments,
+                  //   {
+                  //     commentId: comments.length + 1,
+                  //     createdAt: new Date().toISOString(),
+                  //     celestialStem: "임수",
+                  //     content: comment,
+                  //   },
+                  // ]);
+             
+                  // 댓글 작성성
+                  // mutation.mutate(
+                  //   {
+                  //     uri: `/api/community/${postId}/reply`,
+                  //     payload: {}, //이거 댓글에 맞게 수정하고
+                  //   },
+                  //   {
+                  //     onSuccess: () => {
+                  //       console.log("댓글 작성 성공");
+                  //     },
+                  //     onError: (error) => {
+                  //       console.error("댓글 작성 실패:", error);
+                  //     },
+                  //   }
+                  // );
                   setComment("");
                 }
               }
