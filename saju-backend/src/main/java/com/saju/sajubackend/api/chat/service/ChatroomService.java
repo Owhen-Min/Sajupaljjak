@@ -85,16 +85,19 @@ public class ChatroomService {
 
     public void leave(ChatroomLeaveRequestDto request, Long memberId) {
         // 1. 유효성 검증
-        validChatroom(request.getChatroomId(), memberId);
+        validChatroom(request.getChatRoomId(), memberId);
 
         // 2. 마지막 메시지 찾고 몽고DB에 저장
-        chatMessageRepository.findFirstByChatroomIdOrderBySendTimeDesc(String.valueOf(request.getChatroomId()))
+        chatMessageRepository.findFirstByChatroomIdOrderBySendTimeDesc(String.valueOf(request.getChatRoomId()))
                 .ifPresent(lastMessage -> {
                     lastMessageRepository.save(createLastMessage(lastMessage, memberId));
                 });
     }
 
     private void validChatroom(String chatroomId, Long memberId) {
+        System.out.println("[👍chatroomId : " + chatroomId + " - ChatroomService.validChatroom]");
+        System.out.println("[👍chatroomId 타입 : " + chatroomId.getClass() + " - ChatroomService.validChatroom]");
+
         if (chatroomId == null || chatroomId.isEmpty()) {
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
         }
