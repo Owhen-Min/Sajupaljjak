@@ -41,6 +41,8 @@ public class ChattingRequestDto {
     }
 
     public void validateMessageType() {
+        if (messageType == null) throw new BadRequestException(ErrorMessage.INVALID_MESSAGE_LABEL);
+        
         if (!MessageTypeValidator.isValidType(this.messageType)) {
             throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_MESSAGE_CODE);
         }

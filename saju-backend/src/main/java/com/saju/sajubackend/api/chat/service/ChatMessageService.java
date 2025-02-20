@@ -25,7 +25,12 @@ public class ChatMessageService {
         System.out.println("[👍senderId] : " + request.getSenderId());
         isValid(request);
         ChatMessage validMessage = createChatMessage(request);
-        chatMessageRepository.save(validMessage);
+        ChatMessage message = chatMessageRepository.save(validMessage);
+        if (message != null) {
+            System.out.println("[👍content] : " + message.getContent());
+        } else {
+            System.out.println("[👍content] : 저장 안됨!");
+        }
         return ChattingRequestDto.fromEntity(validMessage);
     }
 

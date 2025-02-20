@@ -29,7 +29,7 @@ public class MatchingQueryDslRepository extends MatchingBaseRepository {
         super(queryFactory);
     }
 
-    public Map<Member, Integer> findMatchingMembers(Long memberId, long maginot, int count) {
+    public Map<Member, Integer> findMatchingMembers(Long memberId, int maginot, int count) {
         // 1. 회원 정보 조회
         Member foundMember = findMember(memberId);
 
