@@ -130,6 +130,7 @@ public class ChatroomService {
 
         // 2. 회원별 마지막 읽은 메시지 조회 (몽고 DB LastMessage)
         Map<Long, LastMessage> lastReadMessages = findLastReadMessages(partners, memberId);
+        System.out.println("[👍lastReadMessages]" + lastReadMessages.size());
 
         // 3. 채팅방 응답 리스트 생성
         return buildChatroomResponses(partners, lastReadMessages);
