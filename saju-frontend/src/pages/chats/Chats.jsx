@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 function Chats() {
   const [data, setData] = useState([]);
 
-  const { stompClient } = useWebSocket();
+  const { stompClient, isConnected } = useWebSocket();
   const memberId = localStorage.getItem("memberId");
 
   useEffect(() => {
