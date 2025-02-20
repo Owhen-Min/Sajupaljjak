@@ -7,9 +7,18 @@ import { coupleData } from "../../data/coupleData";
 import {useGet, usePost} from "../../hooks/useApi";
 import { useNavigate } from "react-router-dom";
 
+
 function MyPageEditCouple() {
 
   const navigate = useNavigate();
+
+   useEffect(() => {
+     const relation = localStorage.getItem("relation");
+     if (relation === "SOLO") {
+       navigate("/couple/code");
+     }
+   }, [navigate]); 
+   
   const mutation = usePost();
   const [couple, setCouple] = useState([]);
   const { data, isPending, error } = useGet("/api/couples");
