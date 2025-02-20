@@ -27,7 +27,7 @@ public record CoupleResponseDto(
             Long memberId,
             String nickname,
             String profileImage,
-            Long region,
+            String region,
             int age,
             String celestialStem
     ) {
@@ -36,7 +36,7 @@ public record CoupleResponseDto(
                     member.getMemberId(),
                     member.getNickname(),
                     member.getProfileImg(),
-                    member.getCityCode(),
+                    member.getCityCode().toString(),
                     calculateAge(member.getBday()),
                     member.getCelestialStem().getLabel()
             );
