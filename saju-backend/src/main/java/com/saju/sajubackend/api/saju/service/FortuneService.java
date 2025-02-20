@@ -32,11 +32,13 @@ public class FortuneService {
 
     public SoloYearDto getNewYearFortune(Long memberId) {
         // Member 조회
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
+        //Member member = memberRepository.findById(memberId)
+        //        .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
         // 해당 회원의 Saju 정보를 DB에서 조회
-        Saju saju = sajuRepository.findByMember(member)
-                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
+        //Saju saju = sajuRepository.findByMember(member)
+        //        .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
+        Saju saju = sajuRepository.getReferenceById(memberId);
+
 
         // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
         SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely().substring(saju.getTimely().length() - 1), saju.getDaily())
