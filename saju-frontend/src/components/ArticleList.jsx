@@ -21,7 +21,7 @@ function formatRelativeTime(dateString) {
 
 const ArticleList = ({ articles, className }) => {
   const navigate = useNavigate();
-
+  console.log(articles);
   return (
     <div className={`article-list font-NanumR p-2 ${className}`}>
       {articles.map((article) => (
