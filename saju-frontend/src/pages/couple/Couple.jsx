@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 import LoadingSpinner from "../../components/LoadingSpinner";
+import PageLoader from "../../components/PageLoader";
 
 function Couple() {
 
@@ -42,7 +43,7 @@ function Couple() {
   if (isCouplePending)
     return (
       <div>
-        <LoadingSpinner />
+        <PageLoader />
         <p>커플 데이터 로딩중...</p>
       </div>
     );

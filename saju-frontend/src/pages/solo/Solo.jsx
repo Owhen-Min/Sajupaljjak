@@ -10,7 +10,7 @@ import Lottie from "lottie-react";
 import { useGet, usePost } from "../../hooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
-
+import PageLoader from "../../components/PageLoader";
 export default function Solo() {
 
   // 하단 탭 (메인, 커뮤니티, 운세, 매칭, 채팅)
@@ -45,7 +45,11 @@ export default function Solo() {
       setUsers(data);
     }
   }, [data]);
-  if (isPending) return <div><LoadingSpinner/></div>;
+  if (isPending) return (
+    <div>
+      <PageLoader />
+    </div>
+  );
   if (error) return <div>Error: {error.message}</div>;
 
   return (
