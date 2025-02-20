@@ -35,11 +35,11 @@ function CommunityView() {
   const navigate = useNavigate();
   const mutation = usePost();
   const deleteMutation = useDelete();
-  // const { data, isPending, error } = useGet(`/community/${postId}`);
-  // if (error){
-  //   alert('유효하지 않은 접근입니다')
-  //   navigate('/community');
-  // }
+  const { data, isPending, error } = useGet(`/community/${postId}`);
+  if (error){
+    alert('유효하지 않은 접근입니다')
+    navigate('/community');
+  }
 
   const [article, setArticle] = useState({
     articleId: "",
