@@ -12,6 +12,7 @@ import com.saju.sajubackend.common.enums.MessageType;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
 import jakarta.annotation.PostConstruct;
+import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -56,21 +57,23 @@ public class RandomService {
     }
 
     @Async("asyncThreadPool")
-    public Member join(Long memberId, DeferredResult<Map<String, String>> deferredResult) {
-        Member member = findMember(memberId);
+    public CompletableFuture<Member> join(Long memberId, DeferredResult<Map<String, String>> deferredResult) {
+        return CompletableFuture.supplyAsync(() -> {
+            Member member = findMember(memberId);
 
-        try {
-            lock.writeLock().lock();
-            waiting.offer(WaitingDto.builder() // 채팅 대기열에 등록
-                    .member(member)
-                    .deferredResult(deferredResult)
-                    .build());
-        } finally {
-            lock.writeLock().unlock();
-            matching();
-        }
+            try {
+                lock.writeLock().lock();
+                waiting.offer(WaitingDto.builder() // 채팅 대기열에 등록
+                        .member(member)
+                        .deferredResult(deferredResult)
+                        .build());
+            } finally {
+                lock.writeLock().unlock();
+                matching();
+            }
 
-        return member;
+            return member;
+        });
     }
 
     public void delete(Member member) { // 대기열에서 삭제 (타임 아웃, 에러 발생 시)
