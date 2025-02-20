@@ -82,7 +82,7 @@ public class InviteService {
     private boolean isValidPair(Member inviter, Member joiner) {
         return ((inviter.getGender() == Gender.MALE && joiner.getGender() == Gender.FEMALE) ||
                 (inviter.getGender() == Gender.FEMALE && joiner.getGender() == Gender.MALE))
-                && (inviter.getRelation() == RelationshipStatus.SOLO && joiner.getRelation() == RelationshipStatus.SOLO);
+                && (inviter.getRelation() == null && joiner.getRelation() == null);
     }
 
     private ElementInfo getLackAndPlentyElement(Member inviter, Member joiner) {
