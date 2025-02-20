@@ -1,53 +1,84 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../../assets/logo.png';
-
+import Lottie from "lottie-react";
+import Random from "../../assets/animations/heart.json";
+import { useAuth } from "../../hooks/useAuth";
+import { usePost } from "../../hooks/useApi";
 
 function OnboardingPage() {
   const navigate = useNavigate();
-  
-  // 임시 상태 처리 함수들
-  const handleNotLoggedIn = () => {
-    // 로그인 페이지로 이동
-    navigate('/auth/');
-  };
+  const {
+    updateUser,
+    updateMemberId,
+    updateRelation,
+    updateIsAuthenticated,
+    updateAccessToken,
+    logout,
+  } = useAuth();
 
-  const handleNoFinishedSignUp = () => {
-    // 커플 등록 페이지로 이동
-    navigate('/auth/signup/additional');
-  };
+  const { mutateAsync: refreshTokenMutation } = usePost('/api/auth/access-token');
 
-  const handleNoCoupleStatus = () => {
-    navigate('/solo');
-  };
+  useEffect(() => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    
+    if (!refreshToken) {
+      navigate('/auth');
+      return;
+    }
 
-  const handleCoupleStatus = () => {
-    navigate('/couple');
-  };
+    const refreshAccessToken = async () => {
+      try {
+        const data = await refreshTokenMutation({ refreshToken });
+        
+        // 기존 데이터 초기화
+        logout();
+        
+        // 새로운 데이터 저장
+        const { token, ...userData } = data;
+        
+        localStorage.setItem("accessToken", token.accessToken);
+        localStorage.setItem("refreshToken", token.refreshToken);
+        localStorage.setItem("memberId", data.member_id);
+        localStorage.setItem("relation", data.relation);
+        localStorage.setItem("user", JSON.stringify(userData));
+        
+        // Context 업데이트
+        updateUser(userData);
+        updateMemberId(data.member_id);
+        updateRelation(data.relation);
+        updateIsAuthenticated(true);
+        updateAccessToken(token.accessToken);
 
+        if (data.relation === null) {
+          navigate('/auth/signup/additional');
+          return;
+        }
+        // 관계 상태에 따른 페이지 이동
+        navigate(data.relation === 'COUPLE' ? '/couple' : '/solo');
+      } catch (error) {
+        console.error('Token refresh failed:', error);
+        navigate('/auth');
+      }
+    };
+
+    refreshAccessToken();
+  }, [navigate, updateUser, updateMemberId, updateRelation, updateIsAuthenticated, updateAccessToken, logout, refreshTokenMutation]);
+
+ 
   return (
-    <div className="onboarding bg-gray-100 h-screen py-20 text-center">
-      <div className="flex flex-col justify-center items-center w-full h-auto px-8 mb-20">
-        <img src={logo} alt="logo" className="w-1/2 h-1/2 mb-5" />
-        <h1 className="text-5xl font-gapyeong"><span className="text-black">사주팔</span><span className="text-red-500">짝</span></h1>
-      </div>
-      <h4 className="onboarding-title text-blue-500">상태에 따른 분기점</h4>
-      <div className="onboarding-buttons">
-        <button onClick={handleNotLoggedIn}>
-          isLogin이 False일 때
-        </button>
-        <button onClick={handleNoFinishedSignUp}>
-          isLogin이 True이고 isCouple이 null일 때
-        </button>
-        <button onClick={handleNoCoupleStatus}>
-          isLogin이 True이고 isCouple이 false일 때
-        </button>
-        <button onClick={handleCoupleStatus}>
-          isLogin이 True이고 isCouple이 true일 때
-        </button>
+    <div className="onboarding bg-gray-50 h-screen w-full">
+      <div className="h-[70%] w-full flex items-center justify-center flex-col gap-y-3">
+        <div style={{ width: 100, height: 100 }}>
+          <Lottie animationData={Random} loop={true} />
+        </div>
+        <div className="font-NanumH text-[#ff7070] font-bold text-3xl">
+          사주팔짝
+        </div>
+        <div className="font-NanumH text-[#ff7070] font-bold text-base">
+          운명이 점지해준 단 한사람.
+        </div>
       </div>
     </div>
-
-    
   );
 }
 
