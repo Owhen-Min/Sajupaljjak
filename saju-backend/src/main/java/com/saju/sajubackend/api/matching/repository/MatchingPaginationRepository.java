@@ -1,16 +1,15 @@
 package com.saju.sajubackend.api.matching.repository;
 
+import static com.saju.sajubackend.api.member.domain.QMember.member;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.saju.sajubackend.api.filter.domain.Filter;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.common.enums.CelestialStem;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static com.saju.sajubackend.api.member.domain.QMember.member;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class MatchingPaginationRepository extends MatchingBaseRepository {
@@ -38,7 +37,7 @@ public class MatchingPaginationRepository extends MatchingBaseRepository {
                                 .and(matchReligion(foundFilter))  // 종교
                                 .and(matchRegion(foundFilter))    // 지역
                                 .and(matchFilter(foundFilter))    // 그 외(키, 나이, 흡연, 음주)
-                                .and(cursor != null ? member.memberId.gt(cursor) : null) // cursor 기반 페이징
+                                .and(cursor != null ? member.memberId.goe(cursor) : null) // cursor 기반 페이징
                 )
                 .orderBy(member.memberId.desc())
                 .limit(pageSize)
