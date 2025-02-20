@@ -35,31 +35,33 @@ function CommunityView() {
   const navigate = useNavigate();
   const mutation = usePost();
   const deleteMutation = useDelete();
-  const { data, isPending, error } = useGet(`/community/${postId}`);
-  if (error){
-    alert('유효하지 않은 접근입니다')
-    navigate('/community');
-  }
 
-  const [article, setArticle] = useState({
-    articleId: "",
-    createdAt: "2025-01-20 23:12:00",
-    boardType: "무토",
-    celestialStem: "경금",
-    title: "안녕하세요",
-    content: "반갑습니다",
-    likeCount: 100,
-    isLiked: false,
-    commentCount: 999,
-    comments: [
-      {
-        commentId: 1,
-        createdAt: "2025-02-07 12:30:00",
-        celestialStem: "갑목",
-        content: "",
-      },
-    ],
-  });
+  const { data, isPending, error } = useGet(`/api/community/${postId}`);
+
+const [article, setArticle] = useState({
+  articleId: "",
+  createdAt: "2025-01-20 23:12:00",
+  boardType: "무토",
+  celestialStem: "경금",
+  title: "안녕하세요",
+  content: "반갑습니다",
+  likeCount: 100,
+  isLiked: false,
+  commentCount: 999,
+  comments: [
+    {
+      commentId: 1,
+      createdAt: "2025-02-07 12:30:00",
+      celestialStem: "갑목",
+      content: "",
+    },
+  ],
+});
+ 
+useEffect(() => {
+  if (data) 
+    setArticle(data);
+}, [data]);
 
   const [comments, setComments] = useState([
     {
@@ -89,6 +91,10 @@ function CommunityView() {
     console.log(liked);
   };
 
+   if (error) {
+     alert("유효하지 않은 접근입니다");
+     navigate("/community");
+   }
   // const handleComment = () => {
   //   mutation.mutate(
   //     { uri: `/api/community/${postId}/reply`, payload: {  } },
