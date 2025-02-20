@@ -130,7 +130,7 @@ function CommunityModify() {
     if (!validateForm()) return;
     mutation.mutate(
       {
-        uri: `community/${postId}`,
+        uri: `/api/community/${postId}`,
         payload: formData,
       },
       {
