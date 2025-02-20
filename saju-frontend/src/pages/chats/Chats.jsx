@@ -25,7 +25,6 @@ function Chats() {
             chatRoom: {
               id: responseData.chatRoomId,
               partner: {
-                id: responseData.partner.memberId,
                 nickname: responseData.partner.nickname,
                 profileImage: responseData.partner.profileImage,
                 celestialStem: responseData.partner.celestialStem,
