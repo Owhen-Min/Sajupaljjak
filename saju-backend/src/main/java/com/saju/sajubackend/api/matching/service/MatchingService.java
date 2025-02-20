@@ -40,7 +40,9 @@ public class MatchingService {
                 .map(entry -> MatchingMemberResponseDto.fromEntity(entry.getKey(), entry.getValue()))
                 .toList();
 
-        matchingRedisUtil.createCache(memberId, response);
+        if (response != null && !response.isEmpty()) {
+            matchingRedisUtil.createCache(memberId, response);
+        }
         return response;
     }
 

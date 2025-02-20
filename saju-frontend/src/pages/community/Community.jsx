@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import TopBar3 from "../../components/TopBar3";
 import BottomNav from "../../components/BottomNav";
@@ -18,16 +18,30 @@ function Community() {
   const [selectedSub, setSelectedSub] = useState("");
   const navigate = useNavigate();
   // const data = articles; // 임시 데이터
-  const [articles, setArticles] = useState([]);
+  const [articles, setArticles] = useState(
+    [
+    //   {
+    //   createdAt: "",
+    //   boardId: 0,
+    //   mainType: "",
+    //   subType: "",
+    //   celestialStem: "",
+    //   title: "",
+    //   content:"",
+    //   likeCount: 0,
+    //   commentCount: 0,
+    // },
+  ]
+);
 
   const observerRef = useRef(null);
   const { data, fetchNextPage, hasNextPage } = useInfiniteGet("/api/community", {
-    initialCursor: 1,
+    initialCursor: 0,
   });
 
   useEffect(() => {
     if (data) {
-      setArticles((prev) => [...prev, ...data.pages.map((page) => page.data)]);
+      setArticles((prev) => [...prev, ...data.pages.map((page) => page.data.content)]);
     }
   }, [data]);
 
