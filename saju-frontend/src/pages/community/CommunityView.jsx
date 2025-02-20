@@ -35,11 +35,11 @@ function CommunityView() {
   const navigate = useNavigate();
   const mutation = usePost();
   const deleteMutation = useDelete();
-  // const { data, isPending, error } = useGet(`/community/${postId}`);
-  // if (error){
-  //   alert('유효하지 않은 접근입니다')
-  //   navigate('/community');
-  // }
+  const { data, isPending, error } = useGet(`/community/${postId}`);
+  if (error){
+    alert('유효하지 않은 접근입니다')
+    navigate('/community');
+  }
 
   const [article, setArticle] = useState({
     articleId: "",
@@ -71,7 +71,6 @@ function CommunityView() {
   ]);
 
   const [comment, setComment] = useState("");
-
   const [liked, setLiked] = useState(false);
 
   const handleLike = () => {
@@ -236,7 +235,7 @@ function CommunityView() {
               onClick={
                 // () => {handleComment();}
                 () => {
-                  // if (!comment.trim()) return;
+                  if (!comment.trim()) return;
                   // setComments([
                   //   ...comments,
                   //   {
@@ -251,7 +250,7 @@ function CommunityView() {
                   // mutation.mutate(
                   //   {
                   //     uri: `/api/community/${postId}/reply`,
-                  //     payload: {  }, //이거 댓글에 맞게 수정하고
+                  //     payload: {}, //이거 댓글에 맞게 수정하고
                   //   },
                   //   {
                   //     onSuccess: () => {
