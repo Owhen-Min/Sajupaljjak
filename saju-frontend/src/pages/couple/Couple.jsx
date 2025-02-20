@@ -43,7 +43,7 @@ function Couple() {
     return (
       <div>
         <PageLoader />
-        {/* <p>커플 데이터 로딩중...</p> */}
+        <p>커플 데이터 로딩중...</p>
       </div>
     );
   if (error) return <div>{error}</div>;

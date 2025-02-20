@@ -42,7 +42,11 @@ export default function Solo() {
       setUsers(data);
     }
   }, [data]);
-  if (isPending) return <div><LoadingSpinner/></div>;
+  if (isPending) return (
+    <div>
+      <PageLoader />
+    </div>
+  );
   if (error) return <div>Error: {error.message}</div>;
 
   return (
