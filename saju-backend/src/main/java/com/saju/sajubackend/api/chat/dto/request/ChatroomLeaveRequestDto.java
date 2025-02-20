@@ -7,7 +7,7 @@ import lombok.Getter;
 public class ChatroomLeaveRequestDto {
 
     @JsonProperty("chatRoomId")
-    private Long chatroomId;
+    private String chatroomId;
 
     private String lastReadMessage;
 }

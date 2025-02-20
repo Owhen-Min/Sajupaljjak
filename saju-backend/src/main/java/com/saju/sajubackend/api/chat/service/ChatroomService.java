@@ -94,8 +94,12 @@ public class ChatroomService {
                 });
     }
 
-    private void validChatroom(Long chatroomId, Long memberId) {
-        if (chatroomQueryDslRepository.existChatMember(chatroomId, memberId)) {
+    private void validChatroom(String chatroomId, Long memberId) {
+        if (chatroomId == null || chatroomId.isEmpty()) {
+            throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
+        }
+
+        if (chatroomQueryDslRepository.existChatMember(Long.parseLong(chatroomId), memberId)) {
             throw new BaseException(HttpStatus.BAD_REQUEST, ErrorMessage.INVALID_CHAT_ROOM);
         }
     }
