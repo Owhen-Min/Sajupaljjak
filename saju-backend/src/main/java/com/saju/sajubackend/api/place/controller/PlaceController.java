@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,15 +23,11 @@ public class PlaceController {
 
     @GetMapping
     public ResponseEntity<List<PlaceResponseDto>> getPlaces(
-            @RequestParam(required = false) Integer month,
-            @RequestParam(required = false) Integer day,
+            @RequestParam String date,
             @CurrentMemberId Long currentMemberId) {
 
-        // 날짜가 없으면 오늘 날짜 사용
-        LocalDate date = (month != null && day != null) ?
-                LocalDate.of(LocalDate.now().getYear(), month, day) :
-                LocalDate.now();
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
 
-        return ResponseEntity.ok(placeService.getPlaceList(date, currentMemberId));
+        return ResponseEntity.ok(placeService.getPlaceList(localDate, currentMemberId));
     }
 }
