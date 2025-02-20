@@ -96,7 +96,7 @@ const MessageList = ({ messages }) => {
                 <img
                   src={message.profileImage}
                   alt="프로필"
-                  className="w-10 h-10 rounded-full"
+                  className="w-10 h-10 rounded-full object-cover"
                 />
               </div>
             )}
@@ -105,10 +105,10 @@ const MessageList = ({ messages }) => {
                 <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
               )}
               <div
-                className={`rounded-lg p-3 whitespace-normal ${
+                className={`rounded-lg p-3 whitespace-pre-wrap break-normal overflow-wrap break-word ${
                   message.isMine
-                    ? 'bg-blue-500 text-white max-w-[80%]'
-                    : 'bg-gray-200 text-black max-w-[70%]'
+                    ? 'bg-blue-500 text-white md:max-w-[80%] max-w-[90%]' 
+                    : 'bg-gray-200 text-black md:max-w-[70%] max-w-[85%]'
                 }`}
                 style={{ wordBreak: 'keep-all' }}
               >
