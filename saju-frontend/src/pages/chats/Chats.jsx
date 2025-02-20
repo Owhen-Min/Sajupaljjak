@@ -19,6 +19,9 @@ function Chats() {
       `/topic/list/${memberId}`,
       (response) => {
         const responseData = JSON.parse(response.body);
+
+
+        
         console.log("받은 데이터 :", responseData);
         const newData = {
           [responseData.chatRoomId]: {
@@ -37,7 +40,11 @@ function Chats() {
             }
           }
         };
+<<<<<<< HEAD
+        setData((prev) => [...prev, newData]);
+=======
         setData((prev) => ({ ...prev, ...newData }));
+>>>>>>> dc21721ea15871daf64ed2ab05d2b904bf039621
       }
     );
 
