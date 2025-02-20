@@ -31,6 +31,7 @@ public class FortuneService {
     private final CoupleYearRepository coupleYearRepository;
     private final CoupleRepository coupleRepository;
 
+    @Transactional
     public SoloYearDto getNewYearFortune(Long memberId) {
         // Member 조회
         //Member member = memberRepository.findById(memberId)
