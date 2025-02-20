@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,7 +138,7 @@ public class ChatroomService {
     private Map<Long, LastMessage> findLastReadMessages(Map<Long, Member> partners, Long memberId) {
         return partners.keySet().stream()
                 .map(chatroomId -> Map.entry(chatroomId, lastMessageRepository
-                        .findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(
+                        .findLatestByChatroomIdAndMemberId(
                                 String.valueOf(chatroomId), String.valueOf(memberId))
                         .orElse(LastMessage.builder()
                                 .chatroomId(NONE_MESSAGE_CHATROOM)
@@ -191,7 +192,7 @@ public class ChatroomService {
         }
 
         LastMessage lastReadMessage = lastMessageRepository
-                .findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(
+                .findLatestByChatroomIdAndMemberId(
                         chatMessage.getChatroomId(),
                         String.valueOf(receiverId))
                 .orElse(null);
