@@ -28,15 +28,23 @@ function Chats() {
             chatRoom: {
               id: responseData.chatRoomId,
               partner: {
-                id: responseData.partner.memberId,
                 nickname: responseData.partner.nickname,
                 profileImage: responseData.partner.profileImage,
                 celestialStem: responseData.partner.celestialStem,
               },
             },
-          },
+            message: {
+              lastMessage: responseData.message.lastMessage,
+              lastSendTime: responseData.message.lastSendTime,
+              newMessageCount: responseData.message.newMessageCount
+            }
+          }
         };
+<<<<<<< HEAD
         setData((prev) => [...prev, newData]);
+=======
+        setData((prev) => ({ ...prev, ...newData }));
+>>>>>>> dc21721ea15871daf64ed2ab05d2b904bf039621
       }
     );
 

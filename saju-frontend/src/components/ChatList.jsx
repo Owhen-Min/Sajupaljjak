@@ -33,6 +33,10 @@ const ChatList = ({ chats }) => {
   const renderSwipeableChat = (chatRoomId, chatData) => {
     const [isDragging, setIsDragging] = useState(false);
 
+    if (!chatData?.partner || !chatData?.message) {
+      return null;
+    }
+
     const swipeHandlers = useSwipeable({
       onSwipeStart: () => {
         setIsDragging(true);
@@ -86,12 +90,12 @@ const ChatList = ({ chats }) => {
           <div
             {...swipeHandlers}
             id={`chat-content-${chatRoomId}`}
-            className=" w-full flex items-center bg-white pl-3 py-2 border-gray-200 cursor-pointer opacity-100 hover:bg-gray-50 transition transform duration-200 ease-in-out gap-x-3 overflow-x-hidden select-none"
+            className="w-full flex items-center bg-white pl-3 py-2 border-gray-200 cursor-pointer opacity-100 hover:bg-gray-50 transition transform duration-200 ease-in-out gap-x-3 overflow-x-hidden select-none"
             onClick={() => !isDragging && handleChatClick(chatRoomId)}
           >
             <div className="flex w-2/12 justify-center items-center">
               <img
-                src={chatData.partner.profileImage}
+                src={chatData.partner.profileImage || '/default-profile.png'}
                 alt="profile"
                 className="w-12 h-12 rounded-xl object-cover object-center"
               />
@@ -99,15 +103,15 @@ const ChatList = ({ chats }) => {
             <div className="flex w-7/12 flex-col gap-y-1 py-1">
               <div className="flex items-center gap-x-2">
                 <SajuUserBubble
-                  skyElement={chatData.partner.celestialStem}
+                  skyElement={chatData.partner.celestialStem || ''}
                   size="small"
                 />
                 <h3 className="text-base text-black font-bold">
-                  {chatData.partner.nickname}
+                  {chatData.partner.nickname || '알 수 없음'}
                 </h3>
               </div>
               <p className="w-full truncate text-gray-700 ml-1">
-                {chatData.message.lastMessage}
+                {chatData.message.lastMessage || ''}
               </p>
             </div>
             <div className="flex w-2/12 flex-col items-end gap-y-2">
@@ -116,10 +120,10 @@ const ChatList = ({ chats }) => {
               </span>
               <span
                 className={`text-xs text-white bg-red-500 h-6 w-6 flex items-center justify-center rounded-full text-center ${
-                  chatData.message.newMessageCount > 0 ? "block" : "opacity-0"
+                  (chatData.message.newMessageCount || 0) > 0 ? "block" : "opacity-0"
                 }`}
               >
-                {chatData.message.newMessageCount >= 100
+                {(chatData.message.newMessageCount || 0) >= 100
                   ? "99+"
                   : chatData.message.newMessageCount}
               </span>
@@ -130,9 +134,19 @@ const ChatList = ({ chats }) => {
     );
   };
 
+  const processChats = () => {
+    if (!chats || !Array.isArray(chats) || chats.length === 0) return [];
+    
+    return chats.map(chat => ({
+      chatRoomId: chat.chatRoomId,
+      partner: chat.partner,
+      message: chat.message
+    }));
+  };
+
   return (
     <div className="flex flex-col h-full">
-      {chats
+      {processChats()
         .sort(
           (a, b) =>
             new Date(b.message.lastSendTime) - new Date(a.message.lastSendTime)
