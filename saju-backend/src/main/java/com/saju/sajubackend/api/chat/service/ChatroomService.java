@@ -133,6 +133,7 @@ public class ChatroomService {
                         .findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(
                                 String.valueOf(chatroomId), String.valueOf(memberId))
                         .orElse(null)))
+                .filter(entry -> entry.getValue() != null)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
