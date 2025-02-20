@@ -40,11 +40,11 @@ function Chats() {
             }
           }
         };
-<<<<<<< HEAD
-        setData((prev) => [...prev, newData]);
-=======
+// <<<<<<< HEAD
+//         setData((prev) => [...prev, newData]);
+// =======
         setData((prev) => ({ ...prev, ...newData }));
->>>>>>> dc21721ea15871daf64ed2ab05d2b904bf039621
+// >>>>>>> dc21721ea15871daf64ed2ab05d2b904bf039621
       }
     );
 

@@ -8,7 +8,7 @@ function ChatsRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Chats />} />
-      <Route path="random" element={<ChatRandom />} />
+      <Route path="random/:chatId" element={<ChatRandom />} />
       <Route path=":chatId" element={<Chat />} />
       {/* <Route path=":chatId/video" element={<ChatVideo />} /> */}
     </Routes>
