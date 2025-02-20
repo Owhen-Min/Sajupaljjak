@@ -105,12 +105,11 @@ const MessageList = ({ messages }) => {
                 <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
               )}
               <div
-                className={`rounded-lg p-3 whitespace-normal break-words ${
+                className={`rounded-lg p-3 block w-fit ${
                   message.isMine
-                    ? 'bg-blue-500 text-white w-auto max-w-[80%]' 
-                    : 'bg-gray-200 text-black w-auto max-w-[70%]'
+                    ? 'bg-blue-500 text-white max-w-[80%]' 
+                    : 'bg-gray-200 text-black max-w-[70%]'
                 }`}
-                style={{ wordBreak: 'keep-all' }}
               >
                 {message.message}
               </div>
