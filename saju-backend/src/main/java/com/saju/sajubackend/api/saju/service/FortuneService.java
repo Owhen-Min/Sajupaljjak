@@ -11,7 +11,6 @@ import com.saju.sajubackend.api.saju.entity.CoupleYearFortune;
 import com.saju.sajubackend.api.saju.entity.SoloLife;
 import com.saju.sajubackend.api.saju.entity.SoloYear;
 import com.saju.sajubackend.api.saju.repository.*;
-import com.saju.sajubackend.common.enums.Gender;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -55,6 +54,7 @@ public class FortuneService {
                 fortune.getAdvice()
         );
     }
+
     @Transactional
     public SoloLifeDto getLifeTimeFortune(Long memberId) {
         // memberID로 해당하는 member 객체를 가져와서 getSiju, getIlju 해서 쓸 예정
@@ -100,83 +100,110 @@ public class FortuneService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
 
-        // 2. 회원의 사주(Saju) 조회
-        Saju mySaju = sajuRepository.findByMember(member)
+//        // 2. 회원의 사주(Saju) 조회
+//        Saju mySaju = sajuRepository.findByMember(member)
+//                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
+//        // 3. 커플(Couple) 정보 조회
+//        // 예시: 회원이 남성 혹은 여성으로 커플에 속할 수 있으므로 두 방식으로 조회합니다.
+//
+//        Couple couple;
+//        if (member.getGender().equals(Gender.MALE)){
+//            couple = coupleRepository.findByCoupleMale(member)
+//                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
+//        } else if (member.getGender().equals(Gender.FEMALE)) {
+//            couple = coupleRepository.findByCoupleFemale(member)
+//                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
+//        }else {
+//            throw new RuntimeException("Invalid gender for member: " + member.getGender());
+//        }
+//
+//        Member partnerMember;
+//        if (member.getGender().equals(Gender.MALE)) {
+//            partnerMember = couple.getCoupleFemale();
+//        } else {
+//            partnerMember = couple.getCoupleMale();
+//        }
+//
+//        Saju partnerSaju = sajuRepository.findByMember(partnerMember)
+//                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
+//
+//        // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
+//        CoupleYearFortune coupleYearFortune = coupleYearRepository.findByMaleAndFemale(
+//                        mySaju.getTimely(),
+//                        partnerSaju.getDaily())
+//                .orElseThrow(() -> new EntityNotFoundException(
+//                        "No fortune found for siju: " + mySaju.getTimely()
+//                                + " and ilju: " + partnerSaju.getDaily()));
+
+        Couple couple = coupleRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.COUPLE_NOT_FOUND));
+
+        Saju maleSaju = sajuRepository.findByMember(couple.getCoupleMale())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
-        // 3. 커플(Couple) 정보 조회
-        // 예시: 회원이 남성 혹은 여성으로 커플에 속할 수 있으므로 두 방식으로 조회합니다.
-
-        Couple couple;
-        if (member.getGender().equals(Gender.MALE)){
-            couple = coupleRepository.findByCoupleMale(member)
-                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
-        } else if (member.getGender().equals(Gender.FEMALE)) {
-            couple = coupleRepository.findByCoupleFemale(member)
-                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
-        }else {
-            throw new RuntimeException("Invalid gender for member: " + member.getGender());
-        }
-
-        Member partnerMember;
-        if (member.getGender().equals(Gender.MALE)) {
-            partnerMember = couple.getCoupleFemale();
-        } else {
-            partnerMember = couple.getCoupleMale();
-        }
-
-        Saju partnerSaju = sajuRepository.findByMember(partnerMember)
+        Saju femaleSaju = sajuRepository.findByMember(couple.getCoupleFemale())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
-        // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
         CoupleYearFortune coupleYearFortune = coupleYearRepository.findByMaleAndFemale(
-                        mySaju.getTimely(),
-                        partnerSaju.getDaily())
+                        maleSaju.getDaily(), femaleSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No fortune found for siju: " + mySaju.getTimely()
-                                + " and ilju: " + partnerSaju.getDaily()));
+                        "No fortune found for male: " + maleSaju.getDaily() + " and female: " + femaleSaju.getDaily()));
 
         // 7. DTO 변환 후 반환
         return CoupleYearDto.fromEntity(coupleYearFortune);
     }
+
     public CoupleLifeDto getCoupleLifeTimeFortune(Long memberId) {
         // 1. 회원(Member) 조회
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
 
-        // 2. 회원의 사주(Saju) 조회
-        Saju mySaju = sajuRepository.findByMember(member)
+//        // 2. 회원의 사주(Saju) 조회
+//        Saju mySaju = sajuRepository.findByMember(member)
+//                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
+//        // 3. 커플(Couple) 정보 조회
+//        // 예시: 회원이 남성 혹은 여성으로 커플에 속할 수 있으므로 두 방식으로 조회합니다.
+//
+//        Couple couple;
+//        if (member.getGender().equals(Gender.MALE)){
+//            couple = coupleRepository.findByCoupleMale(member)
+//                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
+//        } else if (member.getGender().equals(Gender.FEMALE)) {
+//            couple = coupleRepository.findByCoupleFemale(member)
+//                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
+//        }else {
+//            throw new RuntimeException("Invalid gender for member: " + member.getGender());
+//        }
+//
+//        Member partnerMember;
+//        if (member.getGender().equals(Gender.MALE)) {
+//            partnerMember = couple.getCoupleFemale();
+//        } else {
+//            partnerMember = couple.getCoupleMale();
+//        }
+//
+//        Saju partnerSaju = sajuRepository.findByMember(partnerMember)
+//                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
+//
+//        // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
+//        CoupleLifeFortune coupleLifeFortune = coupleLifeRepository.findByMaleAndFemale(
+//                        mySaju.getTimely(),
+//                        partnerSaju.getDaily())
+//                .orElseThrow(() -> new EntityNotFoundException(
+//                        "No fortune found for siju: " + mySaju.getTimely()
+//                                + " and ilju: " + partnerSaju.getDaily()));
+        Couple couple = coupleRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.COUPLE_NOT_FOUND));
+
+        Saju maleSaju = sajuRepository.findByMember(couple.getCoupleMale())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
-        // 3. 커플(Couple) 정보 조회
-        // 예시: 회원이 남성 혹은 여성으로 커플에 속할 수 있으므로 두 방식으로 조회합니다.
-
-        Couple couple;
-        if (member.getGender().equals(Gender.MALE)){
-            couple = coupleRepository.findByCoupleMale(member)
-                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
-        } else if (member.getGender().equals(Gender.FEMALE)) {
-            couple = coupleRepository.findByCoupleFemale(member)
-                    .orElseThrow(() -> new RuntimeException("Member is not in a couple."));
-        }else {
-            throw new RuntimeException("Invalid gender for member: " + member.getGender());
-        }
-
-        Member partnerMember;
-        if (member.getGender().equals(Gender.MALE)) {
-            partnerMember = couple.getCoupleFemale();
-        } else {
-            partnerMember = couple.getCoupleMale();
-        }
-
-        Saju partnerSaju = sajuRepository.findByMember(partnerMember)
+        Saju femaleSaju = sajuRepository.findByMember(couple.getCoupleFemale())
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
-        // 6. 본인의 'timely' 값과 상대방의 'daily' 값을 이용하여 운세 조회
         CoupleLifeFortune coupleLifeFortune = coupleLifeRepository.findByMaleAndFemale(
-                        mySaju.getTimely(),
-                        partnerSaju.getDaily())
+                        maleSaju.getDaily(), femaleSaju.getDaily())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No fortune found for siju: " + mySaju.getTimely()
-                                + " and ilju: " + partnerSaju.getDaily()));
+                        "No fortune found for male: " + maleSaju.getDaily() + " and female: " + femaleSaju.getDaily()));
+
 
         // 7. DTO 변환 후 반환
         return new CoupleLifeDto(
