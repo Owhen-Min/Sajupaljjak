@@ -23,7 +23,6 @@ const Chat = () => {
     celestialStem: null,
     age: null
   });
-  const [showScrollBottom, setShowScrollBottom] = useState(false);
 
   // 초기 메시지 로드
   useEffect(() => {
@@ -84,17 +83,6 @@ const Chat = () => {
 
       console.log('[웹소켓] 새 메시지 처리:', newMessage);
       setMessages(prev => [...prev, newMessage]);
-
-      // 스크롤 위치 확인 후 조건부 스크롤
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
-      const clientHeight = window.innerHeight;
-      const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-
-      // 사용자가 화면 높이의 2배 이상 위에 있지 않을 때만 스크롤
-      if (distanceFromBottom < clientHeight * 2) {
-        window.scrollTo(0, document.body.scrollHeight);
-      }
     } catch (error) {
       console.error('[웹소켓] 메시지 파싱 오류:', error);
     }
@@ -151,7 +139,7 @@ const Chat = () => {
       chatRoomId: chatRoomId,
       senderId: memberId,
       message: input.trim(),
-      sentAt: new Date().toISOString()
+      messageType: "TEXT"
     };
 
     console.log('[메시지] 전송 시도:', messageData);
@@ -183,30 +171,7 @@ const Chat = () => {
         error: error.message,
         messageData: messageData
       });
-      window.scrollTo(0, document.body.scrollHeight);
     }
-  };
-
-  // 스크롤 위치에 따라 버튼 표시 여부 결정
-  useEffect(() => {
-    const toggleScrollButton = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
-      const clientHeight = window.innerHeight;
-      const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-
-      // 화면 높이의 2배 이상 위에 있을 때만 버튼 표시
-      setShowScrollBottom(distanceFromBottom > clientHeight * 2);
-    };
-
-    window.addEventListener('scroll', toggleScrollButton);
-    return () => window.removeEventListener('scroll', toggleScrollButton);
-  }, []);
-
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-    });
   };
 
   if (isPending) return <div>Loading...</div>;
@@ -216,60 +181,19 @@ const Chat = () => {
     <div className="h-screen bg-gray-50 font-NanumR flex flex-col w-full relative">
       <Header data={data} />
       <div className="flex-1 overflow-hidden">
-        <div className="h-full overflow-y-auto">
-          {/* 디버깅용 출력 */}
-          <div>메시지 개수: {messages?.length}</div>
-          {messages?.length > 0 ? (
-            <MessageList messages={messages} />
-          ) : (
-            <div>메시지가 없습니다.</div>
-          )}
-        </div>
+        {/* 디버깅용 출력 */}
+        <div>메시지 개수: {messages?.length}</div>
+        {messages?.length > 0 ? (
+          <MessageList messages={messages} />
+        ) : (
+          <div>메시지가 없습니다.</div>
+        )}
       </div>
       <BottomInput
         input={input}
         setInput={setInput}
         sendMessage={sendMessage}
       />
-      {showScrollBottom && (
-        <button
-          onClick={scrollToBottom}
-          aria-label="최신 메시지로"
-          className={`
-            fixed
-            bottom-20
-            right-4
-            w-10
-            h-10
-            z-20
-            bg-gray-700
-            text-white
-            rounded-full
-            flex
-            items-center
-            justify-center
-            cursor-pointer
-            hover:bg-gray-600
-            transition-all
-            duration-300
-            shadow-lg
-          `}
-        >
-          <svg 
-            className="w-6 h-6" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-            />
-          </svg>
-        </button>
-      )}
     </div>
   );
 };

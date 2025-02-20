@@ -1,7 +1,47 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MessageItem from "./MessageItem";
 
 const MessageList = ({ messages }) => {
+  const [showScrollBottom, setShowScrollBottom] = useState(false);
+  const messageEndRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // 스크롤 위치에 따라 버튼 표시 여부 결정
+  useEffect(() => {
+    const container = containerRef.current;
+    
+    const toggleScrollButton = () => {
+      if (!container) return;
+      
+      const { scrollHeight, scrollTop, clientHeight } = container;
+      const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+      
+      // 컨테이너 높이의 2배 이상 위에 있을 때만 버튼 표시
+      setShowScrollBottom(distanceFromBottom > clientHeight * 2);
+    };
+
+    container?.addEventListener('scroll', toggleScrollButton);
+    return () => container?.removeEventListener('scroll', toggleScrollButton);
+  }, []);
+
+  // 새 메시지가 추가될 때 스크롤 처리
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const { scrollHeight, scrollTop, clientHeight } = container;
+    const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+
+    // 사용자가 컨테이너 높이의 2배 이상 위에 있지 않을 때만 자동 스크롤
+    if (distanceFromBottom < clientHeight * 2) {
+      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   const formatMessageTime = (isoString) => {
     const messageDate = new Date(isoString);
     const now = new Date();
@@ -22,7 +62,10 @@ const MessageList = ({ messages }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div 
+      ref={containerRef}
+      className="flex flex-col gap-4 p-4 h-full overflow-y-auto relative"
+    >
       {messages.map((message) => (
         <div
           key={message.id}
@@ -42,12 +85,12 @@ const MessageList = ({ messages }) => {
               <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
             )}
             <div
-              className={`rounded-lg p-3 break-words ${
+              className={`rounded-lg p-3 whitespace-pre-wrap break-words ${
                 message.isMine
                   ? 'bg-blue-500 text-white max-w-[80%]'
                   : 'bg-gray-200 text-black max-w-[70%]'
               }`}
-              style={{ wordBreak: 'break-word' }}
+              style={{ width: 'fit-content' }}
             >
               {message.message}
             </div>
@@ -57,6 +100,47 @@ const MessageList = ({ messages }) => {
           </div>
         </div>
       ))}
+      <div ref={messageEndRef} />
+      
+      {showScrollBottom && (
+        <button
+          onClick={scrollToBottom}
+          aria-label="최신 메시지로"
+          className={`
+            fixed
+            bottom-20
+            right-4
+            w-10
+            h-10
+            z-20
+            bg-gray-700
+            text-white
+            rounded-full
+            flex
+            items-center
+            justify-center
+            cursor-pointer
+            hover:bg-gray-600
+            transition-all
+            duration-300
+            shadow-lg
+          `}
+        >
+          <svg 
+            className="w-6 h-6" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M19 14l-7 7m0 0l-7-7m7 7V3" 
+            />
+          </svg>
+        </button>
+      )}
     </div>
   );
 };
