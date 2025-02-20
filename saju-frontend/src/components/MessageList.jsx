@@ -81,44 +81,48 @@ const MessageList = ({ messages }) => {
       ref={containerRef}
       className="flex flex-col gap-4 p-4 h-full overflow-y-auto relative scrollbar-hide"
     >
-      {messages.map((message) => (
-        <div
-          key={message.id}
-          className={`flex ${message.isMine ? 'justify-end' : 'justify-start'}`}
-        >
-          {!message.isMine && (
-            <div className="flex-shrink-0 mr-2">
-              <img
-                src={message.profileImage}
-                alt="프로필"
-                className="w-10 h-10 rounded-full"
-              />
-            </div>
-          )}
-          <div className={`flex flex-col ${message.isMine ? 'items-end' : 'items-start'}`}>
+      {messages.map((message, index) => {
+        // 다음 메시지의 시간과 비교하여 시간 표시 여부 결정
+        const showTime = index === messages.length - 1 || 
+          formatMessageTime(message.sentAt) !== formatMessageTime(messages[index + 1].sentAt);
+
+        return (
+          <div
+            key={message.id}
+            className={`flex ${message.isMine ? 'justify-end' : 'justify-start'}`}
+          >
             {!message.isMine && (
-              <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
+              <div className="flex-shrink-0 mr-2">
+                <img
+                  src={message.profileImage}
+                  alt="프로필"
+                  className="w-10 h-10 rounded-full"
+                />
+              </div>
             )}
-            <div
-              className={`rounded-lg p-3 whitespace-pre-wrap break-words ${
-                message.isMine
-                  ? 'bg-blue-500 text-white max-w-[80%]'
-                  : 'bg-gray-200 text-black max-w-[70%]'
-              }`}
-              style={{ 
-                width: 'fit-content',
-                wordBreak: 'break-word',
-                overflowWrap: 'break-word'
-              }}
-            >
-              {message.message}
+            <div className={`flex flex-col ${message.isMine ? 'items-end' : 'items-start'}`}>
+              {!message.isMine && (
+                <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
+              )}
+              <div
+                className={`rounded-lg p-3 whitespace-normal ${
+                  message.isMine
+                    ? 'bg-blue-500 text-white max-w-[80%]'
+                    : 'bg-gray-200 text-black max-w-[70%]'
+                }`}
+                style={{ wordBreak: 'keep-all' }}
+              >
+                {message.message}
+              </div>
+              {showTime && (
+                <span className="text-xs text-gray-500 mt-1">
+                  {formatMessageTime(message.sentAt)}
+                </span>
+              )}
             </div>
-            <span className="text-xs text-gray-500 mt-1">
-              {formatMessageTime(message.sentAt)}
-            </span>
           </div>
-        </div>
-      ))}
+        );
+      })}
       <div ref={messageEndRef} />
       
       {showScrollBottom && (
