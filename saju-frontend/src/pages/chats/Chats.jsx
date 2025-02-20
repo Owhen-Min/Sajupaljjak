@@ -20,30 +20,35 @@ function Chats() {
     const subscription = stompClient.subscribe(
       `/topic/list/${memberId}`,
       (response) => {
+        // response.body가 JSON 문자열이라면 파싱
         const responseData = JSON.parse(response.body);
         setNewData(responseData);
         console.log("받은 데이터 :", responseData);
 
-        const message = {
-          [responseData.chatRoomId]: {
+        // responseData가 배열이라고 가정하고, reduce로 변환
+        const newMessages = responseData.reduce((acc, item) => {
+          acc[item.chatRoomId] = {
             chatRoom: {
-              id: responseData.chatRoomId,
+              id: item.chatRoomId,
               partner: {
-                nickname: responseData.partner.nickname,
-                profileImage: responseData.partner.profileImage,
-                celestialStem: responseData.partner.celestialStem,
+                nickname: item.partner.nickname,
+                profileImage: item.partner.profileImage,
+                celestialStem: item.partner.celestialStem,
               },
             },
             message: {
-              lastMessage: responseData.message.lastMessage,
-              lastSendTime: responseData.message.lastSendTime,
-              newMessageCount: responseData.message.newMessageCount
-            }
-          }
-        };
 
-        setData((prev) => ({ message, ...prev }));
-        console.log("추가된 이후 배열", data);
+              lastMessage: item.message.lastMessage,
+              lastSendTime: item.message.lastSendTime,
+              newMessageCount: item.message.newMessageCount,
+            },
+          };
+          return acc;
+        }, {});
+
+        // 기존 데이터와 새 데이터를 병합하여 업데이트
+        setData((prev) => ({ ...prev, ...newMessages }));
+        console.log("추가된 이후 데이터", data);
       }
     );
 
