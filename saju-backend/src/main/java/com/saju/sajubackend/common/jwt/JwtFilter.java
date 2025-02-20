@@ -58,23 +58,39 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             String accessToken = getJwtFromRequest(request);
+            String refreshToken = request.getHeader("Refresh-Token");
 
-            if (accessToken == null) {
-                log.warn("❌ [JWT 필터] Authorization 헤더 없음! 요청 URI: {}", requestURI);
+            if (accessToken == null && refreshToken == null) {
+                log.warn("❌ [JWT 필터] Authorization 및 Refresh-Token 헤더 없음! 요청 URI: {}", requestURI);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
-            log.info("🔑 [JWT 필터] 추출된 Access Token: {}", accessToken);
+            if (accessToken != null) {
+                log.info("🔑 [JWT 필터] 추출된 Access Token: {}", accessToken);
 
-            if (jwtProvider.validateToken(accessToken)) {
-                Long memberId = jwtProvider.getUserIdFromToken(accessToken);
-                request.setAttribute("memberId", memberId);
-                log.info("✅ [JWT 인증 성공] memberId: {}", memberId);
-            } else {
-                log.warn("❌ [JWT 인증 실패] 유효하지 않은 토큰! 요청 URI: {}", requestURI);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                return;
+                if (jwtProvider.validateToken(accessToken)) {
+                    Long memberId = jwtProvider.getUserIdFromToken(accessToken);
+                    request.setAttribute("memberId", memberId);
+                    log.info("✅ [JWT 인증 성공] memberId: {}", memberId);
+                } else {
+                    log.warn("❌ [JWT 인증 실패] 유효하지 않은 Access Token! 요청 URI: {}", requestURI);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
+            } else if (refreshToken != null) {
+                log.info("🔄 [JWT 필터] Access Token 없음, Refresh Token 사용 시도...");
+
+                if (jwtProvider.validateToken(refreshToken)) {
+                    Long memberId = jwtProvider.getUserIdFromToken(refreshToken);
+                    request.setAttribute("memberId", memberId);
+                    request.setAttribute("refreshTokenUsed", true); // ✅ Refresh Token을 사용했음을 표시
+                    log.info("✅ [JWT 인증 성공] Refresh Token으로 인증됨, memberId: {}", memberId);
+                } else {
+                    log.warn("❌ [JWT 인증 실패] 유효하지 않은 Refresh Token! 요청 URI: {}", requestURI);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
             }
         } catch (Exception e) {
             log.error("❌ [JWT 필터] 인증 오류: {}", e.getMessage());
