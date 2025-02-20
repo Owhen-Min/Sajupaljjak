@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import MessageItem from "./MessageItem";
+import { useEffect, useRef, useState } from "react";
 
 const MessageList = ({ messages }) => {
   const [showScrollBottom, setShowScrollBottom] = useState(false);
@@ -101,7 +100,7 @@ const MessageList = ({ messages }) => {
               <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
             )}
             <div
-              className={`rounded-lg p-3 whitespace-pre-wrap break-words ${
+              className={`rounded-lg p-3 whitespace-pre-wrap ${
                 message.isMine
                   ? 'bg-blue-500 text-white max-w-[80%]'
                   : 'bg-gray-200 text-black max-w-[70%]'
