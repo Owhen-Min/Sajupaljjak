@@ -73,7 +73,7 @@ export default function Solo() {
               matchingTab={matchingTab}
               setMatchingTab={setMatchingTab}
             />
-            {matchingTab === "compatibility" && <CompatibilityMatching />}
+            {matchingTab === "compatibility" && <CompatibilityMatching  users={users}/>}
             {matchingTab === "random" && <RandomMatching />}
           </div>
         )}
@@ -124,7 +124,7 @@ function MatchingNav({ matchingTab, setMatchingTab }) {
  * - 모든 카드에 이미지, 인포, 버튼 항상 표시
  * - 터치(스와이프) 및 카드 클릭으로 슬라이드 이동
  */
-function CompatibilityMatching() {
+function CompatibilityMatching(users) {
   // 컨테이너 및 카드 설정
   const containerWidth = 380; // 뷰포트 폭
   const cardWidth = 300; // 각 카드 폭
