@@ -2,7 +2,7 @@ package com.saju.sajubackend.api.chat.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
-import com.saju.sajubackend.common.exception.BaseException;
+import com.saju.sajubackend.common.exception.BadRequestException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.validator.MessageTypeValidator;
 import lombok.Builder;
