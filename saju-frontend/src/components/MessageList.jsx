@@ -105,7 +105,7 @@ const MessageList = ({ messages }) => {
                 <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
               )}
               <div
-                className={`rounded-lg p-3 block w-fit ${
+                className={`rounded-lg p-3 block w-fit break-words ${
                   message.isMine
                     ? 'bg-blue-500 text-white max-w-[80%]' 
                     : 'bg-gray-200 text-black max-w-[70%]'
