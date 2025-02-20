@@ -34,7 +34,7 @@ function CommunityView() {
   const { postId } = useParams();
   const navigate = useNavigate();
   const mutation = usePost();
-
+  const deleteMutation = useDelete();
   // const { data, isPending, error } = useGet(`/community/${postId}`);
   // if (error){
   //   alert('유효하지 않은 접근입니다')
@@ -150,10 +150,12 @@ function CommunityView() {
               size="normal"
             />
           </span>
-          <span className="text-xs flex space-x-2 text-gray-700 ml-auto ">
-            <span onClick={() => {}}>수정</span>
-            <span> | </span>
-            <span onClick={() => {}}>삭제</span>
+          <span className="text-xs ">
+            <span onClick={() => {navigate(`/community/${postId}/modify`)}}>수정</span>
+            <span onClick={() => {
+              deleteMutation({ uri: `/chats/${chatRoomId}` });
+              navigate("/community");
+          }}>삭제</span>
           </span>
 
           <div className="flex justify-between items-center mt-2">

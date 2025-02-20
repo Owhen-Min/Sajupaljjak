@@ -9,17 +9,18 @@ import { useNavigate } from "react-router-dom";
 
 function MyPageEditCouple() {
 
-  
   const navigate = useNavigate();
   const mutation = usePost();
-
+  const [couple, setCouple] = useState([]);
   const { data, isPending, error } = useGet("/api/couples");
-  if (error) {
-    navigate("/couple/code");
-  }
+  useEffect(() => {
+    if (data) {
+      setCouple(data);
+    }
+  }, [data]);
   const [meetDate, setMeetDate] = useState('');
   const [daysCount, setDaysCount] = useState(0);
-
+  
   const submit = (uri, payload) => {
     console.log("POST Request Payload:", payload);
     mutation.mutate(
@@ -34,7 +35,7 @@ function MyPageEditCouple() {
       }
     );
   };
-
+  
   useEffect(() => {
     // 만난 일수 계산
     if (data) {
@@ -46,40 +47,40 @@ function MyPageEditCouple() {
       setDaysCount(diffDays);
     }
   }, [data]);
-
+  
   const handleSave = async () => {
     if (!meetDate) {
       alert("만난 날짜를 선택해주세요.");
       return;
     }
-
+    
     try {
       // TODO: API로 수정된 만난 날짜 저장
-
+      
       // 저장 후 날짜 다시 계산
       const start = new Date(meetDate);
       const today = new Date();
       const diffTime = Math.abs(today - start);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24) + 1);
       setDaysCount(diffDays);
-
+      
       alert("성공적으로 수정되었습니다.");
     } catch (error) {
       console.error("저장 실패:", error);
       alert("저장 중 오류가 발생했습니다.");
     }
   };
-
+  
   const handleBreakUp = async () => {
     submit("/api/couple/breakup", { isBroken: true, startDate: '' });
     alert("회원님의 앞으로의 행복을 기원합니다.");
     navigate("/auth/signup/additional");
   };
-
+  
   const handleDateChange = (e) => {
     const newValue = e.target.value;
     setMeetDate(newValue);
-
+    
     // 날짜 변경 시 즉시 일수 계산
     const start = new Date(newValue);
     const today = new Date();
@@ -87,10 +88,15 @@ function MyPageEditCouple() {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     setDaysCount(diffDays);
   };
-
-  // if (isPending) return <div>로딩중 ...</div>;
-  // if (error) return <div>에러 : {error.message}</div>;
-
+  
+  
+    if (isPending) {
+      <div>커플 정보 로딩 중</div>
+    }
+    if (error) {
+      <div>커플 정보 get 에러</div>
+    }
+  
   return (
     <div className="flex flex-col relative pt-14 min-h-screen bg-gray-50">
       <TopBar2 mainText={"커플 정보 수정하기"} />
