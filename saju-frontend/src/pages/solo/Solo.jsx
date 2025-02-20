@@ -11,40 +11,6 @@ import { useGet } from "../../hooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
-// 캐러셀로 돌릴 유저 데이터
-// const users = [
-//   {
-//     id: 1,
-//     nickname: "이종문",
-//     score: 99,
-//     profileImage: profile1,
-//     region: 1123123123,
-//     age: 28,
-//     celestialStem: "무토",
-//     introduction: "찰떡궁합인분 찾습니다^^",
-//   },
-//   {
-//     id: 2,
-//     nickname: "오수영",
-//     score: 99,
-//     profileImage: profile2,
-//     region: 1234123,
-//     age: 26,
-//     celestialStem: "갑목",
-//     introduction: "찰떡궁합인분 찾습니다^^",
-//   },
-//   {
-//     id: 3,
-//     nickname: "윤크리스탈",
-//     score: 99,
-//     profileImage: profile3,
-//     region: 123124123412,
-//     age: 31,
-//     celestialStem: "갑목",
-//     introduction: "찰떡궁합인분 찾습니다^^",
-//   },
-// ];
-
 export default function Solo() {
 
   // 하단 탭 (메인, 커뮤니티, 운세, 매칭, 채팅)
@@ -124,7 +90,7 @@ function MatchingNav({ matchingTab, setMatchingTab }) {
  * - 모든 카드에 이미지, 인포, 버튼 항상 표시
  * - 터치(스와이프) 및 카드 클릭으로 슬라이드 이동
  */
-function CompatibilityMatching(users) {
+function CompatibilityMatching({users}) {
   // 컨테이너 및 카드 설정
   const containerWidth = 380; // 뷰포트 폭
   const cardWidth = 300; // 각 카드 폭
@@ -255,3 +221,38 @@ function RandomMatching() {
     </div>
   );
 }
+
+
+// 캐러셀로 돌릴 유저 데이터
+// const users = [
+//   {
+//     id: 1,
+//     nickname: "이종문",
+//     score: 99,
+//     profileImage: profile1,
+//     region: 1123123123,
+//     age: 28,
+//     celestialStem: "무토",
+//     introduction: "찰떡궁합인분 찾습니다^^",
+//   },
+//   {
+//     id: 2,
+//     nickname: "오수영",
+//     score: 99,
+//     profileImage: profile2,
+//     region: 1234123,
+//     age: 26,
+//     celestialStem: "갑목",
+//     introduction: "찰떡궁합인분 찾습니다^^",
+//   },
+//   {
+//     id: 3,
+//     nickname: "윤크리스탈",
+//     score: 99,
+//     profileImage: profile3,
+//     region: 123124123412,
+//     age: 31,
+//     celestialStem: "갑목",
+//     introduction: "찰떡궁합인분 찾습니다^^",
+//   },
+// ];
