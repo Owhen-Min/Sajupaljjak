@@ -19,6 +19,23 @@ function formatRelativeTime(dateString) {
   }
 }
 
+function convertSubTypeToKorean(subType) {
+  const subTypeMap = {
+    'GAP_MOK': '갑목',
+    'EUL_MOK': '을목',
+    'BYEONG_HWA': '병화',
+    'JEONG_HWA': '정화',
+    'GYE_SU': '계수',
+    'IM_SU': '임수',
+    'SHIN_GUM': '신금',
+    'GYEONG_GUM': '경금',
+    'GI_TO': '기토',
+    'MU_TO': '무토',
+  };
+  
+  return subTypeMap[subType] || subType;
+}
+
 const ArticleList = ({ articles, className }) => {
   const navigate = useNavigate();
   console.log(articles);
@@ -31,7 +48,7 @@ const ArticleList = ({ articles, className }) => {
           onClick={() => navigate(`/community/${article.boardId}`)}
         >
           <div className="flex items-center gap-x-2 mb-2">
-            <SajuUserBubble skyElement={article.subType} />
+            <SajuUserBubble skyElement={convertSubTypeToKorean(article.subType)} />
             <h3 className="text-base text-gray-800 font-semibold">
               {article.title}
             </h3>
