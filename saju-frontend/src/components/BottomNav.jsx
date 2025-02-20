@@ -12,7 +12,9 @@ import {
 } from "@heroicons/react/24/solid";
 
 export default function BottomNav() {
-  const { isCouple } = useAuth();
+  // const { isCouple } = useAuth();
+  const isCouple = localStorage.getItem("relation") === 'COUPLE' //확인인
+  console.log(isCouple);
   const location = useLocation();
 
   // 메뉴 항목 정의 (isCouple 여부에 따라 매칭/캘린더 구분)
