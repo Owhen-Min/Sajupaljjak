@@ -38,7 +38,7 @@ public class RandomService {
     private Deque<WaitingDto> waiting;
     private Map<Long, Member> partners; // memberId : Member(매칭 상대)
     private Map<String, ScheduledExecutorService> schedulers; // 채팅방 uuid : 스케줄러
-    private Map<String, Integer> chatRoomNoticeCount; // 채팅방 uuid : 정보 인덱스
+    public Map<String, Integer> chatRoomNoticeCount; // 채팅방 uuid : 정보 인덱스
 
     private ReentrantReadWriteLock lock;
     private Random random;
@@ -46,7 +46,7 @@ public class RandomService {
     private final String CHATROOM = "chatRoomId";
 
     @PostConstruct
-    private void setUp() {
+    public void setUp() {
         this.waiting = new ArrayDeque<>(); // 순서 유지 필요
         this.partners = new ConcurrentHashMap<>(); // 멀티 스레드 환경 고려
         this.schedulers = new ConcurrentHashMap<>();
@@ -196,7 +196,9 @@ public class RandomService {
         schedulers.remove(request.getChatroomId()); // 정보 공개 스케줄러 삭제
         chatRoomNoticeCount.remove(request.getChatroomId()); // 정보 인덱스 삭제
         Member partner = partners.remove(Long.parseLong(request.getSenderId())); // 회원 정보 삭제
-        partners.remove(partner.getMemberId()); // 매칭 상대 정보 삭제
+        if (partner != null) {
+            partners.remove(partner.getMemberId()); // 매칭 상대 정보 삭제
+        }
     }
 
     public CreateChatroomResponseDto liked(Long memberId, Long partnerId) {

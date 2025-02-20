@@ -4,6 +4,7 @@ import com.saju.sajubackend.api.chat.dto.request.ChattingRequestDto;
 import com.saju.sajubackend.api.chat.dto.response.CreateChatroomResponseDto;
 import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.random.service.RandomService;
+import com.saju.sajubackend.common.jwt.resolver.CurrentMemberId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,7 +27,7 @@ public class RandomController {
 
     @PostMapping("/api/random")
     @ResponseBody
-    public DeferredResult<Map<String, String>> createChatroom(Long memberId) { // todo : accessToken에서 memberId 꺼내기
+    public DeferredResult<Map<String, String>> createChatroom(@CurrentMemberId Long memberId) {
 
         DeferredResult<Map<String, String>> deferredResult =
                 new DeferredResult<>(10 * 1000L, Map.of("message", "랜덤 채팅 상대를 찾을 수 없습니다."));
