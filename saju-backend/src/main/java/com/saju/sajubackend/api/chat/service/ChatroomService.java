@@ -130,6 +130,7 @@ public class ChatroomService {
 
         // 2. 회원별 마지막 읽은 메시지 조회 (몽고 DB LastMessage)
         Map<Long, LastMessage> lastReadMessages = findLastReadMessages(partners, memberId);
+        System.out.println("[👍lastReadMessages]" + lastReadMessages.size());
 
         // 3. 채팅방 응답 리스트 생성
         return buildChatroomResponses(partners, lastReadMessages);
@@ -143,7 +144,6 @@ public class ChatroomService {
                         .orElse(LastMessage.builder()
                                 .chatroomId(NONE_MESSAGE_CHATROOM)
                                 .build())))
-                .filter(entry -> !entry.getValue().getChatroomId().equals(NONE_MESSAGE_CHATROOM))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
@@ -152,7 +152,7 @@ public class ChatroomService {
     }
 
     private ChatMessage findLatestMessage(Long chatroomId) {
-        return chatMessageRepository.findLatestMessageByChatroomId(String.valueOf(chatroomId)).orElse(null);
+        return chatMessageRepository.findFirstByChatroomIdOrderBySendTimeDesc(String.valueOf(chatroomId)).orElse(null);
     }
 
     private List<ChatroomResponseDto> buildChatroomResponses(Map<Long, Member> partners,
@@ -162,7 +162,7 @@ public class ChatroomService {
         for (Long chatroomId : partners.keySet()) {
             LastMessage lastReadMessage = lastReadMessages.get(chatroomId);
             String lastMessageTime =
-                    (lastReadMessage != null) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
+                    (!lastReadMessage.getChatroomId().equals(NONE_MESSAGE_CHATROOM)) ? lastReadMessage.getLastMessageTime() : "1970-01-01T00:00:00";
 
             // 읽지 않은 메시지 개수 조회
             long unreadCount = countUnreadMessages(chatroomId, lastMessageTime);

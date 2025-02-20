@@ -16,8 +16,5 @@ public interface ChatMessageRepository extends MongoRepository<ChatMessage, Stri
 
     @Query(value = "{ 'chatroomId' : ?0, 'sendTime' : { '$gt' : ?1 } }", count = true)
     long countByChatroomIdAndSendTimeAfter(String chatroomId, String sendTime);
-
-    @Query(value = "{ 'chatroomId' : ?0 }", sort = "{ 'sendTime' : -1 }")
-    Optional<ChatMessage> findLatestMessageByChatroomId(String chatroomId);
 }
 

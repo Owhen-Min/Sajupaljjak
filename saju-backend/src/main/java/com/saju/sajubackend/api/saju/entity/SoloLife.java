@@ -17,10 +17,17 @@ public class SoloLife {
 
     private String siju;
     private String ilju;
-    private String characteristic;
-    private String flow;
-    private String danger;
-    private String advice;
 
+    @Column(columnDefinition = "TEXT")
+    private String characteristic;
+
+    @Column(columnDefinition = "TEXT")
+    private String flow;
+
+    @Column(columnDefinition = "TEXT")
+    private String danger;
+
+    @Column(columnDefinition = "TEXT")
+    private String advice;
 
 }

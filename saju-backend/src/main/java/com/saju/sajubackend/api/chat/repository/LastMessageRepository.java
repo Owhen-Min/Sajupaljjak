@@ -13,7 +13,7 @@ public interface LastMessageRepository extends MongoRepository<LastMessage, Stri
 
     default Optional<LastMessage> findLatestByChatroomIdAndMemberId(String chatroomId, String memberId) {
         return findByChatroomIdAndMemberId(
-                chatroomId, memberId, PageRequest.of(0, 1, Sort.by("lastMessageTime").descending())
+                chatroomId, memberId, PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "lastMessageTime"))
         ).stream().findFirst();
     }
 
