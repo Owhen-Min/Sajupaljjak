@@ -26,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value.Str;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -38,6 +39,7 @@ public class ChatroomService {
     private final MemberRepository memberRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final LastMessageRepository lastMessageRepository;
+    private final String NONE_MESSAGE_CHATROOM = "none";
 
     @Transactional
     public CreateChatroomResponseDto getChatroom(Long memberId, Long partnerId) {
@@ -120,6 +122,11 @@ public class ChatroomService {
         // 1. 채팅 상대방 정보 구하기
         Map<Long, Member> partners = chatroomQueryDslRepository.findChatPartnersByMemberId(memberId);
 
+        if (partners == null || partners.isEmpty()) {
+            System.out.println("[👍활성화된 채팅방 없음]" + partners);
+            return List.of();
+        }
+
         // 2. 회원별 마지막 읽은 메시지 조회 (몽고 DB LastMessage)
         Map<Long, LastMessage> lastReadMessages = findLastReadMessages(partners, memberId);
 
@@ -132,7 +139,10 @@ public class ChatroomService {
                 .map(chatroomId -> Map.entry(chatroomId, lastMessageRepository
                         .findFirstByChatroomIdAndMemberIdOrderByLastMessageTimeDesc(
                                 String.valueOf(chatroomId), String.valueOf(memberId))
-                        .orElse(null)))
+                        .orElse(LastMessage.builder()
+                                .chatroomId(NONE_MESSAGE_CHATROOM)
+                                .build())))
+                .filter(entry -> !entry.getValue().getChatroomId().equals(NONE_MESSAGE_CHATROOM))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

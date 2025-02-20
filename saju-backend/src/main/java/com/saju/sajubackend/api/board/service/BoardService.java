@@ -132,7 +132,7 @@ public class BoardService {
     public BoardCreateResponse createBoard(Long memberId, BoardCreateRequest request) {
         // Element는 mainType, CelestialStem은 subType으로 사용
         Element mainType = Element.fromLabel(request.getMainType());
-        CelestialStem subType = CelestialStem.fromLabel(request.getCelestialStem());
+        CelestialStem subType = CelestialStem.fromLabel(request.getSubType());
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
