@@ -40,7 +40,7 @@ const MessageList = ({ messages }) => {
     // 마지막 메시지가 내가 보낸 메시지이거나 초기 로딩인 경우 무조건 스크롤
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.isMine || isInitialLoad) {
-      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      messageEndRef.current?.scrollIntoView({ behavior: 'instant' });
       return;
     }
 
@@ -100,12 +100,16 @@ const MessageList = ({ messages }) => {
               <span className="text-sm text-gray-600 mb-1">{message.nickName}</span>
             )}
             <div
-              className={`rounded-lg p-3 whitespace-pre-wrap ${
+              className={`rounded-lg p-3 whitespace-pre-wrap break-words ${
                 message.isMine
                   ? 'bg-blue-500 text-white max-w-[80%]'
                   : 'bg-gray-200 text-black max-w-[70%]'
               }`}
-              style={{ width: 'fit-content' }}
+              style={{ 
+                width: 'fit-content',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word'
+              }}
             >
               {message.message}
             </div>
