@@ -62,8 +62,8 @@ public class RandomService {
     }
 
     @Async("asyncThreadPool")
-    public CompletableFuture<Map<String, Object>> join(Long memberId, DeferredResult<Map<String, Object>> deferredResult) {
-        CompletableFuture<Map<String, Object>> future = new CompletableFuture<>();
+    public CompletableFuture<Member> join(Long memberId, DeferredResult<Map<String, Object>> deferredResult) {
+        CompletableFuture<Member> future = new CompletableFuture<>();
         Member member = findMember(memberId);
 
         if (waiting.stream().anyMatch(dto -> dto.getMember().getMemberId().equals(member.getMemberId()))) {
@@ -87,7 +87,7 @@ public class RandomService {
         Runnable task = new Runnable() {
             @Override
             public void run() {
-                Map<String, Object> matchResult = matching();
+                Member matchResult = matching(memberId);
                 if (matchResult != null) {
                     future.complete(matchResult);
                     scheduler.shutdown();
@@ -125,7 +125,7 @@ public class RandomService {
                 .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
     }
 
-    private Map<String, Object> matching() { // 랜덤 매칭
+    private Member matching(Long memberId) { // 랜덤 매칭
 
         try {
             lock.writeLock().lock(); // 락 걸기
@@ -160,7 +160,7 @@ public class RandomService {
             // 매칭된 두 명이 존재할 때만 채팅방 생성
             if (waiting1 != null && waiting2 != null) {
                 createChatRoom(waiting1, waiting2);
-                return getInfo(waiting1.getMember(), waiting2.getMember());
+                return (waiting1.getMember().getMemberId().equals(memberId)) ? waiting2.getMember() : waiting1.getMember();
             }
 
             return null;
