@@ -109,7 +109,7 @@ function CommunityWrite() {
     if (!validateForm()) return;
     mutation.mutate(
       {
-        uri: `community`,
+        uri: `/api/community`,
         // uri: `community/${formData.celestialStem.charAt(1)}`,
         payload: formData,
       },

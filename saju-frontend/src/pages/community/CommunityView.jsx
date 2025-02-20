@@ -36,6 +36,10 @@ function CommunityView() {
   const mutation = usePost();
 
   // const { data, isPending, error } = useGet(`/community/${postId}`);
+  // if (error){
+  //   alert('유효하지 않은 접근입니다')
+  //   navigate('/community');
+  // }
 
   const [article, setArticle] = useState({
     articleId: "",
@@ -146,6 +150,12 @@ function CommunityView() {
               size="normal"
             />
           </span>
+          <span className="text-xs flex space-x-2 text-gray-700 ml-auto ">
+            <span onClick={() => {}}>수정</span>
+            <span> | </span>
+            <span onClick={() => {}}>삭제</span>
+          </span>
+
           <div className="flex justify-between items-center mt-2">
             <h3 className="text-base font-semibold text-gray-800">
               {article.title}
