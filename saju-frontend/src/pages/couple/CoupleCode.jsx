@@ -56,7 +56,7 @@ function CoupleCode() {
   useEffect(() => {
     const loadCoupleCode = async () => {
       // 로컬 스토리지에서 커플 코드 정보 확인
-      // const savedCode = localStorage.getItem('coupleCode');
+      const savedCode = localStorage.getItem('coupleCode');
       const savedExpiresAt = localStorage.getItem('codeExpiresAt');
 
       if (savedCode && savedExpiresAt) {
