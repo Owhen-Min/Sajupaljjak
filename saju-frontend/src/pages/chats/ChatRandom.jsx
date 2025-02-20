@@ -12,7 +12,6 @@ const ChatRandom = () => {
   const chatRoomId = useParams().chatId;
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
-  const { data, isPending, error } = useGet(`/api/chats/${chatRoomId}`);
   const { stompClient, isConnected } = useWebSocket();
   const memberId = localStorage.getItem("memberId");
   const subscriptionRef = useRef(null);
@@ -23,60 +22,7 @@ const ChatRandom = () => {
     celestialStem: null,
     age: null,
   });
-  const updateLastReadMessage = usePatch();
 
-  // 초기 메시지 로드
-  useEffect(() => {
-    if (data) {
-      console.log("[채팅] 초기 데이터 수신:", data);
-
-      if (data.partner) {
-        setPartner(data.partner);
-      }
-
-      // 메시지 변환 및 한 번만 설정
-      const transformMessages = (messages, memberId, partnerInfo) => {
-        if (!Array.isArray(messages)) {
-          console.log("[채팅] 메시지 데이터 형식 오류");
-          return [];
-        }
-        return messages
-          .map((message) => {
-            // messageType 확인
-            if (message.messageType !== "TEXT") {
-              console.log(
-                `[채팅] 지원하지 않는 메시지 타입: ${message.messageType}`
-              );
-              return null;
-            }
-
-            return {
-              id: message.id,
-              message: message.content,
-              sentAt: message.sendTime, // sendTime으로 수정
-              isMine: message.senderId === memberId,
-              profileImage:
-                message.senderId == memberId
-                  ? null
-                  : partnerInfo?.profileImage || "기본이미지URL",
-              nickName:
-                message.senderId == memberId
-                  ? "나"
-                  : partnerInfo?.nickname || "상대방", // nickname으로 수정
-            };
-          })
-          .filter((message) => message !== null); // 지원하지 않는 메시지 타입 필터링
-      };
-
-      const transformedMessages = transformMessages(
-        data.messages,
-        memberId,
-        data.partner
-      );
-      console.log("[채팅] 변환된 메시지:", transformedMessages);
-      setMessages(transformedMessages);
-    }
-  }, [data, memberId]);
 
   const handleNewMessage = (messageData) => {
     try {
@@ -185,10 +131,6 @@ const ChatRandom = () => {
       });
     }
   };
-
-  if (isPending) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-
   return (
     <div className="h-[100dvh] bg-gray-50 font-NanumR flex flex-col w-full relative">
       <Header data={data} />
