@@ -191,7 +191,7 @@ const Chat = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="h-screen bg-gray-50 font-NanumR flex flex-col w-full relative">
+    <div className="h-[100dvh] bg-gray-50 font-NanumR flex flex-col w-full relative">
       <Header data={data} />
       <div className="flex-1 overflow-hidden">
         {messages?.length > 0 ? (
