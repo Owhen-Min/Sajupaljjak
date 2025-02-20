@@ -127,7 +127,7 @@ const Chat = () => {
           uri: `/api/chats`,
           payload: {
             chatRoomId: chatRoomId,
-            lastMessageId: lastMessageId
+            lastReadMessage: lastMessageId
           }
         });
       }
