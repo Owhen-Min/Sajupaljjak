@@ -20,7 +20,7 @@ function Match() {
   
   useEffect(() => {
     if (data) {
-      setDisplayedUsers((prev) => [...prev, ...data.pages.map((page) => page.data)]);
+      setDisplayedUsers((prev) => [...prev, ...data.pages.map((page) => page.members)]);
     }
   }, [data]);
 
