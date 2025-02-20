@@ -5,6 +5,7 @@ const MessageList = ({ messages }) => {
   const [showScrollBottom, setShowScrollBottom] = useState(false);
   const messageEndRef = useRef(null);
   const containerRef = useRef(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // 스크롤 위치에 따라 버튼 표시 여부 결정
   useEffect(() => {
@@ -24,19 +25,34 @@ const MessageList = ({ messages }) => {
     return () => container?.removeEventListener('scroll', toggleScrollButton);
   }, []);
 
+  // 초기 로딩 시 스크롤
+  useEffect(() => {
+    if (isInitialLoad && messages.length > 0) {
+      messageEndRef.current?.scrollIntoView();
+      setIsInitialLoad(false);
+    }
+  }, [messages, isInitialLoad]);
+
   // 새 메시지가 추가될 때 스크롤 처리
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || messages.length === 0) return;
 
+    // 마지막 메시지가 내가 보낸 메시지이거나 초기 로딩인 경우 무조건 스크롤
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.isMine || isInitialLoad) {
+      messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    // 그 외의 경우는 기존 로직 유지
     const { scrollHeight, scrollTop, clientHeight } = container;
     const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
 
-    // 사용자가 컨테이너 높이의 2배 이상 위에 있지 않을 때만 자동 스크롤
     if (distanceFromBottom < clientHeight * 2) {
       messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages]);
+  }, [messages, isInitialLoad]);
 
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -64,7 +80,7 @@ const MessageList = ({ messages }) => {
   return (
     <div 
       ref={containerRef}
-      className="flex flex-col gap-4 p-4 h-full overflow-y-auto relative"
+      className="flex flex-col gap-4 p-4 h-full overflow-y-auto relative scrollbar-hide"
     >
       {messages.map((message) => (
         <div

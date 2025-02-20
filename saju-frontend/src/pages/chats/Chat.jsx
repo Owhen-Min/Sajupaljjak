@@ -138,7 +138,7 @@ const Chat = () => {
     const messageData = {
       chatRoomId: chatRoomId,
       senderId: memberId,
-      message: input.trim(),
+      content: input.trim(),
       messageType: "TEXT"
     };
 
@@ -182,11 +182,10 @@ const Chat = () => {
       <Header data={data} />
       <div className="flex-1 overflow-hidden">
         {/* 디버깅용 출력 */}
-        <div>메시지 개수: {messages?.length}</div>
         {messages?.length > 0 ? (
           <MessageList messages={messages} />
         ) : (
-          <div>메시지가 없습니다.</div>
+          <div className="flex items-center justify-center h-full">주고 받은 메시지가 없습니다. 새로운 대화를 시작해보세요!</div>
         )}
       </div>
       <BottomInput
