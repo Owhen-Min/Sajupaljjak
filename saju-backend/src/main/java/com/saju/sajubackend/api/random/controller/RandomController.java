@@ -28,18 +28,18 @@ public class RandomController {
     @PostMapping("/api/random")
     @ResponseBody
     public DeferredResult<Map<String, String>> createChatroom(@CurrentMemberId Long memberId) {
-
         DeferredResult<Map<String, String>> deferredResult =
                 new DeferredResult<>(10 * 1000L, Map.of("message", "랜덤 채팅 상대를 찾을 수 없습니다."));
 
-        // 랜덤 상대 찾기
-        Member member = randomService.join(memberId, deferredResult);
-
-        deferredResult.onError((throwable) -> randomService.delete(member)); // 에러 발생
-        deferredResult.onTimeout(() -> randomService.delete(member)); // 타임 아웃 시
+        // 랜덤 상대 찾기 (비동기 처리)
+        randomService.join(memberId, deferredResult).thenAccept(member -> {
+            deferredResult.onError((throwable) -> randomService.delete(member)); // 에러 발생 시 삭제
+            deferredResult.onTimeout(() -> randomService.delete(member)); // 타임아웃 시 삭제
+        });
 
         return deferredResult;
     }
+
 
     @PostMapping("/api/random/{partnerId}")
     @ResponseBody
