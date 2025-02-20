@@ -20,26 +20,33 @@ export default function Solo() {
 
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  // const { data, isPending, error } = useGet("api/match/top");
-  const { mutate: createRandom } = usePost("/api/random", {
-    onSuccess:(response) => {
-      // if (response.message){
-      //   console.log("랜덤채팅 실패")
-      // } 매칭 실패가 백엔드에서 처리하는 건지지
-      console.log('랜덤채팅 매칭 성공')
-      navigate(`/chats/random/${response.chatRoomId}`)
-    },
-    onError: (error) => {
-      console.log("error", error);
+  const { data, isPending, error } = useGet("api/match/top");
+  const mutation = usePost();
+  const createRandom = () => {
+    mutation.mutate(
+      { uri: `/api/random`},
+      {
+       onSuccess:(response) => {
+       if (response.message){
+         console.log("랜덤채팅 실패")
+        } //매칭 실패가 백엔드에서 처리하는 건지지
+       console.log('랜덤채팅 매칭 성공')
+       navigate(`/chats/random/${response.chatRoomId}`)
+     },
+     onError: (error) => {
+       console.log("error", error);
+     }}
+
+    )
+  };
+
+  useState(() => {
+    if (data) {
+      setUsers(data);
     }
-  });
-  // useState(() => {
-  //   if (data) {
-  //     setUsers(data);
-  //   }
-  // }, [data]);
-  // if (isPending) return <div><LoadingSpinner/></div>;
-  // if (error) return <div>Error: {error.message}</div>;
+  }, [data]);
+  if (isPending) return <div><LoadingSpinner/></div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="w-full h-screen flex flex-col">

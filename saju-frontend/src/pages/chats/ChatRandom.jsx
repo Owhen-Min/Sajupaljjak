@@ -133,7 +133,7 @@ const ChatRandom = () => {
   };
   return (
     <div className="h-[100dvh] bg-gray-50 font-NanumR flex flex-col w-full relative">
-      <Header data={data} />
+      <Header />
       <div className="flex-1 overflow-hidden">
         {messages?.length > 0 ? (
           <MessageList messages={messages} />
@@ -152,12 +152,13 @@ const ChatRandom = () => {
   );
 };
 
-function Header({ data }) {
+function Header() {
   const navigate = useNavigate();
 
   return (
     <header className="relative h-12 flex-shrink-0 bg-black text-white flex items-center justify-center ">
-      <h1 className="text-lg font-bold">{data?.partner?.nickName}</h1>
+      {/* <h1 className="text-lg font-bold">{data?.partner?.nickName}</h1> */}
+      <h1 className="text-lg font-bold">???</h1>
       <div
         className="absolute left-4 text-xl cursor-pointer text-white"
         onClick={() => navigate("/chats")}
