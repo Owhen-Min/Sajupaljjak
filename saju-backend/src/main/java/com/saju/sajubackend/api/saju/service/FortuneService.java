@@ -33,21 +33,21 @@ public class FortuneService {
 
     @Transactional
     public SoloYearDto getNewYearFortune(Long memberId) {
-        // Member 조회
-        //Member member = memberRepository.findById(memberId)
-        //        .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
-        // 해당 회원의 Saju 정보를 DB에서 조회
-        //Saju saju = sajuRepository.findByMember(member)
-        //        .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
-        Saju saju = sajuRepository.getReferenceById(memberId);
+        // Member 및 Saju 조회: getReferenceById 대신 findByMember를 사용하여 올바른 Saju 정보를 가져옴
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.MEMBER_NOT_FOUND));
+        Saju saju = sajuRepository.findByMember(member)
+                .orElseThrow(() -> new NotFoundException(ErrorMessage.INVALID_CELESTIAL_STEM_LABEL));
 
+        String siju = saju.getTimely().substring(saju.getTimely().length() - 1);
+        String ilju = saju.getDaily();
 
-        // DB에서 siju와 ilju에 해당하는 운세 정보를 조회
-        SoloYear fortune = soloYearRepository.findBySijuAndIlju(saju.getTimely().substring(saju.getTimely().length() - 1), saju.getDaily())
+        // DB에서 siju와 ilju에 해당하는 신년 운세 정보 조회
+        SoloYear fortune = soloYearRepository.findBySijuAndIlju(siju, ilju)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No fortune found for siju: " + saju.getTimely().substring(saju.getTimely().length() - 1) + " and ilju: " + saju.getDaily()));
+                        "No fortune found for siju: " + siju + " and ilju: " + ilju));
 
-        // 엔티티에서 필요한 값만 추출하여 DTO로 변환
+        // DTO로 변환하여 반환
         return new SoloYearDto(
                 fortune.getSoloYearId(),
                 fortune.getSiju(),
