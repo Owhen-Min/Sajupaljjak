@@ -18,9 +18,9 @@ function ElementChart({ elementCounts }) {
   };
 
   const getStatus = (percentage) => {
-    if (percentage < 10) return "부족";
-    if (percentage <= 20) return "적정";
-    if (percentage <= 30) return "발달";
+    if (percentage < 13) return "부족";
+    if (percentage <= 26) return "적정";
+    if (percentage <= 39) return "발달";
     return "과다";
   };
 
