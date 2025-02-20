@@ -19,10 +19,10 @@ export default function BottomNav() {
   // 메뉴 항목 정의 (isCouple 여부에 따라 매칭/캘린더 구분)
   const navItems = isCouple
     ? [
-        { path: "/solo", label: "메인", icon: HomeIcon },
+        { path: "/couple", label: "메인", icon: HomeIcon },
         { path: "/community", label: "커뮤니티", icon: BookOpenIcon },
         { path: "/fortune", label: "운세", icon: HeartIcon },
-        { path: "/calendar", label: "캘린더", icon: CalendarIcon },
+        { path: "/couple/place", label: "캘린더", icon: CalendarIcon },
         { path: "/chats", label: "채팅", icon: ChatBubbleOvalLeftEllipsisIcon },
       ]
     : [
