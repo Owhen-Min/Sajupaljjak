@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import SajuGrid from "../../components/SajuGrid";
 import { useGet } from "../../hooks/useApi";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 
 const FortuneLife = () => {

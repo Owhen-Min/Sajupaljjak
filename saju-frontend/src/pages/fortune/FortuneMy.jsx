@@ -3,6 +3,8 @@ import TopBar2 from "../../components/TopBar2";
 import ElementChart from "../../components/ElementChart";
 import { useGet } from "../../hooks/useApi";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 function FortuneMy() {
   // 천간과 지지의 원소 매핑

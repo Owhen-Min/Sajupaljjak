@@ -1,8 +1,9 @@
-import { TopBar2 } from "../../components/TopBar2";
 import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import SajuColumn from "../../components/SajuColumn";
 import { useGet } from "../../hooks/useApi";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 function FortuneYear() {
   const { data:data1, isPending, error } = useGet("/api/fortune/new-year");
