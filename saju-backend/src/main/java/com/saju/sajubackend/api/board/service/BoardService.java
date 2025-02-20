@@ -129,15 +129,15 @@ public class BoardService {
 
     /**
      * 게시글 작성
+     *
      * @param memberId 현재 로그인한 회원 아이디
-     * @param mainTypeLabel 요청 쿼리 파라미터로 전달된 mainType label (예: "화")
-     * @param request 작성 요청 DTO (title, content, celestialStem label)
+     * @param request  작성 요청 DTO (title, content, celestialStem label)
      * @return 생성된 게시글의 boardId를 담은 응답 DTO
      */
     @Transactional
-    public BoardCreateResponse createBoard(Long memberId, String mainTypeLabel, BoardCreateRequest request) {
+    public BoardCreateResponse createBoard(Long memberId, BoardCreateRequest request) {
         // Element는 mainType, CelestialStem은 subType으로 사용
-        Element mainType = Element.fromLabel(mainTypeLabel);
+        Element mainType = Element.fromLabel(request.getMainType());
         CelestialStem subType = CelestialStem.fromLabel(request.getCelestialStem());
 
         Member member = memberRepository.findById(memberId)
