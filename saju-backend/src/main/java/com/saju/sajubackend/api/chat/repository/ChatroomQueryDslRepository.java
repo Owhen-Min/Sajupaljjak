@@ -54,7 +54,7 @@ public class ChatroomQueryDslRepository {
         // 활성화된 채팅방 ID 목록 가져오기
         List<Long> activeChatroomIds = findActiveChatrooms(memberId);
 
-        if (activeChatroomIds.isEmpty()) {
+        if (activeChatroomIds == null || activeChatroomIds.isEmpty()) {
             return Map.of(); // 활성화된 채팅방이 없으면 빈 맵 반환
         }
 

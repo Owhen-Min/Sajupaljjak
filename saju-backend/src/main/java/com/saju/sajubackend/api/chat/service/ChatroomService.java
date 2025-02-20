@@ -123,6 +123,7 @@ public class ChatroomService {
         Map<Long, Member> partners = chatroomQueryDslRepository.findChatPartnersByMemberId(memberId);
 
         if (partners == null || partners.isEmpty()) {
+            System.out.println("[👍활성화된 채팅방 없음]" + partners);
             return List.of();
         }
 
