@@ -10,9 +10,9 @@ import { useGet } from "../../hooks/useApi";
 
 
 function CouplePlace() {
+  const navigate = useNavigate();
   const [goodDates, setGoodDates] = useState([]); // YYYY-MM-DD 형식
   const [badDates, setBadDates] = useState([]);
-  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(
     `${new Date().getFullYear()}-${String(
     new Date().getMonth() + 1
@@ -21,9 +21,8 @@ function CouplePlace() {
 
 
   const [selectedPlaces, setSelectedPlaces] = useState([]);
-
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  //오늘 날짜 받는 부분분
+
 
   const {
     data: dateData,
@@ -35,7 +34,7 @@ function CouplePlace() {
     data: placeData,
     isPending: placePending,
     error: placeError,
-  } = useGet(`api/places?date=${selectedDate}`); //body에 담아서 하려면 POST??
+  } = useGet(`api/places?date=${selectedDate}`, [selectedDate]);
 
   useEffect(() => {
     if (dateData) {
@@ -46,13 +45,23 @@ function CouplePlace() {
 
   useEffect(() => {
     if (placeData) {
+      setSelectedPlaces(
+      placeData.map(place => ({
+        image:place.image,
+        element : place.element,
+        description : place.description,
+        title : place.name
+      })));
       console.log(placeData);
+      console.log(selectedPlaces);
     }
   }, [placeData]);
+
 
   const handleDateSelect = (date) => {
     const formattedDate = date.format("YYYY-MM-DD");
     setSelectedDate(formattedDate);
+    console.log(selectedDate)
     setMonth(date.month() + 1); //월 잘 바뀌는지 확인
   };
 
