@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import SajuGrid from "../../components/SajuGrid";
 import { useGet } from "../../hooks/useApi";
-import { Header } from "../../components/Header";
 
 
 const FortuneLife = () => {
@@ -96,5 +95,21 @@ const FortuneLife = () => {
     </div>
   );
 };
+
+export function Header() {
+  const navigate = useNavigate();
+
+  return (
+    <header className="relative h-12 w-full flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">평생 운세</h1>
+      <div
+        className="absolute left-4 text-xl cursor-pointer text-white "
+        onClick={() => navigate("/fortune")}
+      >
+        <IoArrowBack />
+      </div>
+    </header>
+  );
+}
 
 export default FortuneLife;

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import SajuColumn from "../../components/SajuColumn";
 import { useGet } from "../../hooks/useApi";
-import { Header } from "../../components/Header";
 
 function FortuneYear() {
   const { data:data1, isPending, error } = useGet("/api/fortune/new-year");
@@ -95,4 +94,23 @@ function FortuneYear() {
   );
 }
 
+
+export function Header() {
+  const navigate = useNavigate();
+
+  return (
+    <header className="relative h-12 w-full flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">신년 운세</h1>
+      <div
+        className="absolute left-4 text-xl cursor-pointer text-white "
+        onClick={() => navigate("/fortune")}
+      >
+        <IoArrowBack />
+      </div>
+    </header>
+  );
+}
+
 export default FortuneYear;
+
+
