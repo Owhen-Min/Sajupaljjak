@@ -811,8 +811,8 @@ function SignUpPage() {
             .then((blob) => {
               const uniqueFileName = `profile_${Date.now()}_${Math.random()
                 .toString(36)
-                .substring(7)}.jpg`;
-              return new File([blob], uniqueFileName, { type: "image/jpeg" });
+                .substring(7)}.webp`;
+              return new File([blob], uniqueFileName, { type: "image/webp" });
             });
 
           const presignResponse = await mutation.mutateAsync({
