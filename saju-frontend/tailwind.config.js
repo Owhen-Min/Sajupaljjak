@@ -52,5 +52,5 @@ export default {
       },
     },
   },
-  plugins: [daisyui, import("tailwind-scrollbar-hide")],
+  plugins: [daisyui, require("tailwind-scrollbar-hide")],
 };

@@ -35,7 +35,7 @@ function CouplePlace() {
     data: placeData,
     isPending: placePending,
     error: placeError,
-  } = useGet(`api/places?${selectedDate}`); //body에 담아서 하려면 POST??
+  } = useGet(`api/places?date=${selectedDate}`); //body에 담아서 하려면 POST??
 
   useEffect(() => {
     if (dateData) {

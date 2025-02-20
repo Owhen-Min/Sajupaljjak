@@ -1,5 +1,11 @@
 package com.saju.sajubackend.api.matching.repository;
 
+import static com.saju.sajubackend.api.filter.domain.QFilter.filter;
+import static com.saju.sajubackend.api.filter.domain.QRegionFilter.regionFilter;
+import static com.saju.sajubackend.api.filter.domain.QReligionFilter.religionFilter;
+import static com.saju.sajubackend.api.member.domain.QMember.member;
+import static com.saju.sajubackend.api.saju.domain.QScore.score1;
+
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -8,18 +14,13 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.common.enums.CelestialStem;
 import com.saju.sajubackend.common.enums.Gender;
 import com.saju.sajubackend.common.enums.RelationshipStatus;
-import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.saju.sajubackend.api.filter.domain.QFilter.filter;
-import static com.saju.sajubackend.api.filter.domain.QRegionFilter.regionFilter;
-import static com.saju.sajubackend.api.filter.domain.QReligionFilter.religionFilter;
-import static com.saju.sajubackend.api.member.domain.QMember.member;
-import static com.saju.sajubackend.api.saju.domain.QScore.score1;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public abstract class MatchingBaseRepository {
@@ -72,8 +73,13 @@ public abstract class MatchingBaseRepository {
     }
 
     protected BooleanExpression matchCelestialStem(Set<CelestialStem> compatibleStems) {
+        List<Integer> stemCodes = compatibleStems.stream()
+                .map(CelestialStem::getCode)
+                .toList();
+
         return member.celestialStem.in(compatibleStems);
     }
+
 
     protected BooleanExpression matchReligion(Filter filter) {
         return member.religion.in(

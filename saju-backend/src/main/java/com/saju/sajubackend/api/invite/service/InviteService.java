@@ -57,8 +57,8 @@ public class InviteService {
         Member joiner = memberRepository.findById(joinerId)
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.MEMBER_NOT_FOUND));
 
-        if (!isValidGenderPair(inviter, joiner)) {
-            throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_GENDER_COMBINATION);
+        if (!isValidPair(inviter, joiner)) {
+            throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_COUPLE_COMBINATION);
         }
 
         ElementInfo lackAndPlenty = getLackAndPlentyElement(inviter, joiner);
@@ -79,9 +79,10 @@ public class InviteService {
         inviteRedisUtil.deleteBothCode(inviterId, joinerId);
     }
 
-    private boolean isValidGenderPair(Member inviter, Member joiner) {
-        return (inviter.getGender() == Gender.MALE && joiner.getGender() == Gender.FEMALE) ||
-                (inviter.getGender() == Gender.FEMALE && joiner.getGender() == Gender.MALE);
+    private boolean isValidPair(Member inviter, Member joiner) {
+        return ((inviter.getGender() == Gender.MALE && joiner.getGender() == Gender.FEMALE) ||
+                (inviter.getGender() == Gender.FEMALE && joiner.getGender() == Gender.MALE))
+                && (inviter.getRelation() == null && joiner.getRelation() == null);
     }
 
     private ElementInfo getLackAndPlentyElement(Member inviter, Member joiner) {

@@ -3,6 +3,8 @@ import TopBar2 from "../../components/TopBar2";
 import ElementChart from "../../components/ElementChart";
 import { useGet } from "../../hooks/useApi";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 function FortuneMy() {
   // 천간과 지지의 원소 매핑
@@ -72,13 +74,39 @@ function FortuneMy() {
   const elementCounts = calculateElementCounts();
   
   return (
-    <div className="fortune flex flex-col items-center relative h-screen pt-10">
-      <TopBar2 url="/fortune" mainText="나의 사주" />
+    <div className="font-NanumR flex flex-col items-center relative mx-auto">
+      <Header />
       <div className="px-4">
-        <SajuGrid saju={saju} />
-        <ElementChart elementCounts={elementCounts} />
+        <div className="mt-6">
+          <div className="bg-gray-50 rounded-2xl p-6 mb-6">
+            <SajuGrid saju={saju} />
+          </div>
+          
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+              원소 분석
+            </h3>
+            <ElementChart elementCounts={elementCounts} />
+          </div>
+        </div>
       </div>
     </div>
+  );
+}
+
+export function Header() {
+  const navigate = useNavigate();
+
+  return (
+    <header className="relative h-12 w-full flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">나의 사주</h1>
+      <div
+        className="absolute left-4 text-xl cursor-pointer text-white "
+        onClick={() => navigate("/fortune")}
+      >
+        <IoArrowBack />
+      </div>
+    </header>
   );
 }
 

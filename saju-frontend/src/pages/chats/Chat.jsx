@@ -23,22 +23,17 @@ const Chat = () => {
     celestialStem: null,
     age: null
   });
-  const [showScrollBottom, setShowScrollBottom] = useState(false);
 
   // 초기 메시지 로드
   useEffect(() => {
     if (data) {
       console.log('[채팅] 초기 데이터 수신:', data);
       
-      // partner 정보를 먼저 설정
       if (data.partner) {
         setPartner(data.partner);
       }
 
-      if (data.messages) {
-        setMessages(data.messages);
-      }
-      // 메시지 변환 및 설정
+      // 메시지 변환 및 한 번만 설정
       const transformMessages = (messages, memberId, partnerInfo) => {
         if (!Array.isArray(messages)) {
           console.log('[채팅] 메시지 데이터 형식 오류');
@@ -83,22 +78,11 @@ const Chat = () => {
         sentAt: messageData.sendTime,
         isMine: false,
         profileImage: partner.profileImage || "기본이미지URL",
-        nickName: partner.nickName || "상대방",
+        nickName: partner.nickname || "상대방",
       };
 
       console.log('[웹소켓] 새 메시지 처리:', newMessage);
       setMessages(prev => [...prev, newMessage]);
-
-      // 스크롤 위치 확인 후 조건부 스크롤
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
-      const clientHeight = window.innerHeight;
-      const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-
-      // 사용자가 화면 높이의 2배 이상 위에 있지 않을 때만 스크롤
-      if (distanceFromBottom < clientHeight * 2) {
-        window.scrollTo(0, document.body.scrollHeight);
-      }
     } catch (error) {
       console.error('[웹소켓] 메시지 파싱 오류:', error);
     }
@@ -112,40 +96,6 @@ const Chat = () => {
     }
 
     console.log(`[웹소켓] 채팅방 ${chatRoomId} 구독 시도`);
-
-    // 웹소켓 연결 시 채팅 데이터 새로 불러오기
-    const fetchLatestMessages = async () => {
-      try {
-        const response = await fetch(`/api/chats/${chatRoomId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-          }
-        });
-        const newData = await response.json();
-        if (newData) {
-          const transformMessages = (messages, memberId) => {
-            if (!Array.isArray(messages)) return [];
-            return messages.map((message) => ({
-              id: message.id || Date.now(),
-              message: message.content,
-              sentAt: message.sendTime,
-              isMine: message.senderId === memberId,
-              profileImage: message.senderId === memberId
-                ? "기본이미지URL"
-                : newData.partner?.profileImage || "기본이미지URL",
-              nickName: message.senderId === memberId ? "나" : newData.partner?.nickName || "상대방",
-            }));
-          };
-          
-          const transformedMessages = transformMessages(newData, memberId);
-          setMessages(transformedMessages);
-        }
-      } catch (error) {
-        console.error('[채팅] 최신 메시지 로드 실패:', error);
-      }
-    };
-
-    fetchLatestMessages();
 
     try {
       const subscription = stompClient.subscribe(
@@ -169,7 +119,7 @@ const Chat = () => {
         subscriptionRef.current.unsubscribe();
       }
     };
-  }, [stompClient, isConnected, chatRoomId, memberId, data]);
+  }, [stompClient, isConnected, chatRoomId, memberId]);
 
   const sendMessage = () => {
     if (!input.trim()) {
@@ -188,8 +138,8 @@ const Chat = () => {
     const messageData = {
       chatRoomId: chatRoomId,
       senderId: memberId,
-      message: input.trim(),
-      sentAt: new Date().toISOString()
+      content: input.trim(),
+      messageType: "TEXT"
     };
 
     console.log('[메시지] 전송 시도:', messageData);
@@ -221,30 +171,7 @@ const Chat = () => {
         error: error.message,
         messageData: messageData
       });
-      window.scrollTo(0, document.body.scrollHeight);
     }
-  };
-
-  // 스크롤 위치에 따라 버튼 표시 여부 결정
-  useEffect(() => {
-    const toggleScrollButton = () => {
-      const scrollHeight = document.documentElement.scrollHeight;
-      const scrollTop = window.scrollY;
-      const clientHeight = window.innerHeight;
-      const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-
-      // 화면 높이의 2배 이상 위에 있을 때만 버튼 표시
-      setShowScrollBottom(distanceFromBottom > clientHeight * 2);
-    };
-
-    window.addEventListener('scroll', toggleScrollButton);
-    return () => window.removeEventListener('scroll', toggleScrollButton);
-  }, []);
-
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-    });
   };
 
   if (isPending) return <div>Loading...</div>;
@@ -254,60 +181,18 @@ const Chat = () => {
     <div className="h-screen bg-gray-50 font-NanumR flex flex-col w-full relative">
       <Header data={data} />
       <div className="flex-1 overflow-hidden">
-        <div className="h-full overflow-y-auto">
-          {/* 디버깅용 출력 */}
-          <div>메시지 개수: {messages?.length}</div>
-          {messages?.length > 0 ? (
-            <MessageList messages={messages} />
-          ) : (
-            <div>메시지가 없습니다.</div>
-          )}
-        </div>
+        {/* 디버깅용 출력 */}
+        {messages?.length > 0 ? (
+          <MessageList messages={messages} />
+        ) : (
+          <div className="flex items-center justify-center h-full">주고 받은 메시지가 없습니다. 새로운 대화를 시작해보세요!</div>
+        )}
       </div>
       <BottomInput
         input={input}
         setInput={setInput}
         sendMessage={sendMessage}
       />
-      {showScrollBottom && (
-        <button
-          onClick={scrollToBottom}
-          aria-label="최신 메시지로"
-          className={`
-            fixed
-            bottom-20
-            right-4
-            w-10
-            h-10
-            z-20
-            bg-gray-700
-            text-white
-            rounded-full
-            flex
-            items-center
-            justify-center
-            cursor-pointer
-            hover:bg-gray-600
-            transition-all
-            duration-300
-            shadow-lg
-          `}
-        >
-          <svg 
-            className="w-6 h-6" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-            />
-          </svg>
-        </button>
-      )}
     </div>
   );
 };

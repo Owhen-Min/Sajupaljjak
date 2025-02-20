@@ -2,6 +2,7 @@ package com.saju.sajubackend.api.chat.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.saju.sajubackend.api.chat.domain.ChatMessage;
+import com.saju.sajubackend.common.exception.BadRequestException;
 import com.saju.sajubackend.common.exception.BaseException;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.validator.MessageTypeValidator;
@@ -41,6 +42,8 @@ public class ChattingRequestDto {
     }
 
     public void validateMessageType() {
+        if (messageType == null) throw new BadRequestException(ErrorMessage.INVALID_MESSAGE_LABEL);
+
         if (!MessageTypeValidator.isValidType(this.messageType)) {
             throw new BaseException(HttpStatus.UNPROCESSABLE_ENTITY, ErrorMessage.INVALID_MESSAGE_CODE);
         }

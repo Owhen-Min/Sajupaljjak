@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import SajuGrid from "../../components/SajuGrid";
 import { useGet } from "../../hooks/useApi";
+import { useNavigate } from "react-router-dom";
+import { IoArrowBack } from "react-icons/io5";
 
 
 const FortuneLife = () => {
@@ -41,49 +43,53 @@ const FortuneLife = () => {
   
 
   return (
-    <div className="fortune flex flex-col items-center relative mx-auto max-w-3xl pt-10 pb-5">
-      <TopBar2 url="/fortune" mainText="평생 운세" />
+    <div className="font-NanumR flex flex-col items-center relative mx-auto">
+      <Header />
       <div className="px-4">
-        <SajuGrid saju={saju} />
-
-        <div className="mt-6 space-y-6">
-          {/* 주요 특징 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              ✨ 사주의 주요 특징
-            </h3>
-            <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
-              <ReactMarkdown>{data.characteristic}</ReactMarkdown>
-            </div>
+        <div className="mt-6">
+          <div className="bg-gray-50 rounded-2xl p-6 mb-6">
+            <SajuGrid saju={saju} />
           </div>
 
-          {/* 운세의 흐름 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              🌊 평생 운세의 흐름
-            </h3>
-            <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
-              <ReactMarkdown>{data.flow}</ReactMarkdown>
+          <div className="space-y-4">
+            {/* 각 섹션의 스타일 통일 */}
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                ✨ 사주의 주요 특징
+              </h3>
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
+                <ReactMarkdown>{data.characteristic}</ReactMarkdown>
+              </div>
             </div>
-          </div>
 
-          {/* 유의할 점 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              ⚠️ 유의할 점
-            </h3>
-            <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
-              <ReactMarkdown>{data.danger}</ReactMarkdown>
+            {/* 운세의 흐름 */}
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                🌊 평생 운세의 흐름
+              </h3>
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
+                <ReactMarkdown>{data.flow}</ReactMarkdown>
+              </div>
             </div>
-          </div>
 
-          {/* 요약 */}
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              💡 요약
-            </h3>
-            <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
-              <ReactMarkdown>{data.advice}</ReactMarkdown>
+            {/* 유의할 점 */}
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                ⚠️ 유의할 점
+              </h3>
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
+                <ReactMarkdown>{data.danger}</ReactMarkdown>
+              </div>
+            </div>
+
+            {/* 요약 */}
+            <div className="bg-white rounded-xl p-6 shadow-sm">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                💡 요약
+              </h3>
+              <div className="text-gray-600 text-[15px] leading-relaxed leading-loose">
+                <ReactMarkdown>{data.advice}</ReactMarkdown>
+              </div>
             </div>
           </div>
         </div>
@@ -91,5 +97,21 @@ const FortuneLife = () => {
     </div>
   );
 };
+
+export function Header() {
+  const navigate = useNavigate();
+
+  return (
+    <header className="relative h-12 w-full flex-shrink-0 bg-black text-white flex items-center justify-center">
+      <h1 className="text-lg font-bold">평생 운세</h1>
+      <div
+        className="absolute left-4 text-xl cursor-pointer text-white "
+        onClick={() => navigate("/fortune")}
+      >
+        <IoArrowBack />
+      </div>
+    </header>
+  );
+}
 
 export default FortuneLife;

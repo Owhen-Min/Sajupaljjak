@@ -23,7 +23,7 @@ public class MatchingService {
     private final MatchingQueryDslRepository matchingQueryDslRepository;
     private final MatchingPaginationRepository matchingPaginationRepository;
 
-    private final int MAGINOT_SCORE = 0;
+    private final int MAGINOT_SCORE = 80;
     private final int MEMBER_COUNT = 3;
     private final int PAGE_SIZE = 20;
 

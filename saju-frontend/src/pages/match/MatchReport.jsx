@@ -102,7 +102,7 @@ function MatchReport() {
           <p className="text-gray-500 text-sm">{user.harmony}</p>
         </div>
       </div>
-      <button onClick={handleMatchRequest}>채팅하기 </button>
+      {/* <button onClick={handleMatchRequest}>채팅하기 </button> */}
       <BottomNav />
     </div>
   );
