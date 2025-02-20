@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FortuneService {
 
     private final SoloLifeRepository soloLifeRepository;
