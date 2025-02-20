@@ -11,9 +11,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 import LoadingSpinner from "../../components/LoadingSpinner";
+import PageLoader from "../../components/PageLoader";
 
 function Couple() {
-
   const navigate = useNavigate();
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [couple, setCouple] = useState(null);
@@ -42,8 +42,8 @@ function Couple() {
   if (isCouplePending)
     return (
       <div>
-        <LoadingSpinner />
-        <p>커플 데이터 로딩중...</p>
+        <PageLoader />
+        {/* <p>커플 데이터 로딩중...</p> */}
       </div>
     );
   if (error) return <div>{error}</div>;

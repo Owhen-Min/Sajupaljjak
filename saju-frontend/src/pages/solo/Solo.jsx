@@ -9,6 +9,7 @@ import Lottie from "lottie-react";
 import { useGet } from "../../hooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
+import PageLoader from "../../components/PageLoader";
 
 export default function Solo() {
   const [currentTab, setCurrentTab] = useState("main");
@@ -27,7 +28,7 @@ export default function Solo() {
   if (isPending)
     return (
       <div>
-        <LoadingSpinner />
+        <PageLoader />
       </div>
     );
   if (error) return <div>Error: {error.message}</div>;

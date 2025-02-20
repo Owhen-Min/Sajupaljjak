@@ -9,6 +9,7 @@ import "../../styles/Signup.css";
 import { useAuth } from "../../hooks/useAuth";
 import { usePost } from "../../hooks/useApi";
 import * as blazeface from "@tensorflow-models/blazeface";
+import PageLoader from "../../components/PageLoader";
 
 function Header({ step, children }) {
   const getProgressWidth = () => {
@@ -1065,12 +1066,13 @@ function SignUpPage() {
         )}
       </div>
       {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-5 rounded-lg flex flex-col items-center">
-            <div className="w-10 h-10 border-4 border-[#ff7070] border-t-transparent rounded-full animate-spin mb-3"></div>
-            <p className="text-gray-700">회원가입 처리중...</p>
-          </div>
-        </div>
+        // <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        //   <div className="bg-white p-5 rounded-lg flex flex-col items-center">
+        //     <div className="w-10 h-10 border-4 border-[#ff7070] border-t-transparent rounded-full animate-spin mb-3"></div>
+        //     <p className="text-gray-700">회원가입 처리중...</p>
+        //   </div>
+        // </div>
+        <PageLoader />
       )}
     </div>
   );
