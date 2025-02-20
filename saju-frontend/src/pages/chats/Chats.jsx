@@ -12,13 +12,13 @@ function Chats() {
   const memberId = localStorage.getItem("memberId");
 
   useEffect(() => {
-    if (!stompClient || !stompClient.connected) return;
-
+    if (!stompClient || !isConnected) return;
     console.log("채팅목록 구독 시작");
+    console.log(memberId);
     const subscription = stompClient.subscribe(
       `/topic/list/${memberId}`,
-      (message) => {
-        const responseData = JSON.parse(message.body);
+      (response) => {
+        const responseData = JSON.parse(response.body);
         console.log("받은 데이터 :", responseData);
         const newData = {
           [responseData.chatRoomId]: {
