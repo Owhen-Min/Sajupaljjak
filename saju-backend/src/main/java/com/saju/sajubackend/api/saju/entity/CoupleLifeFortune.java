@@ -17,10 +17,20 @@ public class CoupleLifeFortune {
 
     private String male;
     private String female;
+
+    @Column(columnDefinition = "TEXT")
     private String harmony;
+
+    @Column(columnDefinition = "TEXT")
     private String chemi;
+
+    @Column(columnDefinition = "TEXT")
     private String good;
+
+    @Column(columnDefinition = "TEXT")
     private String bad;
+
+    @Column(columnDefinition = "TEXT")
     private String advice;
 
 }
