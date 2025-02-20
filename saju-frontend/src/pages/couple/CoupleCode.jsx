@@ -84,7 +84,7 @@ function CoupleCode() {
         });
         
         // 로컬 스토리지에 저장
-        localStorage.setItem('coupleCode', code.slice(0, 4) + ' ' + code.slice(4));
+        // localStorage.setItem('coupleCode', code.slice(0, 4) + ' ' + code.slice(4));
         localStorage.setItem('codeExpiresAt', expiresAt);
         
       } catch (error) {
