@@ -61,6 +61,8 @@ const [article, setArticle] = useState({
 useEffect(() => {
   if (data) 
     setArticle(data);
+    console.log("data : ",data)  
+    console.log("article : ", article)
 }, [data]);
 
   const [comments, setComments] = useState([
