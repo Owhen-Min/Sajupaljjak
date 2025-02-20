@@ -26,6 +26,7 @@ function formatRelativeTime(dateString) {
   if (diffInHours < 24) return `${diffInHours}시간 전`;
   if (diffInDays < 30) return `${diffInDays}일 전`;
   if (diffInMonths < 12) return `${diffInMonths}달 전`;
+  console.log(diffInYears);
   return `${diffInYears}년 전`;
 }
 
@@ -38,12 +39,12 @@ function CommunityView() {
 
   const [article, setArticle] = useState({
     articleId: "",
-    createdAt: "",
-    boardType: "",
-    celestialStem: "",
-    title: "",
-    content: "",
-    likeCount: 999,
+    createdAt: "2025-01-20 23:12:00",
+    boardType: "무토",
+    celestialStem: "경금",
+    title: "안녕하세요",
+    content: "반갑습니다",
+    likeCount: 100,
     isLiked: false,
     commentCount: 999,
     comments: [
@@ -83,7 +84,8 @@ function CommunityView() {
 
   const handleLike = () => {
     setLiked((prev) => !prev);
-    mutation.mutate({ uri: `community/${postId}/like`, payload: { liked: liked } },
+    mutation.mutate(
+      { uri: `/api/community/${postId}/like`, payload: { liked: liked } },
       {
         onSuccess: () => {
           console.log("좋아요 요청 성공");
@@ -94,17 +96,17 @@ function CommunityView() {
       }
     );
     console.log(liked);
-  }
+  };
 
   // const handleComment = () => {
   //   mutation.mutate(
-  //     { uri: `community/${postId}/like`, payload: { liked: liked } },
+  //     { uri: `/api/community/${postId}/reply`, payload: {  } },
   //     {
   //       onSuccess: () => {
-  //         console.log("좋아요 요청 성공");
+  //         console.log("댓글 등록 성공");
   //       },
   //       onError: (error) => {
-  //         console.error("좋아요 요청 실패:", error);
+  //         console.error("댓글 등록록 실패:", error);
   //       },
   //     }
   //   );
@@ -156,11 +158,17 @@ function CommunityView() {
             {article.content}
           </p>
           <div className="flex justify-between items-center mt-4">
-            <span onClick={()=>{handleLike()}} className="text-xs text-gray-700" style={{cursor: "pointer"}}>
+            <span
+              onClick={() => {
+                handleLike();
+              }}
+              className={`text-xs ${liked ? "text-red-500" : "text-gray-700"}`}
+              style={{ cursor: "pointer" }}
+            >
               좋아요 {article.likeCount}
             </span>
             <span className="text-xs text-gray-700">
-              {/* 댓글 {comments.length}개 */}
+              댓글 {comments.length}개
             </span>
           </div>
         </div>
@@ -213,19 +221,22 @@ function CommunityView() {
             />
             <MainButton
               className="px-3 border-none py-2 bg-[#ff7070] text-white rounded-md text-sm hover:opacity-90 active:scale-95 transition"
-              onClick={() => {
-                if (!comment.trim()) return;
-                setComments([
-                  ...comments,
-                  {
-                    commentId: comments.length + 1,
-                    createdAt: new Date().toISOString(),
-                    celestialStem: "임수",
-                    content: comment,
-                  },
-                ]);
-                setComment("");
-              }}
+              onClick={
+                // () => {handleComment();}
+                () => {
+                  if (!comment.trim()) return;
+                  setComments([
+                    ...comments,
+                    {
+                      commentId: comments.length + 1,
+                      createdAt: new Date().toISOString(),
+                      celestialStem: "임수",
+                      content: comment,
+                    },
+                  ]);
+                  setComment("");
+                }
+              }
             >
               확인
             </MainButton>
