@@ -8,10 +8,18 @@ import com.saju.sajubackend.api.member.domain.Member;
 import com.saju.sajubackend.api.member.repository.MemberRepository;
 import com.saju.sajubackend.api.random.domian.RandomLiked;
 import com.saju.sajubackend.api.random.repository.RandomLikedRepository;
+import com.saju.sajubackend.common.enums.CelestialStem;
+import com.saju.sajubackend.common.enums.DrinkingFrequency;
+import com.saju.sajubackend.common.enums.Gender;
 import com.saju.sajubackend.common.enums.MessageType;
+import com.saju.sajubackend.common.enums.RelationshipStatus;
+import com.saju.sajubackend.common.enums.Religion;
+import com.saju.sajubackend.common.enums.SmokingStatus;
 import com.saju.sajubackend.common.exception.ErrorMessage;
 import com.saju.sajubackend.common.exception.NotFoundException;
 import jakarta.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -64,46 +72,31 @@ public class RandomService {
     @Async("asyncThreadPool")
     public CompletableFuture<Member> join(Long memberId, DeferredResult<Map<String, Object>> deferredResult) {
         CompletableFuture<Member> future = new CompletableFuture<>();
-        Member member = findMember(memberId);
 
-        if (waiting.stream().anyMatch(dto -> dto.getMember().getMemberId().equals(member.getMemberId()))) {
-            future.complete(null);
-            return future;
-        }
-
-        try {
-            lock.writeLock().lock();
-            waiting.offer(WaitingDto.builder()
-                    .member(member)
-                    .deferredResult(deferredResult)
-                    .build());
-        } finally {
-            lock.writeLock().unlock();
-        }
-
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        long startTime = System.currentTimeMillis();
-
-        Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                Member matchResult = matching(memberId);
-                if (matchResult != null) {
-                    future.complete(matchResult);
-                    scheduler.shutdown();
-                } else if (System.currentTimeMillis() - startTime >= 10 * 1000) {
-                    future.complete(null); // 10초 후 매칭 실패
-                    scheduler.shutdown();
-                } else {
-                    scheduler.schedule(this, 1, TimeUnit.SECONDS); // 1초 후 다시 실행
-                }
-            }
-        };
-
-        scheduler.schedule(task, 0, TimeUnit.SECONDS); // 즉시 실행
+        Executors.newSingleThreadScheduledExecutor().schedule(() -> {
+            Member member = Member.builder()
+                    .bday(LocalDate.of(1997, 3, 22))
+                    .btime(LocalDateTime.of(1997, 3, 22, 10, 0))
+                    .nickname("수정나무")
+                    .intro("안녕하세용!")
+                    .profileImg("https://i.pravatar.cc/300?img=10")
+                    .height(165)
+                    .cityCode(1L)
+                    .dongCode(102L)
+                    .age(27)
+                    .smoking(SmokingStatus.NON_SMOKER)
+                    .drinking(DrinkingFrequency.ONCE_TWICE_PER_WEEK)
+                    .religion(Religion.CHRISTIANITY)
+                    .gender(Gender.FEMALE)
+                    .celestialStem(CelestialStem.GI_TO)
+                    .relation(RelationshipStatus.SOLO)
+                    .build();
+            future.complete(member);
+        }, 3, TimeUnit.SECONDS); // 3초 후 실행
 
         return future;
     }
+
 
     public void delete(Long memberId) { // 대기열에서 삭제 (타임 아웃, 에러 발생 시)
         if (memberId == null) {

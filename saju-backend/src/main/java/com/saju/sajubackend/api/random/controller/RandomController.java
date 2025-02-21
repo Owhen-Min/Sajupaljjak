@@ -34,7 +34,7 @@ public class RandomController {
         // 랜덤 상대 찾기 (비동기 처리)
         randomService.join(memberId, deferredResult).thenAccept(matchingInfo -> {
             if (matchingInfo != null) {
-                deferredResult.setResult(Map.of("parnter", matchingInfo)); // 매칭된 정보 반환
+                deferredResult.setResult(Map.of("parnter", matchingInfo, "chatRoomId", "408")); // 매칭된 정보 반환
             } else {
                 deferredResult.setResult(Map.of("message", "랜덤 채팅 상대를 찾을 수 없습니다."));
             }
