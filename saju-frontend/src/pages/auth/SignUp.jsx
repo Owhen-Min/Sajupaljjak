@@ -848,7 +848,7 @@ function SignUpPage() {
           localStorage.setItem("memberId", userData.member_id);
           localStorage.setItem(
             "relation",
-            userData.relation === "SOLO" ? false : true
+            userData.relation === "SOLO" ? "SOLO" : "COUPLE"
           );
           localStorage.setItem("user", JSON.stringify(userData));
           updateUser(userData);
