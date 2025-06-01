@@ -4,4 +4,19 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  // server: {
+  //   https: {
+  //     key: "./localhost.key",
+  //     cert: "./localhost.crt",
+  //   },
+  //   proxy: {
+  //     "/api": {
+  //       target: "https://i12a408.p.ssafy.io",
+  //       changeOrigin: true,
+  //       secure: false,
+  //       rewrite: (path) => path.replace(/^\/api/, "/api"),
+  //     },
+  //   },
+  // },
+});
+
